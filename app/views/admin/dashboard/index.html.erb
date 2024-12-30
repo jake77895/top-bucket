@@ -1,0 +1,11 @@
+<h1 class="text-center my-4">Admin Dashboard</h1>
+<div class="container">
+  <p>Welcome, <%= current_user.user_name %>! You have admin privileges.</p>
+
+  <ul class="list-group mt-4">
+    <li class="list-group-item"><%= link_to "Manage Users", "#" %></li>
+    <li class="list-group-item"><%= link_to "Manage Pages", "#" %></li>
+    <li class="list-group-item"><%= link_to "Manage Tierlists", "#" %></li>
+    <li class="list-group-item"><%= link_to "Site Settings", "#" %></li>
+  </ul>
+</div>
