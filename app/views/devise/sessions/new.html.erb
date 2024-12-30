@@ -1,0 +1,45 @@
+<h2 class="text-center mb-4 mt-4">Sign In</h2>
+
+<div class="container d-flex justify-content-center">
+  <div class="card shadow-lg p-4 w-100" style="max-width: 500px;">
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= f.error_notification %>
+
+      <!-- Login Field (Username or Email) -->
+      <div class="form-group mb-3">
+        <%= f.input :login,
+                    required: true,
+                    autofocus: true,
+                    label: false,
+                    placeholder: "Username or Email",
+                    input_html: { class: 'form-control' } %>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group mb-4">
+        <%= f.input :password,
+                    required: true,
+                    label: false,
+                    placeholder: "Password",
+                    input_html: { autocomplete: "current-password", class: 'form-control' } %>
+      </div>
+
+      <!-- Remember Me Checkbox -->
+      <div class="form-check mb-3">
+        <%= f.input :remember_me,
+                    as: :boolean,
+                    label: "Remember me",
+                    input_html: { class: 'form-check-input' } %>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions text-center">
+        <%= f.button :submit, "Sign In", class: "btn btn-dark w-100" %>
+      </div>
+    <% end %>
+
+    <div class="text-center mt-3">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>
