@@ -28,7 +28,7 @@
     transform: translateY(-50%);
     width: 80%;
     height: 90%;
-    background: url('<%= asset_path('hero-bg.png') %>') no-repeat center center / contain;
+    background: url('<%= asset_path('backgrounds/bank-logos.png') %>') no-repeat center center / contain;
     z-index: 1;
     opacity: 0.9;
   "></div>
@@ -42,7 +42,8 @@
     border-radius: 8px; /* Rounded corners */
     text-align: left; /* Left-align text */
     max-width: 600px; /* Prevent stretching */
-    margin-top: -125px; /* Adjust positioning */
+    margin-top: -150px; /* Adjust positioning */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Shadow effect */
   ">
       <h2 class="fw-bold" 
         style="font-size: clamp(1.0rem, 4vw, 2rem); margin-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 0.75rem;">
@@ -56,14 +57,14 @@
         <li style="margin-bottom: 0.75rem;">
           🤝 <strong style="font-size: .9em;">Networking Opportunities:</strong>
           <span style="font-size: 0.8em;">Find banking professionals broken out by coverage and product groups.</span>
-        </li>
-        <li style="margin-bottom: 0.75rem;">
-          📝 <strong style="font-size: .9em;">Prepare with Real Interview Questions:</strong>
-          <span style="font-size: 0.8em;">Compiled by hundreds of banking applicants.</span>
-        </li>
+        </li> 
         <li style="margin-bottom: 0.75rem;">
           ☕ <strong style="font-size: .9em;">Coffee Chat Insights:</strong>
           <span style="font-size: 0.8em;">Know what to expect with banker-specific reviews.</span>
+        </li>
+        <li style="margin-bottom: 0.75rem;">
+          📝 <strong style="font-size: .9em;">Prepare with Real Interview Questions:</strong>
+          <span style="font-size: 0.8em;">Compiled from hundreds of banking applicants.</span>
         </li>
       </ul>
 
@@ -72,37 +73,65 @@
 
 </section>
 
-<!-- 🟩 Three-Column Section -->
+<!-- Three-Column Section -->
+
 <section class="py-5 bg-light">
   <div class="container">
-    <div class="row text-center">
+    <div class="row text-center align-items-start">
       <!-- Column 1 -->
       <div class="col-md-4">
-        <h3>Feature One</h3>
-        <p>Learn more about our first amazing feature.</p>
-        <a href="#" class="btn btn-outline-primary">Explore</a>
+        <section class="text-start">
+          <h2 class="fw-bold d-flex align-items-center mb-2">
+            🏦 <span class="ms-2">In-Depth Bank Insights</span>
+          </h2>
+          <p class="text-secondary" style="font-size: 1rem;">
+            Compare culture, deal flow, and exit opportunities across banks.
+          </p>
+          <a href="#" class="btn btn-outline-primary">View</a>
+        </section>
       </div>
-      <!-- Column 2 -->
-      <div class="col-md-4">
-        <h3>Feature Two</h3>
-        <p>Discover how our second feature can help you.</p>
-        <a href="#" class="btn btn-outline-primary">Learn More</a>
+
+      <!-- Subtle Divider -->
+      <div class="col-md-4 border-start border-opacity-25">
+        <section class="text-start ps-4">
+          <h2 class="fw-bold d-flex align-items-center mb-2">
+            🤝 <span class="ms-2">Build Your Network</span>
+          </h2>
+          <p class="text-secondary" style="font-size: 1rem;">
+            Discover top professionals across coverage and product groups.
+          </p>
+          <a href="#" class="btn btn-outline-primary">View</a>
+        </section>
       </div>
-      <!-- Column 3 -->
-      <div class="col-md-4">
-        <h3>Feature Three</h3>
-        <p>Check out our third incredible feature.</p>
-        <a href="#" class="btn btn-outline-primary">Find Out</a>
+
+      <!-- Subtle Divider -->
+      <div class="col-md-4 border-start border-opacity-25">
+        <section class="text-start ps-4">
+          <h2 class="fw-bold d-flex align-items-center mb-2">
+            ☕ <span class="ms-2">Coffee Chat Insights</span>
+          </h2>
+          <p class="text-secondary" style="font-size: 1rem;">
+            User-generated reviews on how often technical questions come up, and tips for a successful chat.
+          </p>
+          <a href="#" class="btn btn-outline-primary">View</a>
+        </section>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 🟫 Bottom Section -->
+
+
+<!-- Bottom Section -->
 <section class="py-5 bg-secondary text-white text-center">
-  <div class="container">
-    <h2>Join Us Today!</h2>
-    <p class="lead">Start your journey with us and make the most of every opportunity.</p>
-    <a href="#" class="btn btn-light btn-lg mt-3">Get Started</a>
+  <div class="container text-center">
+  <div class="d-flex align-items-center justify-content-center mb-3">
+    <span style="font-size: 2rem;">📝</span>
+    <h2 class="fw-bold ms-2 mb-0">Real Interview Questions</h2>
   </div>
+  <p class="lead">
+    Access hundreds of real interview questions from hundreds of banking applicants over 5+ years, organized by topic, bank, and difficulty level.
+  </p>
+  <a href="#" class="btn btn-light btn-lg mt-3">View</a>
+</div>
 </section>
