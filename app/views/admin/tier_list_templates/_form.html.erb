@@ -1,0 +1,97 @@
+<%= form_with(model: @template, url: @template.new_record? ? admin_tier_list_templates_path : admin_tier_list_template_path(@template)) do |form| %>
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white">
+      <h2><%= @template.new_record? ? 'Create New Template' : 'Edit Template' %></h2>
+    </div>
+    <div class="card-body">
+      <!-- Name -->
+      <div class="mb-3">
+        <%= form.label :name, class: 'form-label fw-bold' %>
+        <%= form.text_field :name, class: 'form-control', placeholder: 'Enter template name' %>
+      </div>
+
+      <!-- Short Description -->
+      <div class="mb-3">
+        <%= form.label :short_description, class: 'form-label fw-bold' %>
+        <%= form.text_area :short_description, class: 'form-control', rows: 3, placeholder: 'Short description' %>
+      </div>
+
+      <!-- Custom Fields Section -->
+<h4 class="mt-4">Add Custom Fields</h4>
+<p class="text-muted">Custom fields let you specify additional details for your tier list.</p>
+<div id="custom-fields-container">
+  <% @template.custom_fields&.each_with_index do |field, index| %>
+    <div class="custom-field mb-3 border p-3 rounded">
+      <div class="row">
+        <div class="col-md-5">
+          <%= label_tag "tier_list_template[custom_fields][#{index}][name]", 'Field Name', class: 'form-label' %>
+          <%= text_field_tag "tier_list_template[custom_fields][#{index}][name]", field['name'], class: 'form-control', placeholder: 'Enter field name' %>
+        </div>
+        <div class="col-md-5">
+          <%= label_tag "tier_list_template[custom_fields][#{index}][type]", 'Select Data Type', class: 'form-label' %>
+          <%= select_tag "tier_list_template[custom_fields][#{index}][type]", 
+                options_for_select(TierListTemplate::DATA_TYPE_MAPPING.keys, field['type']), 
+                include_blank: 'Select Data Type', 
+                class: 'form-select' %>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="button" class="btn btn-danger remove-field w-100">Remove</button>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<button type="button" class="btn btn-outline-primary mt-2" id="add-custom-field">Add Custom Field</button>
+    </div>
+    <div class="card-footer text-end">
+      <%= form.submit @template.new_record? ? 'Create Template' : 'Update Template', class: 'btn btn-dark px-4' %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('custom-fields-container');
+  const addFieldButton = document.getElementById('add-custom-field');
+
+  if (addFieldButton) {
+    let index = container.children.length;
+
+    addFieldButton.addEventListener('click', () => {
+      const fieldHTML = `
+        <div class="custom-field mb-3 border p-3 rounded">
+          <div class="row">
+            <div class="col-md-5">
+              <label class="form-label">Field Name</label>
+              <input type="text" name="tier_list_template[custom_fields][${index}][name]" class="form-control" placeholder="Enter field name">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">Select Data Type</label>
+              <select name="tier_list_template[custom_fields][${index}][type]" class="form-select">
+                <option value="">Select Data Type</option>
+                <option value="Text">Text</option>
+                <option value="Number">Number</option>
+                <option value="True/False">True/False</option>
+                <option value="Date">Date</option>
+              </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="button" class="btn btn-danger remove-field w-100">Remove</button>
+            </div>
+          </div>
+        </div>`;
+      container.insertAdjacentHTML('beforeend', fieldHTML);
+      index++;
+    });
+
+    container.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-field')) {
+        e.target.closest('.custom-field').remove();
+      }
+    });
+  }
+});
+
+
+</script>

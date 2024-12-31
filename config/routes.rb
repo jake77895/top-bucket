@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :edit, :update, :destroy]
     resources :settings, only: [:index, :update]
     resources :pages
+    resources :tier_list_templates
   end
 
   # Redirect invalid /users route to /users/sign_up

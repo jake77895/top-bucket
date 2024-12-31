@@ -1,0 +1,27 @@
+<h1 class="mb-4">Tier List Templates</h1>
+<%= link_to 'New Template', new_admin_tier_list_template_path, class: 'btn btn-dark mb-3' %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Created By</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @templates.each do |template| %>
+      <tr>
+        <td><%= template.name %></td>
+        <td><%= template.creator.user_name %></td>
+        <td>
+          <%= link_to 'Edit', edit_admin_tier_list_template_path(template), class: 'btn btn-outline-secondary btn-sm' %>
+          <%= link_to 'Delete', admin_tier_list_template_path(template), 
+                        method: :delete, 
+                        data: { confirm: 'Are you sure?' }, 
+                        class: 'btn btn-outline-danger btn-sm' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
