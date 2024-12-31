@@ -1,0 +1,98 @@
+<!-- Page Header Section -->
+<div class="container mb-4 mt-4">
+  <div class="position-relative">
+    <!-- Back Arrow Button -->
+    <div class="position-absolute top-0 start-0 m-3" style="z-index: 10;">
+      <%= link_to pages_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center', style: 'width: 50px; height: 50px;' do %>
+        <span class="fs-4">&larr;</span>
+      <% end %>
+    </div>
+
+    <!-- Cover Image -->
+    <img src="<%= @page.cover_image.attached? ? url_for(@page.cover_image) : 'https://via.placeholder.com/1200x400' %>" 
+        alt="Page Banner" 
+        class="img-fluid w-100 rounded" 
+        style="object-fit: cover; max-height: 400px;">
+
+    <!-- Logo Overlay -->
+    <div class="position-absolute" style="bottom: -50px; left: 20px;">
+      <img src="<%= @page.profile_image.attached? ? url_for(@page.profile_image) : 'https://via.placeholder.com/100' %>" 
+          alt="Page Logo" 
+          class="rounded-circle border border-white shadow-lg"
+          style="width: 100px; height: 100px; object-fit: cover;">
+    </div>
+  </div>
+
+  <!-- Title and Description -->
+  <div class="mt-4 pt-4">
+    <h1 class="fw-bold"><%= @page.name %></h1>
+    <p class="text-muted"><%= @page.short_description.presence || 'Premier independent advisory focused on key areas.' %></p>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- Page Content -->
+<div class="container">
+  <div class="row">
+    <!-- Left Column -->
+    <div class="col-md-8">
+      <!-- Tier Lists Section -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Tier Lists</h5>
+        </div>
+        <div class="card-body d-flex align-items-center">
+          <img src="https://via.placeholder.com/150" alt="Tier List Placeholder" class="img-thumbnail me-3">
+          <div>
+            <h6 class="fw-bold">Placeholder Tier List Title</h6>
+            <p class="text-muted mb-0">Placeholder short description of the tier list.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other Info Section -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Other Info</h5>
+        </div>
+        <div class="card-body d-flex align-items-center">
+          <img src="https://via.placeholder.com/150" alt="Other Info Placeholder" class="img-thumbnail me-3">
+          <div>
+            <h6 class="fw-bold">Explore Bankers</h6>
+            <p class="text-muted mb-0">Learn more about <strong><%= @page.name %></strong>'s professionals and insights.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-4">
+      <!-- About Section -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">About</h5>
+        </div>
+        <div class="card-body">
+          <p><%= @page.about.presence || 'Details about this page will go here.' %></p>
+        </div>
+      </div>
+
+      <!-- Parent Page Section -->
+      <% if @page.parent_id.present? %>
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Parent Page</h5>
+          </div>
+          <div class="card-body">
+            <%= link_to @page.parent.name, page_path(@page.parent.slug), class: 'text-primary text-decoration-none' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

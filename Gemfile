@@ -3,8 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Added gems
 
-# Devise user gems
-gem 'devise'
+# Creates hierarchy logic for the pages
+gem 'acts_as_tree'
 
 ruby "3.2.1"
 

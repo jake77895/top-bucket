@@ -1,0 +1,8 @@
+<h1>All Pages</h1>
+<ul class="list-group">
+  <% @pages.each do |page| %>
+    <li class="list-group-item">
+      <%= link_to page.name, page_path(page.slug), class: 'text-decoration-none' %>
+    </li>
+  <% end %>
+</ul>

@@ -4,7 +4,9 @@
 
   <ul class="list-group mt-4">
     <li class="list-group-item"><%= link_to "Manage Users", "#" %></li>
-    <li class="list-group-item"><%= link_to "Manage Pages", "#" %></li>
+    <li class="list-group-item">
+      <%= link_to "Manage Pages", admin_pages_path, class: "text-decoration-underline" %>
+    </li>
     <li class="list-group-item"><%= link_to "Manage Tierlists", "#" %></li>
     <li class="list-group-item"><%= link_to "Site Settings", "#" %></li>
   </ul>
