@@ -6,6 +6,7 @@
 #  custom_fields     :json
 #  name              :string           not null
 #  short_description :text
+#  tag               :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  created_by_id     :integer          not null
@@ -29,6 +30,12 @@ class TierListTemplate < ApplicationRecord
 
   before_save :sanitize_custom_fields
 
+  TAG_OPTIONS = [
+    'Finance'
+  ].freeze
+
+  validates :tag, inclusion: { in: TAG_OPTIONS, message: "%{value} is not a valid tag" }, allow_blank: true
+
   private
 
   def validate_custom_fields_format
@@ -48,4 +55,3 @@ class TierListTemplate < ApplicationRecord
     self.custom_fields = custom_fields.reject { |field| field['name'].blank? }
   end
 end
-

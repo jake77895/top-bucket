@@ -4,7 +4,7 @@ class Admin::TierListTemplatesController < ApplicationController
   before_action :set_template, only: [:edit, :update, :destroy]
 
   def index
-    @templates = TierListTemplate.all
+    @templates = TierListTemplate.order(updated_at: :desc)
   end
 
   def new
@@ -56,6 +56,7 @@ class Admin::TierListTemplatesController < ApplicationController
     params.require(:tier_list_template).permit(
       :name,
       :short_description,
+      :tag,
       custom_fields: [:name, :type]
     )
   end

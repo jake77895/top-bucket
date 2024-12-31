@@ -41,19 +41,21 @@
         <%= form.text_area :about, class: 'form-control', placeholder: 'Enter details about the page', rows: 4 %>
       </div>
 
-     <!-- Cover Image Upload -->
-    <div class="mb-3">
-      <%= form.label :cover_image, 'Cover Image' %>
-      <%= form.file_field :cover_image, class: 'form-control' %>
+      <!-- Cover Image Upload -->
+      <div class="mb-3">
+        <%= form.label :cover_image, 'Cover Image' %>
+        <%= form.file_field :cover_image, class: 'form-control' %>
+      </div>
+
+      <!-- Profile Image Upload -->
+      <div class="mb-3">
+        <%= form.label :profile_image, 'Profile Image' %>
+        <%= form.file_field :profile_image, class: 'form-control' %>
+      </div>
     </div>
 
-    <!-- Profile Image Upload -->
-    <div class="mb-3">
-      <%= form.label :profile_image, 'Profile Image' %>
-      <%= form.file_field :profile_image, class: 'form-control' %>
-    </div>
-
-    <div class="card-footer text-end">
+    <div class="card-footer d-flex justify-content-between">
+      <%= link_to 'Back', admin_pages_path, class: 'btn btn-outline-secondary px-4' %>
       <%= form.submit @page.new_record? ? 'Create Page' : 'Update Page', class: 'btn btn-dark px-4' %>
     </div>
   </div>
