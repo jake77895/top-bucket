@@ -1,0 +1,36 @@
+<h1 class="text-center my-4">Add Items to <%= @tier_list.name %></h1>
+
+<div class="container">
+  <!-- Back Button -->
+  <div class="d-flex justify-content-end mb-3">
+    <%= link_to 'Back', admin_tier_lists_path, class: 'btn btn-outline-secondary px-4' %>
+  </div>
+
+  <!-- Items Form -->
+  <%= form_with url: associate_items_admin_tier_list_path(@tier_list), method: :post do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Select Items to Add</h5>
+      </div>
+      
+      <ul class="list-group list-group-flush">
+        <% @items.each do |item| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <%= check_box_tag 'item_ids[]', item.id, @tier_list.items.include?(item), id: "item_#{item.id}", class: 'me-2' %>
+              <%= label_tag "item_#{item.id}", item.name, class: 'fw-bold me-3' %>
+              <% if item.picture.attached? %>
+                <%= image_tag item.picture, style: 'width: 50px; height: 50px; object-fit: cover; border-radius: 4px;', class: 'ms-2' %>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      
+      <!-- Submit Button -->
+      <div class="card-footer text-end">
+        <%= form.submit 'Add Selected Items', class: 'btn btn-dark px-4' %>
+      </div>
+    </div>
+  <% end %>
+</div>

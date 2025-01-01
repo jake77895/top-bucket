@@ -5,6 +5,18 @@ Rails.application.routes.draw do
 
   # Namespaced Admin Section
   namespace :admin do
+    get 'item_ranks/index'
+    get 'item_ranks/new'
+    get 'item_ranks/create'
+    get 'item_ranks/edit'
+    get 'item_ranks/update'
+    get 'item_ranks/destroy'
+    get 'items/index'
+    get 'items/new'
+    get 'items/create'
+    get 'items/edit'
+    get 'items/update'
+    get 'items/destroy'
     get 'tier_lists/index'
     get 'tier_lists/new'
     get 'tier_lists/edit'
@@ -14,7 +26,15 @@ Rails.application.routes.draw do
     resources :settings, only: [:index, :update]
     resources :pages
     resources :tier_list_templates
-    resources :tier_lists
+    resources :tier_lists do
+      member do
+        get 'add_items'
+        post 'associate_items'
+        patch :publish
+      end
+      resources :item_ranks, only: [:index, :edit, :update, :destroy]
+    end
+    resources :items
   end
 
   # Redirect invalid /users route to /users/sign_up

@@ -1,0 +1,15 @@
+<%= form_with(model: [@tier_list, @item_rank]) do |form| %>
+  <div class="mb-3">
+    <%= form.label :item_id, 'Select Item' %>
+    <%= form.collection_select :item_id, @items, :id, :name, { prompt: 'Choose an Item' }, class: 'form-select' %>
+  </div>
+
+  <% @tier_list.custom_fields.each do |field| %>
+    <div class="mb-3">
+      <%= form.label "custom_values[#{field['name']}]", field['name'], class: 'form-label' %>
+      <%= form.text_field "custom_values[#{field['name']}]", class: 'form-control' %>
+    </div>
+  <% end %>
+
+  <%= form.submit 'Save', class: 'btn btn-dark' %>
+<% end %>

@@ -1,8 +1,11 @@
-<h1 class="text-center my-4"><%= @tier_list.new_record? ? 'Create New Tier List' : 'Edit Tier List' %></h1>
+<h1 class="text-center my-4">
+  <%= @tier_list.new_record? ? 'Create New Tier List' : 'Edit Tier List' %>
+</h1>
 
 <div class="container">
   <%= form_with(model: @tier_list, url: @tier_list.new_record? ? admin_tier_lists_path : admin_tier_list_path(@tier_list)) do |form| %>
     <div class="card shadow-sm border-0">
+      
       <!-- Header -->
       <div class="card-header bg-dark text-white">
         <h2 class="mb-0"><%= @tier_list.new_record? ? 'Create New Tier List' : 'Edit Tier List' %></h2>
@@ -22,34 +25,48 @@
           <%= form.text_area :description, class: 'form-control', rows: 3, placeholder: 'Enter description' %>
         </div>
 
+        <!-- Picture Upload -->
+        <div class="mb-3">
+          <%= form.label :picture, 'Upload Picture', class: 'form-label fw-bold' %>
+          <%= form.file_field :picture, class: 'form-control' %>
+          <% if @tier_list.picture.attached? %>
+            <div class="mt-3">
+              <p>Current Picture:</p>
+              <%= image_tag @tier_list.picture.variant(resize_to_fit: [200, 200]), class: 'img-thumbnail' %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Template Selection (Only on Create) -->
         <% if @tier_list.new_record? %>
-          <!-- Template Selection (Only on Create) -->
           <div class="mb-3">
             <%= form.label :tier_list_template_id, 'Template', class: 'form-label fw-bold' %>
-            <%= form.collection_select :tier_list_template_id, @templates, :id, :name, { prompt: 'Choose a template' }, class: 'form-select' %>
+            <%= select_tag 'tier_list[tier_list_template_id]', 
+      options_from_collection_for_select(@templates, :id, :name, params.dig(:tier_list, :tier_list_template_id)),
+      { include_blank: 'Choose a template', class: 'form-select' } %>
+
             <small class="form-text text-muted">Select a template to base this tier list on.</small>
           </div>
         <% else %>
-          <!-- Custom Fields Display (Editable after Creation) -->
+          <!-- Custom Fields (Editable after creation) -->
           <h5 class="fw-bold mt-4">Custom Fields</h5>
           <% if @tier_list.custom_fields.present? %>
             <% @tier_list.custom_fields.each_with_index do |field, index| %>
               <div class="mb-3">
-                <label class="form-label fw-bold"><%= field['name'] %> (<%= field['type'] %>)</label>
-                <%= text_field_tag "tier_list[custom_fields][#{index}][value]", field['value'], class: 'form-control', placeholder: "Enter value for #{field['name']}" %>
+                <%= label_tag "tier_list[custom_fields][#{index}][value]", "#{field['name']} (#{field['type']})", class: 'form-label fw-bold' %>
+                <%= text_field_tag "tier_list[custom_fields][#{index}][value]", field['value'].presence || '', class: 'form-control', placeholder: "Enter value for #{field['name']}" %>
+                <%= hidden_field_tag "tier_list[custom_fields][#{index}][name]", field['name'] %>
+                <%= hidden_field_tag "tier_list[custom_fields][#{index}][type]", field['type'] %>
               </div>
             <% end %>
           <% else %>
             <p class="text-muted">No custom fields available.</p>
           <% end %>
         <% end %>
-
-        <!-- Published Toggle -->
-        <div class="form-check mt-4">
-          <%= form.check_box :published, class: 'form-check-input' %>
-          <%= form.label :published, 'Published', class: 'form-check-label' %>
-        </div>
       </div>
+
+      <!-- Hidden Published Field -->
+      <%= form.hidden_field :published, value: false %>
 
       <!-- Footer -->
       <div class="card-footer d-flex justify-content-between">

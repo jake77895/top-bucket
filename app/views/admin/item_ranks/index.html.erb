@@ -1,0 +1,30 @@
+<h1 class="text-center my-4">Manage Items for <%= @tier_list.name %></h1>
+
+<div class="container">
+  <div class="d-flex justify-content-end mb-3">
+    <%= link_to 'Back to Tier Lists', admin_tier_lists_path, class: 'btn btn-outline-secondary me-2' %>
+    <%= link_to 'Add Items', add_items_admin_tier_list_path(@tier_list), class: 'btn btn-dark' %>
+  </div>
+
+  <ul class="list-group">
+    <% @item_ranks.each do |item_rank| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong><%= item_rank.item.name %></strong>
+          <% if item_rank.item.picture.attached? %>
+            <%= image_tag item_rank.item.picture, style: 'width: 50px; height: 50px; object-fit: cover;', class: 'ms-2' %>
+          <% end %>
+          <div>
+            <% item_rank.custom_values.each do |field, value| %>
+              <p><strong><%= field %>:</strong> <%= value %></p>
+            <% end %>
+          </div>
+        </div>
+        <div>
+          <%= link_to 'Edit', edit_admin_tier_list_item_rank_path(@tier_list, item_rank), class: 'btn btn-outline-secondary btn-sm me-2' %>
+          <%= link_to 'Remove', admin_tier_list_item_rank_path(@tier_list, item_rank), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>
