@@ -24,6 +24,13 @@ class ItemRank < ApplicationRecord
   belongs_to :item
   belongs_to :tier_list
 
-  validates :custom_values, presence: true
+  validate :custom_values_presence
 
+  private
+
+  def custom_values_presence
+    if tier_list.custom_fields.present? && custom_values.blank?
+      errors.add(:custom_values, "can't be blank when tier list has custom fields")
+    end
+  end
 end

@@ -36,15 +36,14 @@
           <div>
             <% if tier_list.published %>
               <span class="badge bg-success me-2">Published</span>
+              <%= link_to 'Add Items', add_items_admin_tier_list_path(tier_list), class: 'btn btn-outline-primary btn-sm me-2' %>
               <%= link_to 'Manage Items', admin_tier_list_item_ranks_path(tier_list), class: 'btn btn-outline-secondary btn-sm me-2' %>
             <% else %>
               <%= link_to 'Publish', publish_admin_tier_list_path(tier_list), 
                         method: :patch, 
                         data: { confirm: 'Are you sure you want to publish this Tier List? You will not be able to edit the tier list after. This action cannot be undone.' }, 
                         class: 'btn btn-success btn-sm me-2' %>
-              <div class="vr"></div>
-              <%= link_to 'Add Items', add_items_admin_tier_list_path(tier_list), class: 'btn btn-outline-primary btn-sm me-2' %>
-              <%= link_to 'Manage Items', admin_tier_list_item_ranks_path(tier_list), class: 'btn btn-outline-secondary btn-sm me-2' %>
+              <div class="vr me-2"></div>
               <%= link_to 'Edit', edit_admin_tier_list_path(tier_list), class: 'btn btn-outline-secondary btn-sm me-2' %>
         
             <% end %>

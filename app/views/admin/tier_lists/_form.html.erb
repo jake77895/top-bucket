@@ -37,32 +37,42 @@
           <% end %>
         </div>
 
-        <!-- Template Selection (Only on Create) -->
-        <% if @tier_list.new_record? %>
-          <div class="mb-3">
-            <%= form.label :tier_list_template_id, 'Template', class: 'form-label fw-bold' %>
-            <%= select_tag 'tier_list[tier_list_template_id]', 
-      options_from_collection_for_select(@templates, :id, :name, params.dig(:tier_list, :tier_list_template_id)),
-      { include_blank: 'Choose a template', class: 'form-select' } %>
+<!-- Template Selection (Always Visible) -->
+<div class="mb-3">
+  <%= form.label :tier_list_template_id, 'Template', class: 'form-label fw-bold' %>
+  <%= form.collection_select :tier_list_template_id, @templates, :id, :name,
+    { include_blank: 'Choose a template', selected: @tier_list.tier_list_template_id }, 
+    { class: 'form-select' } %>
+  <small class="form-text text-muted">Select a template to base this tier list on.</small>
+</div>
 
-            <small class="form-text text-muted">Select a template to base this tier list on.</small>
-          </div>
-        <% else %>
-          <!-- Custom Fields (Editable after creation) -->
-          <h5 class="fw-bold mt-4">Custom Fields</h5>
-          <% if @tier_list.custom_fields.present? %>
-            <% @tier_list.custom_fields.each_with_index do |field, index| %>
-              <div class="mb-3">
-                <%= label_tag "tier_list[custom_fields][#{index}][value]", "#{field['name']} (#{field['type']})", class: 'form-label fw-bold' %>
-                <%= text_field_tag "tier_list[custom_fields][#{index}][value]", field['value'].presence || '', class: 'form-control', placeholder: "Enter value for #{field['name']}" %>
-                <%= hidden_field_tag "tier_list[custom_fields][#{index}][name]", field['name'] %>
-                <%= hidden_field_tag "tier_list[custom_fields][#{index}][type]", field['type'] %>
-              </div>
-            <% end %>
-          <% else %>
-            <p class="text-muted">No custom fields available.</p>
-          <% end %>
+
+
+        <!-- Custom Fields -->
+        <% unless @tier_list.new_record? %>
+  <h5 class="fw-bold mt-4">Custom Fields</h5>
+  <% if @tier_list.custom_fields.present? %>
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Field Name</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tier_list.custom_fields.each_with_index do |field, index| %>
+          <tr>
+            <td><%= field['name'].capitalize %></td>
+            <td><%= @tier_list.human_readable_type(field['type']) %></td>
+          </tr>
         <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-muted">No custom fields available.</p>
+  <% end %>
+<% end %>
+
       </div>
 
       <!-- Hidden Published Field -->
