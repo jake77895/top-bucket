@@ -28,13 +28,22 @@ class Admin::ItemRanksController < ApplicationController
   end
 
   def update
+    if params[:item_rank][:custom_values].is_a?(Hash)
+      # Convert hash to an array of hashes
+      params[:item_rank][:custom_values] = params[:item_rank][:custom_values].values
+    end
+  
     if @item_rank.update(item_rank_params)
-      redirect_to admin_tier_list_item_ranks_path(@tier_list), notice: 'Item association updated successfully.'
+      redirect_to admin_tier_list_item_ranks_path(@tier_list), notice: 'Item values updated successfully.'
     else
-      @items = Item.all
+      flash.now[:alert] = 'Failed to update item values.'
       render :edit
     end
   end
+  
+  
+  
+  
 
   def destroy
     @item_rank.destroy
@@ -49,11 +58,18 @@ class Admin::ItemRanksController < ApplicationController
 
   def set_item_rank
     @item_rank = @tier_list.item_ranks.find(params[:id])
+    
+    # Normalize custom_values into an array if it's a hash
+    if @item_rank.custom_values.is_a?(Hash)
+      @item_rank.custom_values = @item_rank.custom_values.values
+    end
   end
 
   def item_rank_params
-    params.require(:item_rank).permit(:item_id, custom_values: {})
-  end
+    params.require(:item_rank).permit(:item_id, custom_values: [:name, :type, :value])
+  end  
+  
+  
 
   def authorize_admin!
     redirect_to root_path, alert: 'You are not authorized to access this page.' unless current_user&.admin?

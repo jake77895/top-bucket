@@ -23,6 +23,7 @@
 class ItemRank < ApplicationRecord
   belongs_to :item
   belongs_to :tier_list
+  before_save :normalize_custom_values
 
   validate :custom_values_presence
 
@@ -31,6 +32,13 @@ class ItemRank < ApplicationRecord
   def custom_values_presence
     if tier_list.custom_fields.present? && custom_values.blank?
       errors.add(:custom_values, "can't be blank when tier list has custom fields")
+    end
+  end
+
+
+  def normalize_custom_values
+    if custom_values.is_a?(Hash)
+      self.custom_values = custom_values.values
     end
   end
 end

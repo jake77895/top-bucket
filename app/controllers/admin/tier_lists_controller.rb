@@ -23,7 +23,6 @@ class Admin::TierListsController < ApplicationController
   
     item_ids.each do |item_id|
       item = Item.find_by(id: item_id)
-  
       next unless item # Skip invalid or non-existing items
   
       item_rank = @tier_list.item_ranks.find_or_initialize_by(item: item)
@@ -41,10 +40,19 @@ class Admin::TierListsController < ApplicationController
         item_rank.custom_values = []
       end
   
+      # Ensure item_rank is saved
+      if item_rank.new_record?
+        if item_rank.save
+          Rails.logger.debug "ItemRank successfully saved for Item ID: #{item_id}"
+        else
+          Rails.logger.error "Failed to save ItemRank for Item ID: #{item_id}. Errors: #{item_rank.errors.full_messages}"
+        end
+      end
     end
   
     redirect_to admin_tier_list_item_ranks_path(@tier_list), notice: 'Items successfully added to the Tier List.'
   end
+  
   
   
 
