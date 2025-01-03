@@ -1,22 +1,28 @@
-<h1 class="text-center my-4">Manage Tier Lists for <%= @page.name %></h1>
+<h1 class="text-center my-4">Manage Tier List Associations for <%= @page.name %></h1>
 
 <div class="container">
-  <%= form_with url: update_tier_list_associations_admin_page_path(@page), method: :patch do %>
+  <%= form_with url: update_tier_list_associations_admin_page_path(@page), method: :patch do |form| %>
     <div class="card shadow-sm border-0">
       <div class="card-header bg-dark text-white">
-        <h5 class="mb-0">Available Tier Lists</h5>
+        <h5 class="mb-0">Available Published Tier Lists</h5>
       </div>
+
       <div class="card-body">
-        <% @tier_lists.each do |tier_list| %>
-          <div class="form-check mb-2">
-            <%= check_box_tag "page[tier_list_ids][]", tier_list.id, @associated_tier_lists.include?(tier_list), class: 'form-check-input', id: "tier_list_#{tier_list.id}" %>
-            <%= label_tag "tier_list_#{tier_list.id}", tier_list.name, class: 'form-check-label' %>
-          </div>
+        <% if @tier_lists.any? %>
+          <% @tier_lists.each do |tier_list| %>
+            <div class="form-check mb-2">
+              <%= check_box_tag 'page[tier_list_ids][]', tier_list.id, @associated_tier_lists.include?(tier_list), id: "tier_list_#{tier_list.id}" %>
+              <%= label_tag "tier_list_#{tier_list.id}", tier_list.name, class: 'form-check-label' %>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted">No published tier lists available for association.</p>
         <% end %>
       </div>
+
       <div class="card-footer d-flex justify-content-between">
         <%= link_to 'Back', admin_pages_path, class: 'btn btn-outline-secondary px-4' %>
-        <%= submit_tag 'Save Changes', class: 'btn btn-dark px-4' %>
+        <%= form.submit 'Save Changes', class: 'btn btn-dark px-4' %>
       </div>
     </div>
   <% end %>

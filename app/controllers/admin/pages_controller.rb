@@ -42,21 +42,24 @@ class Admin::PagesController < ApplicationController
   end
 
   def manage_tier_lists
-    @tier_lists = TierList.all
+    @tier_lists = TierList.where(published: true)
     @associated_tier_lists = @page.tier_lists
   end
 
   def update_tier_list_associations
-    selected_tier_list_ids = params[:page][:tier_list_ids] || []
-
+    selected_tier_list_ids = params.dig(:page, :tier_list_ids) || []
+  
+    # Ensure selected_tier_list_ids is always an array
+    selected_tier_list_ids = Array(selected_tier_list_ids)
+  
     # Remove unselected associations
     @page.page_associations.where.not(tier_list_id: selected_tier_list_ids).destroy_all
-
+  
     # Add new associations
     selected_tier_list_ids.each do |tier_list_id|
       @page.page_associations.find_or_create_by(tier_list_id: tier_list_id)
     end
-
+  
     redirect_to admin_pages_path, notice: 'Tier List associations updated successfully.'
   end
 
