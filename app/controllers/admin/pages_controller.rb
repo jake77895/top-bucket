@@ -1,6 +1,7 @@
 class Admin::PagesController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_admin
+  before_action :set_page, only: [:manage_tier_lists, :update_tier_list_associations]
 
   def index
     @pages = Page.all
@@ -40,7 +41,30 @@ class Admin::PagesController < ApplicationController
     redirect_to admin_pages_path, notice: "Page deleted successfully."
   end
 
+  def manage_tier_lists
+    @tier_lists = TierList.all
+    @associated_tier_lists = @page.tier_lists
+  end
+
+  def update_tier_list_associations
+    selected_tier_list_ids = params[:page][:tier_list_ids] || []
+
+    # Remove unselected associations
+    @page.page_associations.where.not(tier_list_id: selected_tier_list_ids).destroy_all
+
+    # Add new associations
+    selected_tier_list_ids.each do |tier_list_id|
+      @page.page_associations.find_or_create_by(tier_list_id: tier_list_id)
+    end
+
+    redirect_to admin_pages_path, notice: 'Tier List associations updated successfully.'
+  end
+
   private
+
+  def set_page
+    @page = Page.find(params[:id])
+  end
 
   def authorize_admin
     redirect_to root_path, alert: "You are not authorized to view this page." unless current_user.admin?

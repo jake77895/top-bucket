@@ -24,6 +24,9 @@ class Page < ApplicationRecord
   has_one_attached :cover_image
   has_one_attached :profile_image
 
+  has_many :page_associations, dependent: :destroy
+  has_many :tier_lists, through: :page_associations
+
   # Custom validation for cover_image
   validate :acceptable_cover_image
   validate :acceptable_profile_image

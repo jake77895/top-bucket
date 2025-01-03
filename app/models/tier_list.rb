@@ -25,6 +25,9 @@ class TierList < ApplicationRecord
   has_many :items, through: :item_ranks
   belongs_to :tier_list_template, optional: true
 
+  has_many :page_associations, dependent: :destroy
+  has_many :pages, through: :page_associations
+
   validates :name, presence: true
   validates :published, inclusion: { in: [true, false] }
 

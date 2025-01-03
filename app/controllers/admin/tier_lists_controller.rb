@@ -66,7 +66,6 @@ class Admin::TierListsController < ApplicationController
   end
 
   def create
-    template_id = params[:tier_list].delete(:tier_list_template_id)
     @tier_list = TierList.new(tier_list_params)
   
     if template_id.present?

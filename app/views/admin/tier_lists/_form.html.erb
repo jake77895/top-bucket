@@ -5,7 +5,7 @@
 <div class="container">
   <%= form_with(model: @tier_list, url: @tier_list.new_record? ? admin_tier_lists_path : admin_tier_list_path(@tier_list)) do |form| %>
     <div class="card shadow-sm border-0">
-      
+
       <!-- Header -->
       <div class="card-header bg-dark text-white">
         <h2 class="mb-0"><%= @tier_list.new_record? ? 'Create New Tier List' : 'Edit Tier List' %></h2>
@@ -37,41 +37,39 @@
           <% end %>
         </div>
 
-<!-- Template Selection (Always Visible) -->
-<div class="mb-3">
-  <%= form.label :tier_list_template_id, 'Template', class: 'form-label fw-bold' %>
-  <%= form.collection_select :tier_list_template_id, @templates, :id, :name,
+        <!-- Template Selection (Always Visible) -->
+        <div class="mb-3">
+          <%= form.label :tier_list_template_id, 'Template', class: 'form-label fw-bold' %>
+          <%= form.collection_select :tier_list_template_id, @templates, :id, :name,
     { include_blank: 'Choose a template', selected: @tier_list.tier_list_template_id }, 
     { class: 'form-select' } %>
-  <small class="form-text text-muted">Select a template to base this tier list on.</small>
-</div>
-
-
+          <small class="form-text text-muted">Select a template to base this tier list on.</small>
+        </div>
 
         <!-- Custom Fields -->
         <% unless @tier_list.new_record? %>
-  <h5 class="fw-bold mt-4">Custom Fields</h5>
-  <% if @tier_list.custom_fields.present? %>
-    <table class="table table-bordered">
-      <thead class="table-light">
-        <tr>
-          <th>Field Name</th>
-          <th>Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @tier_list.custom_fields.each_with_index do |field, index| %>
-          <tr>
-            <td><%= field['name'].capitalize %></td>
-            <td><%= @tier_list.human_readable_type(field['type']) %></td>
-          </tr>
+          <h5 class="fw-bold mt-4">Custom Fields</h5>
+          <% if @tier_list.custom_fields.present? %>
+            <table class="table table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>Field Name</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @tier_list.custom_fields.each_with_index do |field, index| %>
+                  <tr>
+                    <td><%= field['name'].capitalize %></td>
+                    <td><%= @tier_list.human_readable_type(field['type']) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <p class="text-muted">No custom fields available.</p>
+          <% end %>
         <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p class="text-muted">No custom fields available.</p>
-  <% end %>
-<% end %>
 
       </div>
 

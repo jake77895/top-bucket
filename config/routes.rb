@@ -24,7 +24,12 @@ Rails.application.routes.draw do
     get 'dashboard', to: 'dashboard#index'
     resources :users, only: [:index, :edit, :update, :destroy]
     resources :settings, only: [:index, :update]
-    resources :pages
+    resources :pages do
+      member do
+        get :manage_tier_lists
+        patch :update_tier_list_associations
+      end
+    end
     resources :tier_list_templates
     resources :tier_lists do
       member do

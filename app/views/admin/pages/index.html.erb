@@ -21,6 +21,7 @@
             <% end %>
           </div>
           <div>
+            <%= link_to 'Manage Tier Lists', manage_tier_lists_admin_page_path(page), class: 'btn btn-outline-primary btn-sm me-2' %>
             <%= link_to 'Edit', edit_admin_page_path(page), class: 'btn btn-outline-secondary btn-sm me-2' %>
             <%= link_to 'Delete', admin_page_path(page), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
           </div>
@@ -29,4 +30,3 @@
     </ul>
   </div>
 </div>
-
