@@ -1,0 +1,88 @@
+<div class="container mt-4 mb-4">
+  <div class="card shadow-sm border-0">
+    <!-- Tier List Name with Info Icon -->
+    <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
+      <h5 class="mb-0">
+        <%= @tier_list.name %>
+        <!-- Info Icon Trigger -->
+        <%= link_to '#', data: { bs_toggle: 'modal', bs_target: '#tierListInfoModal' } do %>
+          <%= image_tag 'icons/info_icon.svg', alt: 'Info', width: 20, height: 20, class: 'ms-2' %>
+        <% end %>
+      </h5>
+    </div>
+    
+    <!-- Tier List Content -->
+    <div class="card-body">
+      <div class="container-fluid">
+        <!-- Tiers Layout -->
+        <% ["S", "A", "B", "C", "D", "F"].each_with_index do |tier, index| %>
+          <div class="row align-items-center mb-3 g-0">
+            <!-- Tier Label -->
+            <div class="col-auto text-center d-flex align-items-center justify-content-center flex-shrink-0" 
+                 style="width: 70px; height: 70px;">
+              <div class="text-dark fw-bold w-100 h-100 d-flex align-items-center justify-content-center fs-5 rounded-start flex-wrap"
+                   style="background-color: <%= ["#FF7F7F", "#FFBF7F", "#FFDF7F", "#BFFF7F", "#7FFF7F", "#7FFFFF"][index] %>; 
+                          box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);">
+                <%= tier %>
+              </div>
+            </div>
+
+            <!-- Tier Items -->
+            <div class="col">
+              <div class="d-flex align-items-center gap-1 flex-wrap bg-white h-100 px-2 py-2" 
+                   style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); border-radius: 0 8px 8px 0;">
+                <% 17.times do %>
+                  <div class="d-flex flex-column justify-content-center align-items-center text-center flex-shrink-0"
+                       style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa; border-radius: 4px; overflow: hidden;">
+                    <p class="text-muted m-0 text-center" style="font-size: 0.75rem;"></p>
+                  </div>
+                <% end %>
+
+                <!-- Vertical Divider -->
+                <div class="vr mx-0"></div>
+
+                <!-- SVG Icon to Open Tier-Specific Modal -->
+                <div class="d-flex align-items-center" 
+                     style="cursor: pointer; margin-left: auto; margin-right: 3px;">
+                  <%= image_tag "icons/expand_icon.svg", alt: "Expand #{tier} items", width: 17, height: 17 %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tier List Info Modal -->
+<div class="modal fade" id="tierListInfoModal" tabindex="-1" aria-labelledby="tierListInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="tierListInfoModalLabel"><%= @tier_list.name %></h5>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="modal-body text-center">
+        <!-- Image Section -->
+        <% if @tier_list.picture.attached? %>
+          <%= image_tag @tier_list.picture, class: 'img-thumbnail mb-3', style: 'width: 250px; height: 200px; object-fit: cover;' %>
+        <% else %>
+          <img src="https://via.placeholder.com/200x150" class="img-thumbnail mb-3" alt="Placeholder Image" style="width: 200px; height: 150px; object-fit: cover;">
+        <% end %>
+        
+        <!-- Description Section -->
+        <div class="border rounded p-3 text-start bg-light" style="max-height: 200px; overflow-y: auto;">
+          <p class="mb-0"><%= @tier_list.description.presence || "No description available." %></p>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

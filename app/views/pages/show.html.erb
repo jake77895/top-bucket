@@ -46,33 +46,7 @@
     <h5 class="mb-0">Tier Lists</h5>
   </div>
   <div class="card-body">
-    <% if @page.tier_lists.present? %>
-      <div class="row row-cols-1 row-cols-md-2 g-4">
-        <% @page.tier_lists.each do |tier_list| %>
-          <div class="col">
-            <div class="card h-100 shadow-sm">
-              <%= link_to tier_list_path(tier_list) do %>
-                <% if tier_list.picture.attached? %>
-                  <%= image_tag tier_list.picture.variant(resize_to_fill: [300, 200]), class: 'card-img-top', alt: tier_list.name %>
-                <% else %>
-                  <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Tier List Placeholder">
-                <% end %>
-                <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                  <h5 class="card-title text-white text-center bg-dark bg-opacity-75 p-2 rounded">
-                    <%= tier_list.name %>
-                  </h5>
-                </div>
-              <% end %>
-              <div class="card-body">
-                <p class="card-text text-muted"><%= tier_list.description.presence || 'No description available.' %></p>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <p class="text-muted">No tier lists are currently associated with this page.</p>
-    <% end %>
+    <%= render 'tier_lists'%>
   </div>
 </div>
 
@@ -115,6 +89,27 @@
           </div>
         </div>
       <% end %>
+
+
+      <!-- Subpages Section -->
+      <% if @page.children.any? %>
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Subpages</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-0">
+              <% @page.children.each do |subpage| %>
+                <li class="mb-1">
+                  <%= link_to subpage.name, page_path(subpage.slug), class: 'text-primary text-decoration-none' %>
+                  <hr class="my-1">
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+
     </div>
   </div>
 </div>

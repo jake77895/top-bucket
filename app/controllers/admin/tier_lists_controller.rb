@@ -68,8 +68,8 @@ class Admin::TierListsController < ApplicationController
   def create
     @tier_list = TierList.new(tier_list_params)
   
-    if template_id.present?
-      template = TierListTemplate.find_by(id: template_id)
+    if params[:tier_list][:tier_list_template_id].present?
+      template = TierListTemplate.find_by(id: params[:tier_list][:tier_list_template_id])
       @tier_list.custom_fields = template.custom_fields if template
     end
   
@@ -81,6 +81,7 @@ class Admin::TierListsController < ApplicationController
       render :new
     end
   end
+  
 
 
   def edit
@@ -118,7 +119,8 @@ class Admin::TierListsController < ApplicationController
       :name, 
       :description, 
       :published,
-      :tier_list_template_id, 
+      :tier_list_template_id,
+      :picture, 
       custom_fields: [:name, :type, :value]
     )
   end

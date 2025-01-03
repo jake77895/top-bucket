@@ -1,0 +1,28 @@
+<% if @page.tier_lists.present? %>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <% @page.tier_lists.each do |tier_list| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <%= link_to tier_list_path(tier_list), class: 'text-decoration-none text-dark' do %>
+            <% if tier_list.picture.attached? %>
+              <%= image_tag tier_list.picture, 
+                    class: 'card-img-top rounded-top object-fit-cover', 
+                    alt: tier_list.name, 
+                    style: 'height: 150px; width: 100%; object-fit: cover;' %>
+            <% else %>
+              <img src="https://via.placeholder.com/200x150" 
+                   class="card-img-top rounded-top object-fit-cover" 
+                   alt="Tier List Placeholder"
+                   style="height: 150px; width: 100%; object-fit: cover;">
+            <% end %>
+            <div class="card-body p-2">
+              <h6 class="card-title fw-bold text-center mb-1"><%= tier_list.name %></h6>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-muted text-center">No tier lists are currently associated with this page.</p>
+<% end %>
