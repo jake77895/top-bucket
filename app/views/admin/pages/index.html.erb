@@ -12,31 +12,66 @@
       <h5 class="mb-0">Pages List</h5>
     </div>
     <ul class="list-group list-group-flush">
-      <% @pages.each do |page| %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong><%= page.name %></strong>
-            <% if page.parent_id.present? %>
-              <small class="text-muted">(Child of <%= Page.find_by(id: page.parent_id)&.name || 'Unknown' %>)</small>
-            <% end %>
+      <% @pages.where(parent_id: nil).each do |page| %>
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong><%= page.name %></strong>
+              <!-- Parent Page with Accordion Toggle -->
+              <button class="btn btn-link text-decoration-none p-0" 
+                      data-bs-toggle="collapse" 
+                      data-bs-target="#children-<%= page.id %>" 
+                      aria-expanded="false" 
+                      aria-controls="children-<%= page.id %>">
+                <%= image_tag('icons/arrow_toggle.svg', alt: 'Toggle Arrow', width: 16, height: 16, class: 'svg-icon') %>
+              </button>
+              
+            </div>
+            <div class="d-flex align-items-center">
+              <!-- Dropdown for Manage Tier Lists -->
+              <div class="btn-group me-2">
+                <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <%= link_to 'Manage Tier Lists', manage_tier_lists_admin_page_path(page), class: 'dropdown-item' %>
+                  </li>
+                </ul>
+              </div>
+              <!-- Edit and Delete Buttons -->
+              <%= link_to 'Edit', edit_admin_page_path(page), class: 'btn btn-outline-secondary btn-sm me-2' %>
+              <%= link_to 'Delete', admin_page_path(page), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
+            </div>
           </div>
-<div class="d-flex align-items-center">
-  <!-- Dropdown for Manage Tier Lists -->
-  <div class="btn-group me-2">
-    <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      Actions
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <%= link_to 'Manage Tier Lists', manage_tier_lists_admin_page_path(page), class: 'dropdown-item' %>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Edit and Delete Buttons -->
-  <%= link_to 'Edit', edit_admin_page_path(page), class: 'btn btn-outline-secondary btn-sm me-2' %>
-  <%= link_to 'Delete', admin_page_path(page), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
-</div>
+          <!-- Child Pages Accordion -->
+          <div class="collapse mt-2" id="children-<%= page.id %>">
+            <ul class="list-group ms-4">
+              <% @pages.where(parent_id: page.id).each do |child_page| %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong><%= child_page.name %></strong>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <!-- Dropdown for Manage Tier Lists -->
+                    <div class="btn-group me-2">
+                      <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <%= link_to 'Manage Tier Lists', manage_tier_lists_admin_page_path(child_page), class: 'dropdown-item' %>
+                        </li>
+                      </ul>
+                    </div>
+                    <!-- Edit and Delete Buttons -->
+                    <%= link_to 'Edit', edit_admin_page_path(child_page), class: 'btn btn-outline-secondary btn-sm me-2' %>
+                    <%= link_to 'Delete', admin_page_path(child_page), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          </div>
         </li>
       <% end %>
     </ul>
