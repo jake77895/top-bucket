@@ -1,0 +1,47 @@
+<!-- Tier-Specific Items Modal -->
+<div class="modal fade" id="tierItemsModal-<%= tier %>" tabindex="-1" aria-labelledby="tierItemsModalLabel-<%= tier %>" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="tierItemsModalLabel-<%= tier %>">
+          Items in Tier: <%= tier %>
+        </h5>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="container">
+          <div class="row row-cols-2 row-cols-md-3 g-3">
+            <% ranked_items.each do |rank| %>
+              <div class="col">
+                <div class="card text-center shadow-sm border rounded">
+                  <% if rank.item.picture.attached? %>
+                    <%= image_tag rank.item.picture,
+                                  alt: rank.item.name,
+                                  class: "card-img-top img-fluid rounded",
+                                  style: "height: 150px; object-fit: cover;" %>
+                  <% else %>
+                    <%= image_tag "https://via.placeholder.com/150x150",
+                                  alt: "Placeholder Image",
+                                  class: "card-img-top img-fluid rounded",
+                                  style: "height: 150px; object-fit: cover;" %>
+                  <% end %>
+                  <div class="card-body p-2">
+                    <h6 class="card-title fw-bold text-truncate mb-0"><%= rank.item.name %></h6>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

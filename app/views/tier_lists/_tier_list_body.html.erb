@@ -31,10 +31,40 @@
             <div class="col">
               <div class="d-flex align-items-center gap-1 flex-wrap bg-white h-100 px-2 py-2" 
                    style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); border-radius: 0 8px 8px 0;">
-                <% 17.times do %>
-                  <div class="d-flex flex-column justify-content-center align-items-center text-center flex-shrink-0"
-                       style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa; border-radius: 4px; overflow: hidden;">
-                    <p class="text-muted m-0 text-center" style="font-size: 0.75rem;"></p>
+                
+                <% ranked_items = @item_ranks.select { |rank| rank.rank == rank_value(tier) } %>
+                <% ranked_items.each do |rank| %>
+                  <div class="position-relative text-center flex-shrink-0 overflow-hidden rounded"
+                       style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa;"
+                       data-bs-toggle="modal" data-bs-target="#itemDetailsModal-<%= rank.item.id %>">
+                    <% if rank.item.picture.attached? %>
+                      <%= image_tag rank.item.picture, 
+                                    alt: rank.item.name, 
+                                    class: "img-fluid w-100 h-100 object-fit-cover" %>
+                    <% else %>
+                      <%= image_tag "https://via.placeholder.com/62x62", 
+                                    alt: "Item Placeholder", 
+                                    class: "img-fluid w-100 h-100 object-fit-cover" %>
+                    <% end %>
+                    <!-- Item Name Overlay -->
+                    <div class="position-absolute bottom-0 start-0 w-100 text-white bg-dark bg-opacity-75 px-1"
+                         style="font-size: 0.7rem;">
+                      <strong><%= rank.item.name %></strong>
+                    </div>
+                  </div>
+
+                  <!-- Include Item Details Modal for Each Item -->
+                  <%= render partial: 'tier_lists/item_details_modal', locals: { 
+                        item: rank.item, 
+                        custom_values: @item_custom_values.find { |cv| cv[:item_id] == rank.item.id }&.dig(:custom_values) 
+                      } %>
+                <% end %>
+
+                <!-- Empty Slots for Remaining Spaces -->
+                <% (17 - ranked_items.size).times do %>
+                  <div class="d-flex justify-content-center align-items-center text-center flex-shrink-0 rounded"
+                       style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa;">
+                    <p class="text-muted m-0" style="font-size: 0.75rem;">&nbsp;</p>
                   </div>
                 <% end %>
 
@@ -42,10 +72,15 @@
                 <div class="vr mx-0"></div>
 
                 <!-- SVG Icon to Open Tier-Specific Modal -->
-                <div class="d-flex align-items-center" 
-                     style="cursor: pointer; margin-left: auto; margin-right: 3px;">
-                  <%= image_tag "icons/expand_icon.svg", alt: "Expand #{tier} items", width: 17, height: 17 %>
+                <div class="d-flex align-items-center ms-auto">
+                  <%= link_to '#', data: { bs_toggle: 'modal', bs_target: "#tierItemsModal-#{tier}" } do %>
+                    <%= image_tag "icons/expand_icon.svg", alt: "Expand #{tier} items", width: 17, height: 17 %>
+                  <% end %>
                 </div>
+
+                <!-- Render Tier Items Modal Partial -->
+                <%= render partial: 'tier_lists/tier_items_modal', locals: { tier: tier, ranked_items: ranked_items } %>
+                
               </div>
             </div>
           </div>
@@ -66,14 +101,12 @@
       
       <!-- Modal Body -->
       <div class="modal-body text-center">
-        <!-- Image Section -->
         <% if @tier_list.picture.attached? %>
           <%= image_tag @tier_list.picture, class: 'img-thumbnail mb-3', style: 'width: 250px; height: 200px; object-fit: cover;' %>
         <% else %>
           <img src="https://via.placeholder.com/200x150" class="img-thumbnail mb-3" alt="Placeholder Image" style="width: 200px; height: 150px; object-fit: cover;">
         <% end %>
         
-        <!-- Description Section -->
         <div class="border rounded p-3 text-start bg-light" style="max-height: 200px; overflow-y: auto;">
           <p class="mb-0"><%= @tier_list.description.presence || "No description available." %></p>
         </div>

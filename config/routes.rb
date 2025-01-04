@@ -51,6 +51,8 @@ Rails.application.routes.draw do
 
   # Public Routes for Viewing Individual TierLists
   resources :tier_lists, only: [:show]
+  post 'rank_item', to: 'tier_lists#rank_item', as: :rank_item
+
   
   # Navigation parts of the site
   root "site#home"

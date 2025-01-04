@@ -1,4 +1,3 @@
-<!-- Item Ranking Partial -->
 <div class="container mt-4 mb-4">
   <div class="card shadow-sm border rounded p-3">
     <div class="card-header bg-dark text-white rounded-top">
@@ -6,37 +5,77 @@
     </div>
     
     <div class="card-body text-center">
-      <!-- Item Image -->
+      <!-- Item Image with Modal Trigger -->
       <div class="mb-3">
-        <%= image_tag "https://via.placeholder.com/300x200", 
-                      alt: "Item Image", 
-                      class: "img-fluid rounded shadow-sm border", 
-                      style: "max-width: 300px; max-height: 200px; object-fit: cover;" %>
+        <% if @current_item&.picture&.attached? %>
+          <%= image_tag @current_item.picture, 
+                        alt: @current_item.name, 
+                        class: "img-fluid rounded shadow-sm border", 
+                        style: "max-width: 300px; max-height: 200px; object-fit: cover; cursor: pointer;", 
+                        "data-bs-toggle": "modal", 
+                        "data-bs-target": (@current_item ? "#itemDetailsModal-#{@current_item.id}" : '') %>
+        <% else %>
+          <%= image_tag "https://via.placeholder.com/300x200", 
+                        alt: "Item Image", 
+                        class: "img-fluid rounded shadow-sm border", 
+                        style: "max-width: 300px; max-height: 200px; object-fit: cover; cursor: pointer;", 
+                        "data-bs-toggle": "modal", 
+                        "data-bs-target": (@current_item ? "#itemDetailsModal-#{@current_item.id}" : '') %>
+        <% end %>
       </div>
-      
+
       <!-- Item Name -->
-      <h5 class="fw-bold mb-3">Item Name Placeholder</h5>
+      <h5 class="fw-bold mb-3">
+        <%= @current_item.present? ? @current_item.name : "No Item Available" %>
+      </h5>
       
       <!-- Ranking Options with Border -->
-      <div class="mb-4 border rounded p-3 shadow-sm">
-        <h6 class="text-center fw-bold mb-3">Select Item Rank</h6>
-        <div class="d-flex justify-content-center gap-3">
-          <% ["S", "A", "B", "C", "D", "F"].each do |rank| %>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="item_rank" id="rank_<%= rank %>" value="<%= rank %>">
-              <label class="form-check-label fw-bold" for="rank_<%= rank %>">
-                <%= rank %>
-              </label>
-            </div>
-          <% end %>
+      <%= form_with url: rank_item_path, method: :post, local: true do |form| %>
+        <%= form.hidden_field :tier_list_id, value: @tier_list.id %>
+        <%= form.hidden_field :item_id, value: @current_item.id if @current_item.present? %>
+        
+        <div class="border rounded p-3 mb-3 shadow-sm text-center">
+          
+          <!-- Ranking Options -->
+          <div class="d-flex justify-content-center gap-3 mb-3 flex-wrap">
+            <% ["S", "A", "B", "C", "D", "F"].each do |rank| %>
+              <div class="form-check form-check-inline">
+                <%= form.radio_button :item_rank, rank, id: "rank_#{rank}", class: "form-check-input" %>
+                <%= form.label "rank_#{rank}", rank, class: "form-check-label fw-bold" %>
+              </div>
+            <% end %>
+          </div>
+          
+          <!-- Submit Button -->
+          <div>
+            <%= form.submit "Submit Rank", class: "btn btn-dark px-4 fw-bold" %>
+          </div>
         </div>
-      </div>
+      <% end %>
+
       
       <!-- Navigation Buttons -->
       <div class="d-flex justify-content-between align-items-center">
-        <button class="btn btn-outline-secondary px-4">Previous</button>
-        <button class="btn btn-outline-secondary px-4">Next</button>
+        <% if @previous_item_id.present? %>
+          <%= link_to "Previous", tier_list_path(@tier_list, item_id: @previous_item_id), class: "btn btn-outline-secondary px-4" %>
+        <% else %>
+          <button class="btn btn-outline-secondary px-4 disabled">Previous</button>
+        <% end %>
+
+        <% if @next_item_id.present? %>
+          <%= link_to "Next", tier_list_path(@tier_list, item_id: @next_item_id), class: "btn btn-outline-secondary px-4" %>
+        <% else %>
+          <button class="btn btn-outline-secondary px-4 disabled">Next</button>
+        <% end %>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Include Item Details Modal if @current_item Exists -->
+<% if @current_item.present? %>
+  <%= render partial: 'tier_lists/item_details_modal', locals: { 
+        item: @current_item, 
+        custom_values: @item_custom_values.find { |cv| cv[:item_id] == @current_item.id }&.dig(:custom_values) 
+      } %>
+<% end %>

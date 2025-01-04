@@ -9,16 +9,19 @@
 #  updated_at    :datetime         not null
 #  item_id       :bigint           not null
 #  tier_list_id  :bigint           not null
+#  user_id       :bigint
 #
 # Indexes
 #
 #  index_item_ranks_on_item_id       (item_id)
 #  index_item_ranks_on_tier_list_id  (tier_list_id)
+#  index_item_ranks_on_user_id       (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (item_id => items.id)
 #  fk_rails_...  (tier_list_id => tier_lists.id)
+#  fk_rails_...  (user_id => users.id)
 #
 class ItemRank < ApplicationRecord
   belongs_to :item
