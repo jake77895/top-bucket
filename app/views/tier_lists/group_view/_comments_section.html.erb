@@ -1,0 +1,56 @@
+<div class="container mt-4 mb-4">
+  <div class="card shadow-sm border-0">
+    <!-- Comments Header -->
+    <div class="card-header bg-light d-flex align-items-center justify-content-between">
+      <h6 class="fw-bold mb-0">Comments</h6>
+    </div>
+
+    <!-- Comments Form -->
+    <div class="card-body">
+      <form>
+        <div class="d-flex align-items-center gap-2 mb-3">
+          
+
+          <!-- Comment Input Field -->
+          <input type="text" placeholder="Add a comment..." class="form-control border rounded" style="flex: 1;">
+
+          <!-- Item Selection Dropdown -->
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="selectItemDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              Select Item (Optional)
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="selectItemDropdown">
+              <% @tier_list.items.each do |item| %>
+                <li>
+                  <a href="#" class="dropdown-item" data-item-id="<%= item.id %>"><%= item.name %></a>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="button" class="btn btn-dark fw-bold px-4">Comment</button>
+        </div>
+      </form>
+
+      <!-- Comments List Section -->
+      <div class="mt-4">
+        <%# Placeholder Comments %>
+        <% comments = [
+          { username: "@username_placeholder", time: "2 hours ago", text: "This is a placeholder comment for demonstration purposes." },
+          { username: "@another_user", time: "1 day ago", text: "Another placeholder comment showing how multiple comments would appear." }
+        ] %>
+
+        <% comments.each do |comment| %>
+          <div class="border-bottom border-top py-2">
+            <p class="mb-1 fw-bold">
+              <%= comment[:username] %>
+              <span class="text-muted small">· <%= comment[:time] %></span>
+            </p>
+            <p class="mb-0 text-muted" style="font-size: 0.9rem;"><%= comment[:text] %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

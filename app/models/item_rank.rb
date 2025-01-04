@@ -31,15 +31,6 @@ class ItemRank < ApplicationRecord
 
   validate :custom_values_presence
 
-  # Explicitly allowlist searchable attributes for Ransack
-  def self.ransackable_attributes(auth_object = nil)
-    %w[item_id tier_list_id user_id rank custom_values created_at updated_at]
-  end
-
-  def self.ransackable_associations(auth_object = nil)
-    %w[item tier_list user]
-  end
-
   private
 
   def custom_values_presence
