@@ -7,24 +7,42 @@
 
     <div class="card-body p-2" style="max-height: 600px; overflow-y: auto;">
       <!-- Items Grid -->
-      <div class="row row-cols-2 row-cols-md-3 g-2">
-        <% 12.times do |i| %>
-          <div class="col">
-            <div class="card h-100 shadow-sm border-0 text-center">
-              <!-- Item Image -->
-              <%= image_tag "https://via.placeholder.com/120x120", 
-                            alt: "Item Image", 
-                            class: "card-img-top mx-auto mt-2 rounded-circle", 
-                            style: "width: 80px; height: 80px; object-fit: cover;" %>
-              
-              <!-- Item Name -->
-              <div class="card-body p-2">
-                <h6 class="card-title fw-bold text-truncate">Item Name Placeholder <%= i+1 %></h6>
+      <% if @items.any? %>
+        <div class="row row-cols-2 row-cols-md-3 g-2">
+          <% @items.each do |item| %>
+            <div class="col">
+              <div class="card h-100 shadow-sm border rounded text-center p-2" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#itemDetailsModal-<%= item.id %>">
+                <!-- Item Image -->
+                <% if item.picture.attached? %>
+                  <%= image_tag item.picture, 
+                                alt: item.name, 
+                                class: "card-img-top mx-auto mt-2 rounded-circle border", 
+                                style: "width: 80px; height: 80px; object-fit: cover;" %>
+                <% else %>
+                  <%= image_tag "https://via.placeholder.com/120x120", 
+                                alt: "Placeholder", 
+                                class: "card-img-top mx-auto mt-2 rounded-circle border", 
+                                style: "width: 80px; height: 80px; object-fit: cover;" %>
+                <% end %>
+
+                <!-- Item Name -->
+                <div class="card-body p-2">
+                  <h6 class="card-title fw-bold text-truncate"><%= item.name %></h6>
+                </div>
               </div>
             </div>
-          </div>
-        <% end %>
-      </div>
+
+            <!-- Modal Partial for Item -->
+            <%= render partial: 'item_details_modal', locals: { item: item, custom_values: @item_custom_values.find { |cv| cv[:item_id] == item.id }&.dig(:custom_values) } %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center p-4">
+          <p class="text-muted mb-0">No items are currently associated with this tier list.</p>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
