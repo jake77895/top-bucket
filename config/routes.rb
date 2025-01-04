@@ -50,7 +50,12 @@ Rails.application.routes.draw do
   get '/pages/:slug', to: 'pages#show', as: 'page'
 
   # Public Routes for Viewing Individual TierLists
-  resources :tier_lists, only: [:show]
+  resources :tier_lists, only: [:show] do
+    member do
+      get :user_rankings
+      get :group_rankings
+    end
+  end
   post 'rank_item', to: 'tier_lists#rank_item', as: :rank_item
 
   

@@ -24,6 +24,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class ItemRank < ApplicationRecord
+  belongs_to :user, optional: true
   belongs_to :item
   belongs_to :tier_list
   before_save :normalize_custom_values

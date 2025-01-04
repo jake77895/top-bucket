@@ -42,6 +42,19 @@ class TierListsController < ApplicationController
       redirect_to tier_list_path(@tier_list), alert: "Failed to rank item."
     end
   end
+
+  def user_rankings
+    @tier_list = TierList.find(params[:id])
+    @user_ranks = ItemRank.where(tier_list_id: @tier_list.id, user_id: current_user.id).includes(:item).order(:rank)
+    @ranked_items = @user_ranks.map(&:item)
+  end
+
+  def group_rankings
+    @tier_list = TierList.find(params[:id])
+    @group_ranks = ItemRank.where(tier_list_id: @tier_list.id, user_id: nil).includes(:item).order(:rank)
+    @ranked_items = @group_ranks.map(&:item)
+  end
+  
   
 
   private
