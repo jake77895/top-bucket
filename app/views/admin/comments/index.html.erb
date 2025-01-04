@@ -1,0 +1,41 @@
+<h1 class="text-center my-4">All Comments (Admin View)</h1>
+
+<div class="container">
+  <div class="card shadow-sm border-0">
+    <!-- Table Body -->
+    <div class="table-responsive">
+      <table class="table table-bordered mb-0">
+        <thead class="table-dark text-white">
+          <tr>
+            <th>User</th>
+            <th>Content</th>
+            <th>Commentable</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @comments.each do |comment| %>
+            <tr>
+              <td>@<%= comment.user.user_name %></td>
+              <td><%= comment.content %></td>
+              <td>
+                <% if comment.commentable.is_a?(Item) %>
+                  Item: <strong><%= comment.commentable.name %></strong>
+                <% else %>
+                  General
+                <% end %>
+              </td>
+              <td><%= time_ago_in_words(comment.created_at) %> ago</td>
+              <td>
+                <%= link_to comment_path(comment), method: :delete, data: { confirm: "Are you sure you want to delete this comment?" }, class: "text-danger" do %>
+                  <%= image_tag 'icons/trash_icon.svg', alt: 'Delete Comment', width: 16, height: 16 %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

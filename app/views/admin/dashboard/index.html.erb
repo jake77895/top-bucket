@@ -3,7 +3,9 @@
   <p>Welcome, <%= current_user.user_name %>! You have admin privileges.</p>
 
   <ul class="list-group mt-4">
-    <li class="list-group-item"><%= link_to "Manage Users", "#" %></li>
+    <li class="list-group-item">
+      <%= link_to "Manage Users", admin_users_path, class: "text-decoration-underline" %>
+    </li>
     <li class="list-group-item">
       <%= link_to "Manage Pages", admin_pages_path, class: "text-decoration-underline" %>
     </li>
@@ -16,9 +18,12 @@
     <li class="list-group-item">
       <%= link_to "Manage Items", admin_items_path, class: "text-decoration-underline" %>
     </li>
-<li class="list-group-item">
-  <%= link_to "Manage Item Ranks", admin_tier_lists_path, class: "text-decoration-underline" %>
-</li>
+    <li class="list-group-item">
+      <%= link_to "Manage Item Ranks", admin_tier_lists_path, class: "text-decoration-underline" %>
+    </li>
+    <li class="list-group-item">
+      <%= link_to 'Manage Comments', admin_comments_path, class: 'text-decoration-underline' %>
+    </li>
     <li class="list-group-item"><%= link_to "Site Settings", "#" %></li>
   </ul>
 </div>

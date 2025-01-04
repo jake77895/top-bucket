@@ -23,7 +23,8 @@ Rails.application.routes.draw do
     get 'tier_lists/edit'
     get 'tier_lists/show'
     get 'dashboard', to: 'dashboard#index'
-    resources :users, only: [:index, :edit, :update, :destroy]
+    resources :users, only: [:index, :destroy]
+    resources :comments, only: [:index, :destroy]
     resources :settings, only: [:index, :update]
     resources :pages do
       member do
