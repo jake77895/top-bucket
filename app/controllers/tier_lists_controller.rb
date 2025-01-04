@@ -18,7 +18,35 @@ class TierListsController < ApplicationController
 
     @next_item_id = @items[@items.index(@current_item) + 1]&.id
     @previous_item_id = @items[@items.index(@current_item) - 1]&.id if @items.index(@current_item).positive?
+
+    render "tier_lists/individual_view/show"
   end
+
+  # For the average ranking view
+  def show_group
+    @tier_list = TierList.find(params[:id])
+  
+    # Fetch grouped rankings
+    group_rankings = ItemRank
+      .where(tier_list_id: @tier_list.id)
+      .group(:item_id)
+      .select('item_id, AVG(rank) as average_rank')
+      .map do |rank|
+        { 
+          item: Item.find(rank.item_id), 
+          average_rank: rank.average_rank.round 
+        }
+      end
+  
+    @group_rankings = group_rankings
+    @item_custom_values = ItemRank
+      .where(tier_list_id: @tier_list.id)
+      .select(:item_id, :custom_values)
+      .map { |ir| { item_id: ir.item_id, custom_values: ir.custom_values } }
+
+    render "tier_lists/group_view/show_group"
+  end
+  
 
 
   def rank_item
@@ -26,9 +54,13 @@ class TierListsController < ApplicationController
   
     item_rank = ItemRank.find_or_initialize_by(
       item_id: params[:item_id],
-      tier_list_id: @tier_list.id
+      tier_list_id: @tier_list.id,
+
     )
+
+    item_rank.user_id = params[:user_id] || current_user&.id
   
+    # Uses helper method to rank item with integer value
     item_rank.rank = rank_value(params[:item_rank])
   
     if item_rank.save
@@ -51,8 +83,15 @@ class TierListsController < ApplicationController
 
   def group_rankings
     @tier_list = TierList.find(params[:id])
-    @group_ranks = ItemRank.where(tier_list_id: @tier_list.id, user_id: nil).includes(:item).order(:rank)
-    @ranked_items = @group_ranks.map(&:item)
+  
+    # Calculate average rank for each item
+    @group_rankings = @tier_list.items.map do |item|
+      average_rank = ItemRank.where(item_id: item.id, tier_list_id: @tier_list.id)
+                             .average(:rank)
+      { item: item, average_rank: average_rank&.ceil || "N/A" }
+    end
+  
+    render 'tier_lists/group_rankings'
   end
   
   
@@ -60,15 +99,24 @@ class TierListsController < ApplicationController
   private
 
   def next_item_id_after_rank(current_item_id)
-    item_ids = @tier_list.items.pluck(:id)
+    # Ensure items are consistently ordered (e.g., by creation date or ID)
+    item_ids = @tier_list.items.order(:id).pluck(:id)
+  
+    # Convert current_item_id to integer for accurate comparison
     current_index = item_ids.index(current_item_id.to_i)
-
+  
     return nil if current_index.nil? # Handle edge case if the item is not found
-
-    # Check if there's a next item
+  
+    # Move to the next item if it exists
     next_index = current_index + 1
     next_index < item_ids.length ? item_ids[next_index] : nil
   end
+  
+
+  def rank_item_params
+    params.permit(:tier_list_id, :item_id, :item_rank, :user_id)
+  end
+  
   
   
 end

@@ -3,7 +3,7 @@
     <div class="card-header bg-dark text-white rounded-top">
       <h5 class="mb-0 text-center">Rank Item</h5>
     </div>
-    
+
     <div class="card-body text-center">
       <!-- Item Image with Modal Trigger -->
       <div class="mb-3">
@@ -28,14 +28,14 @@
       <h5 class="fw-bold mb-3">
         <%= @current_item.present? ? @current_item.name : "No Item Available" %>
       </h5>
-      
+
       <!-- Ranking Options with Border -->
       <%= form_with url: rank_item_path, method: :post, local: true do |form| %>
         <%= form.hidden_field :tier_list_id, value: @tier_list.id %>
         <%= form.hidden_field :item_id, value: @current_item.id if @current_item.present? %>
-        
+        <%= form.hidden_field :user_id, value: current_user.id if current_user.present? %>
+
         <div class="border rounded p-3 mb-3 shadow-sm text-center">
-          
           <!-- Ranking Options -->
           <div class="d-flex justify-content-center gap-3 mb-3 flex-wrap">
             <% ["S", "A", "B", "C", "D", "F"].each do |rank| %>
@@ -45,7 +45,7 @@
               </div>
             <% end %>
           </div>
-          
+
           <!-- Submit Button -->
           <div>
             <%= form.submit "Submit Rank", class: "btn btn-dark px-4 fw-bold" %>
@@ -53,7 +53,6 @@
         </div>
       <% end %>
 
-      
       <!-- Navigation Buttons -->
       <div class="d-flex justify-content-between align-items-center">
         <% if @previous_item_id.present? %>
@@ -74,7 +73,7 @@
 
 <!-- Include Item Details Modal if @current_item Exists -->
 <% if @current_item.present? %>
-  <%= render partial: 'tier_lists/item_details_modal', locals: { 
+  <%= render partial: 'tier_lists/individual_view/item_details_modal', locals: { 
         item: @current_item, 
         custom_values: @item_custom_values.find { |cv| cv[:item_id] == @current_item.id }&.dig(:custom_values) 
       } %>

@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   resources :tier_lists, only: [:show] do
     member do
       get :user_rankings
-      get :group_rankings
+      get :group, to: 'tier_lists#show_group'
     end
   end
   post 'rank_item', to: 'tier_lists#rank_item', as: :rank_item

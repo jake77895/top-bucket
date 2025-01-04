@@ -9,6 +9,10 @@
           <%= image_tag 'icons/info_icon.svg', alt: 'Info', width: 20, height: 20, class: 'ms-2' %>
         <% end %>
       </h5>
+
+      <!-- Group Rankings Button -->
+  <%= link_to 'Group Rankings', group_tier_list_path(@tier_list), 
+        class: 'btn btn-light btn-sm fw-bold' %>
     </div>
     
     <!-- Tier List Content -->
@@ -54,7 +58,7 @@
                   </div>
 
                   <!-- Include Item Details Modal for Each Item -->
-                  <%= render partial: 'tier_lists/item_details_modal', locals: { 
+                  <%= render partial: 'tier_lists/individual_view/item_details_modal', locals: { 
                         item: rank.item, 
                         custom_values: @item_custom_values.find { |cv| cv[:item_id] == rank.item.id }&.dig(:custom_values) 
                       } %>
@@ -79,7 +83,7 @@
                 </div>
 
                 <!-- Render Tier Items Modal Partial -->
-                <%= render partial: 'tier_lists/tier_items_modal', locals: { tier: tier, ranked_items: ranked_items } %>
+                <%= render partial: 'tier_lists/individual_view/tier_items_modal', locals: { tier: tier, ranked_items: ranked_items } %>
                 
               </div>
             </div>
