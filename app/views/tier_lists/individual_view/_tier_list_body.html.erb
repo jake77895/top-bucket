@@ -11,10 +11,19 @@
       </h5>
 
       <!-- Group Rankings Button -->
-  <%= link_to 'Group Rankings', group_tier_list_path(@tier_list), 
+      <%= link_to 'Group Rankings', group_tier_list_path(@tier_list), 
         class: 'btn btn-light btn-sm fw-bold' %>
     </div>
-    
+
+    <div class="text-end mb-3">
+      <button type="button" class="btn btn-dark fw-bold" data-bs-toggle="modal" data-bs-target="#filterModal">
+        Open Filter
+      </button>
+    </div>
+
+    <%= render 'tier_lists/individual_view/filter_modal' %>
+
+
     <!-- Tier List Content -->
     <div class="card-body">
       <div class="container-fluid">
@@ -35,7 +44,7 @@
             <div class="col">
               <div class="d-flex align-items-center gap-1 flex-wrap bg-white h-100 px-2 py-2" 
                    style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); border-radius: 0 8px 8px 0;">
-                
+
                 <% ranked_items = @item_ranks.select { |rank| rank.rank == rank_value(tier) } %>
                 <% ranked_items.each do |rank| %>
                   <div class="position-relative text-center flex-shrink-0 overflow-hidden rounded"
@@ -84,7 +93,7 @@
 
                 <!-- Render Tier Items Modal Partial -->
                 <%= render partial: 'tier_lists/individual_view/tier_items_modal', locals: { tier: tier, ranked_items: ranked_items } %>
-                
+
               </div>
             </div>
           </div>
@@ -102,7 +111,7 @@
       <div class="modal-header">
         <h5 class="modal-title fw-bold" id="tierListInfoModalLabel"><%= @tier_list.name %></h5>
       </div>
-      
+
       <!-- Modal Body -->
       <div class="modal-body text-center">
         <% if @tier_list.picture.attached? %>
@@ -110,12 +119,12 @@
         <% else %>
           <img src="https://via.placeholder.com/200x150" class="img-thumbnail mb-3" alt="Placeholder Image" style="width: 200px; height: 150px; object-fit: cover;">
         <% end %>
-        
+
         <div class="border rounded p-3 text-start bg-light" style="max-height: 200px; overflow-y: auto;">
           <p class="mb-0"><%= @tier_list.description.presence || "No description available." %></p>
         </div>
       </div>
-      
+
       <!-- Modal Footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

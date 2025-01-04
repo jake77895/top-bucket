@@ -1,0 +1,41 @@
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="filterModalLabel">Filter Tier List</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <%= search_form_for @q, url: tier_list_path(@tier_list), method: :get, html: { class: 'row g-3' } do |f| %>
+          <% @filter_custom_values.each do |custom_value| %>
+            <div class="col-md-4">
+              <label class="form-label"><%= custom_value["name"] %></label>
+              <% case custom_value["type"] %>
+                <% when "integer" %>
+                  <%= f.number_field :custom_values_cont, class: "form-control", placeholder: "Enter #{custom_value["name"]}" %>
+                <% when "boolean" %>
+                  <%= f.select :custom_values_cont, [["Yes", true], ["No", false]], { include_blank: true }, class: "form-select" %>
+                <% else %>
+                  <%= f.text_field :custom_values_cont, class: "form-control", placeholder: "Enter #{custom_value["name"]}" %>
+              <% end %>
+            </div>
+          <% end %>
+          
+          <!-- Submit Button -->
+          <div class="col-12 mt-4 text-end">
+            <%= f.submit "Apply Filters", class: "btn btn-dark fw-bold px-4" %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

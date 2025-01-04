@@ -3,24 +3,34 @@ class TierListsController < ApplicationController
 
   def show
     @tier_list = TierList.find(params[:id])
-    @item_custom_values = ItemRank.where(tier_list_id: @tier_list.id).includes(:item).map do |rank|
-      { item_id: rank.item_id, custom_values: rank.custom_values }
-    end
-
-    @item_ranks = ItemRank.where(tier_list_id: @tier_list.id).includes(:item).order(:id)
+    
+    # Custom Values for Display
+    @item_custom_values = ItemRank.where(tier_list_id: @tier_list.id)
+                                  .includes(:item)
+                                  .map { |rank| { item_id: rank.item_id, custom_values: rank.custom_values } }
+  
+    # Apply Filtering and Retrieve Filtered Ranks and Custom Values
+    filter_result = filter
+    @item_ranks = filter_result[:ranks]
+    @filter_custom_values = filter_result[:custom_values]
+  
     @items = @item_ranks.map(&:item)
-
+  
     if params[:item_id].present?
       @current_item = @items.find { |item| item.id == params[:item_id].to_i }
     else
       @current_item = @items.first
     end
-
+  
     @next_item_id = @items[@items.index(@current_item) + 1]&.id
     @previous_item_id = @items[@items.index(@current_item) - 1]&.id if @items.index(@current_item).positive?
-
+  
     render "tier_lists/individual_view/show"
   end
+  
+  
+  
+  
 
   # For the average ranking view
   def show_group
@@ -93,6 +103,8 @@ class TierListsController < ApplicationController
   
     render 'tier_lists/group_rankings'
   end
+
+
   
   
 
@@ -111,6 +123,30 @@ class TierListsController < ApplicationController
     next_index = current_index + 1
     next_index < item_ids.length ? item_ids[next_index] : nil
   end
+
+  # Helper method for filtering ItemRanks
+  def filter
+    @q = ItemRank.ransack(params[:q])
+    filtered_item_ranks = @q.result
+                            .where(tier_list_id: @tier_list.id, user_id: current_user.id)
+                            .includes(:item)
+
+    # Extract unique custom value fields
+    filter_custom_values = ItemRank
+                            .where(tier_list_id: @tier_list.id)
+                            .pluck(:custom_values)
+                            .compact
+                            .flat_map { |cv| cv.is_a?(Array) ? cv : [cv] }
+                            .uniq { |cv| cv["name"] }
+
+    { ranks: filtered_item_ranks, custom_values: filter_custom_values }
+  end
+
+
+  
+  
+  
+
   
 
   def rank_item_params
