@@ -1,0 +1,32 @@
+<div class="container mt-4 mb-4">
+  <div class="card shadow-sm border-0">
+    <!-- Comments Header -->
+    <div class="card-header bg-light d-flex align-items-center justify-content-between">
+      <h6 class="fw-bold mb-0">Comment</h6>
+    </div>
+
+    <!-- Comments Form -->
+    <div class="card-body">
+      <%= form_with model: Comment.new, url: comments_path, local: true do |f| %>
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <!-- Comment Input Field -->
+          <%= f.text_field :content, placeholder: "Add a comment...", 
+                           class: "form-control border rounded", style: "flex: 1;" %>
+
+          <!-- Item Selection Dropdown -->
+          <%= f.select :commentable_id, 
+                        @tier_list.items.map { |item| [item.name, item.id] }, 
+                        { include_blank: "Select Item (Optional)" }, 
+                        { class: "form-select border rounded", style: "max-width: 210px;" } %>
+
+          <!-- Hidden Fields -->
+          <%= f.hidden_field :tier_list_id, value: @tier_list.id %>
+          <%= f.hidden_field :commentable_type, value: "Item" %>
+
+          <!-- Submit Button -->
+          <%= f.submit "Comment", class: "btn btn-dark fw-bold px-4" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

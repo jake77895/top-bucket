@@ -25,6 +25,8 @@ class User < ApplicationRecord
   # Include default devise modules.
   attr_accessor :login
 
+  has_many :comments, dependent: :destroy
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 

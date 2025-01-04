@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   get 'pages/index'
   get 'pages/show'
   devise_for :users
@@ -57,6 +58,9 @@ Rails.application.routes.draw do
     end
   end
   post 'rank_item', to: 'tier_lists#rank_item', as: :rank_item
+
+  # Public post routes for creating and destroying comments
+  resources :comments, only: [:create, :destroy]
 
   
   # Navigation parts of the site

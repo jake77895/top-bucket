@@ -56,12 +56,6 @@
                       <strong><%= rank[:item].name %></strong>
                     </div>
                   </div>
-
-                  <!-- Include Item Details Modal for Each Item -->
-                  <%= render partial: 'tier_lists/group_view/item_details_modal', locals: { 
-                        item: rank[:item], 
-                        custom_values: @item_custom_values.find { |cv| cv[:item_id] == rank[:item].id }&.dig(:custom_values) 
-                      } %>
                 <% end %>
 
                 <!-- Empty Slots for Remaining Spaces -->
@@ -83,7 +77,18 @@
                 </div>
 
                 <!-- Render Tier Items Modal Partial -->
-                <%= render partial: 'tier_lists/group_view/tier_items_modal', locals: { tier: tier, ranked_items: ranked_items } %>
+                <% ranked_items.each do |rank| %>
+                  <% if rank[:item].present? %>
+                    <% Rails.logger.debug "Rendering Modal for Item ID: #{rank[:item]&.id}" %>
+                    <%= render partial: 'tier_lists/group_view/item_details_modal', locals: { 
+                          item: rank[:item],
+                          custom_values: @item_custom_values.find { |cv| cv[:item_id] == rank[:item].id }&.dig(:custom_values),
+                          item_comments: Comment.where(commentable_type: "Item", commentable_id: rank[:item].id).includes(:user)
+                        } %>
+                  <% else %>
+                    <% Rails.logger.debug "Skipping Modal: rank[:item] is nil" %>
+                  <% end %>
+                <% end %>
                 
               </div>
             </div>

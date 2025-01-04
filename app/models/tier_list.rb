@@ -28,6 +28,8 @@ class TierList < ApplicationRecord
   has_many :page_associations, dependent: :destroy
   has_many :pages, through: :page_associations
 
+  has_many :comments, dependent: :destroy
+
   validates :name, presence: true
   validates :published, inclusion: { in: [true, false] }
 

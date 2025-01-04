@@ -2,5 +2,6 @@
   <!-- Render Group Rankings Partial -->
   <%= render partial: 'tier_lists/group_view/tier_list_grouped_body', locals: { group_rankings: @group_rankings } %>
 
-  <!-- Render Comments Section Partial -->
-  <%= render partial: 'tier_lists/group_view/comments_section', locals: { tier_list: @tier_list } %>
+<!-- Comments Section -->
+<%= render 'comments/comment_form', tier_list: @tier_list %>
+<%= render 'comments/comments_list', comments: @comments %>

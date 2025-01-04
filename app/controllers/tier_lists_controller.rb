@@ -7,8 +7,9 @@ class TierListsController < ApplicationController
   
     # Fetch ItemRanks and custom values
     @item_custom_values = ItemRank.where(tier_list_id: @tier_list.id)
-                                  .includes(:item)
-                                  .map { |rank| { item_id: rank.item_id, custom_values: rank.custom_values } }
+                              .includes(:item)
+                              .map { |rank| { item_id: rank.item_id, custom_values: rank.custom_values } }
+
   
     @item_ranks = ItemRank.where(tier_list_id: @tier_list.id).includes(:item).order(:id)
     @items = @item_ranks.map(&:item)
@@ -28,6 +29,7 @@ class TierListsController < ApplicationController
   # --- SHOW GROUP ---
   def show_group
     @tier_list = TierList.find(params[:id])
+    @comments = @tier_list.comments.includes(:user).order(created_at: :desc)
   
     @group_rankings = ItemRank
       .where(tier_list_id: @tier_list.id)
