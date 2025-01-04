@@ -1,0 +1,30 @@
+<!-- All Items Partial -->
+<div class="container mt-4 mb-4">
+  <div class="card shadow-sm border rounded p-3">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0 text-center">All Items</h5>
+    </div>
+
+    <div class="card-body p-2" style="max-height: 600px; overflow-y: auto;">
+      <!-- Items Grid -->
+      <div class="row row-cols-2 row-cols-md-3 g-2">
+        <% 12.times do |i| %>
+          <div class="col">
+            <div class="card h-100 shadow-sm border-0 text-center">
+              <!-- Item Image -->
+              <%= image_tag "https://via.placeholder.com/120x120", 
+                            alt: "Item Image", 
+                            class: "card-img-top mx-auto mt-2 rounded-circle", 
+                            style: "width: 80px; height: 80px; object-fit: cover;" %>
+              
+              <!-- Item Name -->
+              <div class="card-body p-2">
+                <h6 class="card-title fw-bold text-truncate">Item Name Placeholder <%= i+1 %></h6>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
