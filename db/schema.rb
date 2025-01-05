@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_04_205326) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_05_011759) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,6 +55,54 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_04_205326) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.string "company_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "employee_views", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "job_level_id", null: false
+    t.bigint "company_id", null: false
+    t.bigint "previous_company_id"
+    t.string "linkedin_url"
+    t.integer "flagged", default: 0, null: false
+    t.text "flag_comment"
+    t.bigint "group_id", null: false
+    t.bigint "location_id", null: false
+    t.bigint "school_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_employees_on_company_id"
+    t.index ["flagged"], name: "index_employees_on_flagged"
+    t.index ["group_id"], name: "index_employees_on_group_id"
+    t.index ["job_level_id"], name: "index_employees_on_job_level_id"
+    t.index ["linkedin_url"], name: "index_employees_on_linkedin_url"
+    t.index ["location_id"], name: "index_employees_on_location_id"
+    t.index ["name"], name: "index_employees_on_name"
+    t.index ["previous_company_id"], name: "index_employees_on_previous_company_id"
+    t.index ["school_id"], name: "index_employees_on_school_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "company_id", null: false
+    t.bigint "location_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_groups_on_company_id"
+    t.index ["location_id"], name: "index_groups_on_location_id"
+  end
+
   create_table "item_ranks", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "tier_list_id", null: false
@@ -74,6 +122,21 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_04_205326) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "job_levels", force: :cascade do |t|
+    t.string "name"
+    t.string "company_type"
+    t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_job_levels_on_company_id"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "page_associations", force: :cascade do |t|
     t.bigint "page_id", null: false
     t.bigint "tier_list_id", null: false
@@ -81,6 +144,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_04_205326) do
     t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "employee_view_id"
+    t.index ["employee_view_id"], name: "index_page_associations_on_employee_view_id"
     t.index ["page_id", "tier_list_id"], name: "index_page_associations_on_page_id_and_tier_list_id", unique: true
     t.index ["page_id"], name: "index_page_associations_on_page_id"
     t.index ["tier_list_id"], name: "index_page_associations_on_tier_list_id"
@@ -99,6 +164,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_04_205326) do
     t.index ["created_by"], name: "index_pages_on_created_by"
     t.index ["parent_id"], name: "index_pages_on_parent_id"
     t.index ["slug"], name: "index_pages_on_slug", unique: true
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tier_list_templates", force: :cascade do |t|
@@ -142,9 +213,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_04_205326) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comments", "tier_lists"
   add_foreign_key "comments", "users"
+  add_foreign_key "employees", "companies"
+  add_foreign_key "employees", "companies", column: "previous_company_id"
+  add_foreign_key "employees", "groups"
+  add_foreign_key "employees", "job_levels"
+  add_foreign_key "employees", "locations"
+  add_foreign_key "employees", "schools"
+  add_foreign_key "groups", "companies"
+  add_foreign_key "groups", "locations"
   add_foreign_key "item_ranks", "items"
   add_foreign_key "item_ranks", "tier_lists"
   add_foreign_key "item_ranks", "users"
+  add_foreign_key "job_levels", "companies"
+  add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"
   add_foreign_key "tier_lists", "tier_list_templates"
