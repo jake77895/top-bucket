@@ -13,10 +13,11 @@
 #
 # Indexes
 #
-#  index_page_associations_on_employee_view_id          (employee_view_id)
-#  index_page_associations_on_page_id                   (page_id)
-#  index_page_associations_on_page_id_and_tier_list_id  (page_id,tier_list_id) UNIQUE
-#  index_page_associations_on_tier_list_id              (tier_list_id)
+#  index_page_associations_on_employee_view_id              (employee_view_id)
+#  index_page_associations_on_page_id                       (page_id)
+#  index_page_associations_on_page_id_and_employee_view_id  (page_id,employee_view_id) UNIQUE WHERE (employee_view_id IS NOT NULL)
+#  index_page_associations_on_page_id_and_tier_list_id      (page_id,tier_list_id) UNIQUE
+#  index_page_associations_on_tier_list_id                  (tier_list_id)
 #
 # Foreign Keys
 #

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_05_011759) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_05_012034) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -146,6 +146,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_05_011759) do
     t.datetime "updated_at", null: false
     t.bigint "employee_view_id"
     t.index ["employee_view_id"], name: "index_page_associations_on_employee_view_id"
+    t.index ["page_id", "employee_view_id"], name: "index_page_associations_on_page_id_and_employee_view_id", unique: true, where: "(employee_view_id IS NOT NULL)"
     t.index ["page_id", "tier_list_id"], name: "index_page_associations_on_page_id_and_tier_list_id", unique: true
     t.index ["page_id"], name: "index_page_associations_on_page_id"
     t.index ["tier_list_id"], name: "index_page_associations_on_tier_list_id"
