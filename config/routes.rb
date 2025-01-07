@@ -42,6 +42,7 @@ Rails.application.routes.draw do
       resources :item_ranks, only: [:index, :edit, :update, :destroy]
     end
     resources :items
+    resources :employees
   end
 
   # Redirect invalid /users route to /users/sign_up

@@ -1,0 +1,82 @@
+<h1 class="text-center my-4">Admin: New Employee</h1>
+
+<div class="container">
+  <div class="card shadow-sm border-0">
+    <!-- Header -->
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0"><%= @employee.new_record? ? 'Create New Employee' : 'Edit Employee' %></h5>
+    </div>
+
+    <!-- Form Body -->
+    <div class="card-body">
+      <%= form_with(model: @employee, url: @employee.new_record? ? admin_employees_path : admin_employee_path(@employee), local: true) do |f| %>
+        
+        <!-- Name Field -->
+        <div class="mb-3">
+          <%= f.label :name, 'Name' %>
+          <%= f.text_field :name, class: 'form-control', placeholder: 'Enter employee name' %>
+        </div>
+
+        <!-- Job Level Dropdown -->
+        <div class="mb-3">
+          <%= f.label :job_level_id, 'Job Level' %>
+          <%= f.collection_select :job_level_id, JobLevel.all, :id, :name, { prompt: 'Select Job Level' }, { class: 'form-control' } %>
+        </div>
+
+        <!-- Company Dropdown -->
+        <div class="mb-3">
+          <%= f.label :company_id, 'Company' %>
+          <%= f.collection_select :company_id, Company.all, :id, :name, { prompt: 'Select Company' }, { class: 'form-control' } %>
+        </div>
+
+        <!-- Previous Company Dropdown -->
+        <div class="mb-3">
+          <%= f.label :previous_company_id, 'Previous Company' %>
+          <%= f.collection_select :previous_company_id, Company.all, :id, :name, { prompt: 'Select Previous Company' }, { class: 'form-control' } %>
+        </div>
+
+        <!-- Location Dropdown -->
+        <div class="mb-3">
+          <%= f.label :location_id, 'Location' %>
+          <%= f.collection_select :location_id, Location.all, :id, :name, { prompt: 'Select Location' }, { class: 'form-control' } %>
+        </div>
+
+        <!-- Group Dropdown -->
+        <div class="mb-3">
+          <%= f.label :group_id, 'Group' %>
+          <%= f.collection_select :group_id, Group.all, :id, :name, { prompt: 'Select Group' }, { class: 'form-control' } %>
+        </div>
+
+        <!-- School Dropdown -->
+        <div class="mb-3">
+          <%= f.label :school_id, 'School' %>
+          <%= f.collection_select :school_id, School.all, :id, :name, { prompt: 'Select School' }, { class: 'form-control' } %>
+        </div>
+
+        <!-- LinkedIn URL Field -->
+        <div class="mb-3">
+          <%= f.label :linkedin_url, 'LinkedIn URL' %>
+          <%= f.text_field :linkedin_url, class: 'form-control', placeholder: 'Enter LinkedIn profile URL' %>
+        </div>
+
+        <!-- Flagged Checkbox -->
+        <div class="form-check mb-3">
+          <%= f.check_box :flagged, class: 'form-check-input' %>
+          <%= f.label :flagged, 'Flagged', class: 'form-check-label' %>
+        </div>
+
+        <!-- Flag Comment -->
+        <div class="mb-3">
+          <%= f.label :flag_comment, 'Flag Comment' %>
+          <%= f.text_area :flag_comment, class: 'form-control', rows: 3, placeholder: 'Enter flag comment (if any)' %>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-end">
+          <%= f.submit @employee.new_record? ? 'Create Employee' : 'Update Employee', class: 'btn btn-dark' %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>

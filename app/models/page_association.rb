@@ -34,4 +34,3 @@ class PageAssociation < ApplicationRecord
   validates :tier_list_id, uniqueness: { scope: :page_id, message: 'This tier list is already associated with this page.' }, if: -> { tier_list_id.present? }
   validates :employee_view_id, uniqueness: { scope: :page_id, message: 'This employee view is already associated with this page.' }, if: -> { employee_view_id.present? }
 end
-

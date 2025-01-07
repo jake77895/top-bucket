@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_05_012034) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_07_173524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,7 +57,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_05_012034) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
-    t.string "company_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "company_type_id", null: false
+    t.index ["company_type_id"], name: "index_companies_on_company_type_id"
+  end
+
+  create_table "company_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -71,14 +79,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_05_012034) do
 
   create_table "employees", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "job_level_id", null: false
-    t.bigint "company_id", null: false
+    t.bigint "job_level_id"
+    t.bigint "company_id"
     t.bigint "previous_company_id"
     t.string "linkedin_url"
     t.integer "flagged", default: 0, null: false
     t.text "flag_comment"
-    t.bigint "group_id", null: false
-    t.bigint "location_id", null: false
+    t.bigint "group_id"
+    t.bigint "location_id"
     t.bigint "school_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -91,6 +99,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_05_012034) do
     t.index ["name"], name: "index_employees_on_name"
     t.index ["previous_company_id"], name: "index_employees_on_previous_company_id"
     t.index ["school_id"], name: "index_employees_on_school_id"
+  end
+
+  create_table "flags", force: :cascade do |t|
+    t.string "flaggable_type", null: false
+    t.bigint "flaggable_id", null: false
+    t.bigint "user_id", null: false
+    t.string "reason"
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flaggable_type", "flaggable_id"], name: "index_flags_on_flaggable"
+    t.index ["user_id"], name: "index_flags_on_user_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -214,12 +234,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_05_012034) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comments", "tier_lists"
   add_foreign_key "comments", "users"
+  add_foreign_key "companies", "company_types"
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "companies", column: "previous_company_id"
   add_foreign_key "employees", "groups"
   add_foreign_key "employees", "job_levels"
   add_foreign_key "employees", "locations"
   add_foreign_key "employees", "schools"
+  add_foreign_key "flags", "users"
   add_foreign_key "groups", "companies"
   add_foreign_key "groups", "locations"
   add_foreign_key "item_ranks", "items"
