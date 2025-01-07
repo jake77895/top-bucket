@@ -43,6 +43,9 @@ Rails.application.routes.draw do
     end
     resources :items
     resources :employees
+    resources :companies
+    resources :position_types
+    resources :locations
   end
 
   # Redirect invalid /users route to /users/sign_up

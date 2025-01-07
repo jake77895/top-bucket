@@ -1,0 +1,20 @@
+<h2 class="text-center my-4"><%= @location.new_record? ? 'New Location' : 'Edit Location' %></h2>
+
+<div class="container">
+  <%= form_with(model: @location, url: @location.new_record? ? admin_locations_path : admin_location_path(@location), local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><%= @location.new_record? ? 'Create Location' : 'Edit Location' %></h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :name, 'Location Name', class: 'form-label' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter location name' %>
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>

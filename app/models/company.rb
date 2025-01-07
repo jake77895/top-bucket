@@ -2,19 +2,19 @@
 #
 # Table name: companies
 #
-#  id              :bigint           not null, primary key
-#  name            :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  company_type_id :bigint           not null
+#  id               :bigint           not null, primary key
+#  name             :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  position_type_id :bigint           not null
 #
 # Indexes
 #
-#  index_companies_on_company_type_id  (company_type_id)
+#  index_companies_on_position_type_id  (position_type_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (company_type_id => company_types.id)
+#  fk_rails_...  (position_type_id => position_types.id)
 #
 class Company < ApplicationRecord
   belongs_to :company_type

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: company_types
+# Table name: position_types
 #
 #  id          :bigint           not null, primary key
 #  description :text
@@ -8,8 +8,9 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class CompanyType < ApplicationRecord
-  has_many :companies, dependent: :nullify
+class PositionType < ApplicationRecord
+  has_many :companies
+  has_many :job_levels
 
   validates :name, presence: true, uniqueness: true
 end

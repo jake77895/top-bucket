@@ -1,0 +1,26 @@
+<h1 class="text-center my-4">Admin: Manage Locations</h1>
+
+<div class="container">
+  <div class="d-flex justify-content-end mb-3">
+    <%= link_to 'New Location', new_admin_location_path, class: 'btn btn-dark' %>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Locations List</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <% @locations.each do |location| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong><%= location.name %></strong>
+          </div>
+          <div class="d-flex align-items-center">
+            <%= link_to 'Edit', edit_admin_location_path(location), class: 'btn btn-outline-secondary btn-sm me-2' %>
+            <%= link_to 'Delete', admin_location_path(location), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_07_173524) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_07_192050) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,15 +59,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_173524) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "company_type_id", null: false
-    t.index ["company_type_id"], name: "index_companies_on_company_type_id"
-  end
-
-  create_table "company_types", force: :cascade do |t|
-    t.string "name", null: false
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "position_type_id", null: false
+    t.index ["position_type_id"], name: "index_companies_on_position_type_id"
   end
 
   create_table "employee_views", force: :cascade do |t|
@@ -144,11 +137,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_173524) do
 
   create_table "job_levels", force: :cascade do |t|
     t.string "name"
-    t.string "company_type"
     t.bigint "company_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "level_rank"
+    t.boolean "is_global_default", default: false, null: false
+    t.boolean "is_company_type_default", default: false, null: false
+    t.bigint "position_type_id"
     t.index ["company_id"], name: "index_job_levels_on_company_id"
+    t.index ["name", "company_id", "position_type_id"], name: "index_job_levels_on_name_and_company_and_type", unique: true
+    t.index ["position_type_id"], name: "index_job_levels_on_position_type_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -185,6 +183,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_173524) do
     t.index ["created_by"], name: "index_pages_on_created_by"
     t.index ["parent_id"], name: "index_pages_on_parent_id"
     t.index ["slug"], name: "index_pages_on_slug", unique: true
+  end
+
+  create_table "position_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "schools", force: :cascade do |t|
@@ -234,7 +239,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_173524) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comments", "tier_lists"
   add_foreign_key "comments", "users"
-  add_foreign_key "companies", "company_types"
+  add_foreign_key "companies", "position_types"
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "companies", column: "previous_company_id"
   add_foreign_key "employees", "groups"
@@ -248,6 +253,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_173524) do
   add_foreign_key "item_ranks", "tier_lists"
   add_foreign_key "item_ranks", "users"
   add_foreign_key "job_levels", "companies"
+  add_foreign_key "job_levels", "position_types"
   add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"

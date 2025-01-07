@@ -1,0 +1,30 @@
+<h2 class="text-center my-4"><%= @company.new_record? ? 'New Company' : 'Edit Company' %></h2>
+
+<div class="container">
+  <%= form_with(model: @company, url: @company.new_record? ? admin_companies_path : admin_company_path(@company), local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><%= @company.new_record? ? 'Create Company' : 'Edit Company' %></h5>
+      </div>
+      <div class="card-body">
+        <!-- Company Name Field -->
+        <div class="mb-3">
+          <%= form.label :name, 'Company Name', class: 'form-label' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter company name' %>
+        </div>
+
+        <!-- Company Type Field -->
+        <div class="mb-3">
+          <%= form.label :position_type_id, 'Position Type', class: 'form-label' %>
+          <%= form.collection_select :position_type_id, PositionType.all, :id, :name, 
+                                    { prompt: 'Select Position Type' }, 
+                                    class: 'form-select' %>
+        </div>
+      </div>
+
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>
