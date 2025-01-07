@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_07_192050) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_07_220510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -142,7 +142,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_192050) do
     t.datetime "updated_at", null: false
     t.integer "level_rank"
     t.boolean "is_global_default", default: false, null: false
-    t.boolean "is_company_type_default", default: false, null: false
+    t.boolean "is_position_type_default", default: false, null: false
     t.bigint "position_type_id"
     t.index ["company_id"], name: "index_job_levels_on_company_id"
     t.index ["name", "company_id", "position_type_id"], name: "index_job_levels_on_name_and_company_and_type", unique: true

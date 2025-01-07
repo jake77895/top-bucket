@@ -1,0 +1,20 @@
+<h2 class="text-center my-4"><%= @school.new_record? ? 'New School' : 'Edit School' %></h2>
+
+<div class="container">
+  <%= form_with(model: @school, url: @school.new_record? ? admin_schools_path : admin_school_path(@school), local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><%= @school.new_record? ? 'Create School' : 'Edit School' %></h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :name, 'School Name', class: 'form-label' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter school name' %>
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>

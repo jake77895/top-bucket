@@ -2,15 +2,15 @@
 #
 # Table name: job_levels
 #
-#  id                      :bigint           not null, primary key
-#  is_company_type_default :boolean          default(FALSE), not null
-#  is_global_default       :boolean          default(FALSE), not null
-#  level_rank              :integer
-#  name                    :string
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  company_id              :bigint           not null
-#  position_type_id        :bigint
+#  id                       :bigint           not null, primary key
+#  is_global_default        :boolean          default(FALSE), not null
+#  is_position_type_default :boolean          default(FALSE), not null
+#  level_rank               :integer
+#  name                     :string
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  company_id               :bigint           not null
+#  position_type_id         :bigint
 #
 # Indexes
 #
