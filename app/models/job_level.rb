@@ -24,7 +24,8 @@
 #  fk_rails_...  (position_type_id => position_types.id)
 #
 class JobLevel < ApplicationRecord
-  belongs_to :company_type
+  belongs_to :position_type, optional: true
+  belongs_to :company, optional: true
 
   has_many :employees, dependent: :nullify
 

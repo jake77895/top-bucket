@@ -1,0 +1,16 @@
+<h2 class="text-center my-4">New Global Default Job Level</h2>
+
+<div class="container">
+  <%= form_with(model: @job_level, url: admin_job_levels_path, local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <%= form.label :name, 'Job Level Name', class: 'form-label' %>
+        <%= form.text_field :name, class: 'form-control' %>
+        <%= form.hidden_field :is_global_default, value: true %>
+      </div>
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit 'Create', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -47,6 +47,19 @@ Rails.application.routes.draw do
     resources :position_types
     resources :locations
     resources :schools
+    resources :job_levels do
+      collection do
+        get 'new_company'
+        get 'new_global'
+        get 'new_position_type'
+      end
+  
+      member do
+        get 'edit_company'
+        get 'edit_global'
+        get 'edit_position_type'
+      end
+    end
   end
 
   # Redirect invalid /users route to /users/sign_up

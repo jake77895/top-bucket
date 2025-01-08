@@ -1,0 +1,83 @@
+<h2 class="text-center my-4">New Position Type-Specific Job Level</h2>
+
+<div class="container">
+  <%= form_with(model: @job_level, url: admin_job_levels_path, local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Create Position Type-Specific Job Levels</h5>
+      </div>
+      <div class="card-body">
+        
+        <!-- Position Type Selection -->
+        <div class="mb-3">
+          <%= form.label :position_type_id, 'Select Position Type', class: 'form-label' %>
+          <%= form.collection_select :position_type_id, @position_types, :id, :name, { prompt: 'Select Position Type' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Position Type Default Checkbox -->
+        <div class="form-check mb-3">
+          <%= form.check_box :is_position_type_default, { class: 'form-check-input' }, '1', '0' %>
+          <%= form.label :is_position_type_default, 'Position Type Default', class: 'form-check-label' %>
+        </div>
+
+        <!-- Job Level Title and Level Rank - Dynamic Fields -->
+        <div id="job-level-fields">
+          <div class="row job-level-pair mb-3">
+            <div class="col-md-6">
+              <%= form.label :name, 'Job Level Title', class: 'form-label' %>
+              <%= form.text_field :name, 
+                    name: 'job_levels[][name]',
+                    class: 'form-control', 
+                    placeholder: 'Enter Job Level Title (e.g., Analyst, Associate, VP)' %>
+            </div>
+            <div class="col-md-6">
+              <%= form.label :level_rank, 'Level Rank', class: 'form-label' %>
+              <%= form.number_field :level_rank, 
+                    name: 'job_levels[][level_rank]',
+                    class: 'form-control', 
+                    placeholder: 'Rank seniority of position, e.g., Analyst is 1, Partner is 7' %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add/Remove Buttons -->
+        <div class="d-flex justify-content-start mb-3">
+          <button type="button" id="add-job-level" class="btn btn-dark me-2">Add Job Level</button>
+          <button type="button" id="remove-job-level" class="btn btn-light">Remove Job Level</button>
+        </div>
+        
+      </div>
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit 'Create', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<!-- JavaScript for Adding/Removing Job Level Fields -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const addButton = document.getElementById('add-job-level');
+    const removeButton = document.getElementById('remove-job-level');
+    const container = document.getElementById('job-level-fields');
+
+    addButton.addEventListener('click', () => {
+      // Clone the first job-level-pair
+      const fieldPair = document.querySelector('.job-level-pair').cloneNode(true);
+
+      // Clear input values in the cloned pair
+      const inputs = fieldPair.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+
+      // Append the cleared clone to the container
+      container.appendChild(fieldPair);
+    });
+
+    removeButton.addEventListener('click', () => {
+      const pairs = document.querySelectorAll('.job-level-pair');
+      if (pairs.length > 1) {
+        pairs[pairs.length - 1].remove();
+      }
+    });
+  });
+</script>

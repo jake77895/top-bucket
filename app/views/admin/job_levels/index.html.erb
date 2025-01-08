@@ -1,0 +1,47 @@
+<h1 class="text-center my-4">Admin: Manage Job Levels</h1>
+
+<div class="container">
+  <!-- Links to Different Forms -->
+  <div class="d-flex justify-content-around mb-4">
+    <%= link_to 'Company-Specific Job Levels', new_company_admin_job_levels_path, class: 'btn btn-dark' %>
+    <%= link_to 'Position Type Job Levels', new_position_type_admin_job_levels_path, class: 'btn btn-dark' %>
+    <%= link_to 'Global Default Job Levels', new_global_admin_job_levels_path, class: 'btn btn-dark' %>
+  </div>
+
+  <!-- Job Levels Table -->
+  <div class="card shadow-sm border-0">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Job Title</th>
+            <th>Company Name</th>
+            <th>Position Type Name</th>
+            <th>Level Rank</th>
+            <th>Position Type Default</th>
+            <th>Global Default</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @job_levels.each do |job_level| %>
+            <tr>
+              <td><%= job_level.name.presence || '' %></td>
+              <td><%= job_level.company&.name.presence || '' %></td>
+              <td><%= job_level.position_type&.name.presence || '' %></td>
+              <td><%= job_level.level_rank.presence || '' %></td>
+              <td><%= job_level.is_position_type_default ? 'True' : 'False' %></td>
+              <td><%= job_level.is_global_default ? 'True' : 'False' %></td>
+              <td class="text-center">
+                <%= link_to 'Delete', admin_job_level_path(job_level), 
+                      method: :delete, 
+                      data: { confirm: 'Are you sure you want to delete this Job Level?' },
+                      class: 'btn btn-sm btn-danger' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
