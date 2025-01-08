@@ -42,7 +42,20 @@ Rails.application.routes.draw do
       resources :item_ranks, only: [:index, :edit, :update, :destroy]
     end
     resources :items
-    resources :employees
+    resources :employees do
+      collection do
+        post :create_initial
+        get :new_details
+        get :edit_initial
+        patch :update_initial
+        get :edit_details
+      end
+      member do
+        get :edit_initial
+        patch :update_initial
+        get :edit_details
+      end
+    end
     resources :companies
     resources :position_types
     resources :locations

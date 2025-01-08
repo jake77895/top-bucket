@@ -1,0 +1,52 @@
+<h2 class="text-center my-4">Edit Employee - Step 2</h2>
+
+<div class="container">
+  <%= form_with(model: @employee, url: admin_employee_path(@employee), method: :patch, local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Additional Details</h5>
+      </div>
+      <div class="card-body">
+        <!-- Job Level -->
+        <div class="mb-3">
+          <%= form.label :job_level_id, 'Select Job Level', class: 'form-label' %>
+          <%= form.collection_select :job_level_id, @job_levels, :id, :name, { prompt: 'Select Job Level' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Group -->
+        <div class="mb-3">
+          <%= form.label :group_id, 'Select Group', class: 'form-label' %>
+          <%= form.collection_select :group_id, @groups, :id, :name, { prompt: 'Select Group' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Previous Company -->
+        <div class="mb-3">
+          <%= form.label :previous_company_id, 'Select Previous Company', class: 'form-label' %>
+          <%= form.collection_select :previous_company_id, @companies, :id, :name, { prompt: 'Select Previous Company' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- LinkedIn URL -->
+        <div class="mb-3">
+          <%= form.label :linkedin_url, 'LinkedIn URL', class: 'form-label' %>
+          <%= form.text_field :linkedin_url, class: 'form-control', placeholder: 'Enter LinkedIn URL' %>
+        </div>
+
+        <!-- Undergraduate School -->
+        <div class="mb-3">
+          <%= form.label :undergraduate_school_id, 'Undergraduate School', class: 'form-label' %>
+          <%= form.collection_select :undergraduate_school_id, @schools, :id, :name, { prompt: 'Select Undergraduate School' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Graduate School -->
+        <div class="mb-3">
+          <%= form.label :graduate_school_id, 'Graduate School', class: 'form-label' %>
+          <%= form.collection_select :graduate_school_id, @schools, :id, :name, { prompt: 'Select Graduate School' }, { class: 'form-select' } %>
+        </div>
+      </div>
+
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit 'Update Employee', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>

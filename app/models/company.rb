@@ -23,6 +23,7 @@ class Company < ApplicationRecord
   has_many :groups
   has_many :job_levels
 
-  validates :name, presence: true, uniqueness: true
+  # Ensure name + position_type_id is unique
+  validates :name, uniqueness: { scope: :position_type_id, message: "with this Position Type already exists" }
   validates :position_type, presence: true
 end

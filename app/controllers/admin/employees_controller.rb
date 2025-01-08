@@ -1,63 +1,200 @@
 class Admin::EmployeesController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_admin!
-  before_action :set_employee, only: [:edit, :update, :destroy]
+  before_action :set_employee, only: [:edit_initial, :edit_details, :update_initial, :destroy]
 
+  ## =====================
+  ## INDEX ACTION
+  ## =====================
   # GET /admin/employees
   def index
-    @employees = Employee.includes(:job_level, :company, :group, :location, :school).order(created_at: :desc)
+    @employees = Employee.includes(:job_level, :company, :group, :location, :undergraduate_school, :graduate_school)
+                         .order(created_at: :desc)
   end
 
+  ## =====================
+  ## INITIAL CREATION FLOW (Step 1)
+  ## =====================
   # GET /admin/employees/new
   def new
     @employee = Employee.new
-    @employees = Employee.all.includes(:job_level) # Load all employees for the form
+    @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+    @position_types = PositionType.all
+    @locations = Location.all
   end
+
+
+  # POST /admin/employees/create_initial
+  def create_initial
+    @employee = Employee.new(initial_employee_params)
+
+    if @employee.valid?
+      session[:employee_initial] = initial_employee_params
+      redirect_to new_details_admin_employees_path, notice: 'Initial details saved. Proceed to finalize the employee information.'
+    else
+      @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+      @position_types = PositionType.all
+      flash.now[:alert] = 'Please fill in all required fields.'
+      render :new
+    end
+  end
+
+  ## =====================
+  ## DETAILS CREATION FLOW (Step 2)
+  ## =====================
+  # GET /admin/employees/new_details
+  def new_details
+    if session[:employee_initial].blank?
+      redirect_to new_admin_employee_path, alert: 'Please provide initial details first.'
+      return
+    end
+
+    @employee = Employee.new(session[:employee_initial])
+    @groups = fetch_groups(@employee.company_id, @employee.location_id, @employee.position_type_id)
+    @job_levels = fetch_job_levels(@employee.company_id, @employee.position_type_id)
+    @locations = Location.all
+    @schools = School.all
+    @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+  end
+
 
   # POST /admin/employees
   def create
-    @employee = Employee.new(employee_params)
+    @employee = Employee.new(session[:employee_initial].merge(employee_params))
+
     if @employee.save
+      session.delete(:employee_initial)
       redirect_to admin_employees_path, notice: 'Employee was successfully created.'
     else
-      flash.now[:alert] = 'Failed to create employee.'
-      render :new, status: :unprocessable_entity
+      @groups = fetch_groups(@employee.company_id, @employee.position_type_id)
+      @job_levels = fetch_job_levels(@employee.company_id, @employee.position_type_id)
+      @locations = Location.all
+      @schools = School.all
+      flash.now[:alert] = 'Failed to save employee details.'
+      render :new_details, status: :unprocessable_entity
     end
   end
 
-  # GET /admin/employees/:id/edit
-  def edit
+  ## =====================
+  ## EDIT ACTION - Step 1
+  ## =====================
+  # GET /admin/employees/:id/edit_initial
+  def edit_initial
     @employee = Employee.find(params[:id])
-    @employees = Employee.all.includes(:job_level) # Ensure it's available
+    @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+    @position_types = PositionType.all
+    @locations = Location.all
   end
 
-  # PATCH/PUT /admin/employees/:id
+  # PATCH /admin/employees/:id/update_initial
+  def update_initial
+    @employee = Employee.find(params[:id])
+
+    if @employee.update(initial_employee_params)
+      session[:employee_edit] = initial_employee_params
+      redirect_to edit_details_admin_employee_path(@employee), notice: 'Initial details updated. Proceed to finalize the employee information.'
+    else
+      @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+      @position_types = PositionType.all
+      @locations = Location.all
+      flash.now[:alert] = 'Please fill in all required fields.'
+      render :edit_initial
+    end
+  end
+
+  ## =====================
+  ## EDIT ACTION - Step 2
+  ## =====================
+  # GET /admin/employees/:id/edit_details
+  def edit_details
+    @employee = Employee.find(params[:id])
+  
+    if session[:employee_edit].blank?
+      redirect_to edit_initial_admin_employee_path(@employee), alert: 'Please provide initial details first.'
+      return
+    end
+  
+    @groups = fetch_groups(@employee.company_id, @employee.location_id, @employee.position_type_id)
+    @job_levels = fetch_job_levels(@employee.company_id, @employee.position_type_id)
+    @locations = Location.all
+    @schools = School.all
+    @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+  end
+
+  # PATCH /admin/employees/:id
   def update
-    if @employee.update(employee_params)
+    @employee = Employee.find(params[:id])
+
+    if @employee.update(session[:employee_edit].merge(employee_params))
+      session.delete(:employee_edit)
       redirect_to admin_employees_path, notice: 'Employee was successfully updated.'
     else
-      flash.now[:alert] = 'Failed to update employee.'
-      render :edit, status: :unprocessable_entity
+      @groups = fetch_groups(@employee.company_id, @employee.location_id, @employee.position_type_id)
+      @job_levels = fetch_job_levels(@employee.company_id, @employee.position_type_id)
+      @locations = Location.all
+      @schools = School.all
+      flash.now[:alert] = 'Failed to save employee details.'
+      render :edit_details, status: :unprocessable_entity
     end
   end
 
+  ## =====================
+  ## DELETE ACTION
+  ## =====================
   # DELETE /admin/employees/:id
   def destroy
     @employee.destroy
     redirect_to admin_employees_path, notice: 'Employee was successfully deleted.'
   end
 
+  ## =====================
+  ## PRIVATE METHODS
+  ## =====================
   private
 
+  # Set Employee
   def set_employee
     @employee = Employee.find(params[:id])
   end
 
+  # Initial required params (Step 1)
+  def initial_employee_params
+    params.require(:employee).permit(:name, :company_id, :position_type_id, :location_id)
+  end
+
+  # Final params (Step 2)
   def employee_params
     params.require(:employee).permit(
-      :name, :job_level_id, :company_id, :previous_company_id,
-      :linkedin_url, :flagged, :flag_comment, :group_id,
-      :location_id, :school_id
-    )
+      :job_level_id, :previous_company_id, :linkedin_url, :flagged, 
+      :flag_comment, :group_id, :location_id, :undergraduate_school_id, :graduate_school_id)
+  end
+
+  # Fetch Groups based on Company, Location, Position Type
+  def fetch_groups(company_id, location_id, position_type_id)
+    # Step 1: Check for groups matching company and location
+    if Group.where(company_id: company_id, location_id: location_id).exists?
+      Group.where(company_id: company_id, location_id: location_id)
+    # Step 2: Check for groups matching only company
+    elsif Group.where(company_id: company_id).exists?
+      Group.where(company_id: company_id)
+    # Step 3: Check for groups matching position type with default
+    elsif Group.where(position_type_id: position_type_id, position_type_default: true).exists?
+      Group.where(position_type_id: position_type_id, position_type_default: true)
+    # Step 4: No matching groups
+    else
+      []
+    end
+  end
+
+
+  # Fetch Job Levels based on Company/Position Type/Global Default
+  def fetch_job_levels(company_id, position_type_id)
+    if JobLevel.where(company_id: company_id).exists?
+      JobLevel.where(company_id: company_id)
+    elsif JobLevel.where(position_type_id: position_type_id, is_position_type_default: true).exists?
+      JobLevel.where(position_type_id: position_type_id, is_position_type_default: true)
+    else
+      JobLevel.where(is_global_default: true)
+    end
   end
 end

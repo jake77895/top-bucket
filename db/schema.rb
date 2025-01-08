@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_08_203532) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_08_212119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,18 +80,21 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_08_203532) do
     t.text "flag_comment"
     t.bigint "group_id"
     t.bigint "location_id"
-    t.bigint "school_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "position_type_id"
+    t.bigint "undergraduate_school_id"
+    t.bigint "graduate_school_id"
     t.index ["company_id"], name: "index_employees_on_company_id"
     t.index ["flagged"], name: "index_employees_on_flagged"
+    t.index ["graduate_school_id"], name: "index_employees_on_graduate_school_id"
     t.index ["group_id"], name: "index_employees_on_group_id"
     t.index ["job_level_id"], name: "index_employees_on_job_level_id"
     t.index ["linkedin_url"], name: "index_employees_on_linkedin_url"
     t.index ["location_id"], name: "index_employees_on_location_id"
     t.index ["name"], name: "index_employees_on_name"
     t.index ["previous_company_id"], name: "index_employees_on_previous_company_id"
-    t.index ["school_id"], name: "index_employees_on_school_id"
+    t.index ["undergraduate_school_id"], name: "index_employees_on_undergraduate_school_id"
   end
 
   create_table "flags", force: :cascade do |t|
@@ -248,7 +251,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_08_203532) do
   add_foreign_key "employees", "groups"
   add_foreign_key "employees", "job_levels"
   add_foreign_key "employees", "locations"
-  add_foreign_key "employees", "schools"
+  add_foreign_key "employees", "schools", column: "graduate_school_id"
+  add_foreign_key "employees", "schools", column: "undergraduate_school_id"
   add_foreign_key "flags", "users"
   add_foreign_key "groups", "companies"
   add_foreign_key "groups", "locations"
