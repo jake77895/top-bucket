@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     resources :position_types
     resources :locations
     resources :schools
+    resources :groups
     resources :job_levels do
       collection do
         get 'new_company'

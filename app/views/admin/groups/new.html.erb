@@ -1,0 +1,91 @@
+<h2 class="text-center my-4">New Group</h2>
+
+<div class="container">
+  <%= form_with(model: @group, url: admin_groups_path, local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Create Groups</h5>
+      </div>
+      
+      <div class="card-body">
+
+        <!-- Position Type Selection -->
+        <div class="mb-3">
+          <%= form.label :position_type_id, 'Select Position Type', class: 'form-label' %>
+          <%= form.collection_select :position_type_id, @position_types, :id, :name, { prompt: 'Select Position Type' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Position Type Default Checkbox -->
+        <div class="form-check mb-3">
+          <%= form.check_box :position_type_default, { class: 'form-check-input' }, '1', '0' %>
+          <%= form.label :position_type_default, 'Position Type Default', class: 'form-check-label' %>
+        </div>
+
+        <!-- Company Selection -->
+        <div class="mb-3">
+          <%= form.label :company_id, 'Select Company', class: 'form-label' %>
+          <%= form.collection_select :company_id, @companies, :id, :name, { prompt: 'Select Company' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Location Selection -->
+        <div class="mb-3">
+          <%= form.label :location_id, 'Select Location', class: 'form-label' %>
+          <%= form.collection_select :location_id, @locations, :id, :name, { prompt: 'Select Location' }, { class: 'form-select' } %>
+        </div>
+
+
+        <!-- Dynamic Group Names -->
+        <h5 class="mt-4">Group Names</h5>
+        <div id="group-name-fields">
+          <div class="row group-name-pair mb-3">
+            <div class="col-md-12">
+              <%= form.text_field :name, 
+                    name: 'groups[][name]',
+                    class: 'form-control', 
+                    placeholder: 'Enter Group Name (e.g., TMT, Industrials, Natural Resources)' %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add/Remove Buttons -->
+        <div class="d-flex justify-content-start mb-3">
+          <button type="button" id="add-group-name" class="btn btn-dark me-2">Add Group Name</button>
+          <button type="button" id="remove-group-name" class="btn btn-light">Remove Group Name</button>
+        </div>
+        
+      </div>
+
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit 'Create', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<!-- JavaScript for Adding/Removing Group Names -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const addButton = document.getElementById('add-group-name');
+    const removeButton = document.getElementById('remove-group-name');
+    const container = document.getElementById('group-name-fields');
+
+    addButton.addEventListener('click', () => {
+      // Clone the first group-name-pair
+      const fieldPair = document.querySelector('.group-name-pair').cloneNode(true);
+
+      // Clear input values in the cloned pair
+      const input = fieldPair.querySelector('input');
+      input.value = '';
+
+      // Append the cleared clone to the container
+      container.appendChild(fieldPair);
+    });
+
+    removeButton.addEventListener('click', () => {
+      const pairs = document.querySelectorAll('.group-name-pair');
+      if (pairs.length > 1) {
+        pairs[pairs.length - 1].remove();
+      }
+    });
+  });
+</script>

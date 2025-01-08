@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_07_220510) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_08_203532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -108,12 +108,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_220510) do
 
   create_table "groups", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "company_id", null: false
-    t.bigint "location_id", null: false
+    t.bigint "company_id"
+    t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "position_type_id"
+    t.boolean "position_type_default", default: false
     t.index ["company_id"], name: "index_groups_on_company_id"
     t.index ["location_id"], name: "index_groups_on_location_id"
+    t.index ["position_type_id"], name: "index_groups_on_position_type_id"
   end
 
   create_table "item_ranks", force: :cascade do |t|
@@ -137,7 +140,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_220510) do
 
   create_table "job_levels", force: :cascade do |t|
     t.string "name"
-    t.bigint "company_id", null: false
+    t.bigint "company_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "level_rank"
@@ -249,6 +252,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_07_220510) do
   add_foreign_key "flags", "users"
   add_foreign_key "groups", "companies"
   add_foreign_key "groups", "locations"
+  add_foreign_key "groups", "position_types"
   add_foreign_key "item_ranks", "items"
   add_foreign_key "item_ranks", "tier_lists"
   add_foreign_key "item_ranks", "users"

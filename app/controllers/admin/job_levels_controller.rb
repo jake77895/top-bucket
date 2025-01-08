@@ -7,11 +7,17 @@ class Admin::JobLevelsController < ApplicationController
   ## =====================
 
   def index
-    @company_job_levels = JobLevel.where.not(company_id: nil).includes(:company)
-    @position_type_job_levels = JobLevel.where.not(position_type_id: nil).includes(:position_type)
-    @global_job_levels = JobLevel.where(is_global_default: true)
-    @job_levels = JobLevel.includes(:company, :position_type).order(:level_rank)
+    @job_levels = JobLevel
+                    .left_joins(:company, :position_type)
+                    .includes(:company, :position_type)
+                    .order(
+                      Arel.sql('COALESCE(companies.name, \'zzz\')'), 
+                      Arel.sql('COALESCE(position_types.name, \'zzz\')'), 
+                      :level_rank
+                    )
   end
+  
+  
 
   ## =====================
   ## NEW ACTIONS
