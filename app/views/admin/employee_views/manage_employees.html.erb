@@ -1,0 +1,74 @@
+<h1 class="text-center my-4">Manage Employees for <%= @employee_view.name %></h1>
+
+<div class="container">
+  <!-- Assigned Employees Table -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Assigned Employees</h5>
+    </div>
+    <table class="table mb-0">
+      <thead class="table-dark text-white">
+        <tr>
+          <th>Name</th>
+          <th>Company</th>
+          <th>Job Level</th>
+          <th>Group</th>
+          <th>Location</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @associated_employees.each do |employee| %>
+          <tr>
+            <td><%= employee.name %></td>
+            <td><%= employee.company&.name || 'N/A' %></td>
+            <td><%= employee.job_level&.name || 'N/A' %></td>
+            <td><%= employee.group&.name || 'N/A' %></td>
+            <td><%= employee.location&.name || 'N/A' %></td>
+            <td class="text-center">
+              <%= button_to 'Remove', remove_employee_admin_employee_view_path(@employee_view, employee_id: employee.id), 
+                            method: :delete, 
+                            data: { confirm: "Are you sure you want to remove #{employee.name}?" }, 
+                            class: 'btn btn-outline-danger btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add New Employees Table -->
+  <div class="card shadow-sm border-0 mt-4">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Add New Employees</h5>
+    </div>
+    <table class="table mb-0">
+      <thead class="table-dark text-white">
+        <tr>
+          <th>Name</th>
+          <th>Company</th>
+          <th>Job Level</th>
+          <th>Group</th>
+          <th>Location</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% (@employees - @associated_employees).each do |employee| %>
+          <tr>
+            <td><%= employee.name %></td>
+            <td><%= employee.company&.name || 'N/A' %></td>
+            <td><%= employee.job_level&.name || 'N/A' %></td>
+            <td><%= employee.group&.name || 'N/A' %></td>
+            <td><%= employee.location&.name || 'N/A' %></td>
+            <td class="text-center">
+              <%= button_to 'Add', add_employee_admin_employee_view_path(@employee_view, employee_id: employee.id), 
+                            method: :post, 
+                            class: 'btn btn-outline-success btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<h1 class="text-center my-4">
+  <%= @employee_view.new_record? ? 'Create New Employee View' : 'Edit Employee View' %>
+</h1>
+
+<div class="container">
+ <%= form_with(model: employee_view, url: employee_view.new_record? ? admin_employee_views_path : admin_employee_view_path(employee_view), local: true, multipart: true) do |form| %>
+
+    <div class="card shadow-sm border-0">
+
+      <!-- Header -->
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><%= @employee_view.new_record? ? 'Create New Employee View' : 'Edit Employee View' %></h5>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Name -->
+        <div class="mb-3">
+          <%= form.label :name, 'Employee View Name', class: 'form-label fw-bold' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter employee view name' %>
+        </div>
+
+        <!--Picture-->
+        <div class="mb-3">
+          <%= form.label :picture, 'Upload Picture', class: 'form-label fw-bold' %>
+          <%= form.file_field :picture, class: 'form-control' %>
+        </div>
+
+        <!-- Picture Preview -->
+        <% if @employee_view.picture.attached? %>
+          <div class="mb-3">
+            <strong>Current Picture:</strong><br>
+            <%= image_tag @employee_view.picture, class: 'img-thumbnail', alt: @employee_view.name, style: 'max-width: 150px; height: auto;' %>
+          </div>
+        <% end %>
+
+        <!--Remove Picture-->
+        <% if @employee_view.picture.attached? %>
+          <div class="form-check mb-3">
+            <%= form.check_box :remove_picture, class: 'form-check-input' %>
+            <%= form.label :remove_picture, 'Remove Picture', class: 'form-check-label' %>
+          </div>
+        <% end %>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <%= form.label :description, 'Description', class: 'form-label fw-bold' %>
+          <%= form.text_area :description, class: 'form-control', rows: 3, placeholder: 'Enter description' %>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer d-flex justify-content-between">
+        <%= link_to 'Back', admin_employee_views_path, class: 'btn btn-outline-secondary px-4' %>
+        <%= form.submit @employee_view.new_record? ? 'Create Employee View' : 'Update Employee View', class: 'btn btn-dark px-4' %>
+      </div>
+    </div>
+  <% end %>
+</div>

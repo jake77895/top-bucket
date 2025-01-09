@@ -1,0 +1,37 @@
+<h1 class="text-center my-4">New Employee Assignment</h1>
+
+<div class="container">
+  <%= form_with(model: @employee_views_employee, url: admin_employee_views_employees_path, local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <!-- Header -->
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Assign Employee to Employee View</h5>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Employee -->
+        <div class="mb-3">
+          <%= form.label :employee_id, 'Employee', class: 'form-label fw-bold' %>
+          <%= form.collection_select :employee_id, @employees, :id, :name, 
+                                     { prompt: 'Select an Employee' }, 
+                                     { class: 'form-select' } %>
+        </div>
+
+        <!-- Employee View -->
+        <div class="mb-3">
+          <%= form.label :employee_view_id, 'Employee View', class: 'form-label fw-bold' %>
+          <%= form.collection_select :employee_view_id, @employee_views, :id, :name, 
+                                     { prompt: 'Select an Employee View' }, 
+                                     { class: 'form-select' } %>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer d-flex justify-content-between">
+        <%= link_to 'Back', admin_employee_views_employees_path, class: 'btn btn-outline-secondary px-4' %>
+        <%= form.submit 'Create Assignment', class: 'btn btn-dark px-4' %>
+      </div>
+    </div>
+  <% end %>
+</div>

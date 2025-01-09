@@ -16,4 +16,9 @@ class EmployeeView < ApplicationRecord
   has_and_belongs_to_many :employees, join_table: 'employee_views_employees'
 
   validates :name, presence: true
+
+  has_one_attached :picture
+
+  # Virtual attribute for removing the picture
+  attr_accessor :remove_picture
 end

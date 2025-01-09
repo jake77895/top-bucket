@@ -1,0 +1,23 @@
+<h1>Employee View Details</h1>
+
+<p>
+  <strong>Name:</strong>
+  <%= @employee_view.name %>
+</p>
+
+<div class="mb-3">
+  <strong>Picture:</strong><br>
+  <% if @employee_view.picture.attached? %>
+    <%= image_tag @employee_view.picture, class: 'img-fluid rounded', alt: @employee_view.name %>
+  <% else %>
+    <p>No picture uploaded.</p>
+  <% end %>
+</div>
+
+
+<p>
+  <strong>Description:</strong>
+  <%= @employee_view.description %>
+</p>
+
+<%= link_to "Back to Employee Views", admin_employee_views_path, class: "btn btn-dark" %>

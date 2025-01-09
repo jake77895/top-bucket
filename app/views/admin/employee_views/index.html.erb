@@ -1,0 +1,38 @@
+<h1 class="text-center my-4">Admin: Manage Employee Views</h1>
+
+<div class="container">
+  <!-- New Employee View Button -->
+  <div class="d-flex justify-content-end mb-3">
+    <%= link_to 'New Employee View', new_admin_employee_view_path, class: 'btn btn-dark' %>
+  </div>
+
+  <!-- Employee Views Table -->
+  <div class="card shadow-sm border-0">
+    <table class="table mb-0">
+      <thead class="table-dark text-white">
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th class="text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @employee_views.each do |employee_view| %>
+          <tr>
+            <td><%= employee_view.name %></td>
+            <td><%= employee_view.description %></td>
+            <td class="text-left">
+              <%= link_to 'Show', admin_employee_view_path(employee_view), class: 'btn btn-outline-secondary btn-sm me-2' %>
+              <%= link_to 'Edit', edit_admin_employee_view_path(employee_view), class: 'btn btn-outline-warning btn-sm me-2' %>
+              <%= link_to 'Manage Employees', manage_employees_admin_employee_view_path(employee_view), class: 'btn btn-outline-primary btn-sm me-2' %>
+              <%= link_to 'Delete', admin_employee_view_path(employee_view), 
+                          method: :delete, 
+                          data: { confirm: 'Are you sure you want to delete this Employee View?' }, 
+                          class: 'btn btn-outline-danger btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

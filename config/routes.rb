@@ -56,6 +56,13 @@ Rails.application.routes.draw do
         get :edit_details
       end
     end
+    resources :employee_views do
+      member do
+        get 'manage_employees' # Display the interface to manage employees
+        post 'add_employee'    # Add an employee to the view
+        delete 'remove_employee' # Remove an employee from the view
+      end
+    end
     resources :companies
     resources :position_types
     resources :locations
