@@ -190,11 +190,12 @@ class Admin::EmployeesController < ApplicationController
   # Fetch Job Levels based on Company/Position Type/Global Default
   def fetch_job_levels(company_id, position_type_id)
     if JobLevel.where(company_id: company_id).exists?
-      JobLevel.where(company_id: company_id)
+      JobLevel.where(company_id: company_id).order(:level_rank) # Order by level_rank
     elsif JobLevel.where(position_type_id: position_type_id, is_position_type_default: true).exists?
-      JobLevel.where(position_type_id: position_type_id, is_position_type_default: true)
+      JobLevel.where(position_type_id: position_type_id, is_position_type_default: true).order(:level_rank) # Order by level_rank
     else
-      JobLevel.where(is_global_default: true)
+      JobLevel.where(is_global_default: true).order(:level_rank) # Order by level_rank
     end
   end
+  
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_08_212119) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_09_153837) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -68,6 +68,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_08_212119) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "employee_views_employees", force: :cascade do |t|
+    t.bigint "employee_id", null: false
+    t.bigint "employee_view_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employee_views_employees_on_employee_id"
+    t.index ["employee_view_id"], name: "index_employee_views_employees_on_employee_view_id"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -246,6 +255,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_08_212119) do
   add_foreign_key "comments", "tier_lists"
   add_foreign_key "comments", "users"
   add_foreign_key "companies", "position_types"
+  add_foreign_key "employee_views_employees", "employee_views"
+  add_foreign_key "employee_views_employees", "employees"
   add_foreign_key "employees", "companies"
   add_foreign_key "employees", "companies", column: "previous_company_id"
   add_foreign_key "employees", "groups"

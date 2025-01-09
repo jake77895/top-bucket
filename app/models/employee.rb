@@ -51,6 +51,8 @@ class Employee < ApplicationRecord
   belongs_to :undergraduate_school, class_name: 'School', optional: true
   belongs_to :graduate_school, class_name: 'School', optional: true
 
+  has_and_belongs_to_many :employee_views, join_table: 'employee_views_employees'
+
   has_many :flags, as: :flaggable, dependent: :destroy
 
   validates :name, presence: true

@@ -13,5 +13,7 @@ class EmployeeView < ApplicationRecord
   has_many :page_associations, dependent: :destroy
   has_many :pages, through: :page_associations
 
+  has_and_belongs_to_many :employees, join_table: 'employee_views_employees'
+
   validates :name, presence: true
 end
