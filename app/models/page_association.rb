@@ -9,7 +9,7 @@
 #  updated_at       :datetime         not null
 #  employee_view_id :bigint
 #  page_id          :bigint           not null
-#  tier_list_id     :bigint           not null
+#  tier_list_id     :bigint
 #
 # Indexes
 #

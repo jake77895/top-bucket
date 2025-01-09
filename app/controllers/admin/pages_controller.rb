@@ -1,7 +1,7 @@
 class Admin::PagesController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_admin
-  before_action :set_page, only: [:manage_tier_lists, :update_tier_list_associations]
+  before_action :set_page, only: [:manage_tier_lists, :update_tier_list_associations, :manage_employee_views, :update_employee_associations]
 
   def index
     @pages = Page.all
@@ -41,6 +41,7 @@ class Admin::PagesController < ApplicationController
     redirect_to admin_pages_path, notice: "Page deleted successfully."
   end
 
+  # Managing Tier Lists
   def manage_tier_lists
     @tier_lists = TierList.where(published: true)
     @associated_tier_lists = @page.tier_lists
@@ -61,6 +62,29 @@ class Admin::PagesController < ApplicationController
     end
   
     redirect_to admin_pages_path, notice: 'Tier List associations updated successfully.'
+  end
+
+  # Managing Employee Views
+  def manage_employee_views
+    @employee_views = EmployeeView.all
+    @associated_employee_views = @page.employee_views
+  end
+
+  def update_employee_associations
+    selected_employee_view_ids = params.dig(:page, :employee_view_ids) || []
+
+    # Ensure selected_employee_view_ids is always an array
+    selected_employee_view_ids = Array(selected_employee_view_ids)
+
+    # Remove unselected associations
+    @page.page_associations.where.not(employee_view_id: selected_employee_view_ids).destroy_all
+
+    # Add new associations
+    selected_employee_view_ids.each do |employee_view_id|
+      @page.page_associations.find_or_create_by(employee_view_id: employee_view_id)
+    end
+
+    redirect_to admin_pages_path, notice: 'Employee View associations updated successfully.'
   end
 
   private

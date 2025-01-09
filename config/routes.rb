@@ -28,8 +28,13 @@ Rails.application.routes.draw do
     resources :settings, only: [:index, :update]
     resources :pages do
       member do
+        # Routes for managing tier lists
         get :manage_tier_lists
         patch :update_tier_list_associations
+
+        # Routes for managing employee views
+        get :manage_employee_views
+        patch :update_employee_associations
       end
     end
     resources :tier_list_templates

@@ -1,0 +1,29 @@
+<h1 class="text-center my-4">Manage Employee View Associations for <%= @page.name %></h1>
+
+<div class="container">
+  <%= form_with url: update_employee_associations_admin_page_path(@page), method: :patch do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Available Employee Views</h5>
+      </div>
+
+      <div class="card-body">
+        <% if @employee_views.any? %>
+          <% @employee_views.each do |employee_view| %>
+            <div class="form-check mb-2">
+              <%= check_box_tag 'page[employee_view_ids][]', employee_view.id, @associated_employee_views.include?(employee_view), id: "employee_view_#{employee_view.id}" %>
+              <%= label_tag "employee_view_#{employee_view.id}", employee_view.name, class: 'form-check-label' %>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted">No employee views available for association.</p>
+        <% end %>
+      </div>
+
+      <div class="card-footer d-flex justify-content-between">
+        <%= link_to 'Back', admin_pages_path, class: 'btn btn-outline-secondary px-4' %>
+        <%= form.submit 'Save Changes', class: 'btn btn-dark px-4' %>
+      </div>
+    </div>
+  <% end %>
+</div>
