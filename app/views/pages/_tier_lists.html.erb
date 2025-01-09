@@ -1,27 +1,37 @@
 <% if @page.tier_lists.present? %>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-    <% @page.tier_lists.each do |tier_list| %>
-      <div class="col">
-        <div class="card h-100 shadow-sm border-0">
-          <%= link_to tier_list_path(tier_list), class: 'text-decoration-none text-dark' do %>
-            <% if tier_list.picture.attached? %>
-              <%= image_tag tier_list.picture, 
-                    class: 'card-img-top rounded-top object-fit-cover', 
-                    alt: tier_list.name, 
-                    style: 'height: 150px; width: 100%; object-fit: cover;' %>
-            <% else %>
-              <img src="https://via.placeholder.com/200x150" 
-                   class="card-img-top rounded-top object-fit-cover" 
-                   alt="Tier List Placeholder"
-                   style="height: 150px; width: 100%; object-fit: cover;">
-            <% end %>
-            <div class="card-body p-2">
-              <h6 class="card-title fw-bold text-center mb-1"><%= tier_list.name %></h6>
+  <div class="container">
+    <div class="row">
+      <% @page.tier_lists.each_with_index do |tier_list, index| %>
+        <div class="col-md-6 mb-3">
+          <%= link_to group_tier_list_path(tier_list, origin_page: request.original_url), class: 'text-decoration-none' do %>
+            <div class="card shadow-sm border-0 d-flex flex-row mx-auto" style="width: 100%; max-width: 400px; height: 80px;">
+              <!-- Image Section -->
+              <div class="flex-shrink-0">
+                <% if tier_list.picture.attached? %>
+                  <%= image_tag tier_list.picture, 
+                        class: 'rounded-start object-fit-cover', 
+                        alt: tier_list.name, 
+                        style: 'height: 80px; width: 80px; object-fit: cover;' %>
+                <% else %>
+                  <%= image_tag 'pictures/placeholder.jpg', 
+                        class: 'rounded-start object-fit-cover', 
+                        alt: 'Tier List Placeholder',
+                        style: 'height: 80px; width: 80px; object-fit: cover;' %>
+                <% end %>
+              </div>
+
+              <!-- Content Section -->
+              <div class="card-body p-2 d-flex flex-column justify-content-center">
+                <h6 class="card-title fw-bold mb-1 text-dark"><%= tier_list.name %></h6>
+                <p class="mb-0 text-muted">
+                  Ranked by <%= pluralize(ItemRank.where(tier_list_id: tier_list.id).distinct.count(:user_id), 'user') %>
+                </p>
+              </div>
             </div>
           <% end %>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 <% else %>
   <p class="text-muted text-center">No tier lists are currently associated with this page.</p>

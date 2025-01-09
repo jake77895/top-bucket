@@ -30,26 +30,20 @@
   </div>
 </div>
 
-
-
-
-
-
 <!-- Page Content -->
 <div class="container">
   <div class="row">
     <!-- Left Column -->
     <div class="col-md-8">
       <!-- Tier Lists Section -->
-<div class="card mb-4 shadow-sm">
-  <div class="card-header bg-dark text-white">
-    <h5 class="mb-0">Tier Lists</h5>
-  </div>
-  <div class="card-body">
-    <%= render 'tier_lists'%>
-  </div>
-</div>
-
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Tier Lists</h5>
+        </div>
+        <div class="card-body">
+          <%= render 'tier_lists'%>
+        </div>
+      </div>
 
       <!-- Other Info Section -->
       <div class="card mb-4 shadow-sm">
@@ -89,7 +83,6 @@
           </div>
         </div>
       <% end %>
-
 
       <!-- Subpages Section -->
       <% if @page.children.any? %>

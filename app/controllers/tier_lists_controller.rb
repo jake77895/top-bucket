@@ -19,9 +19,11 @@ class TierListsController < ApplicationController
     else
       @current_item = @items.first
     end
-  
-    @next_item_id = @items[@items.index(@current_item) + 1]&.id
-    @previous_item_id = @items[@items.index(@current_item) - 1]&.id if @items.index(@current_item).positive?
+
+    if @items.present? && @items.any?
+      @next_item_id = @items[@items.index(@current_item) + 1]&.id
+      @previous_item_id = @items[@items.index(@current_item) - 1]&.id if @items.index(@current_item).positive?
+    end
   
     render "tier_lists/individual_view/show"
   end
