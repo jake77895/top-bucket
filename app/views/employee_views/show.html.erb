@@ -1,0 +1,32 @@
+<h1 class="text-center my-4"><%= @employee_view.name %></h1>
+
+<div class="container">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Employee View Details</h5>
+    </div>
+    <div class="card-body">
+      <p><strong>Description:</strong> <%= @employee_view.description.presence || 'No description available.' %></p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Associated Pages</h5>
+    </div>
+    <div class="card-body">
+      <% if @associated_pages.any? %>
+        <ul class="list-group">
+          <% @associated_pages.each do |page| %>
+            <li class="list-group-item">
+              <%= link_to page.name, page_path(page), class: 'text-decoration-none' %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-muted">No pages are associated with this employee view.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+

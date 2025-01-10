@@ -18,6 +18,7 @@
 #  index_page_associations_on_page_id_and_employee_view_id  (page_id,employee_view_id) UNIQUE WHERE (employee_view_id IS NOT NULL)
 #  index_page_associations_on_page_id_and_tier_list_id      (page_id,tier_list_id) UNIQUE
 #  index_page_associations_on_tier_list_id                  (tier_list_id)
+#  unique_employee_view_per_page                            (page_id) UNIQUE WHERE (employee_view_id IS NOT NULL)
 #
 # Foreign Keys
 #
@@ -32,5 +33,5 @@ class PageAssociation < ApplicationRecord
 
   validates :page_id, presence: true
   validates :tier_list_id, uniqueness: { scope: :page_id, message: 'This tier list is already associated with this page.' }, if: -> { tier_list_id.present? }
-  validates :employee_view_id, uniqueness: { scope: :page_id, message: 'This employee view is already associated with this page.' }, if: -> { employee_view_id.present? }
+  validates :employee_view_id, uniqueness: { scope: :page_id, message: 'Each page can only have one employee view' }, if: -> { employee_view_id.present? }
 end
