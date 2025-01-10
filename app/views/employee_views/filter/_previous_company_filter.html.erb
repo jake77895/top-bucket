@@ -1,0 +1,21 @@
+<div class="modal fade" id="previousCompanyFilterModal" tabindex="-1" aria-labelledby="previousCompanyFilterLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previousCompanyFilterLabel">Filter by Previous Company</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= search_form_for @q, url: employee_view_path(@employee_view), method: :get, html: { class: 'filter-form' } do |f| %>
+          <div class="mb-3">
+            <%= f.label :previous_company_id_eq, "Select Previous Company", class: 'form-label' %>
+            <%= f.collection_select :previous_company_id_eq, Company.joins("INNER JOIN employees ON employees.previous_company_id = companies.id").where(employees: { id: @employee_view.employee_ids }).distinct, :id, :name, { prompt: 'All Previous Companies' }, { class: 'form-select' } %>
+          </div>
+          <div class="text-end">
+            <%= f.submit 'Apply Filter', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

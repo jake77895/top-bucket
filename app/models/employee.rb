@@ -66,6 +66,40 @@ class Employee < ApplicationRecord
 
   before_save :purge_picture, if: -> { remove_picture == '1' }
 
+   # Ransack: Allowlisted searchable attributes
+   def self.ransackable_attributes(auth_object = nil)
+    [
+      "company_id",
+      "created_at",
+      "flag_comment",
+      "flagged",
+      "graduate_school_id",
+      "group_id",
+      "id",
+      "job_level_id",
+      "linkedin_url",
+      "location_id",
+      "name",
+      "position_type_id",
+      "previous_company_id",
+      "undergraduate_school_id",
+      "updated_at"
+    ]
+  end
+
+  # Ransack: Allowlisted searchable associations
+  def self.ransackable_associations(auth_object = nil)
+    [
+      "job_level",
+      "company",
+      "group",
+      "location",
+      "previous_company",
+      "undergraduate_school",
+      "graduate_school"
+    ]
+  end
+
   private
 
   def purge_picture

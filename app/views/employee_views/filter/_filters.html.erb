@@ -1,0 +1,24 @@
+<div class="container mb-4">
+  <div class="d-flex flex-wrap gap-2">
+    <!-- Filter Buttons -->
+    <button type="button" class="btn btn-outline-dark flex-grow-1" data-bs-toggle="modal" data-bs-target="#levelFilterModal">Level</button>
+    <button type="button" class="btn btn-outline-dark flex-grow-1" data-bs-toggle="modal" data-bs-target="#groupFilterModal">Group</button>
+    <button type="button" class="btn btn-outline-dark flex-grow-1" data-bs-toggle="modal" data-bs-target="#locationFilterModal">Location</button>
+    <button type="button" class="btn btn-outline-dark flex-grow-1" data-bs-toggle="modal" data-bs-target="#companyFilterModal">Company</button>
+    <button type="button" class="btn btn-outline-dark flex-grow-1" data-bs-toggle="modal" data-bs-target="#previousCompanyFilterModal">Previous Company</button>
+    <button type="button" class="btn btn-outline-dark flex-grow-1" data-bs-toggle="modal" data-bs-target="#undergraduateSchoolFilterModal">Undergraduate School</button>
+    <button type="button" class="btn btn-outline-dark flex-grow-1" data-bs-toggle="modal" data-bs-target="#graduateSchoolFilterModal">Graduate School</button>
+
+    <!-- Clear Filters Button -->
+    <%= link_to 'Clear Filters', employee_view_path(@employee_view), class: 'btn btn-dark flex-grow-1' %>
+  </div>
+</div>
+
+<!-- Modals for Filters -->
+<%= render 'employee_views/filter/level_filter' %>
+<%= render 'employee_views/filter/group_filter' %>
+<%= render 'employee_views/filter/location_filter' %>
+<%= render 'employee_views/filter/company_filter' %>
+<%= render 'employee_views/filter/previous_company_filter' %>
+<%= render 'employee_views/filter/undergraduate_school_filter' %>
+<%= render 'employee_views/filter/graduate_school_filter' %>

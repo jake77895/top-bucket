@@ -1,0 +1,21 @@
+<div class="modal fade" id="companyFilterModal" tabindex="-1" aria-labelledby="companyFilterLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="companyFilterLabel">Filter by Company</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= search_form_for @q, url: employee_view_path(@employee_view), method: :get, html: { class: 'filter-form' } do |f| %>
+          <div class="mb-3">
+            <%= f.label :company_id_eq, "Select Company", class: 'form-label' %>
+            <%= f.collection_select :company_id_eq, Company.joins(:employees).where(employees: { id: @employee_view.employee_ids }).distinct, :id, :name, { prompt: 'All Companies' }, { class: 'form-select' } %>
+          </div>
+          <div class="text-end">
+            <%= f.submit 'Apply Filter', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

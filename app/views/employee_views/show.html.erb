@@ -7,6 +7,8 @@
   </div>
 </div>
 
+<%= render 'employee_views/filter/filters' %>
+
 
 <div class="container">
   <div class="row g-4">
@@ -19,7 +21,7 @@
           </div>
           <div class="card-body">
             <div class="row">
-              <% job_level.employees.where(id: @employee_view.employee_ids).each do |employee| %>
+              <% job_level.employees.where(id: @filtered_employees.pluck(:id)).each do |employee| %>
                 <div class="col-md-4">
                   <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
                   <%#= render partial: 'employee_views/employee_details_modal', locals: { employee: employee } %>
