@@ -1,0 +1,35 @@
+<div class="card-body">
+  <div class="row g-3"> <!-- Added g-3 for spacing between cards -->
+    <!-- First Info Card -->
+    <% if @employee_view %>
+      <div class="col-md-6">
+        <%= link_to employee_view_path(@employee_view), class: 'text-decoration-none' do %>
+          <div class="d-flex align-items-center shadow-sm p-3 rounded bg-white">
+            <%= image_tag 'pictures/employees.jpg', alt: 'Employees', class: 'img-thumbnail me-3', style: 'width: 80px; height: 80px;' %>
+            <div>
+              <h6 class="fw-bold text-dark">View Professionals</h6>
+              <p class="text-muted mb-0">Relevant professionals and user insights</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="col-md-6">
+        <p class="text-muted">No associated employee view found for this page.</p>
+      </div>
+    <% end %>
+
+    <!-- Second Info Card -->
+    <div class="col-md-6">
+      <div class="d-flex align-items-center shadow-sm p-3 rounded bg-white">
+        <%= image_tag 'pictures/career_path.jpg', alt: 'Careers', class: 'img-thumbnail me-3', style: 'width: 80px; height: 80px;' %>
+        <div>
+          <h6 class="fw-bold">Chart Career Path</h6>
+          <p class="text-muted mb-0">Successful candidates' backgrounds, exit opportunities, and more.</p>
+        </div>
+      </div>
+    </div>
+    
+  
+  </div>
+</div>

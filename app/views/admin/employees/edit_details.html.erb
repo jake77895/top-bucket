@@ -42,6 +42,24 @@
           <%= form.label :graduate_school_id, 'Graduate School', class: 'form-label' %>
           <%= form.collection_select :graduate_school_id, @schools, :id, :name, { prompt: 'Select Graduate School' }, { class: 'form-select' } %>
         </div>
+
+        <!-- Picture Upload -->
+        <div class="mb-3">
+          <%= form.label :picture, 'Upload Picture', class: 'form-label' %>
+          <%= form.file_field :picture, class: 'form-control' %>
+        </div>
+
+        <!-- Display Current Picture -->
+        <% if @employee.picture.attached? %>
+          <div class="mb-3">
+            <label class="form-label">Current Picture:</label>
+            <div>
+              <%= image_tag @employee.picture, class: 'img-thumbnail', style: 'width: 150px; height: 150px;' %>
+            </div>
+            <%= form.check_box :remove_picture, {}, '1', '0' %>
+            <%= form.label :remove_picture, 'Remove Picture', class: 'form-check-label' %>
+          </div>
+        <% end %>
       </div>
 
       <div class="card-footer d-flex justify-content-end">

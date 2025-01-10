@@ -36,6 +36,11 @@
           <%= form.label :graduate_school_id, 'Graduate School', class: 'form-label' %>
           <%= form.collection_select :graduate_school_id, School.all, :id, :name, { prompt: 'Select Graduate School' }, { class: 'form-select' } %>
         </div>
+
+        <div class="mb-3">
+          <%= form.label :picture, 'Upload Picture', class: 'form-label' %>
+          <%= form.file_field :picture, class: 'form-control' %>
+        </div>
       </div>
 
       <div class="card-footer d-flex justify-content-end">

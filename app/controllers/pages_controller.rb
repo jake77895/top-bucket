@@ -8,5 +8,7 @@ class PagesController < ApplicationController
     unless @page
       redirect_to pages_path, alert: "Page not found."
     end
+    @employee_view = @page.page_associations.where.not(employee_view_id: nil).first&.employee_view
+
   end
 end

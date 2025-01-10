@@ -125,6 +125,9 @@ class Admin::EmployeesController < ApplicationController
   def update
     @employee = Employee.find(params[:id])
 
+    # Remove the picture if the checkbox is checked
+    @employee.picture.purge if params[:employee][:remove_picture] == '1'
+
     if @employee.update(session[:employee_edit].merge(employee_params))
       session.delete(:employee_edit)
       redirect_to admin_employees_path, notice: 'Employee was successfully updated.'
@@ -166,7 +169,7 @@ class Admin::EmployeesController < ApplicationController
   def employee_params
     params.require(:employee).permit(
       :job_level_id, :previous_company_id, :linkedin_url, :flagged, 
-      :flag_comment, :group_id, :location_id, :undergraduate_school_id, :graduate_school_id)
+      :flag_comment, :group_id, :location_id, :undergraduate_school_id, :graduate_school_id, :picture, :remove_picture)
   end
 
   # Fetch Groups based on Company, Location, Position Type

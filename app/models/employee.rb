@@ -55,7 +55,20 @@ class Employee < ApplicationRecord
 
   has_many :flags, as: :flaggable, dependent: :destroy
 
+  has_one_attached :picture
+
   validates :name, presence: true
   validates :linkedin_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true
   validates :flagged, numericality: { only_integer: true }, allow_nil: true
+
+  # Virtual attribute for removing the picture
+  attr_accessor :remove_picture
+
+  before_save :purge_picture, if: -> { remove_picture == '1' }
+
+  private
+
+  def purge_picture
+    picture.purge
+  end
 end

@@ -1,0 +1,48 @@
+<div class="card shadow-sm mx-2 mb-3" style="width: 250px; margin-right: 15px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#employeeDetailsModal-<%= employee.id %>">
+  <div class="card-body position-relative text-center">
+    <!-- LinkedIn Link -->
+    <% if employee.linkedin_url.present? %>
+      <%= link_to employee.linkedin_url, target: "_blank", rel: "noopener" do %>
+        <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn', class: 'position-absolute top-0 end-0 me-2 mt-2', style: 'width: 20px; height: 20px;' %>
+      <% end %>
+    <% end %>
+
+    <!-- Employee Picture -->
+    <%= image_tag(
+      employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
+      class: 'rounded-circle mb-3',
+      style: 'width: 80px; height: 80px; object-fit: cover;',
+      alt: employee.name
+    ) %>
+
+    <!-- Employee Name -->
+    <h6 class="card-title mb-1" style="font-size: 14px; text-align: center;"><%= employee.name %></h6>
+
+    <!-- Job Title and Company -->
+    <% if employee.job_level && employee.company %>
+      <p class="card-text mb-0" style="font-size: 12px; text-align: center;">
+        <%= employee.job_level.name %> | <%= employee.company.name %>
+      </p>
+    <% elsif employee.job_level %>
+      <p class="card-text mb-0" style="font-size: 12px; text-align: center;"><%= employee.job_level.name %></p>
+    <% elsif employee.company %>
+      <p class="card-text mb-0" style="font-size: 12px; text-align: center;"><%= employee.company.name %></p>
+    <% else %>
+      <p class="card-text text-muted mb-0" style="font-size: 12px; text-align: center;">No job title or company available</p>
+    <% end %>
+  </div>
+</div>
+
+<div class="modal fade" id="employeeDetailsModal-<%= employee.id %>" tabindex="-1" aria-labelledby="employeeDetailsModalLabel-<%= employee.id %>" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="employeeDetailsModalLabel-<%= employee.id %>"><%= employee.name %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= render partial: 'employee_views/employee_details_modal', locals: { employee: employee } %>
+      </div>
+    </div>
+  </div>
+</div>

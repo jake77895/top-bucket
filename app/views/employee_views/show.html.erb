@@ -1,32 +1,45 @@
 <h1 class="text-center my-4"><%= @employee_view.name %></h1>
 
 <div class="container">
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-dark text-white">
-      <h5 class="mb-0">Employee View Details</h5>
-    </div>
-    <div class="card-body">
-      <p><strong>Description:</strong> <%= @employee_view.description.presence || 'No description available.' %></p>
-    </div>
-  </div>
+  <div class="row g-4">
+    <!-- Job Levels with Level Rank -->
+    <% @job_levels.each do |job_level| %>
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-black text-white">
+            <h5 class="mb-0"><%= job_level.name %></h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <% job_level.employees.where(id: @employee_view.employee_ids).each do |employee| %>
+                <div class="col-md-4">
+                  <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
+                  <%#= render partial: 'employee_views/employee_details_modal', locals: { employee: employee } %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
 
-  <div class="card shadow-sm">
-    <div class="card-header bg-dark text-white">
-      <h5 class="mb-0">Associated Pages</h5>
-    </div>
-    <div class="card-body">
-      <% if @associated_pages.any? %>
-        <ul class="list-group">
-          <% @associated_pages.each do |page| %>
-            <li class="list-group-item">
-              <%= link_to page.name, page_path(page), class: 'text-decoration-none' %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p class="text-muted">No pages are associated with this employee view.</p>
-      <% end %>
+    <!-- "Other" Employees -->
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-black text-white">
+          <h5 class="mb-0">Other</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <% @other_employees.each do |employee| %>
+              <div class="col-md-4">
+                <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
+                <%= render partial: 'employee_views/employee_details_modal', locals: { employee: employee } %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-

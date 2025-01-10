@@ -1,0 +1,60 @@
+<div class="card shadow-sm mb-4">
+  <!-- Employee Picture -->
+  <div class="card-header bg-dark text-white d-flex align-items-center">
+    <%= image_tag(
+      employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
+      class: 'rounded-circle me-3',
+      style: 'width: 50px; height: 50px; object-fit: cover;',
+      alt: employee.name
+    ) %>
+    <h5 class="mb-0"><%= employee.name %></h5>
+  </div>
+
+  <!-- Employee Details -->
+  <div class="card-body">
+    <ul class="list-unstyled mb-0">
+      <%# Job Level %>
+      <% if employee.job_level %>
+        <li><strong>Job Level:</strong> <%= employee.job_level.name %></li>
+      <% end %>
+
+      <%# Company %>
+      <% if employee.company %>
+        <li><strong>Company:</strong> <%= employee.company.name %></li>
+      <% end %>
+
+      <%# Previous Company %>
+      <% if employee.previous_company %>
+        <li><strong>Previous Company:</strong> <%= employee.previous_company.name %></li>
+      <% end %>
+
+      <%# LinkedIn URL %>
+      <% if employee.linkedin_url.present? %>
+        <li>
+          <strong>LinkedIn:</strong>
+          <%= link_to 'View Profile', employee.linkedin_url, target: '_blank', rel: 'noopener', class: 'text-decoration-none' %>
+        </li>
+      <% end %>
+
+      <%# Group %>
+      <% if employee.group %>
+        <li><strong>Group:</strong> <%= employee.group.name %></li>
+      <% end %>
+
+      <%# Location %>
+      <% if employee.location %>
+        <li><strong>Location:</strong> <%= employee.location.name %></li>
+      <% end %>
+
+      <%# Undergraduate School %>
+      <% if employee.undergraduate_school %>
+        <li><strong>Undergraduate School:</strong> <%= employee.undergraduate_school.name %></li>
+      <% end %>
+
+      <%# Graduate School %>
+      <% if employee.graduate_school %>
+        <li><strong>Graduate School:</strong> <%= employee.graduate_school.name %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
