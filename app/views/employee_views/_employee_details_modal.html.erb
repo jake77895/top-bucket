@@ -1,60 +1,80 @@
 <div class="card shadow-sm mb-4">
-  <!-- Employee Picture -->
-  <div class="card-header bg-dark text-white d-flex align-items-center">
-    <%= image_tag(
-      employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
-      class: 'rounded-circle me-3',
-      style: 'width: 50px; height: 50px; object-fit: cover;',
-      alt: employee.name
-    ) %>
-    <h5 class="mb-0"><%= employee.name %></h5>
+  <!-- Employee Picture and Name -->
+  <div class="card-header bg-light text-black d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= image_tag(
+        employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
+        class: 'rounded-circle me-3',
+        style: 'width: 50px; height: 50px; object-fit: cover;',
+        alt: employee.name
+      ) %>
+      <h5 class="mb-0"><%= employee.name %></h5>
+    </div>
+    <% if employee.linkedin_url.present? %>
+      <%= link_to employee.linkedin_url, target: '_blank', rel: 'noopener', class: 'ms-auto' do %>
+        <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn', style: 'width: 20px; height: 20px;' %>
+      <% end %>
+    <% end %>
   </div>
 
   <!-- Employee Details -->
   <div class="card-body">
-    <ul class="list-unstyled mb-0">
+    <table class="table table-borderless table-sm mb-0">
       <%# Job Level %>
       <% if employee.job_level %>
-        <li><strong>Job Level:</strong> <%= employee.job_level.name %></li>
-      <% end %>
-
-      <%# Company %>
-      <% if employee.company %>
-        <li><strong>Company:</strong> <%= employee.company.name %></li>
-      <% end %>
-
-      <%# Previous Company %>
-      <% if employee.previous_company %>
-        <li><strong>Previous Company:</strong> <%= employee.previous_company.name %></li>
-      <% end %>
-
-      <%# LinkedIn URL %>
-      <% if employee.linkedin_url.present? %>
-        <li>
-          <strong>LinkedIn:</strong>
-          <%= link_to 'View Profile', employee.linkedin_url, target: '_blank', rel: 'noopener', class: 'text-decoration-none' %>
-        </li>
+        <tr>
+          <th scope="row" class="text-nowrap border-bottom">Level</th>
+          <td class="border-bottom"><%= employee.job_level.name %></td>
+        </tr>
       <% end %>
 
       <%# Group %>
       <% if employee.group %>
-        <li><strong>Group:</strong> <%= employee.group.name %></li>
+        <tr>
+          <th scope="row" class="text-nowrap border-bottom">Group</th>
+          <td class="border-bottom"><%= employee.group.name %></td>
+        </tr>
       <% end %>
 
       <%# Location %>
       <% if employee.location %>
-        <li><strong>Location:</strong> <%= employee.location.name %></li>
+        <tr>
+          <th scope="row" class="text-nowrap border-bottom">Location</th>
+          <td class="border-bottom"><%= employee.location.name %></td>
+        </tr>
+      <% end %>
+
+      <%# Company %>
+      <% if employee.company %>
+        <tr>
+          <th scope="row" class="text-nowrap border-bottom">Company</th>
+          <td class="border-bottom"><%= employee.company.name %></td>
+        </tr>
+      <% end %>
+
+      <%# Previous Company %>
+      <% if employee.previous_company %>
+        <tr>
+          <th scope="row" class="text-nowrap border-bottom">Previous Company</th>
+          <td class="border-bottom"><%= employee.previous_company.name %></td>
+        </tr>
       <% end %>
 
       <%# Undergraduate School %>
       <% if employee.undergraduate_school %>
-        <li><strong>Undergraduate School:</strong> <%= employee.undergraduate_school.name %></li>
+        <tr>
+          <th scope="row" class="text-nowrap border-bottom">Undergraduate School</th>
+          <td class="border-bottom"><%= employee.undergraduate_school.name %></td>
+        </tr>
       <% end %>
 
       <%# Graduate School %>
       <% if employee.graduate_school %>
-        <li><strong>Graduate School:</strong> <%= employee.graduate_school.name %></li>
+        <tr>
+          <th scope="row" class="text-nowrap">Graduate School</th>
+          <td><%= employee.graduate_school.name %></td>
+        </tr>
       <% end %>
-    </ul>
+    </table>
   </div>
 </div>
