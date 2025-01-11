@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :destroy]
     resources :comments, only: [:index, :destroy]
     resources :form_templates, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :ratings, only: [:index, :destroy]
     resources :settings, only: [:index, :update]
     resources :pages do
       member do

@@ -1,21 +1,41 @@
-
 <div class="row">
   <% if @ratings.present? %>
     <% @ratings.each do |rating| %>
-      <div class="col-md-6 mb-4">
-        <div class="card shadow">
-          <div class="card-body">
-            <p><strong>User:</strong> <%= rating.user.user_name %></p>
-            <% rating.responses.each do |question_id, answer| %>
-              <p>
-                <strong><%= FormTemplate.find(question_id).question_text %>:</strong> <%= answer %>
-              </p>
-            <% end %>
-            <p><strong>Comment:</strong> <%= rating.comment %></p>
-            <p class="text-muted small"><%= time_ago_in_words(rating.created_at) %> ago</p>
+      <% if rating.comment.present? %>
+        <div class="col-md-6 mb-4">
+          <div class="card shadow">
+            <div class="card-body">
+              <!-- Display the comment and timestamp -->
+              <p class="mb-2"><%= rating.comment %></p>
+              <p class="text-muted small"><%= time_ago_in_words(rating.created_at) %> ago</p>
+
+              <!-- Accordion for additional details -->
+              <div class="accordion mt-3" id="accordion-<%= rating.id %>">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="heading-<%= rating.id %>">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<%= rating.id %>" aria-expanded="false" aria-controls="collapse-<%= rating.id %>">
+                      View Additional Details
+                    </button>
+                  </h2>
+                  <div id="collapse-<%= rating.id %>" class="accordion-collapse collapse" aria-labelledby="heading-<%= rating.id %>" data-bs-parent="#accordion-<%= rating.id %>">
+                    <div class="accordion-body">
+                      <!-- Additional Details -->
+                      <ul class="list-group">
+                        <% rating.responses.each do |question_id, answer| %>
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="fw-bold"><%= FormTemplate.find(question_id).question_text %>:</span>
+                            <span><%= answer %></span>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
   <% else %>
     <p class="text-center">No recaps available for this employee.</p>

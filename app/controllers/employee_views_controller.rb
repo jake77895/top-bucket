@@ -3,8 +3,35 @@ class EmployeeViewsController < ApplicationController
     @employee_view = EmployeeView.find(params[:id])
     @employee = Employee.find(params[:employee_id])
     @ratings = @employee.ratings.includes(:user).order(created_at: :desc)
+    overview_summary # Call the overview_summary method to set variables
 
     render 'employee_views/summary/complete_summary'
+  end
+
+    def overview_summary
+    @employee = Employee.find(params[:employee_id])
+    @ratings = Rating.where(employee: @employee)
+
+    # Exclude null values
+    responses = @ratings.pluck(:responses).map(&:compact)
+
+    # Percentage of users asked specific questions
+    @asked_technical = (responses.count { |r| r["1"] == "yes" } * 100.0 / responses.size).round
+    @asked_deal = (responses.count { |r| r["2"] == "yes" } * 100.0 / responses.size).round
+    @asked_trend = (responses.count { |r| r["3"] == "yes" } * 100.0 / responses.size).round
+
+    # Most common tones
+    tones = responses.map { |r| r["4"] }.compact
+    tone_counts = tones.tally
+    @most_common_tones = tone_counts.sort_by { |_tone, count| -count }.take(2).map do |tone, count|
+      [tone, (count * 100.0 / tones.size).round]
+    end
+
+    # Percentage passed to next round
+    @passed_next_round = (responses.count { |r| r["5"] == "yes" } * 100.0 / responses.size).round
+
+    # Total number of recaps
+    @total_recaps = @ratings.size
   end
   
   def show
@@ -48,6 +75,9 @@ end
     @undergraduate_schools = School.where(id: @filtered_employees.pluck(:undergraduate_school_id).uniq).order(:name)
     @graduate_schools = School.where(id: @filtered_employees.pluck(:graduate_school_id).uniq).order(:name)
   end
+
+
+
 
 private
 

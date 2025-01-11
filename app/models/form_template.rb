@@ -31,8 +31,14 @@ class FormTemplate < ApplicationRecord
   # Static dropdown options
   def self.dropdown_options_for(question_text)
     {
+      # Investment Banking - Networking
       "How would you describe the tone of the conversation?" => ["Casual and Friendly", "Professional", "Tense or Confrontational", "Unengaged"],
-      "Rate the clarity of communication" => ["Excellent", "Good", "Fair", "Poor"]
+      "How would you rate your interaction?" => ["Very Positive", "Positive", "Neutral", "Negative"],
+      # Investment Banking - Interview
+      "How difficult were the technical questions?" => ["Easy", "Medium", "Hard", "Very Hard"],
+      "How would you describe the tone of the interview?" => ["Casual and Friendly", "Professional", "Tense or Confrontational", "Unengaged"],
+      "Did you receive a job offer?" => ["Yes", "No", "Waitlisted", "Waiting on response"],
+      "What was your overall impression of the interview?" => ["Positive", "Neutral", "Negative"]
     }[question_text] || []
   end
 
@@ -46,6 +52,7 @@ class FormTemplate < ApplicationRecord
   private
 
   def set_default_position
-    self.position ||= (FormTemplate.maximum(:position) || 0) + 1
+    max_position = FormTemplate.where(position_type_id: position_type_id, form_context: form_context).maximum(:position)
+    self.position ||= (max_position || 0) + 1
   end
 end

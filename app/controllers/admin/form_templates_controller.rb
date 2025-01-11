@@ -1,4 +1,6 @@
 class Admin::FormTemplatesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :authorize_admin!
   before_action :set_form_template, only: [:edit, :update, :destroy]
 
   def index

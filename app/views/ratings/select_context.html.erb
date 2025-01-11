@@ -7,12 +7,21 @@
     </div>
     <div class="card-body">
       <%= form_with url: new_employee_view_employee_rating_path(@employee_view, @employee), method: :get, local: true do |f| %>
+        <!-- Error Messages -->
+        <% if flash[:error].present? %>
+          <div class="alert alert-danger">
+            <%= flash[:error] %>
+          </div>
+        <% end %>
+
+        <!-- Form Context Field -->
         <div class="mb-4">
           <%= f.label :form_context, 'Was this a Networking session or an Interview?', class: 'form-label' %>
           <%= f.select :form_context, [['Networking', 'networking'], ['Interview', 'interview']], 
-                        { prompt: 'Select Context' }, class: 'form-select' %>
+                        { prompt: 'Select Context' }, class: 'form-select', required: true %>
         </div>
 
+        <!-- Submit Button -->
         <div class="text-end">
           <%= f.submit 'Next', class: 'btn btn-dark' %>
         </div>
@@ -20,3 +29,4 @@
     </div>
   </div>
 </div>
+
