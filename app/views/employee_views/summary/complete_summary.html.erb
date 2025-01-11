@@ -15,13 +15,16 @@
     </div>
   </div>
 
-  <!-- Overview Summary -->
-  <%= render 'employee_views/summary/overview_summary', employee: @employee, employee_view: @employee_view %>
-
-  <!-- Recap Cards -->
-  <%= render 'employee_views/summary/recap_cards', ratings: @ratings %>
-
-
-
-
+  <!-- Context-Specific Rendering -->
+  <% if params[:form_context] == 'networking' && @employee.position_type_id == 2 %>
+    <!-- Networking Overview for Position Type 2 -->
+    <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_networking', employee: @employee, employee_view: @employee_view %>
+    <%= render 'employee_views/summary/recap_cards', ratings: @ratings %>
+  <% elsif params[:form_context] == 'interview' && @employee.position_type_id == 2 %>
+    <!-- Interview Overview for Position Type 2 -->
+    <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_interviews', employee: @employee, employee_view: @employee_view %>
+    <%= render 'employee_views/summary/recap_cards', ratings: @ratings %>
+  <% else %>
+    <p class="text-center">This view is not applicable for the selected context or employee position type.</p>
+  <% end %>
 </div>

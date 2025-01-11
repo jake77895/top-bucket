@@ -3,35 +3,22 @@ class EmployeeViewsController < ApplicationController
     @employee_view = EmployeeView.find(params[:id])
     @employee = Employee.find(params[:employee_id])
     @ratings = @employee.ratings.includes(:user).order(created_at: :desc)
+
     overview_summary # Call the overview_summary method to set variables
+
+    # Debugger line
+    Rails.logger.debug "Summary Params: #{params.inspect}"
 
     render 'employee_views/summary/complete_summary'
   end
 
-    def overview_summary
+  def overview_summary
+    @employee_view = EmployeeView.find(params[:id])
     @employee = Employee.find(params[:employee_id])
-    @ratings = Rating.where(employee: @employee)
+    @ratings = @employee.ratings.includes(:user)
 
-    # Exclude null values
-    responses = @ratings.pluck(:responses).map(&:compact)
-
-    # Percentage of users asked specific questions
-    @asked_technical = (responses.count { |r| r["1"] == "yes" } * 100.0 / responses.size).round
-    @asked_deal = (responses.count { |r| r["2"] == "yes" } * 100.0 / responses.size).round
-    @asked_trend = (responses.count { |r| r["3"] == "yes" } * 100.0 / responses.size).round
-
-    # Most common tones
-    tones = responses.map { |r| r["4"] }.compact
-    tone_counts = tones.tally
-    @most_common_tones = tone_counts.sort_by { |_tone, count| -count }.take(2).map do |tone, count|
-      [tone, (count * 100.0 / tones.size).round]
-    end
-
-    # Percentage passed to next round
-    @passed_next_round = (responses.count { |r| r["5"] == "yes" } * 100.0 / responses.size).round
-
-    # Total number of recaps
-    @total_recaps = @ratings.size
+    calculate_summary_metrics
+    overall_impression # Call the separate method for impressions
   end
   
   def show
@@ -96,6 +83,44 @@ private
   # Fetches ratings for the employee filtered by the form context
   def load_ratings(form_context)
     @employee.ratings.includes(:user).where(form_context: form_context)
+  end
+
+  def calculate_summary_metrics
+    responses = @ratings.pluck(:responses).map(&:compact)
+
+    # Percentage calculations
+    @asked_technical = (responses.count { |r| r["1"] == "yes" } * 100.0 / responses.size).round
+    @asked_deal = (responses.count { |r| r["2"] == "yes" } * 100.0 / responses.size).round
+    @asked_trend = (responses.count { |r| r["3"] == "yes" } * 100.0 / responses.size).round
+
+    # Most common tones
+    tones = responses.map { |r| r["4"] }.compact
+    tone_counts = tones.tally
+    @most_common_tones = tone_counts.sort_by { |_tone, count| -count }.take(2).map do |tone, count|
+      [tone, (count * 100.0 / tones.size).round]
+    end
+
+    # Percentage passed to next round
+    @passed_next_round = (responses.count { |r| r["5"] == "yes" } * 100.0 / responses.size).round
+
+    # Total recaps
+    @total_recaps = @ratings.size
+  end
+
+  def overall_impression
+    # Fetch the ID dynamically based on the question text
+    impression_id = FormTemplate.find_by(question_text: "How would you rate your interaction?").id.to_s
+  
+    # Count occurrences of each response for the "How would you rate your interaction?" question
+    impression_counts = @ratings.pluck(:responses).map { |r| r[impression_id] }.compact.tally
+  
+    # Map the counts to predefined categories
+    @impression_data = {
+      'Very Positive' => impression_counts['Very Positive'] || 0,
+      'Positive' => impression_counts['Positive'] || 0,
+      'Neutral' => impression_counts['Neutral'] || 0,
+      'Negative' => impression_counts['Negative'] || 0
+    }
   end
 
 
