@@ -1,25 +1,36 @@
-<h4>Rate Your Interaction with <%= @employee.name %></h4>
+<div class="container mt-5">
+  <h3 class="text-center mb-4">Rate Your Interaction with <%= @employee.name %></h3>
 
-<%= form_with url: employee_view_employee_ratings_path(@employee_view, @employee), method: :post, local: true do |f| %>
-  <%= f.hidden_field :form_context, value: @form_context %>
+  <div class="card shadow">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Interaction Details</h5>
+    </div>
+    <div class="card-body">
+      <%= form_with url: employee_view_employee_ratings_path(@employee_view, @employee), method: :post, local: true do |f| %>
+        <%= f.hidden_field :form_context, value: @form_context %>
 
-  <% @form_questions.each do |question| %>
-    <div class="form-group mb-3">
-      <%= label_tag question.question_text %>
-      <% if question.response_type == 'yes/no' %>
-        <%= f.select :responses[question.id], [['Yes', 'yes'], ['No', 'no']], {}, class: 'form-control' %>
-      <% elsif question.response_type == 'text' %>
-        <%= f.text_area :responses[question.id], class: 'form-control' %>
-      <% elsif question.response_type == 'dropdown' %>
-        <%= f.select :responses[question.id], question.options, {}, class: 'form-control' %> <!-- Ensure `options` are available -->
+        <% @form_questions.each do |question| %>
+          <div class="mb-4">
+            <h6 class="mb-2"><%= question.question_text %></h6>
+            <% if question.response_type == 'yes/no' %>
+              <%= f.select :responses[question.id], [['Yes', 'yes'], ['No', 'no']], {}, class: 'form-select' %>
+            <% elsif question.response_type == 'text' %>
+              <%= f.text_area :responses[question.id], class: 'form-control', rows: 3 %>
+            <% elsif question.response_type == 'dropdown' %>
+              <%= f.select :responses[question.id], question.options, {}, class: 'form-select' %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="mb-4">
+          <h6 class="mb-2">Additional Comments</h6>
+          <%= f.text_area :comment, class: 'form-control', rows: 3 %>
+        </div>
+
+        <div class="text-end">
+          <%= f.submit 'Submit Rating', class: 'btn btn-primary' %>
+        </div>
       <% end %>
     </div>
-  <% end %>
-
-  <div class="form-group mb-3">
-    <%= f.label :comment, 'Additional Comments' %>
-    <%= f.text_area :comment, class: 'form-control' %>
   </div>
-
-  <%= f.submit 'Submit Rating', class: 'btn btn-primary' %>
-<% end %>
+</div>

@@ -1,0 +1,61 @@
+<h2 class="text-center my-4">
+  <%= @form_template.new_record? ? 'New Form Template' : 'Edit Form Template' %>
+</h2>
+
+<div class="container">
+  <%= form_with(model: @form_template, 
+                url: @form_template.new_record? ? admin_form_templates_path : admin_form_template_path(@form_template), 
+                local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">
+          <%= @form_template.new_record? ? 'Create Form Template' : 'Edit Form Template' %>
+        </h5>
+      </div>
+      <div class="card-body">
+        
+        <!-- Position Type and Form Context Fields -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <%= form.label :position_type_id, 'Position Type', class: 'form-label' %>
+            <%= form.collection_select :position_type_id, PositionType.all, :id, :name, 
+                                      { prompt: 'Select Position Type' }, 
+                                      class: 'form-select' %>
+          </div>
+
+          <div class="col-md-6">
+            <%= form.label :form_context, 'Form Context', class: 'form-label' %>
+            <%= form.select :form_context, [['Networking', 'networking'], ['Interview', 'interview']], 
+                            { prompt: 'Select Form Context' }, 
+                            class: 'form-select' %>
+          </div>
+        </div>
+
+        <!-- Question Text Field -->
+        <div class="mb-3">
+          <%= form.label :question_text, 'Question Text', class: 'form-label' %>
+          <%= form.text_area :question_text, class: 'form-control', placeholder: 'Enter the question text' %>
+        </div>
+
+        <!-- Response Type and Select Question Order Fields -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <%= form.label :response_type, 'Response Type', class: 'form-label' %>
+            <%= form.select :response_type, [['Yes/No', 'yes/no'], ['Text', 'text'], ['Dropdown', 'dropdown']], 
+                            { prompt: 'Select Response Type' }, 
+                            class: 'form-select' %>
+          </div>
+
+          <div class="col-md-6">
+            <%= form.label :position, 'Select Question Order', class: 'form-label' %>
+            <%= form.number_field :position, class: 'form-control', placeholder: 'Enter question order' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>

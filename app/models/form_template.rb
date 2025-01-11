@@ -4,6 +4,7 @@
 #
 #  id               :bigint           not null, primary key
 #  form_context     :string           not null
+#  position         :integer
 #  question_text    :string           not null
 #  response_type    :string           not null
 #  created_at       :datetime         not null
@@ -20,6 +21,16 @@
 #
 class FormTemplate < ApplicationRecord
   belongs_to :position_type
+  before_validation :set_default_position, on: :create
 
   validates :form_context, :question_text, :response_type, presence: true
+  
+  # Default scope to order by position
+  default_scope { order(:position) }
+
+  private
+
+  def set_default_position
+    self.position ||= (FormTemplate.maximum(:position) || 0) + 1
+  end
 end

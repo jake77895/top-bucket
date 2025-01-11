@@ -1,0 +1,41 @@
+<div class="container mt-5">
+  <h2 class="text-center">Admin: Manage Form Templates</h2>
+  <div class="d-flex justify-content-end align-items-center mb-3">
+    <%= link_to 'New Form Template', new_admin_form_template_path, class: 'btn btn-dark' %>
+  </div>
+
+  <table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Position Type</th>
+        <th>Context</th>
+        <th>Question</th>
+        <th>Response Type</th>
+        <th>Question Order</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @form_templates.group_by { |template| [template.position_type.name, template.form_context] }.each do |(position_type, context), templates| %>
+        <tr class="table-light">
+        </tr>
+        <% templates.sort_by(&:position).each do |template| %>
+          <tr>
+            <td><%= position_type %></td>
+            <td><%= context.capitalize %></td>
+            <td><%= template.question_text %></td>
+            <td><%= template.response_type.humanize %></td>
+            <td><%= template.position %></td>
+            <td class="text-center">
+              <%= link_to 'Edit', edit_admin_form_template_path(template), class: 'btn btn-sm btn-warning me-2' %>
+              <%= link_to 'Delete', admin_form_template_path(template), 
+                          method: :delete, 
+                          data: { confirm: 'Are you sure?' }, 
+                          class: 'btn btn-sm btn-danger' %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
