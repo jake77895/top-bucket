@@ -28,6 +28,21 @@ class FormTemplate < ApplicationRecord
   # Default scope to order by position
   default_scope { order(:position) }
 
+  # Static dropdown options
+  def self.dropdown_options_for(question_text)
+    {
+      "How would you describe the tone of the conversation?" => ["Casual and Friendly", "Professional", "Tense or Confrontational", "Unengaged"],
+      "Rate the clarity of communication" => ["Excellent", "Good", "Fair", "Poor"]
+    }[question_text] || []
+  end
+
+  # Fetch options for dropdown questions
+  def options
+    return [] unless response_type == 'dropdown'
+
+    self.class.dropdown_options_for(question_text)
+  end
+
   private
 
   def set_default_position

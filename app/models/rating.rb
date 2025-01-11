@@ -25,5 +25,7 @@ class Rating < ApplicationRecord
   belongs_to :employee
   belongs_to :user
 
+  validates :user_id, uniqueness: { scope: [:employee_id, :form_context], 
+                                    message: "can only rate an employee once per context" }
   validates :form_context, :responses, presence: true
 end

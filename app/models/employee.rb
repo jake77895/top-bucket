@@ -55,6 +55,8 @@ class Employee < ApplicationRecord
 
   has_many :flags, as: :flaggable, dependent: :destroy
 
+  has_many :ratings, dependent: :destroy
+
   has_one_attached :picture
 
   validates :name, presence: true

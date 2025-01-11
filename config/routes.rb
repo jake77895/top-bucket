@@ -109,11 +109,15 @@ Rails.application.routes.draw do
   resources :comments, only: [:create, :destroy]
 
   # Public Routes for Viewing Employee Views
-  resources :employee_views, only: [:show] do
-    resources :employees, only: [] do
-      resources :ratings, only: [:new, :create]
+  resources :employee_views do
+    resources :employee_ratings, only: [:select_context, :new, :create], controller: 'ratings', path: 'employees/:employee_id/ratings' do
+      get :select_context, on: :member
+    end
+    member do
+      get 'summary/:employee_id', to: 'employee_views#summary', as: 'summary'
     end
   end
+  
 
 
   

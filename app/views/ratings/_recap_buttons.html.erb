@@ -1,0 +1,23 @@
+<!-- Recap Buttons Section -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- Button to View Recaps -->
+  <%= link_to "View #{employee.ratings.count} #{'Recap'.pluralize(employee.ratings.count)}", 
+            summary_employee_view_path(@employee_view, employee), 
+            class: 'btn btn-outline-dark btn-sm' %>
+
+
+  <!-- Button to Recap Interaction -->
+  <%= link_to 'Recap Interaction', select_context_employee_view_employee_rating_path(@employee_view, employee), 
+              class: 'btn btn-dark btn-sm' %>
+</div>
+
+
+
+<!-- Placeholder Section (to be updated later) -->
+<% if true %> <!-- Temporary conditional -->
+  <!-- Horizontal Divider -->
+  <hr class="my-3">
+  <div class="text-muted">
+    Placeholder text for additional summary or insights.
+  </div>
+<% end %>

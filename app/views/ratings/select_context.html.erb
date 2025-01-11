@@ -1,0 +1,22 @@
+<div class="container mt-5">
+  <h3 class="text-center mb-4">Recap Your Interaction with <%= @employee.name %></h3>
+
+  <div class="card shadow">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Select Interaction Context</h5>
+    </div>
+    <div class="card-body">
+      <%= form_with url: new_employee_view_employee_rating_path(@employee_view, @employee), method: :get, local: true do |f| %>
+        <div class="mb-4">
+          <%= f.label :form_context, 'Was this a Networking session or an Interview?', class: 'form-label' %>
+          <%= f.select :form_context, [['Networking', 'networking'], ['Interview', 'interview']], 
+                        { prompt: 'Select Context' }, class: 'form-select' %>
+        </div>
+
+        <div class="text-end">
+          <%= f.submit 'Next', class: 'btn btn-dark' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

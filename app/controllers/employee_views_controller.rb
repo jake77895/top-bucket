@@ -1,4 +1,12 @@
 class EmployeeViewsController < ApplicationController
+  def summary
+    @employee_view = EmployeeView.find(params[:id])
+    @employee = Employee.find(params[:employee_id])
+    @ratings = @employee.ratings.includes(:user).order(created_at: :desc)
+
+    render 'employee_views/summary/complete_summary'
+  end
+  
   def show
     @employee_view = EmployeeView.find(params[:id])
     @associated_pages = @employee_view.pages

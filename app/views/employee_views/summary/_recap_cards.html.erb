@@ -1,0 +1,23 @@
+
+<div class="row">
+  <% if @ratings.present? %>
+    <% @ratings.each do |rating| %>
+      <div class="col-md-6 mb-4">
+        <div class="card shadow">
+          <div class="card-body">
+            <p><strong>User:</strong> <%= rating.user.user_name %></p>
+            <% rating.responses.each do |question_id, answer| %>
+              <p>
+                <strong><%= FormTemplate.find(question_id).question_text %>:</strong> <%= answer %>
+              </p>
+            <% end %>
+            <p><strong>Comment:</strong> <%= rating.comment %></p>
+            <p class="text-muted small"><%= time_ago_in_words(rating.created_at) %> ago</p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-center">No recaps available for this employee.</p>
+  <% end %>
+</div>
