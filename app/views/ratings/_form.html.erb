@@ -1,0 +1,22 @@
+<%= form_with url: employee_view_employee_ratings_path(employee_view_id: @employee_view.id, employee_id: employee), local: true do |f| %>
+  <%= f.hidden_field :form_context, value: form_context %>
+
+  <% @form_questions.each do |question| %>
+    <div class="form-group">
+      <%= label_tag question.question_text %>
+      <% if question.response_type == 'yes/no' %>
+        <%= f.select :responses, [['Yes', 'yes'], ['No', 'no']], {}, { name: "rating[responses][#{question.id}]" } %>
+      <% elsif question.response_type == 'text' %>
+        <%= f.text_area :responses, name: "rating[responses][#{question.id}]" %>
+      <% elsif question.response_type == 'dropdown' %>
+        <%= f.select :responses, [['Option 1', 'opt1'], ['Option 2', 'opt2']], {}, { name: "rating[responses][#{question.id}]" } %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :comment, 'Additional Comments' %>
+    <%= f.text_area :comment %>
+  </div>
+  <%= f.submit 'Submit Rating', class: 'btn btn-primary' %>
+<% end %>

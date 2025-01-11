@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'employee_views/show'
 
   get 'pages/index'
   get 'pages/show'
@@ -109,7 +108,11 @@ Rails.application.routes.draw do
   resources :comments, only: [:create, :destroy]
 
   # Public Routes for Viewing Employee Views
-  resources :employee_views, only: [:show]
+  resources :employee_views, only: [:show] do
+    resources :employees, only: [] do
+      resources :ratings, only: [:new, :create]
+    end
+  end
 
 
   

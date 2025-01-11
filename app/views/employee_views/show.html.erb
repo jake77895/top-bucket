@@ -1,5 +1,11 @@
 <div class="container mb-4 mt-4">
-  <div class="card shadow-sm">
+  <div class="card shadow-sm position-relative">
+    <!-- Back Button -->
+    <%= link_to params[:origin_page] || root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
     <div class="card-body text-center bg-light">
       <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;"><%= @employee_view.name %></h1>
       <p class="text-muted" style="font-size: 14px;">Explore key professionals and their details</p>
@@ -8,7 +14,6 @@
 </div>
 
 <%= render 'employee_views/filter/filters' %>
-
 
 <div class="container">
   <div class="row g-4">
@@ -24,7 +29,6 @@
               <% job_level.employees.where(id: @filtered_employees.pluck(:id)).each do |employee| %>
                 <div class="col-md-4">
                   <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
-                  <%#= render partial: 'employee_views/employee_details_modal', locals: { employee: employee } %>
                 </div>
               <% end %>
             </div>
@@ -44,7 +48,6 @@
             <% @other_employees.each do |employee| %>
               <div class="col-md-4">
                 <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
-                <%= render partial: 'employee_views/employee_details_modal', locals: { employee: employee } %>
               </div>
             <% end %>
           </div>

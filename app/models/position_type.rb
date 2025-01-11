@@ -11,6 +11,7 @@
 class PositionType < ApplicationRecord
   has_many :companies
   has_many :job_levels
+  has_many :form_templates
 
   validates :name, presence: true, uniqueness: true
 end

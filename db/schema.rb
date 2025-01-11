@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_10_005355) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_11_005345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -118,6 +118,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_10_005355) do
     t.index ["user_id"], name: "index_flags_on_user_id"
   end
 
+  create_table "form_templates", force: :cascade do |t|
+    t.string "form_context", null: false
+    t.string "question_text", null: false
+    t.string "response_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "position_type_id", null: false
+    t.index ["position_type_id"], name: "index_form_templates_on_position_type_id"
+  end
+
   create_table "groups", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "company_id"
@@ -208,6 +218,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_10_005355) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.bigint "employee_id", null: false
+    t.bigint "user_id", null: false
+    t.string "form_context", null: false
+    t.jsonb "responses", default: {}
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_ratings_on_employee_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
+  end
+
   create_table "schools", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -266,6 +288,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_10_005355) do
   add_foreign_key "employees", "schools", column: "graduate_school_id"
   add_foreign_key "employees", "schools", column: "undergraduate_school_id"
   add_foreign_key "flags", "users"
+  add_foreign_key "form_templates", "position_types"
   add_foreign_key "groups", "companies"
   add_foreign_key "groups", "locations"
   add_foreign_key "groups", "position_types"
@@ -277,5 +300,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_10_005355) do
   add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"
+  add_foreign_key "ratings", "employees"
+  add_foreign_key "ratings", "users"
   add_foreign_key "tier_lists", "tier_list_templates"
 end

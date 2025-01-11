@@ -3,7 +3,7 @@
     <!-- First Info Card -->
     <% if @employee_view %>
       <div class="col-md-6">
-        <%= link_to employee_view_path(@employee_view), class: 'text-decoration-none' do %>
+        <%= link_to employee_view_path(@employee_view, origin_page: request.fullpath), class: 'text-decoration-none' do %>
           <div class="d-flex align-items-center shadow-sm p-3 rounded bg-white">
             <%= image_tag 'pictures/employees.jpg', alt: 'Employees', class: 'img-thumbnail me-3', style: 'width: 80px; height: 80px;' %>
             <div>

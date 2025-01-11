@@ -1,0 +1,25 @@
+<h4>Rate Your Interaction with <%= @employee.name %></h4>
+
+<%= form_with url: employee_view_employee_ratings_path(@employee_view, @employee), method: :post, local: true do |f| %>
+  <%= f.hidden_field :form_context, value: @form_context %>
+
+  <% @form_questions.each do |question| %>
+    <div class="form-group mb-3">
+      <%= label_tag question.question_text %>
+      <% if question.response_type == 'yes/no' %>
+        <%= f.select :responses[question.id], [['Yes', 'yes'], ['No', 'no']], {}, class: 'form-control' %>
+      <% elsif question.response_type == 'text' %>
+        <%= f.text_area :responses[question.id], class: 'form-control' %>
+      <% elsif question.response_type == 'dropdown' %>
+        <%= f.select :responses[question.id], question.options, {}, class: 'form-control' %> <!-- Ensure `options` are available -->
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="form-group mb-3">
+    <%= f.label :comment, 'Additional Comments' %>
+    <%= f.text_area :comment, class: 'form-control' %>
+  </div>
+
+  <%= f.submit 'Submit Rating', class: 'btn btn-primary' %>
+<% end %>

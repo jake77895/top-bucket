@@ -1,0 +1,27 @@
+<!-- Summary Section -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h6>Summary for <%= @form_context.capitalize %></h6>
+  <!-- Link to the ratings new view -->
+  <%= link_to 'Rate Employee', new_employee_view_employee_rating_path(employee_view_id: @employee_view.id, employee_id: employee.id, form_context: @form_context), class: 'btn btn-primary btn-sm' %>
+
+</div>
+
+<div>
+  <h6>Summary for <%= @form_context.capitalize %></h6>
+  <% if @ratings.present? %>
+    <% @ratings.where(form_context: @form_context).each do |rating| %>
+      <div class="rating-summary">
+        <p><strong>User:</strong> <%= rating.user.name %></p>
+        <% rating.responses.each do |question_id, answer| %>
+          <p>
+            <%= FormTemplate.find(question_id).question_text %>: <%= answer %>
+          </p>
+        <% end %>
+        <p><strong>Comment:</strong> <%= rating.comment %></p>
+      </div>
+      <hr>
+    <% end %>
+  <% else %>
+    <p>No ratings available for this context.</p>
+  <% end %>
+</div>
