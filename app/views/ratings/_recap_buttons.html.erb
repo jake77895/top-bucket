@@ -1,7 +1,7 @@
 <!-- Recap Buttons Section -->
 <div class="d-flex justify-content-between align-items-center mb-3">
   <!-- Button to View Recaps -->
-  <%= link_to "View #{employee.ratings.where(form_context: 'Networking').count} #{'Recap'.pluralize(employee.ratings.where(form_context: 'Networking').count)}", 
+  <%= link_to "View #{employee.ratings.count} #{'Recap'.pluralize(employee.ratings.count)}", 
               summary_employee_view_path(@employee_view, employee, form_context: 'networking'), 
               class: 'btn btn-outline-dark btn-sm' %>
 
