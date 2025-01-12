@@ -11,6 +11,17 @@
       <div class="card-body text-center bg-light">
         <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;"><%= @employee.name %></h1>
         <p class="text-muted" style="font-size: 14px;">View recaps and insights</p>
+
+      </div>
+
+      <!-- Switch Buttons -->
+      <div class="btn-group mt-0" role="group">
+        <%= link_to 'Networking', 
+                      summary_employee_view_path(@employee_view, @employee, form_context: 'networking'), 
+                      class: "btn btn-outline-dark #{params[:form_context] == 'networking' ? 'active' : ''}" %>
+        <%= link_to 'Interviews', 
+                      summary_employee_view_path(@employee_view, @employee, form_context: 'interview'), 
+                      class: "btn btn-outline-dark #{params[:form_context] == 'interview' ? 'active' : ''}" %>
       </div>
     </div>
   </div>
@@ -19,11 +30,11 @@
   <% if params[:form_context] == 'networking' && @employee.position_type_id == 2 %>
     <!-- Networking Overview for Position Type 2 -->
     <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_networking', employee: @employee, employee_view: @employee_view %>
-    <%= render 'employee_views/summary/recap_cards', ratings: @ratings %>
+    <%= render 'employee_views/summary/recap_cards', ratings: @filtered_ratings %>
   <% elsif params[:form_context] == 'interview' && @employee.position_type_id == 2 %>
     <!-- Interview Overview for Position Type 2 -->
-    <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_interviews', employee: @employee, employee_view: @employee_view %>
-    <%= render 'employee_views/summary/recap_cards', ratings: @ratings %>
+    <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_interview', employee: @employee, employee_view: @employee_view %>
+    <%= render 'employee_views/summary/recap_cards', ratings: @filtered_ratings %>
   <% else %>
     <p class="text-center">This view is not applicable for the selected context or employee position type.</p>
   <% end %>

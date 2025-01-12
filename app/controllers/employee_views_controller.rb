@@ -2,12 +2,13 @@ class EmployeeViewsController < ApplicationController
   def summary
     @employee_view = EmployeeView.find(params[:id])
     @employee = Employee.find(params[:employee_id])
-    @ratings = @employee.ratings.includes(:user).order(created_at: :desc)
+
+    # Filtered Ratings: Using params to dynamically scope
+    @filtered_ratings = @employee.ratings
+                                .where(form_context: params[:form_context], position_type: params[:position_type])
+                                .includes(:user)
 
     overview_summary # Call the overview_summary method to set variables
-
-    # Debugger line
-    Rails.logger.debug "Summary Params: #{params.inspect}"
 
     render 'employee_views/summary/complete_summary'
   end
@@ -15,10 +16,24 @@ class EmployeeViewsController < ApplicationController
   def overview_summary
     @employee_view = EmployeeView.find(params[:id])
     @employee = Employee.find(params[:employee_id])
-    @ratings = @employee.ratings.includes(:user)
 
-    calculate_summary_metrics
-    overall_impression # Call the separate method for impressions
+    # Scoped Ratings: Dynamically filter based on `form_context` and `position_type`
+    @filtered_ratings = @employee.ratings
+                              .where(form_context: params[:form_context], employee: @employee)
+                              .includes(:user)
+                              .order(created_at: :desc)
+
+    if params[:form_context] == 'networking' && @employee.position_type_id == 2
+      calculate_ib_networking_summary_metrics(@filtered_ratings)
+      overall_ib_networking_impression(@filtered_ratings)
+    end
+
+    if params[:form_context] == 'interview' && @employee.position_type_id == 2
+      calculate_ib_interview_summary_metrics(@filtered_ratings)
+      overall_ib_interview_impression(@filtered_ratings)
+      recieved_job_offer_ib_interview(@filtered_ratings)
+      technical_difficulty_ib_interview(@filtered_ratings)
+    end
   end
   
   def show
@@ -85,42 +100,135 @@ private
     @employee.ratings.includes(:user).where(form_context: form_context)
   end
 
-  def calculate_summary_metrics
-    responses = @ratings.pluck(:responses).map(&:compact)
+  def calculate_ib_networking_summary_metrics(ratings)
+    responses = ratings.pluck(:responses).map(&:compact)
 
-    # Percentage calculations
-    @asked_technical = (responses.count { |r| r["1"] == "yes" } * 100.0 / responses.size).round
-    @asked_deal = (responses.count { |r| r["2"] == "yes" } * 100.0 / responses.size).round
-    @asked_trend = (responses.count { |r| r["3"] == "yes" } * 100.0 / responses.size).round
+    # Dynamically find question IDs based on question texts
+    if params[:form_context] == 'networking' && @employee.position_type_id == 2
+      technical_question_id = FormTemplate.find_by(question_text: "Were you asked any technical questions?")&.id.to_s
+      deal_question_id = FormTemplate.find_by(question_text: "Were you asked about a deal?")&.id.to_s
+      trend_question_id = FormTemplate.find_by(question_text: "Were you asked about a market trend?")&.id.to_s
+      referred_question_id = FormTemplate.find_by(question_text: "Were you referred to another colleague?")&.id.to_s
 
-    # Most common tones
-    tones = responses.map { |r| r["4"] }.compact
-    tone_counts = tones.tally
-    @most_common_tones = tone_counts.sort_by { |_tone, count| -count }.take(2).map do |tone, count|
-      [tone, (count * 100.0 / tones.size).round]
+      # Calculate percentages dynamically using the question IDs
+      @asked_technical = (responses.count { |r| r[technical_question_id] == "yes" } * 100.0 / responses.size).round
+      @asked_deal = (responses.count { |r| r[deal_question_id] == "yes" } * 100.0 / responses.size).round
+      @asked_trend = (responses.count { |r| r[trend_question_id] == "yes" } * 100.0 / responses.size).round
+      @passed_next_round = (responses.count { |r| r[referred_question_id] == "yes" } * 100.0 / responses.size).round
     end
 
-    # Percentage passed to next round
-    @passed_next_round = (responses.count { |r| r["5"] == "yes" } * 100.0 / responses.size).round
+    # Most common tones
+    if params[:form_context] == 'networking' && @employee.position_type_id == 2
+      tone_question_id = FormTemplate.find_by(question_text: "How would you describe the tone of the conversation?")&.id.to_s
+      tones = responses.map { |r| r[tone_question_id] }.compact
+      tone_counts = tones.tally
+      @most_common_tones = tone_counts.sort_by { |_tone, count| -count }.take(2).map do |tone, count|
+        [tone, (count * 100.0 / tones.size).round]
+      end
+    end
 
     # Total recaps
-    @total_recaps = @ratings.size
+    @total_recaps = ratings.size
   end
 
-  def overall_impression
-    # Fetch the ID dynamically based on the question text
-    impression_id = FormTemplate.find_by(question_text: "How would you rate your interaction?").id.to_s
-  
-    # Count occurrences of each response for the "How would you rate your interaction?" question
-    impression_counts = @ratings.pluck(:responses).map { |r| r[impression_id] }.compact.tally
-  
-    # Map the counts to predefined categories
-    @impression_data = {
-      'Very Positive' => impression_counts['Very Positive'] || 0,
-      'Positive' => impression_counts['Positive'] || 0,
-      'Neutral' => impression_counts['Neutral'] || 0,
-      'Negative' => impression_counts['Negative'] || 0
-    }
+  def calculate_ib_interview_summary_metrics(ratings)
+    responses = ratings.pluck(:responses).map(&:compact)
+
+    # Dynamically find question IDs based on question texts
+    if params[:form_context] == 'interview' && @employee.position_type_id == 2
+      deal_question_id = FormTemplate.find_by(question_text: "Were you asked about a deal?")&.id.to_s
+      trend_question_id = FormTemplate.find_by(question_text: "Were you asked about a market trend?")&.id.to_s
+
+      # Calculate percentages dynamically using the question IDs
+      @asked_deal = (responses.count { |r| r[deal_question_id] == "yes" } * 100.0 / responses.size).round
+      @asked_trend = (responses.count { |r| r[trend_question_id] == "yes" } * 100.0 / responses.size).round
+    end
+
+    # Most common tones
+    if params[:form_context] == 'interview' && @employee.position_type_id == 2
+      tone_question_id = FormTemplate.find_by(question_text: "How would you describe the tone of the interview?")&.id.to_s
+      tones = responses.map { |r| r[tone_question_id] }.compact
+      tone_counts = tones.tally
+      @most_common_tones = tone_counts.sort_by { |_tone, count| -count }.take(2).map do |tone, count|
+        [tone, (count * 100.0 / tones.size).round]
+      end
+    end
+
+    # Total recaps
+    @total_recaps = ratings.size
+  end
+
+  def overall_ib_networking_impression(ratings)
+    if params[:form_context] == 'networking' && @employee.position_type_id == 2
+      # Fetch the ID dynamically based on the question text
+      impression_id = FormTemplate.find_by(question_text: "How would you rate your interaction?").id.to_s
+    
+      # Count occurrences of each response for the "How would you rate your interaction?" question
+      impression_counts = ratings.pluck(:responses).map { |r| r[impression_id] }.compact.tally
+    
+      # Map the counts to predefined categories
+      @impression_data = {
+        'Very Positive' => impression_counts['Very Positive'] || 0,
+        'Positive' => impression_counts['Positive'] || 0,
+        'Neutral' => impression_counts['Neutral'] || 0,
+        'Negative' => impression_counts['Negative'] || 0
+      }
+    end
+  end
+
+  def overall_ib_interview_impression(ratings)
+    if params[:form_context] == 'interview' && @employee.position_type_id == 2
+      # Fetch the ID dynamically based on the question text
+      impression_id = FormTemplate.find_by(question_text: "What was your overall impression of the interview?").id.to_s
+    
+      # Count occurrences of each response for the "What was your overall impression of the interview?" question
+      impression_counts = ratings.pluck(:responses).map { |r| r[impression_id] }.compact.tally
+    
+      # Map the counts to predefined categories
+      @impression_data = {
+        'Positive' => impression_counts['Positive'] || 0,
+        'Neutral' => impression_counts['Neutral'] || 0,
+        'Negative' => impression_counts['Negative'] || 0
+      }
+    end
+  end
+
+  def recieved_job_offer_ib_interview(ratings)
+    if params[:form_context] == 'interview' && @employee.position_type_id == 2
+      # Fetch the ID dynamically based on the question text
+      offer_id = FormTemplate.find_by(question_text: "Did you receive a job offer?").id.to_s
+    
+      # Count occurrences of each response for the "What was your overall impression of the interview?" question
+      offer_counts = ratings.pluck(:responses).map { |r| r[offer_id] }.compact.tally
+    
+      # Map the counts to predefined categories
+      @offer_data = {
+        'Received offer' => offer_counts['Yes'] || 0,
+        'No offer' => offer_counts['No'] || 0,
+        'Waitlisted' => offer_counts['Waitlisted'] || 0,
+        'Offer Outcome Pending (at Submission Time)' => offer_counts['Waiting on response'] || 0
+      }
+    end
+
+  end
+
+  def technical_difficulty_ib_interview(ratings)
+    if params[:form_context] == 'interview' && @employee.position_type_id == 2
+      # Fetch the ID dynamically based on the question text
+      technical_difficulty_id = FormTemplate.find_by(question_text: "How difficult were the technical questions?").id.to_s
+    
+      # Count occurrences of each response for the "What was your overall impression of the interview?" question
+      technical_difficulty_counts = ratings.pluck(:responses).map { |r| r[technical_difficulty_id] }.compact.tally
+    
+      # Map the counts to predefined categories
+      @technical_difficulty_data = {
+        'Very Hard' => technical_difficulty_counts['Very Hard'] || 0,
+        'Hard' => technical_difficulty_counts['Hard'] || 0,
+        'Medium' => technical_difficulty_counts['Medium'] || 0,
+        'Easy' => technical_difficulty_counts['Easy'] || 0
+      }
+    end
+
   end
 
 

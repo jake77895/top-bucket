@@ -1,6 +1,6 @@
 <div class="row">
-  <% if @ratings.present? %>
-    <% @ratings.each do |rating| %>
+  <% if @filtered_ratings.present? %>
+    <% @filtered_ratings.each do |rating| %>
       <% if rating.comment.present? %>
         <div class="col-md-6 mb-4">
           <div class="card shadow">
