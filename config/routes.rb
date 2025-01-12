@@ -67,6 +67,9 @@ Rails.application.routes.draw do
         get :edit_initial
         patch :update_initial
         get :edit_details
+        
+        # Resolve flags for a specific employee
+        post :resolve
       end
     end
     resources :employee_views do

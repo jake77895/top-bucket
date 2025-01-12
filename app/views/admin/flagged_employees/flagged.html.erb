@@ -1,0 +1,45 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Flagged Employees</h1>
+
+  <% if @flagged_employees.any? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Job Title</th>
+          <th>Company</th>
+          <th>Number of Flags</th>
+          <th>Flag Details</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @flagged_employees.each do |employee| %>
+          <tr>
+            <td><%= employee.name %></td>
+            <td><%= employee.job_level&.name || "N/A" %></td>
+            <td><%= employee.company&.name || "N/A" %></td>
+            <td><%= employee.flag_count %></td>
+            <td>
+              <% @flags.where(flaggable: employee).each do |flag| %>
+                <p>
+                  <strong>Reason:</strong> <%= flag.reason %><br>
+                  <strong>Details:</strong> <%= flag.text %><br>
+                  <strong>Submitted By:</strong> <%= flag.user&.user_name || "Anonymous" %>
+                </p>
+                <hr>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to 'Edit Employee', edit_initial_admin_employee_path(employee), class: 'btn btn-sm btn-warning' %>
+              <%= link_to 'Resolve Flags', resolve_admin_employee_path(employee), method: :post, class: 'btn btn-sm btn-success' %>
+              <%= link_to 'Delete Employee', admin_employee_path(employee), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="alert alert-info">No flagged employees found.</div>
+  <% end %>
+</div>
