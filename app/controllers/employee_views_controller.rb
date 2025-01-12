@@ -76,14 +76,23 @@ class EmployeeViewsController < ApplicationController
     @graduate_schools = School.where(id: @filtered_employees.pluck(:graduate_school_id).uniq).order(:name)
   end
 
-  def flag_employee
-    @employee = Employee.find(params[:id])
-    reason = params[:reason]
-
-    # Handle flagging logic, e.g., save to a flags table
-    Flag.create!(employee: @employee, reason: reason, flagged_by: current_user)
-
-    redirect_to employee_path(@employee), notice: "Employee has been flagged."
+  def flag
+    @employee = Employee.find(params[:employee_id])
+    @flag = Flag.new(
+      flaggable: @employee,
+      user_id: current_user.id,
+      reason: params[:flag][:reason], # Reason from the dropdown
+      text: params[:flag][:text],     # Text from the text area
+      status: "pending"
+    )
+  
+    if @flag.save
+      flash[:success] = "Flag submitted successfully."
+      redirect_to employee_view_path(@employee_view)
+    else
+      flash[:error] = "Could not submit the flag. Please try again."
+      redirect_back fallback_location: employee_view_path(@employee_view)
+    end
   end
 
   private
@@ -246,4 +255,9 @@ class EmployeeViewsController < ApplicationController
       :graduate_school_id_eq
     )
   end
+
+  def flag_params
+    params.require(:flag).permit(:reason, :text)
+  end
+  
 end

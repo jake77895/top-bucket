@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   get 'pages/show'
   devise_for :users
 
+  ########################
+  ####  ADMIN ROUTES  ####
+  ########################
   # Namespaced Admin Section
   namespace :admin do
     get 'item_ranks/index'
@@ -56,6 +59,9 @@ Rails.application.routes.draw do
         get :edit_initial
         patch :update_initial
         get :edit_details
+        
+        # For the flagged flow
+        get :flagged
       end
       member do
         get :edit_initial
@@ -90,6 +96,10 @@ Rails.application.routes.draw do
     end
   end
 
+  ########################
+  ####  PUBLIC ROUTES  ###
+  ########################
+
   # Redirect invalid /users route to /users/sign_up
   get '/users', to: redirect('/users/sign_up')
 
@@ -116,6 +126,8 @@ Rails.application.routes.draw do
     end
     member do
       get 'summary/:employee_id', to: 'employee_views#summary', as: 'summary'
+
+      post 'flag_employee/:employee_id', to: 'employee_views#flag', as: 'flag_employee'
     end
   end
   

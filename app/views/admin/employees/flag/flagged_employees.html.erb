@@ -1,0 +1,36 @@
+<h1>Flagged Employees</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Details</th>
+      <th>Number of Flags</th>
+      <th>Flags</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @flagged_employees.each do |employee| %>
+      <tr>
+        <td><%= employee.name %></td>
+        <td>
+          <%= employee.job_level&.name %> | <%= employee.company&.name %>
+        </td>
+        <td><%= employee.flags.pending.count %></td>
+        <td>
+          <ul>
+            <% employee.flags.pending.each do |flag| %>
+              <li><%= flag.reason %></li>
+            <% end %>
+          </ul>
+        </td>
+        <td>
+          <%= link_to "Edit", edit_admin_employee_path(employee), class: "btn btn-primary btn-sm" %>
+          <%= link_to "Delete", admin_employee_path(employee), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+          <%= link_to "Mark Resolved", update_flag_admin_employees_path(flag_id: employee.flags.pending.first.id), method: :patch, class: "btn btn-success btn-sm" if employee.flags.pending.any? %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -6,6 +6,7 @@
 #  flaggable_type :string           not null
 #  reason         :string
 #  status         :string           default("pending")
+#  text           :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  flaggable_id   :bigint           not null
@@ -26,4 +27,6 @@ class Flag < ApplicationRecord
 
   validates :reason, presence: true
   validates :status, inclusion: { in: %w[pending resolved rejected], message: "%{value} is not a valid status" }
+
+  scope :pending, -> { where(status: "pending") }
 end

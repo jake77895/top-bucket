@@ -151,6 +151,34 @@ class Admin::EmployeesController < ApplicationController
   end
 
   ## =====================
+  ## FLAG FLOW
+  ## =====================
+
+  def flagged
+    @flagged_employees = Employee.joins(:flags)
+                                 .where(flags: { status: "pending" })
+                                 .distinct
+                                 .select("employees.*, COUNT(flags.id) AS flag_count")
+                                 .group("employees.id")
+    @flags = Flag.where(status: "pending")
+  end
+
+  def update_flag
+    flag = Flag.find(params[:flag_id])
+    if flag.update(status: "resolved")
+      redirect_to admin_flagged_employees_path, notice: "Flag resolved."
+    else
+      redirect_to admin_flagged_employees_path, alert: "Failed to resolve flag."
+    end
+  end
+
+  def destroy
+    employee = Employee.find(params[:id])
+    employee.destroy
+    redirect_to admin_flagged_employees_path, notice: "Employee deleted successfully."
+  end
+
+  ## =====================
   ## PRIVATE METHODS
   ## =====================
   private

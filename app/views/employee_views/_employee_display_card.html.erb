@@ -1,33 +1,36 @@
-<div class="card shadow-sm mx-2 mb-3" style="width: 250px; margin-right: 15px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#employeeDetailsModal-<%= employee.id %>">
+<div class="card shadow-sm mx-2 mb-3" style="width: 250px; margin-right: 15px; cursor: pointer;">
   <div class="card-body position-relative text-center">
-      <!-- LinkedIn Link and Flag Icon -->
-      <div class="position-absolute top-0 end-0 me-2 mt-2 d-flex align-items-center">
-        <!-- Flag Icon -->
-        <%= link_to '#', class: 'me-2', style: 'text-decoration: none;' do %>
-          <%= image_tag 'icons/flag_icon.svg', alt: 'Flag', style: 'width: 20px; height: 20px;' %>
+    <!-- LinkedIn Link and Flag Icon -->
+    <div class="position-absolute top-0 end-0 me-2 mt-2 d-flex align-items-center">
+      <!-- Flag Icon -->
+      <%= link_to '#', class: 'me-2', style: 'text-decoration: none;', data: { bs_toggle: 'modal', bs_target: "#flagEmployeeModal-#{employee.id}" } do %>
+        <%= image_tag 'icons/flag_icon.svg', alt: 'Flag', style: 'width: 20px; height: 20px;' %>
+      <% end %>
+
+      <%= render partial: 'employee_views/flag_employee_modal', locals: { employee: employee } %>
+
+      <!-- LinkedIn Icon -->
+      <% if employee.linkedin_url.present? %>
+        <%= link_to employee.linkedin_url, target: "_blank", rel: "noopener", style: 'text-decoration: none;' do %>
+          <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn', style: 'width: 20px; height: 20px;' %>
         <% end %>
-
-        <%= render partial: 'employee_views/flag_employee_modal', locals: { employee: employee } %>
-
-
-        <!-- LinkedIn Icon -->
-        <% if employee.linkedin_url.present? %>
-          <%= link_to employee.linkedin_url, target: "_blank", rel: "noopener" do %>
-            <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn', style: 'width: 20px; height: 20px;' %>
-          <% end %>
-        <% end %>
-      </div>
+      <% end %>
+    </div>
 
     <!-- Employee Picture -->
-    <%= image_tag(
-      employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
-      class: 'rounded-circle mb-3',
-      style: 'width: 80px; height: 80px; object-fit: cover;',
-      alt: employee.name
-    ) %>
+    <%= link_to '#', data: { bs_toggle: 'modal', bs_target: "#employeeDetailsModal-#{employee.id}" } do %>
+      <%= image_tag(
+        employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
+        class: 'rounded-circle mb-3',
+        style: 'width: 80px; height: 80px; object-fit: cover;',
+        alt: employee.name
+      ) %>
+    <% end %>
 
     <!-- Employee Name -->
-    <h6 class="card-title mb-1" style="font-size: 14px; text-align: center;"><%= employee.name %></h6>
+    <%= link_to '#', data: { bs_toggle: 'modal', bs_target: "#employeeDetailsModal-#{employee.id}" }, class: 'text-black text-decoration-none' do %>
+      <h6 class="card-title mb-1" style="font-size: 14px; text-align: center;"><%= employee.name %></h6>
+    <% end %>
 
     <!-- Job Title and Company -->
     <% if employee.job_level && employee.company %>

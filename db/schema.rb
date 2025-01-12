@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_11_040115) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_12_045321) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -114,6 +114,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_11_040115) do
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "text"
     t.index ["flaggable_type", "flaggable_id"], name: "index_flags_on_flaggable"
     t.index ["user_id"], name: "index_flags_on_user_id"
   end

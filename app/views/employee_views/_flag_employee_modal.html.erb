@@ -6,11 +6,25 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <%= form_with url: flag_employee_path(employee.id), method: :post, local: true do |f| %>
+        <%= form_with url: flag_employee_employee_view_path(@employee_view, employee_id: employee.id), method: :post, local: true do |f| %>
+          <!-- Dropdown for Predefined Reasons -->
           <div class="mb-3">
             <%= f.label :reason, "Reason for Flagging", class: "form-label" %>
-            <%= f.text_area :reason, class: "form-control", rows: 3, placeholder: "Explain why you are flagging this employee..." %>
+            <%= f.select :reason, options_for_select([
+              "Inaccurate information",
+              "Inappropriate content",
+              "Duplicate entry",
+              "Other"
+            ]), { prompt: "Select a reason" }, class: "form-select" %>
           </div>
+
+          <!-- Text Area for Additional Details -->
+          <div class="mb-3">
+            <%= f.label :text, "Additional Details (Optional)", class: "form-label" %>
+            <%= f.text_area :text, class: "form-control", rows: 3, placeholder: "Explain further (if applicable)..." %>
+          </div>
+
+          <!-- Submit Button -->
           <div class="text-end">
             <%= f.submit "Submit", class: "btn btn-danger" %>
           </div>
