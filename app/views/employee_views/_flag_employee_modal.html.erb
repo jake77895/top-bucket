@@ -1,0 +1,21 @@
+<div class="modal fade" id="flagEmployeeModal-<%= employee.id %>" tabindex="-1" aria-labelledby="flagEmployeeModalLabel-<%= employee.id %>" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="flagEmployeeModalLabel-<%= employee.id %>">Flag Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with url: flag_employee_path(employee.id), method: :post, local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :reason, "Reason for Flagging", class: "form-label" %>
+            <%= f.text_area :reason, class: "form-control", rows: 3, placeholder: "Explain why you are flagging this employee..." %>
+          </div>
+          <div class="text-end">
+            <%= f.submit "Submit", class: "btn btn-danger" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

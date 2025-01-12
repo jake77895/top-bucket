@@ -1,11 +1,22 @@
 <div class="card shadow-sm mx-2 mb-3" style="width: 250px; margin-right: 15px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#employeeDetailsModal-<%= employee.id %>">
   <div class="card-body position-relative text-center">
-    <!-- LinkedIn Link -->
-    <% if employee.linkedin_url.present? %>
-      <%= link_to employee.linkedin_url, target: "_blank", rel: "noopener" do %>
-        <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn', class: 'position-absolute top-0 end-0 me-2 mt-2', style: 'width: 20px; height: 20px;' %>
-      <% end %>
-    <% end %>
+      <!-- LinkedIn Link and Flag Icon -->
+      <div class="position-absolute top-0 end-0 me-2 mt-2 d-flex align-items-center">
+        <!-- Flag Icon -->
+        <%= link_to '#', class: 'me-2', style: 'text-decoration: none;' do %>
+          <%= image_tag 'icons/flag_icon.svg', alt: 'Flag', style: 'width: 20px; height: 20px;' %>
+        <% end %>
+
+        <%= render partial: 'employee_views/flag_employee_modal', locals: { employee: employee } %>
+
+
+        <!-- LinkedIn Icon -->
+        <% if employee.linkedin_url.present? %>
+          <%= link_to employee.linkedin_url, target: "_blank", rel: "noopener" do %>
+            <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn', style: 'width: 20px; height: 20px;' %>
+          <% end %>
+        <% end %>
+      </div>
 
     <!-- Employee Picture -->
     <%= image_tag(
