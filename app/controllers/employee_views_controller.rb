@@ -77,6 +77,7 @@ class EmployeeViewsController < ApplicationController
   end
 
   def flag
+    @employee_view = EmployeeView.find(params[:id])
     @employee = Employee.find(params[:employee_id])
     @flag = Flag.new(
       flaggable: @employee,
@@ -87,13 +88,14 @@ class EmployeeViewsController < ApplicationController
     )
   
     if @flag.save
-      flash[:success] = "Flag submitted successfully."
+      flash[:notice] = "Thank you for submitting. We will look into this issue and update accordingly."
       redirect_to employee_view_path(@employee_view)
     else
-      flash[:error] = "Could not submit the flag. Please try again."
+      flash[:alert] = "Could not submit the flag. Please try again."
       redirect_back fallback_location: employee_view_path(@employee_view)
     end
   end
+  
 
   private
 
@@ -259,5 +261,5 @@ class EmployeeViewsController < ApplicationController
   def flag_params
     params.require(:flag).permit(:reason, :text)
   end
-  
+
 end
