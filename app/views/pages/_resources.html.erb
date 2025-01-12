@@ -21,15 +21,17 @@
 
     <!-- Second Info Card -->
     <div class="col-md-6">
-      <div class="d-flex align-items-center shadow-sm p-3 rounded bg-white">
-        <%= image_tag 'pictures/career_path.jpg', alt: 'Careers', class: 'img-thumbnail me-3', style: 'width: 80px; height: 80px;' %>
-        <div>
-          <h6 class="fw-bold">Chart Career Path</h6>
-          <p class="text-muted mb-0">Successful candidates' backgrounds, exit opportunities, and more.</p>
+      <%= link_to career_view_path(id: 1, origin_page: request.fullpath), class: 'text-decoration-none' do %>
+        <div class="d-flex align-items-center shadow-sm p-3 rounded bg-white">
+          <%= image_tag 'pictures/career_path.jpg', alt: 'Careers', class: 'img-thumbnail me-3', style: 'width: 80px; height: 80px;' %>
+          <div>
+            <h6 class="fw-bold text-black">Chart Career Path</h6>
+            <p class="text-muted mb-0">Successful candidates' backgrounds, exit opportunities, and more.</p>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
+
     
-  
   </div>
 </div>

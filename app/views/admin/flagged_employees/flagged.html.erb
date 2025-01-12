@@ -1,13 +1,21 @@
 <div class="container mt-4">
-  <h1 class="mb-4">Flagged Employees</h1>
+  <div class="row mb-3">
+    <div class="col-12 text-center">
+      <h1>Flagged Employees</h1>
+    </div>
+    <div class="col-12 text-end">
+      <%= link_to 'New Employee', new_admin_employee_path, class: 'btn btn-dark' %>
+    </div>
+  </div>
 
   <% if @flagged_employees.any? %>
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-bordered align-middle">
+      <thead class="table-dark">
         <tr>
           <th>Employee Name</th>
           <th>Job Title</th>
           <th>Company</th>
+          <th>LinkedIn URL</th>
           <th>Number of Flags</th>
           <th>Flag Details</th>
           <th>Actions</th>
@@ -19,21 +27,32 @@
             <td><%= employee.name %></td>
             <td><%= employee.job_level&.name || "N/A" %></td>
             <td><%= employee.company&.name || "N/A" %></td>
+            <td>
+              <% if employee.linkedin_url.present? %>
+                <%= link_to employee.linkedin_url, target: "_blank", rel: "noopener", class: "text-decoration-none" do %>
+                  View Profile
+                <% end %>
+              <% else %>
+                N/A
+              <% end %>
+            </td>
             <td><%= employee.flag_count %></td>
             <td>
               <% @flags.where(flaggable: employee).each do |flag| %>
-                <p>
-                  <strong>Reason:</strong> <%= flag.reason %><br>
-                  <strong>Details:</strong> <%= flag.text %><br>
-                  <strong>Submitted By:</strong> <%= flag.user&.user_name || "Anonymous" %>
-                </p>
-                <hr>
+                  <p class="mb-1">
+                    <strong>Reason:</strong> <%= flag.reason %><br>
+                    <strong>Details:</strong> <%= flag.text %><br>
+                    <strong>Submitted By:</strong> <%= flag.user&.user_name || "Anonymous" %>
+                  </p>
+                  <hr class="my-2">
               <% end %>
             </td>
             <td>
-              <%= link_to 'Edit Employee', edit_initial_admin_employee_path(employee), class: 'btn btn-sm btn-warning' %>
-              <%= link_to 'Resolve Flags', resolve_admin_employee_path(employee), method: :post, class: 'btn btn-sm btn-success' %>
-              <%= link_to 'Delete Employee', admin_employee_path(employee), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+              <div class="d-flex gap-2">
+                <%= link_to 'Edit', edit_initial_admin_employee_path(employee), class: 'btn btn-sm btn-warning' %>
+                <%= link_to 'Resolve', resolve_admin_employee_path(employee), method: :post, class: 'btn btn-sm btn-success' %>
+                <%= link_to 'Delete', admin_employee_path(employee), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+              </div>
             </td>
           </tr>
         <% end %>

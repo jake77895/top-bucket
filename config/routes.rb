@@ -133,6 +133,10 @@ Rails.application.routes.draw do
       post 'flag_employee/:employee_id', to: 'employee_views#flag', as: 'flag_employee'
     end
   end
+
+  # Public Routes for Viewing Career Path Views
+  resources :career_views, only: :show
+
   
 
 
