@@ -18,19 +18,31 @@
   <div class="card shadow-sm p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <!-- Question and Star Icon -->
+
       <div class="d-flex align-items-center">
         <!--<h3 class="mb-0 me-2" style="font-size: 1.25rem;">Question</h3>-->
         <!-- Star Icon -->
-        <button class="btn star-toggle p-0" 
-                data-star-icon="<%= asset_path('icons/star_icon.svg') %>" 
-                data-star-icon-filled="<%= asset_path('icons/star_filled_icon.svg') %>" 
-                style="border: none; background: none; margin-top: -6px;">
-          <%= image_tag 'icons/star_icon.svg', alt: 'Star Icon', class: 'star-icon', size: '20x20' %>
-        </button>
+        <% if user_signed_in? %>
+          <button class="btn star-toggle p-0" 
+                  data-star-icon="<%= asset_path('icons/star_icon.svg') %>" 
+                  data-star-icon-filled="<%= asset_path('icons/star_filled_icon.svg') %>" 
+                  style="border: none; background: none; margin-top: -6px;">
+            <%= image_tag 'icons/star_icon.svg', alt: 'Star Icon', class: 'star-icon', size: '20x20' %>
+          </button>
+        <%else%>
+          <%= image_tag 'icons/star_icon.svg',
+                          alt: 'Star Icon',
+                          class: 'star-icon',
+                          size: '20x20',
+                          "data-bs-toggle" => "tooltip",
+                          "data-bs-placement" => "right",
+                          title: "Sign in to star questions to review later." %>
+        <% end %>
+
       </div>
 
       <!-- Question Number and Open Options -->
-      <div class="d-flex align-items-center">  
+      <div class="d-flex align-items-center">
         <button type="button" class="btn btn-outline-dark me-3" data-bs-toggle="modal" data-bs-target="#optionsModal">
           Options
         </button>
@@ -122,31 +134,31 @@
 
 <!-- JS for Modal Explanation Feedback -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const explanationModal = document.getElementById("explanationModal");
+  document.addEventListener("DOMContentLoaded", function () {
+    const explanationModal = document.getElementById("explanationModal");
 
-  explanationModal.addEventListener("show.bs.modal", function (event) {
-    const button = event.relatedTarget;
-    const explanation = button.getAttribute("data-bs-explanation");
-    const isCorrect = button.getAttribute("data-is-correct") === "true";
-    const correctAnswer = button.getAttribute("data-bs-correct-answer");
+    explanationModal.addEventListener("show.bs.modal", function (event) {
+      const button = event.relatedTarget;
+      const explanation = button.getAttribute("data-bs-explanation");
+      const isCorrect = button.getAttribute("data-is-correct") === "true";
+      const correctAnswer = button.getAttribute("data-bs-correct-answer");
 
-    const feedbackText = explanationModal.querySelector("#feedbackText");
-    const correctAnswerText = explanationModal.querySelector("#correctAnswerText");
-    const explanationText = explanationModal.querySelector("#explanationText");
+      const feedbackText = explanationModal.querySelector("#feedbackText");
+      const correctAnswerText = explanationModal.querySelector("#correctAnswerText");
+      const explanationText = explanationModal.querySelector("#explanationText");
 
-    if (isCorrect) {
-      feedbackText.textContent = "Nice job!";
-      feedbackText.classList.add("text-success");
-      feedbackText.classList.remove("text-danger");
-    } else {
-      feedbackText.textContent = "Let's walk through it.";
-      feedbackText.classList.add("text-danger");
-      feedbackText.classList.remove("text-success");
-    }
+      if (isCorrect) {
+        feedbackText.textContent = "Nice job!";
+        feedbackText.classList.add("text-success");
+        feedbackText.classList.remove("text-danger");
+      } else {
+        feedbackText.textContent = "Let's walk through it.";
+        feedbackText.classList.add("text-danger");
+        feedbackText.classList.remove("text-success");
+      }
 
-    correctAnswerText.textContent = `Correct Answer: ${correctAnswer}`;
-    explanationText.textContent = explanation;
+      correctAnswerText.textContent = `Correct Answer: ${correctAnswer}`;
+      explanationText.textContent = explanation;
+    });
   });
-});
 </script>

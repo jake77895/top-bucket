@@ -27,6 +27,9 @@ class User < ApplicationRecord
 
   has_many :comments, dependent: :destroy
 
+  has_many :questions_users
+  has_many :questions, through: :questions_users
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 

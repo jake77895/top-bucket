@@ -32,6 +32,15 @@
 class Question < ApplicationRecord
   belongs_to :position_type
 
+  # Associations for starred questions
+  has_many :questions_users
+  has_many :users, through: :questions_users
+
+  # Associations for question packets
+  has_many :question_packet_memberships
+  has_many :question_packets, through: :question_packet_memberships
+
+  # Validations
   validates :question_text, :answer_choice_1, :answer_choice_2, :answer_choice_3, :answer_choice_4, :correct_answer, :explanation_text, :category, presence: true
   validates :correct_answer, inclusion: { in: 1..4 }
   validates :difficulty_level, inclusion: { in: 1..5 }, allow_nil: true
