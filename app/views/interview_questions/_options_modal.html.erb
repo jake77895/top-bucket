@@ -1,0 +1,47 @@
+<div class="modal fade" id="optionsModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="optionsModalLabel">Options</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <!-- Form -->
+        <form action="#" method="post">
+          <!-- Number of Questions -->
+          <div class="mb-3">
+            <label for="numQuestions" class="form-label">Number of questions</label>
+            <select class="form-select" id="numQuestions" name="num_questions">
+              <option value="all">All</option>
+              <option value="20">20</option>
+              <option value="10">10</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <!-- Practice Only Starred Terms -->
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="studyStarred" name="study_starred">
+            <label class="form-check-label" for="studyStarred">
+              Practice only starred terms
+            </label>
+          </div>
+
+          <!-- Randomize Order -->
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="randomizeOrder" name="randomize_order">
+            <label class="form-check-label" for="randomizeOrder">
+              Randomize order
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-dark w-100">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
