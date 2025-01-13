@@ -99,6 +99,7 @@ Rails.application.routes.draw do
         get 'edit_position_type'
       end
     end
+    resources :questions, only: [:index, :new, :create, :edit, :update, :destroy]
   end
 
   ########################

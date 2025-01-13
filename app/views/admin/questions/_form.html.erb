@@ -1,0 +1,104 @@
+<h2 class="text-center my-4"><%= @question.new_record? ? 'New Question' : 'Edit Question' %></h2>
+
+<div class="container">
+  <%= form_with(model: @question, url: @question.new_record? ? admin_questions_path : admin_question_path(@question), local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <!-- Card Header -->
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><%= @question.new_record? ? 'Create Question' : 'Edit Question' %></h5>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body">
+        <!-- Question Text -->
+        <div class="mb-3">
+          <%= form.label :question_text, 'Question Text', class: 'form-label' %>
+          <%= form.text_area :question_text, class: 'form-control', rows: 3, placeholder: 'Enter the question text', required: true %>
+        </div>
+
+        <!-- Answer Choices -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :answer_choice_1, 'Answer Choice 1', class: 'form-label' %>
+            <%= form.text_field :answer_choice_1, class: 'form-control', placeholder: 'Enter answer choice 1', required: true %>
+          </div>
+          <div class="col-md-6 mb-3">
+            <%= form.label :answer_choice_2, 'Answer Choice 2', class: 'form-label' %>
+            <%= form.text_field :answer_choice_2, class: 'form-control', placeholder: 'Enter answer choice 2', required: true %>
+          </div>
+          <div class="col-md-6 mb-3">
+            <%= form.label :answer_choice_3, 'Answer Choice 3', class: 'form-label' %>
+            <%= form.text_field :answer_choice_3, class: 'form-control', placeholder: 'Enter answer choice 3', required: true %>
+          </div>
+          <div class="col-md-6 mb-3">
+            <%= form.label :answer_choice_4, 'Answer Choice 4', class: 'form-label' %>
+            <%= form.text_field :answer_choice_4, class: 'form-control', placeholder: 'Enter answer choice 4', required: true %>
+          </div>
+        </div>
+
+        <!-- Correct Answer -->
+        <div class="mb-3">
+          <%= form.label :correct_answer, 'Correct Answer (1-4)', class: 'form-label' %>
+          <%= form.number_field :correct_answer, class: 'form-control', min: 1, max: 4, required: true %>
+        </div>
+
+        <!-- Explanation -->
+        <div class="mb-3">
+          <%= form.label :explanation_text, 'Explanation', class: 'form-label' %>
+          <%= form.text_area :explanation_text, class: 'form-control', rows: 4, placeholder: 'Enter explanation for the correct answer', required: true %>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+          <%= form.label :category, 'Category', class: 'form-label' %>
+          <%= form.text_field :category, class: 'form-control', placeholder: 'Enter the question category', required: true %>
+        </div>
+
+        <!-- Position Type -->
+        <div class="mb-3">
+          <%= form.label :position_type_id, 'Position Type', class: 'form-label' %>
+          <%= form.collection_select :position_type_id, PositionType.all, :id, :name, { prompt: 'Select Position Type' }, class: 'form-control', required: true %>
+        </div>
+
+        <!-- Optional Fields -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :difficulty_level, 'Difficulty Level (1-5)', class: 'form-label' %>
+            <%= form.number_field :difficulty_level, class: 'form-control', min: 1, max: 5 %>
+          </div>
+          <div class="col-md-6 mb-3">
+            <%= form.label :related_organization, 'Related Organization', class: 'form-label' %>
+            <%= form.text_field :related_organization, class: 'form-control', placeholder: 'Enter related organization' %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :question_link, 'Question Link (for multi-part questions)', class: 'form-label' %>
+            <%= form.text_field :question_link, class: 'form-control', placeholder: 'Enter question link' %>
+          </div>
+          <div class="col-md-6 mb-3">
+            <%= form.label :question_link_order, 'Question Link Order', class: 'form-label' %>
+            <%= form.number_field :question_link_order, class: 'form-control', placeholder: 'Enter question link order' %>
+          </div>
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="form-check mb-3">
+          <%= form.check_box :technical, class: 'form-check-input' %>
+          <%= form.label :technical, 'Technical', class: 'form-check-label' %>
+        </div>
+        <div class="form-check mb-3">
+          <%= form.check_box :behavior, class: 'form-check-input' %>
+          <%= form.label :behavior, 'Behavior', class: 'form-check-label' %>
+        </div>
+      </div>
+
+      <!-- Card Footer -->
+      <div class="card-footer d-flex justify-content-end">
+        <%= form.submit @question.new_record? ? 'Create Question' : 'Update Question', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
