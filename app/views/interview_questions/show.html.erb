@@ -23,7 +23,10 @@
       <div class="d-flex align-items-center">
         <h3 class="mb-0 me-2" style="font-size: 1.25rem;">Question</h3>
         <!-- Star Icon -->
-        <button class="btn star-toggle p-0" style="border: none; background: none;">
+        <button class="btn star-toggle p-0" 
+                data-star-icon="<%= asset_path('icons/star_icon.svg') %>" 
+                data-star-icon-filled="<%= asset_path('icons/star_filled_icon.svg') %>" 
+                style="border: none; background: none; margin-top: -6px;">
           <%= image_tag 'icons/star_icon.svg', alt: 'Star Icon', class: 'star-icon', size: '20x20' %>
         </button>
       </div>
@@ -78,14 +81,23 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".star-toggle").forEach((button) => {
     button.addEventListener("click", function () {
       const icon = this.querySelector(".star-icon");
-      if (icon.src.includes("star_icon.svg")) {
-        icon.src = "/assets/icons/star_icon_filled.svg"; // Use a filled star icon
+      const filledPath = button.dataset.starIconFilled;
+      const unfilledPath = button.dataset.starIcon;
+
+      // Check if the current icon is unfilled or filled using a substring match
+      if (icon.src.includes("star_icon")) {
+        icon.src = filledPath;
+
       } else {
-        icon.src = "/assets/icons/star_icon.svg"; // Revert to the unfilled star icon
+        icon.src = unfilledPath;
+
       }
     });
   });
 });
+
+
+
 
 
 </script>
