@@ -1,0 +1,27 @@
+<h1 class="text-center my-4">Manage Questions for <%= @question_packet.name %></h1>
+
+<div class="container">
+  <%= form_with url: update_questions_admin_question_packet_path(@question_packet), method: :patch, local: true do %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Available Questions</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <% @questions.each do |question| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong><%= truncate(question.question_text, length: 50) %></strong>
+              <small class="text-muted d-block">Category: <%= question.category %></small>
+            </div>
+            <div>
+              <%= check_box_tag "question_ids[]", question.id, @question_packet.questions.include?(question), class: "form-check-input" %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      <div class="card-footer d-flex justify-content-end">
+        <%= submit_tag "Update Questions", class: "btn btn-dark" %>
+      </div>
+    </div>
+  <% end %>
+</div>

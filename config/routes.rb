@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   ########################
   # Namespaced Admin Section
   namespace :admin do
+    get 'question_packets/index'
+    get 'question_packets/new'
+    get 'question_packets/edit'
     get 'item_ranks/index'
     get 'item_ranks/new'
     get 'item_ranks/create'
@@ -100,6 +103,12 @@ Rails.application.routes.draw do
       end
     end
     resources :questions, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :question_packets, only: [:index, :new, :create, :edit, :update, :destroy] do
+      member do
+        get :manage
+        patch :update_questions
+      end
+    end
   end
 
   ########################
@@ -142,6 +151,9 @@ Rails.application.routes.draw do
 
   # Public Routes for Viewing Interview Question Views
   resources :interview_questions, only: [:index, :show]
+
+  # Public Routes for Viewing Interview Question Packets
+  resources :question_packets, only: [:index, :show]
 
   
 

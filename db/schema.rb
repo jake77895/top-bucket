@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_13_185643) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_13_193142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -220,6 +220,22 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_13_185643) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "question_packet_memberships", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.bigint "question_packet_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_question_packet_memberships_on_question_id"
+    t.index ["question_packet_id"], name: "index_question_packet_memberships_on_question_packet_id"
+  end
+
+  create_table "question_packets", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_question_packets_on_name", unique: true
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string "question_text", null: false
     t.string "answer_choice_1", null: false
@@ -323,6 +339,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_13_185643) do
   add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"
+  add_foreign_key "question_packet_memberships", "question_packets"
+  add_foreign_key "question_packet_memberships", "questions"
   add_foreign_key "questions", "position_types"
   add_foreign_key "ratings", "employees"
   add_foreign_key "ratings", "users"

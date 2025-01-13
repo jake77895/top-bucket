@@ -1,0 +1,152 @@
+<div class="container py-5">
+  <!-- Card Header with Back Button -->
+  <div class="card shadow-sm position-relative mb-4">
+    <!-- Back Button -->
+    <%= link_to question_packets_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light position-relative">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
+        <%= @question_packet.name %>
+      </h1>
+    </div>
+  </div>
+
+  <!-- Main Card for Question and Answers -->
+  <div class="card shadow-sm p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <!-- Question and Star Icon -->
+      <div class="d-flex align-items-center">
+        <!--<h3 class="mb-0 me-2" style="font-size: 1.25rem;">Question</h3>-->
+        <!-- Star Icon -->
+        <button class="btn star-toggle p-0" 
+                data-star-icon="<%= asset_path('icons/star_icon.svg') %>" 
+                data-star-icon-filled="<%= asset_path('icons/star_filled_icon.svg') %>" 
+                style="border: none; background: none; margin-top: -6px;">
+          <%= image_tag 'icons/star_icon.svg', alt: 'Star Icon', class: 'star-icon', size: '20x20' %>
+        </button>
+      </div>
+
+      <!-- Question Number and Open Options -->
+      <div class="d-flex align-items-center">  
+        <button type="button" class="btn btn-outline-dark me-3" data-bs-toggle="modal" data-bs-target="#optionsModal">
+          Options
+        </button>
+        <span class="text-muted me-2" style="font-size: 0.9rem;"><%= @current_question_index + 1 %> of <%= @questions.size %></span>
+      </div>
+    </div>
+
+    <!-- Question Text -->
+    <div class="card shadow-sm p-4 mb-4">
+      <p style="font-size: 1rem; line-height: 1.5;"><%= @question.question_text %></p>
+    </div>
+
+    <!-- Answer Choices -->
+    <h3 class="text-left mb-4" style="font-size: 1.1rem;">Choose Answer</h3>
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+      <% 1.upto(4) do |i| %>
+        <div class="col">
+          <button 
+            type="button" 
+            class="btn btn-outline-dark btn-lg w-100" 
+            style="font-size: 0.95rem; white-space: normal;" 
+            data-bs-toggle="modal" 
+            data-bs-target="#explanationModal" 
+            data-bs-explanation="<%= @question.explanation_text %>" 
+            data-is-correct="<%= @question.correct_answer == i %>"
+            data-bs-correct-answer="<%= @question.send("answer_choice_#{@question.correct_answer}") %>">
+            <%= @question.send("answer_choice_#{i}") %>
+          </button>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Navigation -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <!-- Left Arrow -->
+      <% if @prev_index %>
+        <%= link_to image_tag('icons/left_arrow_icon.svg', alt: 'Left Arrow', size: '24x24'), question_packet_path(@question_packet, question_index: @prev_index), class: 'btn p-0', style: 'border: none; background: none;' %>
+      <% else %>
+        <span class="btn p-0" style="border: none; background: none; visibility: hidden;">
+          <%= image_tag 'icons/left_arrow_icon.svg', alt: 'Left Arrow', size: '24x24' %>
+        </span>
+      <% end %>
+
+      <!-- "Don't Know" Button -->
+      <button 
+        class="btn btn-link text-decoration-none text-muted" 
+        style="font-size: 0.875rem;" 
+        data-bs-toggle="modal" 
+        data-bs-target="#explanationModal" 
+        data-bs-explanation="<%= @question.explanation_text %>" 
+        data-is-correct="false" 
+        data-bs-correct-answer="<%= @question.send("answer_choice_#{@question.correct_answer}") %>">
+        Don't know?
+      </button>
+
+      <!-- Right Arrow -->
+      <% if @next_index %>
+        <%= link_to image_tag('icons/right_arrow_icon.svg', alt: 'Right Arrow', size: '24x24'), question_packet_path(@question_packet, question_index: @next_index), class: 'btn p-0', style: 'border: none; background: none;' %>
+      <% else %>
+        <span class="btn p-0" style="border: none; background: none; visibility: hidden;">
+          <%= image_tag 'icons/right_arrow_icon.svg', alt: 'Right Arrow', size: '24x24' %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render 'question_packets/options_modal' %>
+<%= render 'question_packets/explanation_modal' %>
+
+<!-- JS for Filling or Unfilling the Star Icon -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".star-toggle").forEach((button) => {
+      button.addEventListener("click", function () {
+        const icon = this.querySelector(".star-icon");
+        const filledPath = button.dataset.starIconFilled;
+        const unfilledPath = button.dataset.starIcon;
+
+        if (icon.src.includes("star_icon")) {
+          icon.src = filledPath;
+        } else {
+          icon.src = unfilledPath;
+        }
+      });
+    });
+  });
+</script>
+
+<!-- JS for Modal Explanation Feedback -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const explanationModal = document.getElementById("explanationModal");
+
+  explanationModal.addEventListener("show.bs.modal", function (event) {
+    const button = event.relatedTarget;
+    const explanation = button.getAttribute("data-bs-explanation");
+    const isCorrect = button.getAttribute("data-is-correct") === "true";
+    const correctAnswer = button.getAttribute("data-bs-correct-answer");
+
+    const feedbackText = explanationModal.querySelector("#feedbackText");
+    const correctAnswerText = explanationModal.querySelector("#correctAnswerText");
+    const explanationText = explanationModal.querySelector("#explanationText");
+
+    if (isCorrect) {
+      feedbackText.textContent = "Nice job!";
+      feedbackText.classList.add("text-success");
+      feedbackText.classList.remove("text-danger");
+    } else {
+      feedbackText.textContent = "Let's walk through it.";
+      feedbackText.classList.add("text-danger");
+      feedbackText.classList.remove("text-success");
+    }
+
+    correctAnswerText.textContent = `Correct Answer: ${correctAnswer}`;
+    explanationText.textContent = explanation;
+  });
+});
+</script>
