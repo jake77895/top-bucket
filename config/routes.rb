@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'interview_questions/index'
+  get 'interview_questions/show'
 
   get 'pages/index'
   get 'pages/show'
@@ -136,6 +138,9 @@ Rails.application.routes.draw do
 
   # Public Routes for Viewing Career Path Views
   resources :career_views, only: :show
+
+  # Public Routes for Viewing Interview Question Views
+  resources :interview_questions, only: [:index, :show]
 
   
 

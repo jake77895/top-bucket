@@ -1,0 +1,16 @@
+<div class="container py-5">
+  <h1 class="text-center mb-4">Interview Question Packets</h1>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <% @question_packets.each do |packet| %>
+      <div class="col">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= packet[:title] %></h5>
+            <p class="card-text"><%= packet[:description] %></p>
+            <%= link_to 'Quiz Yourself', interview_question_path(packet[:id]), class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
