@@ -153,7 +153,9 @@ Rails.application.routes.draw do
   resources :interview_questions, only: [:index, :show]
 
   # Public Routes for Viewing Interview Question Packets
-  resources :question_packets, only: [:index, :show]
+  resources :question_packets, only: [:index, :show] do
+    post :options, on: :member
+  end
 
   # For toggling star questions on or off
   resources :questions_users, only: [] do

@@ -33,11 +33,11 @@ class Question < ApplicationRecord
   belongs_to :position_type
 
   # Associations for starred questions
-  has_many :questions_users
+  has_many :questions_users, dependent: :destroy
   has_many :users, through: :questions_users
 
   # Associations for question packets
-  has_many :question_packet_memberships
+  has_many :question_packet_memberships, dependent: :destroy
   has_many :question_packets, through: :question_packet_memberships
 
   # Validations

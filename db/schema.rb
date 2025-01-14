@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_13_211357) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_14_055825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -350,8 +350,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_13_211357) do
   add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"
-  add_foreign_key "question_packet_memberships", "question_packets"
-  add_foreign_key "question_packet_memberships", "questions"
+  add_foreign_key "question_packet_memberships", "question_packets", on_delete: :cascade
+  add_foreign_key "question_packet_memberships", "questions", on_delete: :cascade
   add_foreign_key "questions", "position_types"
   add_foreign_key "questions_users", "questions"
   add_foreign_key "questions_users", "users"

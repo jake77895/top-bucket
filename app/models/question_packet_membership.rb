@@ -15,8 +15,8 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (question_id => questions.id)
-#  fk_rails_...  (question_packet_id => question_packets.id)
+#  fk_rails_...  (question_id => questions.id) ON DELETE => cascade
+#  fk_rails_...  (question_packet_id => question_packets.id) ON DELETE => cascade
 #
 class QuestionPacketMembership < ApplicationRecord
   belongs_to :question
