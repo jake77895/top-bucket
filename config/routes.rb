@@ -109,6 +109,8 @@ Rails.application.routes.draw do
         patch :update_questions
       end
     end
+
+    resources :forum_rooms, only: [:index, :new, :create, :edit, :update, :destroy]
   end
 
   ########################

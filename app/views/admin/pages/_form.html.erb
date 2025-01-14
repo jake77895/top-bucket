@@ -1,62 +1,70 @@
-<%= form_with(model: @page, 
+<h1 class="text-center my-4">
+  <%= @page.new_record? ? 'Create New Page' : 'Edit Page' %>
+</h1>
+
+<div class="container">
+
+  <%= form_with(model: @page, 
               url: @page.new_record? ? admin_pages_path : admin_page_path(@page), 
               multipart: true) do |form| %>
-  <div class="card shadow-sm border-0">
-    <div class="card-header bg-dark text-white mt-4">
-      <h2 class="mb-0"><%= @page.new_record? ? 'Create New Page' : 'Edit Page' %></h2>
-    </div>
-    <div class="card-body">
-      <!-- Name -->
-      <div class="mb-3">
-        <%= form.label :name, class: 'form-label fw-bold' %>
-        <%= form.text_field :name, class: 'form-control', placeholder: 'Enter page name' %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white mt-4">
+        <h2 class="mb-0"><%= @page.new_record? ? 'Create New Page' : 'Edit Page' %></h2>
       </div>
+      <div class="card-body">
+        <!-- Name -->
+        <div class="mb-3">
+          <%= form.label :name, class: 'form-label fw-bold' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter page name' %>
+        </div>
 
         <!-- Parent Page -->
-      <div class="mb-3">
-        <%= form.label :parent_id, 'Parent Page (optional)', class: 'form-label fw-bold' %>
-        <%= form.collection_select :parent_id, 
+        <div class="mb-3">
+          <%= form.label :parent_id, 'Parent Page (optional)', class: 'form-label fw-bold' %>
+          <%= form.collection_select :parent_id, 
               Page.where(parent_id: nil).where.not(id: @page.id), 
               :id, 
               :name, 
               { include_blank: 'No Parent Page' }, 
               { class: 'form-select' } %>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+          <%= form.label :category, class: 'form-label fw-bold' %>
+          <%= form.select :category, Page::CATEGORY_OPTIONS, { prompt: 'Select a category' }, class: 'form-select' %>
+        </div>
+
+        <!-- Short Description -->
+        <div class="mb-3">
+          <%= form.label :short_description, class: 'form-label fw-bold' %>
+          <%= form.text_area :short_description, class: 'form-control', placeholder: 'Enter a short description', rows: 2 %>
+        </div>
+
+        <!-- About -->
+        <div class="mb-3">
+          <%= form.label :about, class: 'form-label fw-bold' %>
+          <%= form.text_area :about, class: 'form-control', placeholder: 'Enter details about the page', rows: 4 %>
+        </div>
+
+        <!-- Cover Image Upload -->
+        <div class="mb-3">
+          <%= form.label :cover_image, 'Cover Image' %>
+          <%= form.file_field :cover_image, class: 'form-control' %>
+        </div>
+
+        <!-- Profile Image Upload -->
+        <div class="mb-3">
+          <%= form.label :profile_image, 'Profile Image' %>
+          <%= form.file_field :profile_image, class: 'form-control' %>
+        </div>
       </div>
 
-      <!-- Category -->
-      <div class="mb-3">
-        <%= form.label :category, class: 'form-label fw-bold' %>
-        <%= form.select :category, Page::CATEGORY_OPTIONS, { prompt: 'Select a category' }, class: 'form-select' %>
-      </div>
-
-      <!-- Short Description -->
-      <div class="mb-3">
-        <%= form.label :short_description, class: 'form-label fw-bold' %>
-        <%= form.text_area :short_description, class: 'form-control', placeholder: 'Enter a short description', rows: 2 %>
-      </div>
-
-      <!-- About -->
-      <div class="mb-3">
-        <%= form.label :about, class: 'form-label fw-bold' %>
-        <%= form.text_area :about, class: 'form-control', placeholder: 'Enter details about the page', rows: 4 %>
-      </div>
-
-      <!-- Cover Image Upload -->
-      <div class="mb-3">
-        <%= form.label :cover_image, 'Cover Image' %>
-        <%= form.file_field :cover_image, class: 'form-control' %>
-      </div>
-
-      <!-- Profile Image Upload -->
-      <div class="mb-3">
-        <%= form.label :profile_image, 'Profile Image' %>
-        <%= form.file_field :profile_image, class: 'form-control' %>
+      <div class="card-footer d-flex justify-content-between">
+        <%= link_to 'Back', admin_pages_path, class: 'btn btn-outline-secondary px-4' %>
+        <%= form.submit @page.new_record? ? 'Create Page' : 'Update Page', class: 'btn btn-dark px-4' %>
       </div>
     </div>
+  <% end %>
 
-    <div class="card-footer d-flex justify-content-between">
-      <%= link_to 'Back', admin_pages_path, class: 'btn btn-outline-secondary px-4' %>
-      <%= form.submit @page.new_record? ? 'Create Page' : 'Update Page', class: 'btn btn-dark px-4' %>
-    </div>
-  </div>
-<% end %>
+</div>

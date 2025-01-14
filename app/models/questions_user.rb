@@ -17,7 +17,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (question_id => questions.id)
+#  fk_rails_...  (question_id => questions.id) ON DELETE => cascade
 #  fk_rails_...  (user_id => users.id)
 #
 class QuestionsUser < ApplicationRecord
