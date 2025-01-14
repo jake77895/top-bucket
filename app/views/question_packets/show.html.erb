@@ -92,15 +92,17 @@
     <div class="d-flex justify-content-between align-items-center mt-4">
       <!-- Left Arrow -->
       <% if @prev_index %>
-          <%= link_to question_packet_path(@question_packet, question_index: @prev_index, **@filter_params),
-                      class: 'btn p-0', style: 'border: none; background: none;' do %>
-            <%= image_tag 'icons/left_arrow_icon.svg', alt: 'Left Arrow', size: '24x24' %>
-          <% end %>
-        <% else %>
-          <span class="btn p-0" style="border: none; background: none; visibility: hidden;">
-            <%= image_tag 'icons/left_arrow_icon.svg', alt: 'Left Arrow', size: '24x24' %>
-          </span>
+        <%= link_to question_packet_path(@question_packet, 
+                                        question_index: @prev_index, 
+                                        filtered_questions: @filtered_question_ids),
+                    class: 'btn p-0', style: 'border: none; background: none;' do %>
+          <%= image_tag 'icons/left_arrow_icon.svg', alt: 'Left Arrow', size: '24x24' %>
         <% end %>
+      <% else %>
+        <span class="btn p-0" style="border: none; background: none; visibility: hidden;">
+          <%= image_tag 'icons/left_arrow_icon.svg', alt: 'Left Arrow', size: '24x24' %>
+        </span>
+      <% end %>
 
       <!-- "Don't Know" Button -->
       <button 
@@ -116,7 +118,9 @@
 
       <!-- Right Arrow -->
       <% if @next_index %>
-        <%= link_to question_packet_path(@question_packet, question_index: @next_index, **@filter_params),
+        <%= link_to question_packet_path(@question_packet, 
+                                        question_index: @next_index, 
+                                        filtered_questions: @filtered_question_ids),
                     class: 'btn p-0', style: 'border: none; background: none;' do %>
           <%= image_tag 'icons/right_arrow_icon.svg', alt: 'Right Arrow', size: '24x24' %>
         <% end %>
