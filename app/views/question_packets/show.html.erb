@@ -18,28 +18,36 @@
   <div class="card shadow-sm p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <!-- Question and Star Icon -->
-
-      <div class="d-flex align-items-center">
-        <!--<h3 class="mb-0 me-2" style="font-size: 1.25rem;">Question</h3>-->
-        <!-- Star Icon -->
-        <% if user_signed_in? %>
-          <button class="btn star-toggle p-0" 
-                  data-star-icon="<%= asset_path('icons/star_icon.svg') %>" 
-                  data-star-icon-filled="<%= asset_path('icons/star_filled_icon.svg') %>" 
-                  style="border: none; background: none; margin-top: -6px;">
-            <%= image_tag 'icons/star_icon.svg', alt: 'Star Icon', class: 'star-icon', size: '20x20' %>
-          </button>
-        <%else%>
-          <%= image_tag 'icons/star_icon.svg',
-                          alt: 'Star Icon',
-                          class: 'star-icon',
-                          size: '20x20',
-                          "data-bs-toggle" => "tooltip",
-                          "data-bs-placement" => "right",
-                          title: "Sign in to star questions to review later." %>
-        <% end %>
-
-      </div>
+        
+        <!--Star Icon-->
+        <div class="d-flex align-items-center">
+          <% if user_signed_in? %>
+            <% if current_user.questions.exists?(@question.id) %>
+              <!-- Unstar -->
+              <%= link_to toggle_star_questions_users_path(question_id: @question.id),
+                          method: :post,
+                          class: 'btn p-0' do %>
+                <%= image_tag 'icons/star_filled_icon.svg', alt: 'Star Icon', class: 'star-icon', size: '20x20' %>
+              <% end %>
+            <% else %>
+              <!-- Star -->
+              <%= link_to toggle_star_questions_users_path(question_id: @question.id),
+                          method: :post,
+                          class: 'btn p-0' do %>
+                <%= image_tag 'icons/star_icon.svg', alt: 'Star Icon', class: 'star-icon', size: '20x20' %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <!-- Tooltip for unauthenticated users -->
+            <%= image_tag 'icons/star_icon.svg',
+                            alt: 'Star Icon',
+                            class: 'star-icon',
+                            size: '20x20',
+                            "data-bs-toggle" => "tooltip",
+                            "data-bs-placement" => "right",
+                            title: "Sign in to star questions to review later." %>
+          <% end %>
+        </div>
 
       <!-- Question Number and Open Options -->
       <div class="d-flex align-items-center">
@@ -113,24 +121,6 @@
 <%= render 'question_packets/options_modal' %>
 <%= render 'question_packets/explanation_modal' %>
 
-<!-- JS for Filling or Unfilling the Star Icon -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".star-toggle").forEach((button) => {
-      button.addEventListener("click", function () {
-        const icon = this.querySelector(".star-icon");
-        const filledPath = button.dataset.starIconFilled;
-        const unfilledPath = button.dataset.starIcon;
-
-        if (icon.src.includes("star_icon")) {
-          icon.src = filledPath;
-        } else {
-          icon.src = unfilledPath;
-        }
-      });
-    });
-  });
-</script>
 
 <!-- JS for Modal Explanation Feedback -->
 <script>
