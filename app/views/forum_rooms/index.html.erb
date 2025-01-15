@@ -1,0 +1,35 @@
+<div class="container py-5">
+  <!-- Card Header with Back Button -->
+  <div class="card shadow-sm position-relative mb-4">
+    <!-- Back Button -->
+    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light position-relative">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
+        Forum Rooms
+      </h1>
+      <p class="text-muted" style="font-size: 15px;">Insights from those grinding through the chaos </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <% @forum_rooms.each do |room| %>
+        <div class="col-md-4 mb-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title"><%= room.name %></h5>
+              <p class="card-text">
+                <%= room.description.present? ? truncate(room.description, length: 100) : "No description available" %>
+              </p>
+              <%= link_to "View Room", forum_room_path(room), class: "btn btn-dark btn-sm" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

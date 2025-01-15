@@ -9,4 +9,5 @@
 #  updated_at  :datetime         not null
 #
 class ForumRoom < ApplicationRecord
+  has_many :posts, dependent: :destroy
 end

@@ -1,0 +1,45 @@
+<div class="container py-5">
+  <!-- Card Header with Back Button -->
+  <div class="card shadow-sm position-relative mb-4">
+    <!-- Back Button -->
+    <%= link_to forum_rooms_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light position-relative">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
+        <%= @forum_room.name %>
+      </h1>
+      <p class="text-muted"><%= @forum_room.description %></p>
+    </div>
+  </div>
+
+
+<div class="container">
+
+  <!-- Button to Create Post -->
+  <div class="d-flex justify-content-end mb-3">
+    <%= link_to 'Create Post', new_post_path(forum_room_id: @forum_room.id), class: 'btn btn-dark' %>
+  </div>
+
+  <!-- List of Posts -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Posts in <%= @forum_room.name %></h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <% @posts.each do |post| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong><%= link_to post.title, post_path(post), class: 'text-dark' %></strong>
+            <div class="text-muted">
+              Posted by: <%= post.user.user_name %> | <%= time_ago_in_words(post.created_at) %> ago
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+</div>

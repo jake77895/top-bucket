@@ -25,7 +25,11 @@ class User < ApplicationRecord
   # Include default devise modules.
   attr_accessor :login
 
+  # Comments for tier lists
   has_many :comments, dependent: :destroy
+
+  # Posts for forums
+  has_many :posts, dependent: :destroy
 
   has_many :questions_users
   has_many :questions, through: :questions_users

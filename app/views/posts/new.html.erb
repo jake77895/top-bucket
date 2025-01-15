@@ -1,0 +1,28 @@
+<h1 class="text-center my-4">Create a New Post in <%= @forum_room.name %></h1>
+
+<div class="container">
+  <%= form_with model: @post, local: true do |form| %>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <!-- Title -->
+        <div class="mb-3">
+          <%= form.label :title, 'Title', class: 'form-label fw-bold' %>
+          <%= form.text_field :title, class: 'form-control', placeholder: 'Enter post title' %>
+        </div>
+
+        <!-- Body -->
+        <div class="mb-3">
+          <%= form.label :body, 'Content', class: 'form-label fw-bold' %>
+          <%= form.text_area :body, class: 'form-control', placeholder: 'Write your post here...', rows: 5 %>
+        </div>
+
+        <!-- Hidden Forum Room ID -->
+        <%= form.hidden_field :forum_room_id, value: @forum_room.id %>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <%= link_to 'Back', forum_room_path(@forum_room), class: 'btn btn-outline-secondary' %>
+        <%= form.submit 'Create Post', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>

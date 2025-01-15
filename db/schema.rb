@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_14_224847) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_15_000041) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -130,6 +130,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_14_224847) do
     t.index ["position_type_id"], name: "index_form_templates_on_position_type_id"
   end
 
+  create_table "forum_comments", force: :cascade do |t|
+    t.text "body"
+    t.bigint "post_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_forum_comments_on_parent_id"
+    t.index ["post_id"], name: "index_forum_comments_on_post_id"
+    t.index ["user_id"], name: "index_forum_comments_on_user_id"
+  end
+
   create_table "forum_rooms", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -225,6 +237,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_14_224847) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.bigint "forum_room_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["forum_room_id"], name: "index_posts_on_forum_room_id"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "question_packet_memberships", force: :cascade do |t|
@@ -346,6 +369,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_14_224847) do
   add_foreign_key "employees", "schools", column: "undergraduate_school_id"
   add_foreign_key "flags", "users"
   add_foreign_key "form_templates", "position_types"
+  add_foreign_key "forum_comments", "posts"
+  add_foreign_key "forum_comments", "users"
   add_foreign_key "groups", "companies"
   add_foreign_key "groups", "locations"
   add_foreign_key "groups", "position_types"
@@ -357,6 +382,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_14_224847) do
   add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"
+  add_foreign_key "posts", "forum_rooms"
+  add_foreign_key "posts", "users"
   add_foreign_key "question_packet_memberships", "question_packets", on_delete: :cascade
   add_foreign_key "question_packet_memberships", "questions", on_delete: :cascade
   add_foreign_key "questions", "position_types"
