@@ -11,7 +11,7 @@
     <!-- Author Name and Forum Room -->
     <div>
       <p class="mb-0 fw-bold">
-        Published in <span class="text-primary"><%= @post.forum_room.name %></span> 
+        Published in <span><%= @post.forum_room.name %></span> 
       </p>
       <p class="mb-0 text-muted small">
         <%= @post.user.user_name %> • <%= time_ago_in_words(@post.created_at) %> ago
