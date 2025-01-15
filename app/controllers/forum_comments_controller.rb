@@ -1,5 +1,6 @@
 class ForumCommentsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_post
 
   def create
     @post = Post.find(params[:post_id])
@@ -25,6 +26,10 @@ class ForumCommentsController < ApplicationController
   end
 
   private
+
+  def set_post
+    @post = Post.find(params[:post_id])
+  end
 
   def forum_comment_params
     params.require(:forum_comment).permit(:body, :parent_id)

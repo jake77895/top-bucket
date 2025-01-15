@@ -164,11 +164,11 @@ Rails.application.routes.draw do
     post :toggle_star, on: :collection
   end
 
-  # Public Routes for Viewing Forums
-  resources :forum_rooms, only: [:index, :show]
-  # Public Routes for Creating Forum Posts
-  resources :posts, only: [:new, :create, :show] do
-    resources :forum_comments, only: [:create, :destroy]
+  # Public Routes for Viewing Forums and Posts
+  resources :forum_rooms, only: [:index, :show] do
+    resources :posts, only: [:new, :create, :show] do
+      resources :forum_comments, only: [:create, :destroy]
+    end
   end
 
 

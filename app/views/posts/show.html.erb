@@ -1,20 +1,31 @@
-<div class="container my-4">
-  <!-- Forum Room Name, Time, and User -->
-  <div class="d-flex justify-content-between align-items-center">
-    <span class="text-primary fw-bold"><%= @post.forum_room.name %></span>
-    <span class="text-muted small">
-      Posted by <%= @post.user.user_name %> • <%= time_ago_in_words(@post.created_at) %> ago
-    </span>
+<div class="container my-4 mt-5">
+  <!-- Post Metadata -->
+  <div class="d-flex align-items-center mb-2">
+    <!-- Back Button -->
+    <%= link_to forum_room_path(@post.forum_room), 
+                class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center me-3', 
+                style: 'width: 40px; height: 40px;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Author Name and Forum Room -->
+    <div>
+      <p class="mb-0 fw-bold">
+        Published in <span class="text-primary"><%= @post.forum_room.name %></span> 
+      </p>
+      <p class="mb-0 text-muted small">
+        <%= @post.user.user_name %> • <%= time_ago_in_words(@post.created_at) %> ago
+      </p>
+    </div>
   </div>
 
   <!-- Post Title -->
-  <h1 class="mt-3 mb-4"><%= @post.title %></h1>
+  <h1 class="fw-bold mb-3 fs-2"><%= @post.title %></h1>
 
   <!-- Post Content -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <p class="mb-0"><%= @post.body %></p>
-    </div>
+  <hr>
+  <div class="mb-4">
+    <p class="fs-6"><%= @post.body %></p>
   </div>
 
   <!-- Comments Section -->

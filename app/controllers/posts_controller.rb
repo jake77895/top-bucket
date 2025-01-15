@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
+  before_action :set_forum_room
 
   def show
     @post = Post.find(params[:id])
@@ -24,6 +25,10 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def set_forum_room
+    @forum_room = ForumRoom.find(params[:forum_room_id])
+  end
 
   def post_params
     params.require(:post).permit(:title, :body, :forum_room_id)

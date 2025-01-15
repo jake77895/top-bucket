@@ -15,7 +15,7 @@
         <% end %>
 
         <!-- Reply Form -->
-        <%= form_with(model: [@post, ForumComment.new], local: true) do |form| %>
+        <%= form_with(model: [@post.forum_room, @post, ForumComment.new], local: true) do |form| %>
           <div class="mb-2">
             <%= form.hidden_field :parent_id, value: forum_comment.id %>
             <%= form.text_area :body, class: 'form-control', rows: 2, placeholder: 'Write a reply...' %>
@@ -30,7 +30,7 @@
 <% end %>
 
 <!-- New Comment Form -->
-<%= form_with(model: [@post, ForumComment.new], local: true) do |form| %>
+<%= form_with(model: [@post.forum_room, @post, ForumComment.new], local: true) do |form| %>
   <div class="mb-3">
     <%= form.text_area :body, class: 'form-control', rows: 3, placeholder: 'Write a comment...' %>
   </div>
