@@ -171,6 +171,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # Public Routes for Viewing Mock Interviews
+  resources :mock_interviews, only: [:index]
+
+
 
 
   
