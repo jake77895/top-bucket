@@ -2,33 +2,54 @@
   <!-- Card Header with Back Button -->
   <div class="card shadow-sm position-relative mb-4">
     <!-- Back Button -->
-    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+    <%= link_to meeting_board_mock_interviews_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
       <span class="fs-6">&larr;</span>
     <% end %>
 
     <!-- Title and Description -->
     <div class="card-body text-center bg-light position-relative">
       <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
-        Meeting Board
+        Your Meetings
       </h1>
-      <p class="text-muted" style="font-size: 15px;">Nail the mock, crush the real</p>
+      <p class="text-muted" style="font-size: 15px;">Stay on top of your schedule</p>
     </div>
   </div>
 
-  <!-- Filters and availability button -->
-  <%= render 'filter_and_availability'%>
+  <!-- Upcoming Meetings -->
+  <h2 class="fw-bold mb-4">Upcoming Meetings</h2>
+  <div class="row g-4">
+    <% @upcoming_meetings.each do |meeting| %>
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title fw-bold"><%= meeting[:title] %></h5>
+            <p class="card-text text-muted">Date: <%= meeting[:date] %></p>
+            <p class="card-text">Time: <%= meeting[:time] %></p>
+            <a href="#" class="btn btn-dark w-100">View Details</a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 
-  <!-- List of mock candidates -->
-  <%= render 'candidates'%>
-
-  <div class="icon-container">
-  <!-- Top Bucket Icon -->
-  <img src="/assets/custom_icons/top_bucket_icon.svg" alt="Top Bucket Icon" class="custom-icon" style="width: 35px; height: auto;">
-
-  <!-- Bottom Bucket Icon -->
-  <img src="/assets/custom_icons/bottom_bucket_icon.svg" alt="Bottom Bucket Icon" class="custom-icon" style="width: 50px; height: auto;">
-</div>
-
-
-  
+  <!-- Past Meetings Accordion -->
+  <h2 class="fw-bold mt-5">Past Meetings</h2>
+  <div class="accordion" id="pastMeetingsAccordion">
+    <% @past_meetings.each_with_index do |meeting, index| %>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading<%= index %>">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="false" aria-controls="collapse<%= index %>">
+            <%= meeting[:title] %> - <%= meeting[:date] %>
+          </button>
+        </h2>
+        <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#pastMeetingsAccordion">
+          <div class="accordion-body">
+            <p><strong>Time:</strong> <%= meeting[:time] %></p>
+            <p><strong>Description:</strong> <%= meeting[:description] %></p>
+            <a href="#" class="btn btn-dark">View Details</a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

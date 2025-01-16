@@ -1,0 +1,27 @@
+<div class="container py-5">
+  <!-- Card Header with Back Button -->
+  <div class="card shadow-sm position-relative mb-4">
+    <!-- Back Button -->
+    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light position-relative">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
+        Meeting Board
+      </h1>
+      <p class="text-muted" style="font-size: 15px;">Nail the mock, crush the real</p>
+    </div>
+  </div>
+
+  <!-- Filters and availability button -->
+  <%= render 'filter_and_availability'%>
+
+  <!-- List of mock candidates -->
+  <%= render 'candidates'%>
+
+
+
+  
+</div>

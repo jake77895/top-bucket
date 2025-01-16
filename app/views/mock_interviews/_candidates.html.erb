@@ -1,20 +1,23 @@
+
 <div class="row g-4">
-  <% 13.times do |i| %>
+  <% @candidates.each do |candidate| %>
     <div class="col-md-4">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h5 class="card-title fw-bold">Candidate <%= i + 1 %></h5>
-          <p class="card-text text-muted">Industry: Placeholder Industry</p>
-          <p class="card-text">Skills: Placeholder Skills</p>
+          <h5 class="card-title fw-bold"><%= candidate[:name] %></h5>
+          <p class="card-text text-muted">Industry: <%= candidate[:industry] %></p>
+          <p class="card-text">Skills: <%= candidate[:skills] %></p>
           <div class="d-flex">
             <a href="#" class="btn btn-dark flex-grow-1 me-2">Accept Invite</a>
-            <a href="#" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#profileModal" style="width: 33%;">View Profile</a>
+            <a href="#" class="btn btn-outline-dark" style="width: 33%;">View Profile</a>
           </div>
         </div>
       </div>
     </div>
   <% end %>
 </div>
+
+
 
 <!-- Render the Modal Partial -->
 <%= render partial: "mock_interviews/candidate_profile_modal" %>
