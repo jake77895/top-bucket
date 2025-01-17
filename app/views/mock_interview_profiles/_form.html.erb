@@ -1,0 +1,38 @@
+<%= form_with model: @mock_interview_profile, local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :first_name, class: "form-label" %>
+    <%= f.text_field :first_name, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :recruiting_for, class: "form-label" %>
+    <%= f.text_field :recruiting_for, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :technical_prep_level, class: "form-label" %>
+    <%= f.select :technical_prep_level, MockInterviewProfile.technical_prep_levels.keys.map { |level| [level.humanize, level] }, {}, class: "form-select", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :organization, class: "form-label" %>
+    <%= f.text_field :organization, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :linkedin_url, class: "form-label" %>
+    <%= f.url_field :linkedin_url, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :preferred_language, class: "form-label" %>
+    <%= f.text_field :preferred_language, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :english_proficiency, class: "form-label" %>
+    <%= f.select :english_proficiency, MockInterviewProfile.english_proficiencies.keys.map { |level| [level.humanize, level] }, {}, class: "form-select" %>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>

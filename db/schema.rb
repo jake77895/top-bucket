@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_15_000041) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_17_005209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -201,6 +201,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_15_000041) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "mock_interview_profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "first_name"
+    t.string "recruiting_for"
+    t.integer "technical_prep_level"
+    t.string "organization"
+    t.string "linkedin_url"
+    t.string "preferred_language"
+    t.integer "english_proficiency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_mock_interview_profiles_on_user_id"
+  end
+
   create_table "page_associations", force: :cascade do |t|
     t.bigint "page_id", null: false
     t.bigint "tier_list_id"
@@ -379,6 +393,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_15_000041) do
   add_foreign_key "item_ranks", "users"
   add_foreign_key "job_levels", "companies"
   add_foreign_key "job_levels", "position_types"
+  add_foreign_key "mock_interview_profiles", "users"
   add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"

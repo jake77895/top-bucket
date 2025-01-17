@@ -28,6 +28,9 @@ class User < ApplicationRecord
   # Comments for tier lists
   has_many :comments, dependent: :destroy
 
+  # Mock interview profile
+  has_one :mock_interview_profile, dependent: :destroy
+
   # Posts for forums
   has_many :posts, dependent: :destroy
 

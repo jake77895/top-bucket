@@ -2,76 +2,17 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="createProfileModalLabel">Create Mock Interview Profile</h5>
+        <h5 class="modal-title" id="createProfileModalLabel">Create or Update Mock Interview Profile</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Informational Message -->
+              <!-- Informational Message -->
         <div class="alert alert-info" role="alert">
           This profile is specifically for mock interviews and career coaching. Your TopBucket profile used for forums, recapping interactions, tier list ratings, etc... will remain anonymous to other users, as per your preferences.
         </div>
-
-        <form>
-          <!-- Required Fields -->
-          <h6 class="fw-bold">Required Information</h6>
-
-          <div class="mb-3">
-            <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="recruitingFor" class="form-label">Recruiting For</label>
-            <select class="form-select" id="recruitingFor" required>
-              <option selected disabled>Select position</option>
-              <% @positions.each do |position| %>
-                <option value="<%= position %>"><%= position %></option>
-              <% end %>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label for="technicalPrep" class="form-label">Level of Technical Prep</label>
-            <select class="form-select" id="technicalPrep" required>
-              <option selected disabled>Select level</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-
-          <!-- Optional Fields -->
-          <h6 class="fw-bold mt-4">Optional Information</h6>
-
-          <div class="mb-3">
-            <label for="organization" class="form-label">Organization</label>
-            <input type="text" class="form-control" id="organization" placeholder="Enter your university or company name">
-          </div>
-
-          <div class="mb-3">
-            <label for="linkedinUrl" class="form-label">LinkedIn URL</label>
-            <input type="url" class="form-control" id="linkedinUrl" placeholder="Enter your LinkedIn profile URL">
-          </div>
-
-          <div class="mb-3">
-            <label for="preferredLanguage" class="form-label">Preferred Language (if not English)</label>
-            <input type="text" class="form-control" id="preferredLanguage" placeholder="Enter your preferred language">
-          </div>
-
-          <div class="mb-3">
-            <label for="englishProficiency" class="form-label">Level of English Proficiency (if not fluent)</label>
-            <select class="form-select" id="englishProficiency">
-              <option selected disabled>Select level</option>
-              <option value="conversational">Conversational</option>
-              <option value="basic">Basic</option>
-              <option value="none">None</option>
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-dark">Create Profile</button>
+        
+        <!-- Render the form partial -->
+        <%= render 'mock_interview_profiles/form', mock_interview_profile: @mock_interview_profile %>
       </div>
     </div>
   </div>
