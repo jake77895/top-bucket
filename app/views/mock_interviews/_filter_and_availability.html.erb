@@ -38,13 +38,23 @@
     </select>
   </div>
 
-  <!-- Add Availability Button -->
+  <!-- Add Your Meeting And Availability Buttons -->
   <div class="col-auto ms-auto">
     <%= link_to "Your Meetings", mock_interviews_path, class: "btn btn-outline-dark" %>
-    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addAvailabilityModal">Add Availability</button>
+
+    <!--Availability Button-->
+    <% if user_signed_in? %>
+      <% if false %> <!-- Placeholder conditional -->
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addAvailabilityModal">Add Availability</button>
+      <% else %>
+         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createProfileModal">Add Availability</button>
+      <% end %>
+    <% else %>
+      <button class="btn btn-dark" data-bs-toggle="tooltip" title="You must sign in">Add Availability</button>
+    <% end %>
+
   </div>
 </div>
 
-
-  <!-- Render Add Availability Modal Partial -->
-  <%= render 'mock_interviews/add_availability_modal' %>
+<!-- Render Add Availability Modal Partial -->
+<%= render 'mock_interviews/add_availability_modal' %>

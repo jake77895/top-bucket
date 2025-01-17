@@ -15,8 +15,13 @@
     </div>
   </div>
 
+  <!-- Upcoming Meetings Header with Update Button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Upcoming Meetings</h2>
+    <a href="#" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#createProfileModal">Update Mock Interview Profile</a>
+  </div>
+
   <!-- Upcoming Meetings -->
-  <h2 class="fw-bold mb-4">Upcoming Meetings</h2>
   <div class="row g-4">
     <% @upcoming_meetings.each do |meeting| %>
       <div class="col-md-4">
@@ -53,3 +58,6 @@
     <% end %>
   </div>
 </div>
+
+<!-- Render the Create Profile Modal Partial -->
+  <%= render 'mock_interviews/create_profile_modal' %>

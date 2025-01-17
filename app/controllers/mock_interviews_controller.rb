@@ -10,6 +10,9 @@ class MockInterviewsController < ApplicationController
       { title: "Mock Interview with Emily Johnson", date: "2025-01-10", time: "11:00 AM", description: "A detailed session on behavioral interviews" },
       { title: "Technical Interview with Mark Lee", date: "2025-01-08", time: "3:00 PM", description: "Focused on finance technical skills" }
     ]
+
+    positions
+    
   end
 
   # Displays the meeting board
@@ -18,5 +21,16 @@ class MockInterviewsController < ApplicationController
     @candidates = 13.times.map do |i|
       { id: i + 1, name: "Candidate #{i + 1}", industry: "Placeholder Industry", skills: "Placeholder Skills" }
     end
+
+    positions
+
   end
+end
+
+private
+
+def positions
+
+  @positions = ["Investment Banking", "Private Equity", "Venture Capital"]
+
 end
