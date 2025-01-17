@@ -31,6 +31,10 @@ class User < ApplicationRecord
   # Mock interview profile
   has_one :mock_interview_profile, dependent: :destroy
 
+  # Accepts or rejects mock interview
+  has_many :created_mock_interviews, class_name: "MockInterview", foreign_key: :created_by_id, dependent: :destroy
+  has_many :accepted_mock_interviews, class_name: "MockInterview", foreign_key: :accepted_by_id, dependent: :nullify
+
   # Posts for forums
   has_many :posts, dependent: :destroy
 

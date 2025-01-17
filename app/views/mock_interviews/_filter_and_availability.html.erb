@@ -44,10 +44,10 @@
 
     <!--Availability Button-->
     <% if user_signed_in? %>
-      <% if false %> <!-- Placeholder conditional -->
+      <% if current_user.mock_interview_profile.present? %>
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addAvailabilityModal">Add Availability</button>
       <% else %>
-         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createProfileModal">Add Availability</button>
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createProfileModal">Add Availability</button>
       <% end %>
     <% else %>
       <button class="btn btn-dark" data-bs-toggle="tooltip" title="You must sign in">Add Availability</button>

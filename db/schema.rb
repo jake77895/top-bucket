@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_17_005209) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_17_044945) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -215,6 +215,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_17_005209) do
     t.index ["user_id"], name: "index_mock_interview_profiles_on_user_id"
   end
 
+  create_table "mock_interviews", force: :cascade do |t|
+    t.date "start_date", null: false
+    t.time "start_time", null: false
+    t.string "status", default: "pending", null: false
+    t.bigint "created_by_id", null: false
+    t.bigint "accepted_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "time_zone"
+    t.index ["accepted_by_id"], name: "index_mock_interviews_on_accepted_by_id"
+    t.index ["created_by_id"], name: "index_mock_interviews_on_created_by_id"
+  end
+
   create_table "page_associations", force: :cascade do |t|
     t.bigint "page_id", null: false
     t.bigint "tier_list_id"
@@ -394,6 +407,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_17_005209) do
   add_foreign_key "job_levels", "companies"
   add_foreign_key "job_levels", "position_types"
   add_foreign_key "mock_interview_profiles", "users"
+  add_foreign_key "mock_interviews", "users", column: "accepted_by_id"
+  add_foreign_key "mock_interviews", "users", column: "created_by_id"
   add_foreign_key "page_associations", "employee_views"
   add_foreign_key "page_associations", "pages"
   add_foreign_key "page_associations", "tier_lists"

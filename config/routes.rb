@@ -172,11 +172,17 @@ Rails.application.routes.draw do
   end
 
   # Public Routes for Viewing Mock Interviews
-  resources :mock_interviews, only: [:index] do
+  resources :mock_interviews, only: %i[create destroy] do
+    member do
+      patch :accept
+      patch :complete
+    end
+  
     collection do
       get :meeting_board
     end
   end
+  
 
   # Public Routes for Creating Mock Interview Profiles
   resources :mock_interview_profiles, only: [:new, :create, :edit, :update]
