@@ -20,10 +20,11 @@
         <!-- Add Availability Form -->
         <%= form_with model: @mock_interview, url: mock_interviews_path, method: :post, local: true do |f| %>
           <!-- Date Picker -->
-          <div class="mb-3">
-            <%= f.label :date, "Date", class: "form-label fw-bold" %>
-            <%= f.date_field :date, class: "form-control", required: true, min: (Time.zone.now - 12.hours).to_date %>
-          </div>
+        <div class="mb-3">
+          <%= f.label :start_date, "Start Date", class: "form-label fw-bold" %>
+          <%= f.date_field :start_date, class: "form-control", required: true, min: (Time.zone.now - 12.hours).to_date %>
+        </div>
+
 
           <!-- Time Zone -->
           <div class="mb-3">

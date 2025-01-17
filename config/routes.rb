@@ -172,7 +172,7 @@ Rails.application.routes.draw do
   end
 
   # Public Routes for Viewing Mock Interviews
-  resources :mock_interviews, only: %i[create destroy] do
+  resources :mock_interviews, only: %i[create destroy index] do
     member do
       patch :accept
       patch :complete

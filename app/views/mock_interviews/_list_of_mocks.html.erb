@@ -1,0 +1,49 @@
+<% if @pending_mock_interviews.present? %>
+  <div class="row g-4">
+    <% @pending_mock_interviews.each do |mock_interview| %>
+      <% profile = mock_interview.created_by.mock_interview_profile %>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <!-- Candidate Name -->
+            <h5 class="card-title fw-bold mb-1">
+              <%= profile&.first_name || "Unknown Candidate" %>
+            </h5>
+
+            <hr class="my-1">
+
+            <!-- Organization -->
+            <p class="mb-1">
+              <strong>Organization:</strong> <%= profile&.organization || "N/A" %>
+            </p>
+
+            <!-- Recruiting For -->
+            <p class="mb-1">
+              <strong>Recruiting for:</strong> <%= profile&.recruiting_for || "N/A" %>
+            </p>
+
+            <!-- Interview Prep Level -->
+            <p class="mb-1">
+              <strong>Interview Prep Level:</strong> 
+              <%= profile&.technical_prep_level&.humanize || "N/A" %>
+            </p>
+
+            <!-- Language -->
+            <p class="mb-1">
+              <strong>Language:</strong> <%= profile&.preferred_language || "N/A" %>
+            </p>
+
+            <hr class="my-2">
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between">
+              <%= link_to "Accept Invite", accept_mock_interview_path(mock_interview), method: :patch, class: "btn btn-dark flex-grow-1 me-2" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No pending mock interviews available.</p>
+<% end %>
