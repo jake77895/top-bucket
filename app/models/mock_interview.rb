@@ -32,6 +32,18 @@ class MockInterview < ApplicationRecord
   validates :status, inclusion: { in: %w[pending accepted completed] }
   validate :start_time_in_future
 
+  # Add this method to explicitly allow attributes to be searchable
+  def self.ransackable_attributes(auth_object = nil)
+    %w[start_date check_date_time status] +
+    %w[created_by_id accepted_by_id time_zone] +
+    MockInterviewProfile.ransackable_attributes
+  end
+
+  # Allow associations to be included in searches
+  def self.ransackable_associations(auth_object = nil)
+    %w[created_by created_by.mock_interview_profile]
+  end
+
   private
   
   def start_time_in_future
@@ -42,5 +54,7 @@ class MockInterview < ApplicationRecord
       errors.add(:start_time, "must be at least 30 minutes from now")
     end
   end
+
+
   
 end

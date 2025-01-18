@@ -55,6 +55,14 @@ class User < ApplicationRecord
     false
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id] # Add minimal attributes needed to traverse
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[mock_interview_profile] # Allow access to the mock_interview_profile association
+  end
+
 # Allow sign-in with either username or email
 def self.find_for_database_authentication(warden_conditions)
   conditions = warden_conditions.dup

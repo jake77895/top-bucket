@@ -75,19 +75,18 @@ class MockInterviewsController < ApplicationController
 
   # Displays the meeting board
   def meeting_board
+    @default_time_zone = "Eastern Time (US & Canada)" # Default to EST
+    @selected_time_zone = params[:time_zone] || @default_time_zone
+
+    # Filter available meetings
+    filter_meetings
+
     @mock_interview = MockInterview.new
     @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
 
     # Fetch time options for the availability dropdown
     @time_options = generate_time_options
     @selected_time = @time_options.first[1] # Default to the first time slot if not provided
-
-    # # Fetch pending mock interviews
-    # @mock_interviews = MockInterview.where(status: "pending")
-
-    # Fetch pending mock interviews
-    @pending_mock_interviews = MockInterview.includes(created_by: :mock_interview_profile)
-                                            .where(status: "pending")
 
     # Fetch recruiting options for the profile
     set_recruiting_for_options
@@ -136,12 +135,22 @@ class MockInterviewsController < ApplicationController
   
     # Ensure both date and time are converted to Eastern Time
     time_with_zone&.in_time_zone("Eastern Time (US & Canada)")
-  end  
+  end
+  
+  def filter_meetings
+    @q = MockInterview.ransack(params[:q])
+    @pending_mock_interviews = @q.result.includes(created_by: :mock_interview_profile).where(status: "pending")
+
+    Rails.logger.debug("Ransack params: #{params[:q].inspect}")
+    Rails.logger.debug("Filtered Results: #{@pending_mock_interviews.inspect}")
+  end
   
 
   def mock_interview_params
     params.require(:mock_interview).permit(:start_date, :start_time, :time_zone)
   end
+
+
   
   
 end

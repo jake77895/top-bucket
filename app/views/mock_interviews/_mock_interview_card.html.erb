@@ -43,8 +43,8 @@
 
       <!-- Interview Prep Level -->
       <p class="mb-1">
-        <strong>Interview Prep Level:</strong> 
-        <%= profile&.technical_prep_level&.humanize.presence || "N/A" %>
+        <strong>Interview Prep Level:</strong>
+        <%= profile&.technical_prep_level.presence || "N/A" %>
       </p>
 
       <!-- Language -->
