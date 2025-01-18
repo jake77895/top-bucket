@@ -9,7 +9,7 @@ class MockInterviewsController < ApplicationController
   def create
     @mock_interview = current_user.created_mock_interviews.build(
       mock_interview_params.merge(
-        start_time: convert_to_est(
+        check_date_time: convert_to_est(
           mock_interview_params[:start_date],
           mock_interview_params[:start_time],
           mock_interview_params[:time_zone]
@@ -130,13 +130,14 @@ class MockInterviewsController < ApplicationController
 
   def convert_to_est(date, time, time_zone)
     return nil if date.blank? || time.blank? || time_zone.blank?
-
+  
     # Combine date and time, and parse it in the user's selected time zone
     time_with_zone = ActiveSupport::TimeZone[time_zone].parse("#{date} #{time}")
-
-    # Convert to US Eastern Time
+  
+    # Ensure both date and time are converted to Eastern Time
     time_with_zone&.in_time_zone("Eastern Time (US & Canada)")
-  end
+  end  
+  
 
   def mock_interview_params
     params.require(:mock_interview).permit(:start_date, :start_time, :time_zone)
