@@ -39,7 +39,8 @@
     <div class="col">
       <label for="filter-time-range" class="form-label fw-bold">Time Range</label>
       <div class="d-flex align-items-center">
-        <select id="time-range-start" class="form-select me-2">
+        <select id="time-range-start" class="form-select me-0">
+          <option value="" selected>Start</option>
           <% (0..23).each do |hour| %>
             <% ["00", "15", "30", "45"].each do |minute| %>
               <option value="<%= "%02d:%02d" % [hour, minute] %>">
@@ -48,8 +49,9 @@
             <% end %>
           <% end %>
         </select>
-        <span class="mx-1">to</span>
+        <span class="mx-2">to</span>
         <select id="time-range-end" class="form-select">
+          <option value="" selected>End</option>
           <% (0..23).each do |hour| %>
             <% ["00", "15", "30", "45"].each do |minute| %>
               <option value="<%= "%02d:%02d" % [hour, minute] %>">
@@ -86,12 +88,12 @@
     </div>
 
     <!-- Submit Button -->
-    <!-- Submit Button -->
-<div class="col-auto">
-  <div class="d-flex h-100 align-items-end">
-    <button class="btn btn-dark" style="margin-top: 2.0rem;">Apply Filters</button>
-  </div>
-</div>
+
+    <div class="col-auto">
+      <div class="d-flex h-100 align-items-end">
+        <button class="btn btn-dark" style="margin-top: 2.0rem;">Apply Filters</button>
+      </div>
+    </div>
 
   </div>
 </div>
