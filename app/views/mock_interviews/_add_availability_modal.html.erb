@@ -26,26 +26,25 @@
         </div>
 
 
-          <!-- Time Zone -->
-          <div class="mb-3">
-            <%= f.label :time_zone, "Time Zone", class: "form-label fw-bold" %>
-            <%= f.select :time_zone, 
-                  options_for_select(
-                    ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] }, 
-                    @mock_interview&.time_zone
-                  ), 
-                  {}, 
-                  class: "form-select", required: true %>
-          </div>
+        <!-- Time Zone -->
+        <div class="mb-3">
+          <%= f.label :time_zone, "Time Zone", class: "form-label fw-bold" %>
+          <%= f.select :time_zone, 
+                options_for_select(
+                  ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] }
+                ), 
+                {}, 
+                class: "form-select", required: true %>
+        </div>
 
-          <!-- Start Time -->
-          <div class="mb-3">
-            <%= f.label :start_time, "Start Time", class: "form-label fw-bold" %>
-            <%= f.select :start_time, 
-                  options_for_select(@time_options, @selected_time), 
-                  {}, 
-                  class: "form-select", required: true %>
-          </div>
+        <!-- Start Time -->
+        <div class="mb-3">
+          <%= f.label :start_time, "Start Time", class: "form-label fw-bold" %>
+          <%= f.select :start_time, 
+                options_for_select(@time_options), 
+                {}, 
+                class: "form-select", required: true %>
+        </div>
 
           <!-- Submit Button -->
           <div class="modal-footer">

@@ -14,23 +14,23 @@
 
             <!-- Organization -->
             <p class="mb-1">
-              <strong>Organization:</strong> <%= profile&.organization || "N/A" %>
+              <strong>Organization:</strong> <%= profile&.organization.presence || "N/A" %>
             </p>
 
             <!-- Recruiting For -->
             <p class="mb-1">
-              <strong>Recruiting for:</strong> <%= profile&.recruiting_for || "N/A" %>
+              <strong>Recruiting for:</strong> <%= profile&.recruiting_for.presence || "N/A" %>
             </p>
 
             <!-- Interview Prep Level -->
             <p class="mb-1">
               <strong>Interview Prep Level:</strong> 
-              <%= profile&.technical_prep_level&.humanize || "N/A" %>
+              <%= profile&.technical_prep_level&.humanize.presence || "N/A" %>
             </p>
 
             <!-- Language -->
             <p class="mb-1">
-              <strong>Language:</strong> <%= profile&.preferred_language || "N/A" %>
+              <strong>Language:</strong> <%= profile&.preferred_language.presence || "English" %>
             </p>
 
             <hr class="my-2">

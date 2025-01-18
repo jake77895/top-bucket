@@ -2,13 +2,6 @@ class MockInterviewsController < ApplicationController
   before_action :set_mock_interview, only: %i[accept complete destroy]
 
   def new
-    # Assuming the user's timezone is stored or default to UTC
-    user_time_zone = Time.zone.name || "UTC"
-    Time.zone = user_time_zone
-
-    @default_time_zone = user_time_zone
-    @default_start_time = (Time.zone.now + 1.hour).strftime("%I:%M %p")
-
     @mock_interview = MockInterview.new
     @time_options = generate_time_options
   end
@@ -28,14 +21,13 @@ class MockInterviewsController < ApplicationController
     if @mock_interview.save
       redirect_to meeting_board_mock_interviews_path, notice: "Availability added successfully."
     else
-      # Ensure variables are set for re-rendering the meeting_board
-      Rails.logger.debug("Mock Interview Save Errors: #{@mock_interview.errors.full_messages}")
-      @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
-      set_recruiting_for_options
+      # Collect all error messages and join them into a single string
+      error_messages = @mock_interview.errors.full_messages.join(", ")
+      # Handle re-rendering of the form with errors
       @time_options = generate_time_options
-      @selected_time = @time_options.first[1] # Default to the first time slot
       flash.now[:alert] = "There was an error with your submission."
-      render :meeting_board
+      # render :meeting_board
+      redirect_to meeting_board_mock_interviews_path, alert: "There was an error with your submission: #{error_messages}"
     end
   end
 
@@ -96,8 +88,6 @@ class MockInterviewsController < ApplicationController
     # Fetch pending mock interviews
     @pending_mock_interviews = MockInterview.includes(created_by: :mock_interview_profile)
                                             .where(status: "pending")
-
-    Rails.logger.debug("Pending Mock Interviews: #{@pending_mock_interviews.inspect}")
 
     # Fetch recruiting options for the profile
     set_recruiting_for_options
