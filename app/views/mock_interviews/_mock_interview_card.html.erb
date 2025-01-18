@@ -1,0 +1,63 @@
+<% profile = mock_interview.created_by.mock_interview_profile %>
+<div class="col-md-4">
+  <div class="card shadow-sm border-0 h-100">
+    <div class="card-body">
+      <!-- Candidate Name and LinkedIn -->
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <h5 class="card-title fw-bold mb-0">
+          <%= profile&.first_name || "Unknown Candidate" %>
+        </h5>
+        <% if profile&.linkedin_url.present? %>
+          <%= link_to profile.linkedin_url, target: "_blank", class: "ms-2" do %>
+              <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn', style: 'width: 20px; height: 20px;' %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Start Time -->
+      <% if mock_interview.check_date_time.present? %>
+        <span class="badge badge-dark" style="background-color: #343a40; color: #ffffff; font-size: 1rem;">
+          <%= mock_interview.check_date_time.strftime("%b %d, %l:%M %p") %> -
+          <%= (mock_interview.check_date_time + 1.hour).strftime("%l:%M %p %Z") %>
+        </span>
+      <% else %>
+        <span class="badge badge-dark" style="background-color: #343a40; color: #ffffff; font-size: 1rem;">
+          Start time not set
+        </span>
+      <% end %>
+
+
+
+
+      <hr class="my-1">
+
+      <!-- Organization -->
+      <p class="mb-1">
+        <strong>Organization:</strong> <%= profile&.organization.presence || "N/A" %>
+      </p>
+
+      <!-- Recruiting For -->
+      <p class="mb-1">
+        <strong>Recruiting for:</strong> <%= profile&.recruiting_for.presence || "N/A" %>
+      </p>
+
+      <!-- Interview Prep Level -->
+      <p class="mb-1">
+        <strong>Interview Prep Level:</strong> 
+        <%= profile&.technical_prep_level&.humanize.presence || "N/A" %>
+      </p>
+
+      <!-- Language -->
+      <p class="mb-1">
+        <strong>Language:</strong> <%= profile&.preferred_language.presence || "English" %>
+      </p>
+
+      <hr class="my-3">
+
+      <!-- Action Buttons -->
+      <div class="d-flex justify-content-between">
+        <%= link_to "Accept Invite", accept_mock_interview_path(mock_interview), method: :patch, class: "btn btn-dark flex-grow-1 me-2" %>
+      </div>
+    </div>
+  </div>
+</div>
