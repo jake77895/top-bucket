@@ -1,48 +1,9 @@
-<!-- Filter and Options -->
-<div class="row align-items-center mb-4">
-  <!-- Date Navigation -->
-  <div class="col-auto">
-    <div class="btn-group" role="group">
-      <button type="button" class="btn btn-outline-secondary">&larr;</button>
-      <button type="button" class="btn btn-outline-secondary">Today</button>
-      <button type="button" class="btn btn-outline-secondary">&rarr;</button>
-    </div>
-  </div>
-
-  <!-- Time Range -->
-  <div class="col-auto">
-    <div class="d-flex align-items-center">
-      <span class="text-muted me-2">12:00 AM</span>
-      <div class="position-relative" style="width: 150px;">
-        <input type="range" class="form-range" min="0" max="24" value="12" step="1" style="width: 100%;">
-      </div>
-      <span class="text-muted ms-2">11:45 PM</span>
-    </div>
-  </div>
-
-  <!-- Filters -->
-  <div class="col-auto">
-    <select class="form-select">
-      <option selected>Language</option>
-      <option value="1">English</option>
-      <option value="2">Spanish</option>
-      <option value="3">French</option>
-    </select>
-  </div>
-  <div class="col-auto">
-    <select class="form-select">
-      <option selected>Case Experience</option>
-      <option value="1">Beginner</option>
-      <option value="2">Intermediate</option>
-      <option value="3">Advanced</option>
-    </select>
-  </div>
-
-  <!-- Add Your Meeting And Availability Buttons -->
+<!-- Add Your Meeting And Availability Buttons -->
+<div class="row align-items-center mb-3">
   <div class="col-auto ms-auto">
     <%= link_to "Your Meetings", mock_interviews_path, class: "btn btn-outline-dark" %>
 
-    <!--Availability Button-->
+    <!-- Availability Button -->
     <% if user_signed_in? %>
       <% if current_user.mock_interview_profile.present? %>
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addAvailabilityModal">Add Availability</button>
@@ -52,6 +13,85 @@
     <% else %>
       <button class="btn btn-dark" data-bs-toggle="tooltip" title="You must sign in">Add Availability</button>
     <% end %>
+  </div>
+</div>
+
+<!-- Filters and Submit Button -->
+<div class="card p-3 mb-3">
+  <div class="row g-3 align-items-center">
+    <!-- Date Filter -->
+    <div class="col">
+      <label for="filter-date" class="form-label fw-bold">Date</label>
+      <input type="date" id="filter-date" class="form-control" value="<%= Date.today %>">
+    </div>
+
+    <!-- Time Zone Changer -->
+    <div class="col">
+      <label for="filter-time-zone" class="form-label fw-bold">Time Zone</label>
+      <select id="filter-time-zone" class="form-select">
+        <% ActiveSupport::TimeZone.all.each do |tz| %>
+          <option value="<%= tz.name %>" <%= "selected" if tz.name == Time.zone.name %>><%= tz.name %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <!-- Time Range -->
+    <div class="col">
+      <label for="filter-time-range" class="form-label fw-bold">Time Range</label>
+      <div class="d-flex align-items-center">
+        <select id="time-range-start" class="form-select me-2">
+          <% (0..23).each do |hour| %>
+            <% ["00", "15", "30", "45"].each do |minute| %>
+              <option value="<%= "%02d:%02d" % [hour, minute] %>">
+                <%= Time.parse("#{hour}:#{minute}").strftime("%I:%M %p") %>
+              </option>
+            <% end %>
+          <% end %>
+        </select>
+        <span class="mx-1">to</span>
+        <select id="time-range-end" class="form-select">
+          <% (0..23).each do |hour| %>
+            <% ["00", "15", "30", "45"].each do |minute| %>
+              <option value="<%= "%02d:%02d" % [hour, minute] %>">
+                <%= Time.parse("#{hour}:#{minute}").strftime("%I:%M %p") %>
+              </option>
+            <% end %>
+          <% end %>
+        </select>
+      </div>
+    </div>
+
+    <!-- Language Filter -->
+    <div class="col">
+      <label for="filter-language" class="form-label fw-bold">Language</label>
+      <select id="filter-language" class="form-select">
+        <option selected value="">Any</option>
+        <option value="English">English</option>
+        <option value="Spanish">Spanish</option>
+        <option value="French">French</option>
+        <option value="Chinese">Chinese</option>
+        <option value="German">German</option>
+      </select>
+    </div>
+
+    <!-- Interview Prep Level Filter -->
+    <div class="col">
+      <label for="filter-prep-level" class="form-label fw-bold">Prep Level</label>
+      <select id="filter-prep-level" class="form-select">
+        <option selected value="">Any</option>
+        <option value="Novice">Novice</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Advanced">Advanced</option>
+      </select>
+    </div>
+
+    <!-- Submit Button -->
+    <!-- Submit Button -->
+<div class="col-auto">
+  <div class="d-flex h-100 align-items-end">
+    <button class="btn btn-dark" style="margin-top: 2.0rem;">Apply Filters</button>
+  </div>
+</div>
 
   </div>
 </div>
