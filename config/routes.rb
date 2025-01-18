@@ -199,6 +199,7 @@ Rails.application.routes.draw do
   root "site#home"
   get "/about", to: "site#about"
   get "/contact", to: "site#contact"
+  get "/mock_home", to: "site#mock_home"
 
 
 

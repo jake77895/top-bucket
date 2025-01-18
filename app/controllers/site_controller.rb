@@ -7,4 +7,7 @@ class SiteController < ApplicationController
 
   def contact
   end
+
+  def mock_home
+  end
 end
