@@ -1,5 +1,21 @@
 class MockInterviewsController < ApplicationController
   before_action :set_mock_interview, only: %i[accept complete destroy]
+  require 'icalendar'
+
+  def calendar
+    mock_interview = MockInterview.find(params[:id])
+  
+    calendar = Icalendar::Calendar.new
+    calendar.event do |e|
+      e.dtstart     = mock_interview.check_date_time
+      e.dtend       = mock_interview.check_date_time + 1.hour
+      e.summary     = "Mock Interview"
+      e.description = "Prepare for your mock interview!"
+      e.location    = "Online"
+    end
+  
+    send_data calendar.to_ical, filename: "mock_interview_#{mock_interview.id}.ics", type: 'text/calendar'
+  end
 
   def new
     @mock_interview = MockInterview.new

@@ -7,7 +7,7 @@
       <!-- Candidate Name and LinkedIn -->
       <div class="d-flex justify-content-between align-items-center mb-1">
         <h5 class="card-title fw-bold mb-0">
-          <%= profile&.first_name || "Unknown Candidate" %>
+          Upcoming Meeting with <%= profile&.first_name || "Unknown Candidate" %>
         </h5>
         <% if profile&.linkedin_url.present? %>
           <%= link_to profile.linkedin_url, target: "_blank", class: "ms-2" do %>
@@ -54,14 +54,47 @@
       <hr class="my-3">
 
       <!-- Action Buttons -->
-      <div class="d-flex justify-content-between">
-        <%= button_to "Can't Make it", 
-              reset_mock_interview_path(mock_interview), 
-              method: :patch, 
-              class: "btn btn-danger flex-grow-1", 
-              data: { confirm: "Are you sure you can't make it? This will reset the status to 'pending'." } %>
+      <div class="d-flex justify-content-between align-items-center">
+        <!-- Time Remaining -->
+        <div>
+          <% if mock_interview.check_date_time.present? %>
+            <% 
+        time_remaining = distance_of_time_in_words(Time.current, mock_interview.check_date_time, include_seconds: false)
+        hours_remaining = ((mock_interview.check_date_time - Time.current) / 1.hour).round
+        badge_class = hours_remaining <= 1 ? "bg-danger text-white" : "bg-secondary"
+      %>
+            <span class="badge <%= badge_class %>" style="font-size: 1rem; padding: 0.5rem 1rem; border-radius: 0.5rem;">
+              Starts in <%= time_remaining %>
+            </span>
+          <% else %>
+            <span class="badge bg-secondary" style="font-size: 1rem; padding: 0.5rem 1rem; border-radius: 0.5rem;">
+              Start time not set
+            </span>
+          <% end %>
+        </div>
 
+        <!-- Can't Make It Button -->
+        <% if mock_interview.check_date_time.present? && ((mock_interview.check_date_time - Time.current) / 1.hour).round > 1 %>
+          <%= button_to "Can't Make it", 
+          reset_mock_interview_path(mock_interview), 
+          method: :patch, 
+          class: "btn btn-light flex-grow-1 ms-3", 
+          data: { confirm: "Are you sure you can't make it? This will reset the status to 'pending'." } %>
+        <% end %>
       </div>
+
+      <!-- Add to Calendar Buttons -->
+<div class="d-flex justify-content-start mt-2">
+  <%= link_to "Add to Apple Calendar", calendar_mock_interview_path(mock_interview), class: "btn btn-light me-2", target: "_blank" %>
+  <%= link_to "Add to Google Calendar",
+        "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+        "&text=Mock Interview" +
+        "&dates=#{mock_interview.check_date_time.utc.strftime('%Y%m%dT%H%M%SZ')}/#{(mock_interview.check_date_time + 1.hour).utc.strftime('%Y%m%dT%H%M%SZ')}" +
+        "&details=Prepare for your mock interview!" +
+        "&location=Online",
+        class: "btn btn-light", target: "_blank" %>
+</div>
+
     </div>
   </div>
 </div>

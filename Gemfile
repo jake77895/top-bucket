@@ -2,6 +2,7 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Added gems
+gem 'icalendar'
 
 # Creates hierarchy logic for the pages
 gem 'acts_as_tree'

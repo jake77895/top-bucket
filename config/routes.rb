@@ -178,6 +178,7 @@ Rails.application.routes.draw do
       patch :complete
       patch :cancel
       patch :reset
+      get :calendar
   end
   
     collection do

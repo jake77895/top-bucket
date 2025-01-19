@@ -30,7 +30,7 @@ class MockInterview < ApplicationRecord
   validates :start_date, presence: true
   validates :start_time, presence: true
   validates :status, inclusion: { in: %w[pending accepted completed cancelled] }
-  validate :start_time_in_future, on: :create, on: :accept
+  validate :start_time_in_future, if: :validate_start_time?
 
   # Add this method to explicitly allow attributes to be searchable
   def self.ransackable_attributes(auth_object = nil)
@@ -51,14 +51,24 @@ class MockInterview < ApplicationRecord
   private
   
   def start_time_in_future
+    Rails.logger.debug("Check if start time is called")
+
     return if start_date.blank? || start_time.blank?
     
     now = Time.current
+
+    Rails.logger.debug("Check Date Time: #{check_date_time }")
+    Rails.logger.debug("Check Now: #{now}")
 
     # Validate that the start time is at least 30 minutes in the future
     if check_date_time < now + 30.minutes
       errors.add(:start_time, "must be at least 30 minutes from now")
     end
+  end
+
+  # Determine if the validation should run
+  def validate_start_time?
+    new_record? || status == "accepted"
   end
 
 
