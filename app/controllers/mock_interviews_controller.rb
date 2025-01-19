@@ -37,14 +37,19 @@ class MockInterviewsController < ApplicationController
   # Allows another user to accept a pending interview
   def accept
     @mock_interview = MockInterview.find(params[:id])
+  
     if @mock_interview.status == "pending" && @mock_interview.created_by != current_user
-      @mock_interview.update(accepted_by: current_user, status: "accepted")
-      redirect_to mock_interviews_path, notice: "You have successfully joined the mock interview."
+      if @mock_interview.update(accepted_by: current_user, status: "accepted")
+        redirect_to mock_interviews_path, notice: "You have successfully joined the mock interview."
+      else
+        Rails.logger.debug "Update failed: #{@mock_interview.errors.full_messages}"
+        redirect_to meeting_board_mock_interviews_path, alert: "Unable to accept the mock interview due to an error."
+      end
     else
-      redirect_to meeting_board_mock_interviews_path, alert: "Unable to accept the mock interview."
+      redirect_to meeting_board_mock_interviews_path, alert: "You cannot accept this mock interview."
     end
   end
-
+  
   # Marks an interview as completed
   def complete
     if @mock_interview.status == "accepted"

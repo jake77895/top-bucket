@@ -48,7 +48,9 @@ class MockInterview < ApplicationRecord
   
   def start_time_in_future
     return if start_date.blank? || start_time.blank?
-  
+    
+    now = Time.current
+
     # Validate that the start time is at least 30 minutes in the future
     if check_date_time < now + 30.minutes
       errors.add(:start_time, "must be at least 30 minutes from now")
