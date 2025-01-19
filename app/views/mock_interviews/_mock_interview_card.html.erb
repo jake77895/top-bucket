@@ -49,6 +49,28 @@
         <strong>Language:</strong> <%= profile&.preferred_language.presence || "English" %>
       </p>
 
+      <!-- Reliability -->
+      <% completed_mocks = MockInterview.where(created_by: profile.user_id, status: "completed").count %>
+      <p class="mb-1">
+        <strong>Reliability:</strong>
+        <% if completed_mocks < 3 %>
+          <span class="badge rounded-pill bg-secondary">Not enough mocks to tell</span>
+        <% else %>
+          <% reliability_score = profile.reliability_metric %>
+          <% if reliability_score > 80 %>
+            <span class="badge rounded-pill bg-success">Top Bucket</span>
+          <% elsif reliability_score > 60 %>
+            <span class="badge rounded-pill bg-primary">Good</span>
+          <% elsif reliability_score > 50 %>
+            <span class="badge rounded-pill bg-warning text-dark">Fair</span>
+          <% elsif reliability_score > 30 %>
+            <span class="badge rounded-pill bg-danger">Bottom Bucket</span>
+          <% else %>
+            <span class="badge rounded-pill bg-dark">On a PIP</span>
+          <% end %>
+        <% end %>
+      </p>
+
       <hr class="my-3">
 
       <!-- Action Buttons -->
