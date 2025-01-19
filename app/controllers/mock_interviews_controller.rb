@@ -60,14 +60,35 @@ class MockInterviewsController < ApplicationController
     end
   end
 
+  def reset
+    @mock_interview = MockInterview.find(params[:id])
+    if @mock_interview.accepted_by == current_user || @mock_interview.created_by == current_user 
+      @mock_interview.update(status: "pending", accepted_by: nil)
+      redirect_to meeting_board_mock_interviews_path, notice: "You have successfully reset the mock interview."
+    else
+      redirect_to meeting_board_mock_interviews_path, alert: "You are not authorized to reset this mock interview."
+    end
+  end
+
+  def cancel
+    @mock_interview = MockInterview.find(params[:id])
+
+    if @mock_interview.created_by == current_user
+      @mock_interview.cancel_by_creator
+      redirect_to meeting_board_mock_interviews_path, notice: "Meeting successfully cancelled."
+    else
+      redirect_to meeting_board_mock_interviews_path, alert: "You are not authorized to cancel this meeting."
+    end
+  end
+
   # Displays "Your Meetings" page
   def index
+    @default_time_zone = "Eastern Time (US & Canada)" # Default to EST
+    @selected_time_zone = params[:time_zone] || @default_time_zone
+
     @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
 
-    @upcoming_meetings = [
-      { title: "Mock Interview with Jane Doe", date: "2025-01-20", time: "10:00 AM" },
-      { title: "Case Study with John Smith", date: "2025-01-22", time: "2:00 PM" },
-    ]
+    @accepted_mock_interviews = MockInterview.where(status: "accepted")
 
     @past_meetings = [
       { title: "Mock Interview with Emily Johnson", date: "2025-01-10", time: "11:00 AM", description: "A detailed session on behavioral interviews" },
@@ -76,6 +97,8 @@ class MockInterviewsController < ApplicationController
 
     # Fetch recruiting options for the profile
     set_recruiting_for_options
+
+
   end
 
   # Displays the meeting board
@@ -88,10 +111,6 @@ class MockInterviewsController < ApplicationController
 
     @mock_interview = MockInterview.new
     @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
-
-    # Fetch time options for the availability dropdown
-    @time_options = generate_time_options
-    @selected_time = @time_options.first[1] # Default to the first time slot if not provided
 
     # Fetch recruiting options for the profile
     set_recruiting_for_options

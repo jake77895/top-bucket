@@ -18,24 +18,18 @@
   <!-- Upcoming Meetings Header with Update Button -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold mb-0">Upcoming Meetings</h2>
-    <a href="#" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#createProfileModal">Update Mock Interview Profile</a>
+    <!-- Time Zone Changer -->
+
+
+  <div class="d-flex align-items-center">
+    <a href="#" class="btn btn-dark me-2" data-bs-toggle="modal" data-bs-target="#createProfileModal">Update Mock Interview Profile</a>
+    <%= render 'time_zone' %>
+  </div>
   </div>
 
   <!-- Upcoming Meetings -->
-  <div class="row g-4">
-    <% @upcoming_meetings.each do |meeting| %>
-      <div class="col-md-4">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title fw-bold"><%= meeting[:title] %></h5>
-            <p class="card-text text-muted">Date: <%= meeting[:date] %></p>
-            <p class="card-text">Time: <%= meeting[:time] %></p>
-            <a href="#" class="btn btn-dark w-100">View Details</a>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
+  <%= render partial: "mock_interviews/list_of_meetings", locals: { accepted_mock_interviews: @accepted_mock_interviews } %>
+
 
   <!-- Past Meetings Accordion -->
   <h2 class="fw-bold mt-5">Past Meetings</h2>

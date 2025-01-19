@@ -1,4 +1,6 @@
-<% profile = mock_interview.created_by.mock_interview_profile %>
+<% other_user = (mock_interview.created_by == current_user ? mock_interview.accepted_by : mock_interview.created_by) %>
+<% profile = other_user&.mock_interview_profile %>
+
 <div class="col-md-4">
   <div class="card shadow-sm border-0 h-100">
     <div class="card-body">
@@ -53,15 +55,12 @@
 
       <!-- Action Buttons -->
       <div class="d-flex justify-content-between">
-        <%= link_to "Accept Invite", accept_mock_interview_path(mock_interview), method: :patch, class: "btn btn-dark flex-grow-1 me-2" %>
+        <%= button_to "Can't Make it", 
+              reset_mock_interview_path(mock_interview), 
+              method: :patch, 
+              class: "btn btn-danger flex-grow-1", 
+              data: { confirm: "Are you sure you can't make it? This will reset the status to 'pending'." } %>
 
-        <% if mock_interview.created_by == current_user && mock_interview.status == "pending" %>
-          <%= button_to "Cancel", 
-                      cancel_mock_interview_path(mock_interview), 
-                      method: :patch, 
-                      class: "btn btn-danger", 
-                      data: { confirm: "Are you sure you want to cancel this mock interview?" } %>
-        <% end %>
       </div>
     </div>
   </div>

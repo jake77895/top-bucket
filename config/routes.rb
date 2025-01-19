@@ -176,7 +176,9 @@ Rails.application.routes.draw do
     member do
       patch :accept
       patch :complete
-    end
+      patch :cancel
+      patch :reset
+  end
   
     collection do
       get :meeting_board

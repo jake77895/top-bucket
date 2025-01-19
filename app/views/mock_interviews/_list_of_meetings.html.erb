@@ -1,0 +1,9 @@
+<% if @accepted_mock_interviews.present? %>
+  <div class="row g-4">
+    <% @accepted_mock_interviews.each do |mock_interview| %>
+      <%= render partial: "mock_interviews/accepted_mock_interview_card", locals: { mock_interview: mock_interview } %>
+    <% end %>
+  </div>
+<% else %>
+  <p>No accepted mock interviews available.</p>
+<% end %>

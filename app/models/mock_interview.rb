@@ -29,8 +29,8 @@ class MockInterview < ApplicationRecord
 
   validates :start_date, presence: true
   validates :start_time, presence: true
-  validates :status, inclusion: { in: %w[pending accepted completed] }
-  validate :start_time_in_future
+  validates :status, inclusion: { in: %w[pending accepted completed cancelled] }
+  validate :start_time_in_future, on: :create, on: :accept
 
   # Add this method to explicitly allow attributes to be searchable
   def self.ransackable_attributes(auth_object = nil)
@@ -42,6 +42,10 @@ class MockInterview < ApplicationRecord
   # Allow associations to be included in searches
   def self.ransackable_associations(auth_object = nil)
     %w[created_by created_by.mock_interview_profile]
+  end
+
+  def cancel_by_creator
+    update!(status: "cancelled")
   end
 
   private

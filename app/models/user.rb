@@ -46,6 +46,11 @@ class User < ApplicationRecord
 
   validates :user_name, presence: true, uniqueness: true
 
+  # In the User model
+  def mock_interview_profile
+    MockInterviewProfile.find_by(user_id: id)
+  end
+
   # Override Devise email requirement
   def email_required?
     false

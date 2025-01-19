@@ -23,6 +23,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class MockInterviewProfile < ApplicationRecord
+  
   belongs_to :user
 
   validates :first_name, :recruiting_for, :technical_prep_level, presence: true
