@@ -33,6 +33,13 @@ class MockInterviewProfilesController < ApplicationController
     @mock_interview = MockInterview.find(params[:id])
     profile = current_user == @mock_interview.created_by ? @mock_interview.accepted_by.mock_interview_profile : @mock_interview.created_by.mock_interview_profile
 
+    # Updating the no show flag in the mock interview table to disable the buttons after submitting a reliability review
+    if current_user == @mock_interview.created_by
+      @mock_interview.update!(creator_reliability_flag: "no_show")
+    else
+      @mock_interview.update!(acceptor_reliability_flag: "no_show")
+    end
+
     # Increment no_show_count and recalculate reliability
     profile.increment!(:no_show_count)
     profile.calculate_reliability
@@ -43,6 +50,13 @@ class MockInterviewProfilesController < ApplicationController
   def update_late
     @mock_interview = MockInterview.find(params[:id])
     profile = current_user == @mock_interview.created_by ? @mock_interview.accepted_by.mock_interview_profile : @mock_interview.created_by.mock_interview_profile
+
+    # Updating the late flag in the mock interview table to disable the buttons after submitting a reliability review
+    if current_user == @mock_interview.created_by
+      @mock_interview.update!(creator_reliability_flag: "late")
+    else
+      @mock_interview.update!(acceptor_reliability_flag: "late")
+    end
 
     # Increment late_count and recalculate reliability
     profile.increment!(:late_count)

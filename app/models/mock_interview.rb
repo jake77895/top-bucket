@@ -2,16 +2,18 @@
 #
 # Table name: mock_interviews
 #
-#  id              :bigint           not null, primary key
-#  check_date_time :datetime
-#  start_date      :date             not null
-#  start_time      :time             not null
-#  status          :string           default("pending"), not null
-#  time_zone       :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  accepted_by_id  :bigint
-#  created_by_id   :bigint           not null
+#  id                        :bigint           not null, primary key
+#  acceptor_reliability_flag :string
+#  check_date_time           :datetime
+#  creator_reliability_flag  :string
+#  start_date                :date             not null
+#  start_time                :time             not null
+#  status                    :string           default("pending"), not null
+#  time_zone                 :string
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  accepted_by_id            :bigint
+#  created_by_id             :bigint           not null
 #
 # Indexes
 #

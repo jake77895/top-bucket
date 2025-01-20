@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_20_022524) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_20_183055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -230,6 +230,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_20_022524) do
     t.datetime "updated_at", null: false
     t.string "time_zone"
     t.datetime "check_date_time"
+    t.string "creator_reliability_flag"
+    t.string "acceptor_reliability_flag"
     t.index ["accepted_by_id"], name: "index_mock_interviews_on_accepted_by_id"
     t.index ["created_by_id"], name: "index_mock_interviews_on_created_by_id"
   end

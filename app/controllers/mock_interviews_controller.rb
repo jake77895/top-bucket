@@ -124,11 +124,15 @@ class MockInterviewsController < ApplicationController
     @accepted_mock_interviews = MockInterview.where(status: "accepted")
 
     # Fetching completed mock interviews
-      @completed_mock_interviews = MockInterview.where(status: "completed")
-      .where("check_date_time <= ?", Time.current + 1.hour)
-      .order(check_date_time: :desc)
-      .includes(:created_by, :accepted_by)
-
+    @completed_mock_interviews = if current_user.present?
+      MockInterview.where(status: "completed")
+                   .where("check_date_time <= ?", Time.current + 1.hour)
+                   .where("created_by_id = :user_id OR accepted_by_id = :user_id", user_id: current_user.id)
+                   .order(check_date_time: :desc)
+                   .includes(:created_by, :accepted_by)
+    else
+      []
+    end
 
     @past_meetings = [
       { title: "Mock Interview with Emily Johnson", date: "2025-01-10", time: "11:00 AM", description: "A detailed session on behavioral interviews" },
