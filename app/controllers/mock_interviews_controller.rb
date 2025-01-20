@@ -99,6 +99,8 @@ class MockInterviewsController < ApplicationController
 
   # Displays "Your Meetings" page
   def index
+    MockInterview.update_statuses_by_time 
+    
     @default_time_zone = "Eastern Time (US & Canada)" # Default to EST
     @selected_time_zone = params[:time_zone] || @default_time_zone
 
@@ -119,6 +121,8 @@ class MockInterviewsController < ApplicationController
 
   # Displays the meeting board
   def meeting_board
+    MockInterview.update_statuses_by_time 
+
     @default_time_zone = "Eastern Time (US & Canada)" # Default to EST
     @selected_time_zone = params[:time_zone] || @default_time_zone
 
@@ -185,10 +189,15 @@ class MockInterviewsController < ApplicationController
     Rails.logger.debug("Filtered Results: #{@pending_mock_interviews.inspect}")
   end
   
+  def update_mock_interview_statuses
+    MockInterview.update_statuses_by_time
+  end
 
   def mock_interview_params
     params.require(:mock_interview).permit(:start_date, :start_time, :time_zone)
   end
+
+
 
 
   

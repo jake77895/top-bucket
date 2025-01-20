@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_19_230953) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_19_234747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -213,6 +213,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_19_230953) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "reliability_metric", default: 50, null: false
+    t.string "time_zone", default: "Eastern Time (US & Canada)"
     t.index ["user_id"], name: "index_mock_interview_profiles_on_user_id"
   end
 

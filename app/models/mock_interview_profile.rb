@@ -11,6 +11,7 @@
 #  recruiting_for       :string
 #  reliability_metric   :integer          default(50), not null
 #  technical_prep_level :string
+#  time_zone            :string           default("Eastern Time (US & Canada)")
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  user_id              :bigint           not null

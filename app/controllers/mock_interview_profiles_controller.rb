@@ -31,7 +31,7 @@ class MockInterviewProfilesController < ApplicationController
   private
 
   def mock_interview_profile_params
-    params.require(:mock_interview_profile).permit(:first_name, :recruiting_for, :technical_prep_level, :organization, :linkedin_url, :preferred_language, :english_proficiency)
+    params.require(:mock_interview_profile).permit(:first_name, :recruiting_for, :technical_prep_level, :organization, :linkedin_url, :preferred_language, :english_proficiency, :time_zone)
   end
 
   def authorize_profile

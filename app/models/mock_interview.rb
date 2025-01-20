@@ -48,6 +48,32 @@ class MockInterview < ApplicationRecord
     update!(status: "cancelled")
   end
 
+  # Update statuses based on the current time
+  def self.update_statuses_by_time
+    Rails.logger.info "Updating mock interview statuses at #{Time.current}"
+
+    # Only check mock interviews with check_date_time today
+    today_start = Time.current.beginning_of_day
+    today_end = Time.current.end_of_day
+
+    scope = where(check_date_time: today_start..today_end)
+
+    # Cancel pending interviews
+    cancelled_interviews = scope.where(status: "pending")
+                                .where("check_date_time < ?", Time.current - 10.minutes)
+    cancelled_interviews.update_all(status: "cancelled", updated_at: Time.current)
+
+    Rails.logger.info "Cancelled #{cancelled_interviews.size} interviews: #{cancelled_interviews.pluck(:id)}"
+
+    # Mark accepted interviews as completed
+    completed_interviews = scope.where(status: "accepted")
+                                .where("check_date_time < ?", Time.current - 1.hour)
+    completed_interviews.update_all(status: "completed", updated_at: Time.current)
+
+    Rails.logger.info "Completed #{completed_interviews.size} interviews: #{completed_interviews.pluck(:id)}"
+  end
+  
+
   private
   
   def start_time_in_future

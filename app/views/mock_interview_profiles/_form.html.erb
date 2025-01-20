@@ -9,15 +9,23 @@
     <%= f.select :recruiting_for, options_for_select(@recruiting_for_options, @mock_interview_profile.recruiting_for), { include_blank: "Select a position" }, class: "form-select", required: true %>
   </div>
 
-<div class="mb-3">
-  <%= f.label :technical_prep_level, "Interview Readiness Level", class: "form-label" %>
-  <%= f.select :technical_prep_level, 
+  <div class="mb-3">
+    <%= f.label :technical_prep_level, "Interview Readiness Level", class: "form-label" %>
+    <%= f.select :technical_prep_level, 
         options_for_select(["Beginner", "Intermediate", "Advanced"], f.object.technical_prep_level), 
         {}, 
         class: "form-select", 
         required: true %>
-</div>
+  </div>
 
+  <div class="mb-3">
+  <%= f.label :time_zone, "Preferred Time Zone", class: "form-label" %>
+  <%= f.select :time_zone, 
+        ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] }, 
+        { selected: @mock_interview_profile.time_zone || "Eastern Time (US & Canada)" }, 
+        class: "form-select", 
+        required: true %>
+  </div>
 
   <div class="mb-3">
     <%= f.label :organization, "Organization (e.g., School or Employer) (Optional)", class: "form-label" %>
@@ -38,6 +46,6 @@
           class: "form-select" %>
   </div>
 
-<%= f.submit class: "btn btn-dark w-100" %>
+  <%= f.submit class: "btn btn-dark w-100" %>
 
 <% end %>
