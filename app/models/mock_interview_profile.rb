@@ -33,6 +33,7 @@ class MockInterviewProfile < ApplicationRecord
 
   validates :first_name, :recruiting_for, :technical_prep_level, presence: true
   validates :linkedin_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }, allow_blank: true
+  validate :user_must_have_profile_to_accept, if: -> { accepted_by.present? }
 
   # Ensure reliability metric is always between 0 and 100
   validates :reliability_metric, numericality: {
@@ -45,24 +46,40 @@ class MockInterviewProfile < ApplicationRecord
   MIN_RELIABILITY = 0
 
   def calculate_reliability
+    # Start with the current reliability metric
+    reliability = reliability_metric || 50 # Default to 50 if `reliability_metric` is nil
+  
     # Base reliability from total completes
-    completes_score = 50 + (20 * Math.log(total_completes + 1)).floor
-
-    # Penalty for no-shows (exponential impact)
-    no_show_penalty = no_show_count**2 * 5
-
-    # Penalty for late arrivals (moderate impact)
-    late_penalty = late_count * 3
-
+    completes_score = (5 * total_completes) # Each completion adds a flat 5 points
+  
+    # Penalty for no-shows (fixed impact)
+    no_show_penalty = no_show_count * 15 # Each no-show deducts 15 points
+  
+    # Penalty for late arrivals (fixed impact)
+    late_penalty = late_count * 10 # Each late deducts 10 points
+  
     # Calculate the final reliability metric
-    reliability = completes_score - no_show_penalty - late_penalty
+    reliability = reliability + completes_score - no_show_penalty - late_penalty
+  
+    # Clamp the reliability score to be within the allowed range
     reliability = [[reliability, MIN_RELIABILITY].max, MAX_RELIABILITY].min
-
+  
+    # Update the reliability_metric attribute in the database
     update!(reliability_metric: reliability)
   end
+  
 
   # Add this method to explicitly allow attributes to be searchable
   def self.ransackable_attributes(auth_object = nil)
     %w[first_name organization recruiting_for technical_prep_level preferred_language]
   end
+
+  private
+
+  def user_must_have_profile_to_accept
+    unless accepted_by&.mock_interview_profile
+      errors.add(:accepted_by, "must have a mock interview profile to accept a meeting.")
+    end
+  end
+
 end

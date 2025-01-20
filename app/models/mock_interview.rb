@@ -34,6 +34,12 @@ class MockInterview < ApplicationRecord
   validates :status, inclusion: { in: %w[pending accepted completed cancelled] }
   validate :start_time_in_future, if: :validate_start_time?
 
+  # Custom validation to restrict pending interviews
+  validate :pending_interview_limit, on: :create
+
+  # Custom validation to restrict overlapping meetings
+  validate :no_overlapping_meetings, on: :create
+
   # Add this method to explicitly allow attributes to be searchable
   def self.ransackable_attributes(auth_object = nil)
     %w[start_date check_date_time status] +
@@ -52,28 +58,37 @@ class MockInterview < ApplicationRecord
 
   # Update statuses based on the current time
   def self.update_statuses_by_time
-    Rails.logger.info "Updating mock interview statuses at #{Time.current}"
-
     # Only check mock interviews with check_date_time today
     today_start = Time.current.beginning_of_day
     today_end = Time.current.end_of_day
-
+  
     scope = where(check_date_time: today_start..today_end)
-
+  
     # Cancel pending interviews
     cancelled_interviews = scope.where(status: "pending")
                                 .where("check_date_time < ?", Time.current - 10.minutes)
     cancelled_interviews.update_all(status: "cancelled", updated_at: Time.current)
-
-    Rails.logger.info "Cancelled #{cancelled_interviews.size} interviews: #{cancelled_interviews.pluck(:id)}"
-
-    # Mark accepted interviews as completed
+  
+    # Select interviews eligible to transition to "completed"
     completed_interviews = scope.where(status: "accepted")
                                 .where("check_date_time < ?", Time.current - 1.hour)
-    completed_interviews.update_all(status: "completed", updated_at: Time.current)
-
-    Rails.logger.info "Completed #{completed_interviews.size} interviews: #{completed_interviews.pluck(:id)}"
+    
+    # Iterate over interviews to update status and associated user profiles
+    completed_interviews.each do |mock_interview|
+      previous_status = mock_interview.status
+  
+      # Update status explicitly to "completed"
+      if previous_status == "accepted" && mock_interview.update!(status: "completed")
+        # Only increment and recalculate reliability if the status was updated
+        [mock_interview.created_by, mock_interview.accepted_by].each do |user|
+          profile = user.mock_interview_profile
+          profile.increment!(:total_completes)
+          profile.calculate_reliability
+        end
+      end
+    end
   end
+  
   
 
   private
@@ -97,6 +112,32 @@ class MockInterview < ApplicationRecord
   # Determine if the validation should run
   def validate_start_time?
     new_record? || status == "accepted"
+  end
+
+  def pending_interview_limit
+    # Count the number of pending interviews for the current user
+    pending_count = MockInterview.where(created_by_id: created_by_id, status: "pending").count
+
+    # Restrict creation if the count exceeds 5
+    if pending_count >= 5
+      errors.add(:base, "You can only have up to 5 pending interviews at a time.")
+    end
+  end
+
+  def no_overlapping_meetings
+    # Define the time range for this meeting
+    meeting_start = check_date_time
+    meeting_end = check_date_time + 1.hour
+
+    # Check if any existing meetings overlap
+    overlapping_meeting = MockInterview.where(created_by_id: created_by_id)
+                                       .where.not(id: id) # Exclude the current meeting (important for updates)
+                                       .where("check_date_time < ? AND check_date_time + INTERVAL '1 hour' > ?", meeting_end, meeting_start)
+                                       .exists?
+
+    if overlapping_meeting
+      errors.add(:base, "You cannot create a meeting that overlaps with an existing one.")
+    end
   end
 
 

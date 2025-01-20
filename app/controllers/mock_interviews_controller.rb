@@ -1,20 +1,20 @@
 class MockInterviewsController < ApplicationController
   before_action :set_mock_interview, only: %i[accept complete destroy]
-  require 'icalendar'
+  require "icalendar"
 
   def calendar
     mock_interview = MockInterview.find(params[:id])
-  
+
     calendar = Icalendar::Calendar.new
     calendar.event do |e|
-      e.dtstart     = mock_interview.check_date_time
-      e.dtend       = mock_interview.check_date_time + 1.hour
-      e.summary     = "Mock Interview"
+      e.dtstart = mock_interview.check_date_time
+      e.dtend = mock_interview.check_date_time + 1.hour
+      e.summary = "Mock Interview"
       e.description = "Prepare for your mock interview!"
-      e.location    = "Online"
+      e.location = "Online"
     end
-  
-    send_data calendar.to_ical, filename: "mock_interview_#{mock_interview.id}.ics", type: 'text/calendar'
+
+    send_data calendar.to_ical, filename: "mock_interview_#{mock_interview.id}.ics", type: "text/calendar"
   end
 
   def new
@@ -52,8 +52,19 @@ class MockInterviewsController < ApplicationController
 
   # Allows another user to accept a pending interview
   def accept
+
+    if current_user.nil?
+      # User is not signed in
+      redirect_to meeting_board_mock_interviews_path, alert: "You must sign in and have a mock interview profile to accept a meeting."
+      return
+    elsif current_user.mock_interview_profile.nil?
+      # User is signed in but does not have a mock interview profile
+      redirect_to meeting_board_mock_interviews_path, alert: "You must create a mock interview profile to accept a meeting."
+      return
+    end
+
     @mock_interview = MockInterview.find(params[:id])
-  
+
     if @mock_interview.status == "pending" && @mock_interview.created_by != current_user
       if @mock_interview.update(accepted_by: current_user, status: "accepted")
         redirect_to mock_interviews_path, notice: "You have successfully joined the mock interview."
@@ -64,7 +75,7 @@ class MockInterviewsController < ApplicationController
       redirect_to meeting_board_mock_interviews_path, alert: "You cannot accept this mock interview."
     end
   end
-  
+
   # Marks an interview as completed
   def complete
     if @mock_interview.status == "accepted"
@@ -85,7 +96,7 @@ class MockInterviewsController < ApplicationController
 
   def reset
     @mock_interview = MockInterview.find(params[:id])
-    if @mock_interview.accepted_by == current_user || @mock_interview.created_by == current_user 
+    if @mock_interview.accepted_by == current_user || @mock_interview.created_by == current_user
       @mock_interview.update(status: "pending", accepted_by: nil)
       redirect_to meeting_board_mock_interviews_path, notice: "You have successfully reset the mock interview."
     else
@@ -106,9 +117,9 @@ class MockInterviewsController < ApplicationController
 
   # Displays "Your Meetings" page
   def index
-    MockInterview.update_statuses_by_time 
-    
-    # Set the default time zone based on the user's MockInterviewProfile  
+    MockInterview.update_statuses_by_time
+
+    # Set the default time zone based on the user's MockInterviewProfile
     if current_user.present?
       @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"
     else
@@ -125,14 +136,14 @@ class MockInterviewsController < ApplicationController
 
     # Fetching completed mock interviews
     @completed_mock_interviews = if current_user.present?
-      MockInterview.where(status: "completed")
-                   .where("check_date_time <= ?", Time.current + 1.hour)
-                   .where("created_by_id = :user_id OR accepted_by_id = :user_id", user_id: current_user.id)
-                   .order(check_date_time: :desc)
-                   .includes(:created_by, :accepted_by)
-    else
-      []
-    end
+        MockInterview.where(status: "completed")
+                     .where("check_date_time <= ?", Time.current + 1.hour)
+                     .where("created_by_id = :user_id OR accepted_by_id = :user_id", user_id: current_user.id)
+                     .order(check_date_time: :desc)
+                     .includes(:created_by, :accepted_by)
+      else
+        []
+      end
 
     @past_meetings = [
       { title: "Mock Interview with Emily Johnson", date: "2025-01-10", time: "11:00 AM", description: "A detailed session on behavioral interviews" },
@@ -141,13 +152,11 @@ class MockInterviewsController < ApplicationController
 
     # Fetch recruiting options for the profile
     set_recruiting_for_options
-
-
   end
 
   # Displays the meeting board
   def meeting_board
-    MockInterview.update_statuses_by_time 
+    MockInterview.update_statuses_by_time
 
     # Set the default time zone based on the user's MockInterviewProfile
     if current_user.present?
@@ -155,7 +164,7 @@ class MockInterviewsController < ApplicationController
     else
       @default_time_zone = "Eastern Time (US & Canada)"
     end
-    
+
     @selected_time_zone = params[:time_zone] || @default_time_zone
 
     # Filter available meetings
@@ -173,7 +182,6 @@ class MockInterviewsController < ApplicationController
     @time_options = generate_time_options
     @selected_time = @time_options.first[1] # Default to the first time slot if not provided
   end
-
 
   private
 
@@ -208,20 +216,19 @@ class MockInterviewsController < ApplicationController
 
   def convert_to_est(date, time, time_zone)
     return nil if date.blank? || time.blank? || time_zone.blank?
-  
+
     # Combine date and time, and parse it in the user's selected time zone
     time_with_zone = ActiveSupport::TimeZone[time_zone].parse("#{date} #{time}")
-  
+
     # Ensure both date and time are converted to Eastern Time
     time_with_zone&.in_time_zone("Eastern Time (US & Canada)")
   end
-  
+
   def filter_meetings
     @q = MockInterview.ransack(params[:q])
     @pending_mock_interviews = @q.result.includes(created_by: :mock_interview_profile).where(status: "pending")
-
   end
-  
+
   def update_mock_interview_statuses
     MockInterview.update_statuses_by_time
   end
@@ -229,10 +236,4 @@ class MockInterviewsController < ApplicationController
   def mock_interview_params
     params.require(:mock_interview).permit(:start_date, :start_time, :time_zone)
   end
-
-
-
-
-  
-  
 end
