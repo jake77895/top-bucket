@@ -58,7 +58,6 @@ class MockInterviewsController < ApplicationController
       if @mock_interview.update(accepted_by: current_user, status: "accepted")
         redirect_to mock_interviews_path, notice: "You have successfully joined the mock interview."
       else
-        Rails.logger.debug "Update failed: #{@mock_interview.errors.full_messages}"
         redirect_to meeting_board_mock_interviews_path, alert: "Unable to accept the mock interview due to an error."
       end
     else
@@ -109,11 +108,18 @@ class MockInterviewsController < ApplicationController
   def index
     MockInterview.update_statuses_by_time 
     
-    # Set the default time zone based on the user's MockInterviewProfile
-    @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"
+    # Set the default time zone based on the user's MockInterviewProfile  
+    if current_user.present?
+      @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"
+    else
+      @default_time_zone = "Eastern Time (US & Canada)"
+    end
+
     @selected_time_zone = params[:time_zone] || @default_time_zone
 
-    @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
+    if current_user.present?
+      @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
+    end
 
     @accepted_mock_interviews = MockInterview.where(status: "accepted")
 
@@ -140,15 +146,22 @@ class MockInterviewsController < ApplicationController
     MockInterview.update_statuses_by_time 
 
     # Set the default time zone based on the user's MockInterviewProfile
-    @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"
+    if current_user.present?
+      @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"
+    else
+      @default_time_zone = "Eastern Time (US & Canada)"
+    end
+    
     @selected_time_zone = params[:time_zone] || @default_time_zone
 
     # Filter available meetings
     filter_meetings
 
     @mock_interview = MockInterview.new
-    @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
 
+    if current_user.present?
+      @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
+    end
     # Fetch recruiting options for the profile
     set_recruiting_for_options
 
