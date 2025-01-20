@@ -226,7 +226,10 @@ class MockInterviewsController < ApplicationController
 
   def filter_meetings
     @q = MockInterview.ransack(params[:q])
-    @pending_mock_interviews = @q.result.includes(created_by: :mock_interview_profile).where(status: "pending")
+    @pending_mock_interviews = @q.result
+                             .includes(created_by: :mock_interview_profile)
+                             .where(status: "pending")
+                             .order(Arel.sql("(ABS(EXTRACT(EPOCH FROM check_date_time) - EXTRACT(EPOCH FROM NOW()))) ASC"))
   end
 
   def update_mock_interview_statuses
