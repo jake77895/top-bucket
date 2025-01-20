@@ -35,26 +35,44 @@
       </div>
     </div>
 
-    <!-- Past Meetings Accordion -->
     <h2 class="fw-bold mt-5">Past Meetings</h2>
-    <div class="accordion" id="pastMeetingsAccordion">
-      <% @past_meetings.each_with_index do |meeting, index| %>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="heading<%= index %>">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="false" aria-controls="collapse<%= index %>">
-              <%= meeting[:title] %> - <%= meeting[:date] %>
-            </button>
-          </h2>
-          <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#pastMeetingsAccordion">
-            <div class="accordion-body">
-              <p><strong>Time:</strong> <%= meeting[:time] %></p>
-              <p><strong>Description:</strong> <%= meeting[:description] %></p>
-              <a href="#" class="btn btn-dark">View Details</a>
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <% if @completed_mock_interviews.present? %>
+          <% @completed_mock_interviews.each do |mock_interview| %>
+            <% other_user = (mock_interview.created_by == current_user ? mock_interview.accepted_by : mock_interview.created_by) %>
+            <div class="d-flex justify-content-between align-items-center border-bottom py-3">
+              <!-- Other User Name -->
+              <div>
+                <h5 class="fw-bold mb-1">Mock Interview with <%= other_user.mock_interview_profile&.first_name || "Unknown Candidate" %></h5>
+                <p class="mb-0 text-muted"><strong>Date:</strong> <%= mock_interview.check_date_time.strftime("%B %d, %Y") %></p>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="d-flex align-items-center">
+                <div class="d-flex justify-content-between align-items-center">
+                  <%= button_to "Showed up late", 
+                        update_late_mock_interview_profile_path(mock_interview), 
+                        method: :patch, 
+                        class: "btn btn-warning me-2", 
+                        data: { confirm: "Are you sure you want to mark this as 'Showed up late'?" }%>
+
+                  <%= button_to "No Show", 
+                        update_no_show_mock_interview_profile_path(mock_interview), 
+                        method: :patch, 
+                        class: "btn btn-danger", 
+                        data: { confirm: "Are you sure you want to mark this as 'No Show'?" } %>
+                </div>
+
+              </div>
             </div>
-          </div>
-        </div>
-      <% end %>
+          <% end %>
+        <% else %>
+          <p class="text-muted mb-0">No completed mock interviews to show.</p>
+        <% end %>
+      </div>
     </div>
+
   </div>
 </div>
 

@@ -28,6 +28,29 @@ class MockInterviewProfilesController < ApplicationController
     end
   end
 
+
+  def update_no_show
+    @mock_interview = MockInterview.find(params[:id])
+    profile = current_user == @mock_interview.created_by ? @mock_interview.accepted_by.mock_interview_profile : @mock_interview.created_by.mock_interview_profile
+
+    # Increment no_show_count and recalculate reliability
+    profile.increment!(:no_show_count)
+    profile.calculate_reliability
+
+    redirect_to mock_interviews_path, notice: "Marked as 'No Show'."
+  end
+
+  def update_late
+    @mock_interview = MockInterview.find(params[:id])
+    profile = current_user == @mock_interview.created_by ? @mock_interview.accepted_by.mock_interview_profile : @mock_interview.created_by.mock_interview_profile
+
+    # Increment late_count and recalculate reliability
+    profile.increment!(:late_count)
+    profile.calculate_reliability
+
+    redirect_to mock_interviews_path, notice: "Marked as 'Showed up Late'."
+  end
+
   private
 
   def mock_interview_profile_params
@@ -37,4 +60,5 @@ class MockInterviewProfilesController < ApplicationController
   def authorize_profile
     redirect_to root_path, alert: "Access denied." unless current_user.mock_interview_profile
   end
+
 end

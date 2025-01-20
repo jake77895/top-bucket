@@ -188,7 +188,13 @@ Rails.application.routes.draw do
   
 
   # Public Routes for Creating Mock Interview Profiles
-  resources :mock_interview_profiles, only: [:new, :create, :edit, :update]
+  resources :mock_interview_profiles, only: [:new, :create, :edit, :update] do
+    member do
+      patch :update_late
+      patch :update_no_show
+    end
+  end
+  
 
 
 

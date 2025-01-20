@@ -2,7 +2,7 @@
   <div class="d-flex align-items-center">
     <select id="time-zone-select" name="time_zone" class="form-select me-2" style="width: auto;">
       <% ActiveSupport::TimeZone.all.each do |tz| %>
-        <option value="<%= tz.name %>" <%= "selected" if tz.name == params[:time_zone] || tz.name == @default_time_zone %>>
+        <option value="<%= tz.name %>" <%= "selected" if tz.name == @selected_time_zone || tz.name == @default_time_zone %>>
           <%= tz.name %> <!-- Displays plain time zone names like Central Time (US & Canada) -->
         </option>
       <% end %>

@@ -70,6 +70,14 @@ class MockInterviewsController < ApplicationController
   def complete
     if @mock_interview.status == "accepted"
       @mock_interview.update(status: "completed")
+
+      # Update total_completes and recalculate reliability for both users
+      [@mock_interview.created_by, @mock_interview.accepted_by].each do |user|
+        profile = user.mock_interview_profile
+        profile.increment!(:total_completes)
+        profile.calculate_reliability
+      end
+
       redirect_to mock_interviews_path, notice: "Mock interview marked as completed."
     else
       redirect_to mock_interviews_path, alert: "Unable to mark the mock interview as completed."
@@ -101,12 +109,20 @@ class MockInterviewsController < ApplicationController
   def index
     MockInterview.update_statuses_by_time 
     
-    @default_time_zone = "Eastern Time (US & Canada)" # Default to EST
+    # Set the default time zone based on the user's MockInterviewProfile
+    @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"
     @selected_time_zone = params[:time_zone] || @default_time_zone
 
     @mock_interview_profile = current_user.mock_interview_profile || current_user.build_mock_interview_profile
 
     @accepted_mock_interviews = MockInterview.where(status: "accepted")
+
+    # Fetching completed mock interviews
+      @completed_mock_interviews = MockInterview.where(status: "completed")
+      .where("check_date_time <= ?", Time.current + 1.hour)
+      .order(check_date_time: :desc)
+      .includes(:created_by, :accepted_by)
+
 
     @past_meetings = [
       { title: "Mock Interview with Emily Johnson", date: "2025-01-10", time: "11:00 AM", description: "A detailed session on behavioral interviews" },
@@ -123,7 +139,8 @@ class MockInterviewsController < ApplicationController
   def meeting_board
     MockInterview.update_statuses_by_time 
 
-    @default_time_zone = "Eastern Time (US & Canada)" # Default to EST
+    # Set the default time zone based on the user's MockInterviewProfile
+    @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"
     @selected_time_zone = params[:time_zone] || @default_time_zone
 
     # Filter available meetings
@@ -139,6 +156,7 @@ class MockInterviewsController < ApplicationController
     @time_options = generate_time_options
     @selected_time = @time_options.first[1] # Default to the first time slot if not provided
   end
+
 
   private
 
@@ -185,8 +203,6 @@ class MockInterviewsController < ApplicationController
     @q = MockInterview.ransack(params[:q])
     @pending_mock_interviews = @q.result.includes(created_by: :mock_interview_profile).where(status: "pending")
 
-    Rails.logger.debug("Ransack params: #{params[:q].inspect}")
-    Rails.logger.debug("Filtered Results: #{@pending_mock_interviews.inspect}")
   end
   
   def update_mock_interview_statuses

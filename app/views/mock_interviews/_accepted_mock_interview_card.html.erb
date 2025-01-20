@@ -76,49 +76,62 @@
       <hr class="my-3">
 
       <!-- Action Buttons -->
-      <div class="d-flex justify-content-between align-items-center">
-        <!-- Time Remaining -->
-        <div>
-          <% if mock_interview.check_date_time.present? %>
-            <% 
-        time_remaining = distance_of_time_in_words(Time.current, mock_interview.check_date_time, include_seconds: false)
-        hours_remaining = ((mock_interview.check_date_time - Time.current) / 1.hour).round
-        badge_class = hours_remaining <= 1 ? "bg-danger text-white" : "bg-secondary"
+<!-- Action Buttons -->
+<div class="d-flex justify-content-between align-items-center w-100">
+  <!-- Time Remaining -->
+  <div class="flex-grow-1 me-2">
+    <% if mock_interview.check_date_time.present? %>
+      <% 
+        if Time.current > mock_interview.check_date_time
+          time_remaining_text = "Already Started"
+          badge_class = "bg-danger text-white"
+        else
+          time_remaining = distance_of_time_in_words(Time.current, mock_interview.check_date_time, include_seconds: false)
+          hours_remaining = ((mock_interview.check_date_time - Time.current) / 1.hour).round
+          time_remaining_text = "Starts in #{time_remaining}"
+          badge_class = hours_remaining <= 1 ? "bg-danger text-white" : "bg-secondary"
+        end
       %>
-            <span class="badge <%= badge_class %>" style="font-size: 1rem; padding: 0.5rem 1rem; border-radius: 0.5rem;">
-              Starts in <%= time_remaining %>
-            </span>
-          <% else %>
-            <span class="badge bg-secondary" style="font-size: 1rem; padding: 0.5rem 1rem; border-radius: 0.5rem;">
-              Start time not set
-            </span>
-          <% end %>
-        </div>
+      <span class="badge <%= badge_class %> w-100 text-center" style="font-size: 1rem; padding: 0.5rem; border-radius: 0.5rem;">
+        <%= time_remaining_text %>
+      </span>
+    <% else %>
+      <span class="badge bg-secondary w-100 text-center" style="font-size: 1rem; padding: 0.5rem; border-radius: 0.5rem;">
+        Start time not set
+      </span>
+    <% end %>
+  </div>
 
-        <!-- Can't Make It Button -->
-        <% if mock_interview.check_date_time.present? && ((mock_interview.check_date_time - Time.current) / 1.hour).round > 1 %>
-          <%= button_to "Can't Make it", 
-          reset_mock_interview_path(mock_interview), 
-          method: :patch, 
-          class: "btn btn-light flex-grow-1 ms-3", 
-          data: { confirm: "Are you sure you can't make it? This will reset the status to 'pending'." } %>
-        <% end %>
-      </div>
+  <!-- Can't Make It Button -->
+  <% if mock_interview.check_date_time.present? && ((mock_interview.check_date_time - Time.current) / 1.hour).round > 1 %>
+    <div class="flex-grow-1">
+      <%= button_to "Can't Make it", 
+            reset_mock_interview_path(mock_interview), 
+            method: :patch, 
+            class: "btn btn-light w-100", 
+            data: { confirm: "Are you sure you can't make it? This will reset the status to 'pending'." } %>
+    </div>
+  <% end %>
+</div>
 
-      <hr>
 
-      <!-- Add to Calendar Buttons -->
-      <div class="d-flex justify-content-start mt-2">
-        <%= link_to "Add to Apple Calendar", calendar_mock_interview_path(mock_interview), class: "btn btn-light me-2", target: "_blank" %>
-        <%= link_to "Add to Google Calendar",
+
+
+
+    <hr>
+
+    <!-- Add to Calendar Buttons -->
+    <div class="d-flex justify-content-start mt-2">
+      <%= link_to "Add to Apple Calendar", calendar_mock_interview_path(mock_interview), class: "btn btn-light me-2", target: "_blank" %>
+      <%= link_to "Add to Google Calendar",
         "https://calendar.google.com/calendar/render?action=TEMPLATE" +
         "&text=Mock Interview" +
         "&dates=#{mock_interview.check_date_time.utc.strftime('%Y%m%dT%H%M%SZ')}/#{(mock_interview.check_date_time + 1.hour).utc.strftime('%Y%m%dT%H%M%SZ')}" +
         "&details=Prepare for your mock interview!" +
         "&location=Online",
         class: "btn btn-light", target: "_blank" %>
-      </div>
-
     </div>
+
   </div>
+</div>
 </div>
