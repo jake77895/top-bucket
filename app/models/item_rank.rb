@@ -16,6 +16,7 @@
 #  index_item_ranks_on_item_id       (item_id)
 #  index_item_ranks_on_tier_list_id  (tier_list_id)
 #  index_item_ranks_on_user_id       (user_id)
+#  unique_item_rank_per_user         (item_id,tier_list_id,user_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -30,6 +31,8 @@ class ItemRank < ApplicationRecord
   before_save :normalize_custom_values
 
   validate :custom_values_presence
+  validates :item_id, uniqueness: { scope: [:tier_list_id, :user_id], message: "You have already ranked this item in this tier list" }
+
 
   private
 

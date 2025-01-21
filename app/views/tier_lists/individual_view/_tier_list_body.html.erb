@@ -3,27 +3,20 @@
     <!-- Tier List Name with Info Icon -->
     <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
       <h5 class="mb-0 d-flex align-items-center">
-        <!-- Back Icon -->
         <%= link_to params[:origin_page] || root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center me-2', style: 'width: 30px; height: 30px;' do %>
           <span class="fs-6">&larr;</span>
         <% end %>
-        <!-- Tier List Name -->
         <%= @tier_list.name %>
-        <!-- Info Icon Trigger -->
         <%= link_to '#', data: { bs_toggle: 'modal', bs_target: '#tierListInfoModal' } do %>
           <%= image_tag 'icons/info_icon.svg', alt: 'Info', width: 20, height: 20, class: 'ms-2' %>
         <% end %>
       </h5>
-
-      <!-- Group Rankings Button -->
-      <%= link_to 'Group Rankings', group_tier_list_path(@tier_list, origin_page: params[:origin_page]), 
-          class: 'btn btn-light btn-sm fw-bold' %>
+      <%= link_to 'Group Rankings', group_tier_list_path(@tier_list, origin_page: params[:origin_page]), class: 'btn btn-light btn-sm fw-bold' %>
     </div>
 
     <!-- Tier List Content -->
     <div class="card-body">
       <div class="container-fluid">
-        <!-- Tiers Layout -->
         <% ["S", "A", "B", "C", "D", "F"].each_with_index do |tier, index| %>
           <div class="row align-items-center mb-3 g-0">
             <!-- Tier Label -->
@@ -41,31 +34,26 @@
               <div class="d-flex align-items-center gap-1 flex-wrap bg-white h-100 px-2 py-2" 
                    style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); border-radius: 0 8px 8px 0;">
 
-                <% ranked_items = @item_ranks.select { |rank| rank.rank == rank_value(tier) } %>
-                <% ranked_items.each do |rank| %>
+                <% ranked_items = @items_with_ranks.select { |entry| entry[:item_rank]&.rank == rank_value(tier) } %>
+                <% ranked_items.each do |entry| %>
                   <div class="position-relative text-center flex-shrink-0 overflow-hidden rounded"
                        style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa;"
-                       data-bs-toggle="modal" data-bs-target="#itemDetailsModal-<%= rank.item.id %>">
-                    <% if rank.item.picture.attached? %>
-                      <%= image_tag rank.item.picture, 
-                                    alt: rank.item.name, 
-                                    class: "img-fluid w-100 h-100 object-fit-cover" %>
+                       data-bs-toggle="modal" data-bs-target="#itemDetailsModal-<%= entry[:item].id %>">
+                    <% if entry[:item].picture.attached? %>
+                      <%= image_tag entry[:item].picture, alt: entry[:item].name, class: "img-fluid w-100 h-100 object-fit-cover" %>
                     <% else %>
-                      <%= image_tag "https://via.placeholder.com/62x62", 
-                                    alt: "Item Placeholder", 
-                                    class: "img-fluid w-100 h-100 object-fit-cover" %>
+                      <%= image_tag "https://via.placeholder.com/62x62", alt: "Item Placeholder", class: "img-fluid w-100 h-100 object-fit-cover" %>
                     <% end %>
-                    <!-- Item Name Overlay -->
                     <div class="position-absolute bottom-0 start-0 w-100 text-white bg-dark bg-opacity-75 px-1"
                          style="font-size: 0.7rem;">
-                      <strong><%= rank.item.name %></strong>
+                      <strong><%= entry[:item].name %></strong>
                     </div>
                   </div>
 
                   <!-- Include Item Details Modal for Each Item -->
                   <%= render partial: 'tier_lists/individual_view/item_details_modal', locals: { 
-                        item: rank.item, 
-                        custom_values: @item_custom_values.find { |cv| cv[:item_id] == rank.item.id }&.dig(:custom_values) 
+                        item: entry[:item], 
+                        custom_values: entry[:custom_values]
                       } %>
                 <% end %>
 
@@ -89,41 +77,10 @@
 
                 <!-- Render Tier Items Modal Partial -->
                 <%= render partial: 'tier_lists/individual_view/tier_items_modal', locals: { tier: tier, ranked_items: ranked_items } %>
-
               </div>
             </div>
           </div>
         <% end %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Tier List Info Modal -->
-<div class="modal fade" id="tierListInfoModal" tabindex="-1" aria-labelledby="tierListInfoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="tierListInfoModalLabel"><%= @tier_list.name %></h5>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="modal-body text-center">
-        <% if @tier_list.picture.attached? %>
-          <%= image_tag @tier_list.picture, class: 'img-thumbnail mb-3', style: 'width: 250px; height: 200px; object-fit: cover;' %>
-        <% else %>
-          <img src="https://via.placeholder.com/200x150" class="img-thumbnail mb-3" alt="Placeholder Image" style="width: 200px; height: 150px; object-fit: cover;">
-        <% end %>
-
-        <div class="border rounded p-3 text-start bg-light" style="max-height: 200px; overflow-y: auto;">
-          <p class="mb-0"><%= @tier_list.description.presence || "No description available." %></p>
-        </div>
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

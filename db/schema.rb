@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_21_012347) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_21_024312) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -170,6 +170,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_21_012347) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.index ["item_id", "tier_list_id", "user_id"], name: "unique_item_rank_per_user", unique: true
     t.index ["item_id"], name: "index_item_ranks_on_item_id"
     t.index ["tier_list_id"], name: "index_item_ranks_on_tier_list_id"
     t.index ["user_id"], name: "index_item_ranks_on_user_id"
