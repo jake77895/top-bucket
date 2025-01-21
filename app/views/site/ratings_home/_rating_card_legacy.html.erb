@@ -1,0 +1,27 @@
+<!-- Outer Card with Shared Border -->
+<div class="border p-2">
+  <!-- Inner Card Aligning Elements with Logo -->
+  <div class="d-flex align-items-center" style="height: 30px;">
+    <!-- Left Section with LinkedIn Logo -->
+    <div class="d-flex align-items-center" style="height: 30px;">
+      <!-- Logo Section -->
+      <%= image_tag 'external_logos/linkedIn.png', alt: 'LinkedIn Logo', style: 'width: 30px; height: 30px; margin-right: 10px;' %>
+
+      <!-- Text Section -->
+      <div class="d-flex flex-column justify-content-between" style="height: 100%;">
+        <h6 class="mb-0 text-start" style="line-height: 1; margin: 0;">LinkedIn Inc.</h6>
+        <small class="text-muted text-start" style="line-height: 0.95; margin: 0; font-size: 0.75rem;">LNKD coin</small>
+      </div>
+    </div>
+
+    <!-- Right Section with Top Bucket Icon -->
+    <div class="d-flex align-items-end ms-auto" style="height: 30px;">
+      <img src="/assets/custom_icons/top_bucket_icon.svg" alt="Top Bucket Icon" style="width: 30px; height: 30px; margin-right: 5px;">
+      <span class="text-muted text-start" style="line-height: 1; font-size: 0.7rem;">
+        24
+        <span class="text-start" style="display: block;">ratings</span>
+      </span>
+    </div>
+
+  </div>
+</div>

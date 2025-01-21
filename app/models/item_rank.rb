@@ -31,6 +31,8 @@ class ItemRank < ApplicationRecord
   before_save :normalize_custom_values
 
   validate :custom_values_presence
+  validate :user_must_be_signed_in
+  validates :rank, presence: { message: "cannot be nil" }
   validates :item_id, uniqueness: { scope: [:tier_list_id, :user_id], message: "You have already ranked this item in this tier list" }
 
 
@@ -46,6 +48,12 @@ class ItemRank < ApplicationRecord
   def normalize_custom_values
     if custom_values.is_a?(Hash)
       self.custom_values = custom_values.values
+    end
+  end
+
+  def user_must_be_signed_in
+    if user.nil?
+      errors.add(:user, "must be signed in to rank an item")
     end
   end
 end
