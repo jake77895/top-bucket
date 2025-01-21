@@ -57,37 +57,39 @@ class MockInterview < ApplicationRecord
   end
 
   # Update statuses based on the current time
-  def self.update_statuses_by_time
-    # Only check mock interviews with check_date_time today
+  def self.update_statuses_for_current_user(current_user)
+    # Define time range for today
     today_start = Time.current.beginning_of_day
     today_end = Time.current.end_of_day
   
+    # Narrow down the scope to only today's meetings involving the current_user
     scope = where(check_date_time: today_start..today_end)
+            .where("created_by_id = ? OR accepted_by_id = ?", current_user.id, current_user.id)
   
-    # Cancel pending interviews
-    cancelled_interviews = scope.where(status: "pending")
-                                .where("check_date_time < ?", Time.current - 10.minutes)
-    cancelled_interviews.update_all(status: "cancelled", updated_at: Time.current)
+    # Cancel pending interviews that are overdue
+    scope.where(status: "pending")
+         .where("check_date_time < ?", Time.current - 10.minutes)
+         .update_all(status: "cancelled", updated_at: Time.current)
   
-    # Select interviews eligible to transition to "completed"
+    # Identify accepted interviews that are eligible to be completed
     completed_interviews = scope.where(status: "accepted")
                                 .where("check_date_time < ?", Time.current - 1.hour)
-    
-    # Iterate over interviews to update status and associated user profiles
-    completed_interviews.each do |mock_interview|
-      previous_status = mock_interview.status
+                                .select(:id, :created_by_id, :accepted_by_id)
   
+    # Process each eligible interview
+    completed_interviews.find_each do |mock_interview|
       # Update status explicitly to "completed"
-      if previous_status == "accepted" && mock_interview.update!(status: "completed")
-        # Only increment and recalculate reliability if the status was updated
-        [mock_interview.created_by, mock_interview.accepted_by].each do |user|
-          profile = user.mock_interview_profile
+      if mock_interview.update(status: "completed", updated_at: Time.current)
+        # Update reliability for the users involved
+        [mock_interview.created_by_id, mock_interview.accepted_by_id].each do |user_id|
+          profile = User.find(user_id).mock_interview_profile
           profile.increment!(:total_completes)
           profile.calculate_reliability
         end
       end
     end
   end
+  
   
   
 

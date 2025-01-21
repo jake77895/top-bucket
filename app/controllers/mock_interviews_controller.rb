@@ -117,7 +117,9 @@ class MockInterviewsController < ApplicationController
 
   # Displays "Your Meetings" page
   def index
-    MockInterview.update_statuses_by_time
+    if current_user.present?
+      MockInterview.update_statuses_for_current_user(current_user)
+    end
 
     # Set the default time zone based on the user's MockInterviewProfile
     if current_user.present?
@@ -156,7 +158,9 @@ class MockInterviewsController < ApplicationController
 
   # Displays the meeting board
   def meeting_board
-    MockInterview.update_statuses_by_time
+    if current_user.present?
+      MockInterview.update_statuses_for_current_user(current_user)
+    end
 
     # Set the default time zone based on the user's MockInterviewProfile
     if current_user.present?
