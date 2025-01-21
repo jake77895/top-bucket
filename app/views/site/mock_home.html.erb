@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Left Column -->
       <div class="col-lg-3 col-md-4 col-sm-12">
-        <div class="card mb-4 ms-3" style="height: 375px; background-color: #FCFCFC;">
+        <div class="card mb-4 ms-3 shadow-sm border-0" style="height: 375px;">
           <div class="card-body text-center">
             <div class="d-flex justify-content-between">
               <h5 class="text-start m-2">Top Bucket</h5>
@@ -13,7 +13,7 @@
             <%= render partial: 'site/ratings_home/list_of_rating_cards_tb' %>
           </div>
         </div>
-        <div class="card mb-4 ms-3 shadow-sm" style="height: 375px;">
+        <div class="card mb-4 ms-3 shadow-sm border-0" style="height: 375px;"">
           <div class="card-body text-center">
             <div class="d-flex justify-content-between">
               <h5 class="text-start m-2">Bottom Bucket</h5>
@@ -29,17 +29,35 @@
       <div class="col-lg-6 col-md-8 col-sm-12">
         <div class="row">
           <!-- Top Cards -->
+          <!--Left Card-->
           <div class="col-md-6">
-            <div class="card mb-4 shadow-sm" style="height: 150px;">
+            <div class="card mb-4 shadow-sm border-0" style="height: 230px;">
               <div class="card-body text-center">
-                <h5>Card 1</h5>
+                <div class="d-flex justify-content-center ms-4">
+                  <%= render partial: 'site/mocks_home/overlapping_images_mocks' %>
+                </div>
+                <!-- Content in the middle of the card -->
+                <div class="mt-5 text-center" style="width: 300px; margin: 0 auto;">
+                  <h5>Mock Interview Meeting Board</h5>
+                  <p style="font-size: 0.8rem;">Practice mock interviews with peers pursuing similar career paths.</p>
+                  <%= link_to 'Book a Mock', meeting_board_mock_interviews_path, class: 'btn btn-dark rounded-pill py-1', style: 'width: 100%;' %>
+                </div>
               </div>
             </div>
           </div>
+          <!--Right Card-->
           <div class="col-md-6">
-            <div class="card mb-4 shadow-sm" style="height: 150px;">
+            <div class="card mb-4 shadow-sm border-0" style="height: 230px;">
               <div class="card-body text-center">
-                <h5>Card 2</h5>
+                <div class="d-flex justify-content-center ms-4">
+                  <%= render partial: 'site/mocks_home/overlapping_images_mocks' %>
+                </div>
+                <!-- Content in the middle of the card -->
+                <div class="mt-5 text-center" style="width: 300px; margin: 0 auto;">
+                  <h5>Career Coach Scheduling</h5>
+                  <p style="font-size: 0.8rem;">Work with a coach who’s succeeded in some of the world's most competitive interviews.</p>
+                  <%= link_to 'Book a Session', meeting_board_mock_interviews_path, class: 'btn btn-dark rounded-pill py-1', style: 'width: 100%;' %>
+                </div>
               </div>
             </div>
           </div>

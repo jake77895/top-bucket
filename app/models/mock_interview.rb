@@ -74,7 +74,6 @@ class MockInterview < ApplicationRecord
     # Identify accepted interviews that are eligible to be completed
     completed_interviews = scope.where(status: "accepted")
                                 .where("check_date_time < ?", Time.current - 1.hour)
-                                .select(:id, :created_by_id, :accepted_by_id)
   
     # Process each eligible interview
     completed_interviews.find_each do |mock_interview|
@@ -89,6 +88,7 @@ class MockInterview < ApplicationRecord
       end
     end
   end
+  
   
   
   
