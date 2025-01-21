@@ -7,7 +7,7 @@
           <div class="card-body text-center">
             <div class="d-flex justify-content-between">
               <h5 class="text-start m-2">Top Bucket</h5>
-              <p class="text-end m-2" style="font-size: 0.8rem;">View all</p>
+              <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
             </div>
             <%= render 'site/ratings_home/rating_card'%>
           </div>

@@ -33,7 +33,7 @@ class MockInterviewProfile < ApplicationRecord
 
   validates :first_name, :recruiting_for, :technical_prep_level, presence: true
   validates :linkedin_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }, allow_blank: true
-  validate :user_must_have_profile_to_accept, if: -> { accepted_by.present? }
+  # validate :user_must_have_profile_to_accept, if: -> { accepted_by_id.present? }
 
   # Ensure reliability metric is always between 0 and 100
   validates :reliability_metric, numericality: {

@@ -125,7 +125,7 @@ Rails.application.routes.draw do
   get '/pages/:slug', to: 'pages#show', as: 'page'
 
   # Public Routes for Viewing Individual TierLists
-  resources :tier_lists, only: [:show] do
+  resources :tier_lists, only: [:show, :index] do
     member do
       get :user_rankings
       get :group, to: 'tier_lists#show_group'

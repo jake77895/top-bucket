@@ -1,0 +1,45 @@
+<div class="container mb-4 mt-4">
+  <div class="card shadow-sm position-relative">
+    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <div class="card-body text-center bg-light">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">Tier Lists</h1>
+      <p class="text-muted" style="font-size: 14px;">Explore key professions and their details</p>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="accordion" id="categoryAccordion">
+    <% @tier_lists.group_by(&:category).each do |category, tier_lists| %>
+      <div class="card mb-3">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" id="heading-<%= category.parameterize %>">
+          <h5 class="mb-0">
+            <button class="btn btn-link text-white text-decoration-none" data-bs-toggle="collapse" data-bs-target="#collapse-<%= category.parameterize %>" aria-expanded="false" aria-controls="collapse-<%= category.parameterize %>">
+              <%= category.presence || "Uncategorized" %>
+            </button>
+          </h5>
+          <%= link_to '#', data: { bs_toggle: 'collapse', bs_target: "#collapse-#{category.parameterize}" }, class: 'd-flex align-items-center' do %>
+            <%= image_tag 'icons/arrow_toggle_icon.svg', alt: 'Toggle', style: 'width: 20px; height: 20px; filter: invert(1) brightness(2);' %>
+          <% end %>
+
+        </div>
+
+        <div id="collapse-<%= category.parameterize %>" class="collapse" aria-labelledby="heading-<%= category.parameterize %>" data-bs-parent="#categoryAccordion">
+          <div class="card-body">
+            <ul class="list-group">
+              <% tier_lists.each do |tier_list| %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <%= tier_list.name %>
+                  <%= link_to "View", group_tier_list_path(tier_list), class: "btn btn-dark btn-sm" %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

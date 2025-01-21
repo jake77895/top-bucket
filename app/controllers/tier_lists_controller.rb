@@ -1,6 +1,10 @@
 class TierListsController < ApplicationController
   helper_method :rank_value
 
+  def index
+    @tier_lists = TierList.all.order(:category, :name)
+  end
+
   # --- SHOW METHOD ---
   def show
     @tier_list = TierList.find(params[:id])

@@ -3,7 +3,7 @@
     <!-- Tier List Name with Info Icon -->
     <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
       <h5 class="mb-0 d-flex align-items-center">
-        <%= link_to params[:origin_page] || root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center me-2', style: 'width: 30px; height: 30px;' do %>
+        <%= link_to params[:origin_page] || tier_lists_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center me-2', style: 'width: 30px; height: 30px;' do %>
           <span class="fs-6">&larr;</span>
         <% end %>
         <%= @tier_list.name %>
