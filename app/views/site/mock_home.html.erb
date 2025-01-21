@@ -10,12 +10,17 @@
               <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
             </div>
             <%#= render 'site/ratings_home/rating_card'%>
-            <%= render partial: 'site/ratings_home/list_of_rating_cards' %>
+            <%= render partial: 'site/ratings_home/list_of_rating_cards_tb' %>
           </div>
         </div>
         <div class="card mb-4 ms-3 shadow-sm" style="height: 375px;">
           <div class="card-body text-center">
-            <h5>Bottom Bucket</h5>
+            <div class="d-flex justify-content-between">
+              <h5 class="text-start m-2">Bottom Bucket</h5>
+              <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
+            </div>
+            <%#= render 'site/ratings_home/rating_card'%>
+            <%= render partial: 'site/ratings_home/list_of_rating_cards_bb' %>
           </div>
         </div>
       </div>

@@ -1,0 +1,39 @@
+<%= link_to group_tier_list_path(ranking.tier_list_id), class: "text-decoration-none text-dark" do %>
+  <div class="p-2">
+    <div class="d-flex align-items-center" style="height: 30px;">
+      <div class="d-flex align-items-center" style="height: 30px;">
+        <% tier_list = TierList.find(ranking.tier_list_id) %>
+        <% if tier_list.category == "Investment Banking" %>
+          <% image_path = 'icons/ratings_icons/banker.png' %>
+        <% elsif tier_list.category == "Venture Capital" %>
+          <% image_path = 'icons/ratings_icons/venture_capital.png' %>
+        <% elsif tier_list.category == "Private Equity" %>
+          <% image_path = 'icons/ratings_icons/private_equity.png' %>
+        <% elsif tier_list.category == "Hedge Fund" %>
+          <% image_path = 'icons/ratings_icons/hedge_fund.png' %>
+        <% elsif tier_list.category == "Consulting" %>
+          <% image_path = 'icons/ratings_icons/consulting.png' %>
+        <% elsif tier_list.category == "Corporate Development" %>
+          <% image_path = 'icons/ratings_icons/corp_dev.png' %>
+        <% else %>
+          <% image_path = 'icons/ratings_icons/general.png' %>
+        <% end %>
+        <%= image_tag image_path, alt: ranking.item.name, style: 'width: 22px; height: 22px; margin-right: 8px;' %>
+        <div class="d-flex flex-column justify-content-between" style="height: 100%;">
+          <h6 class="mb-0 text-start" style="line-height: 1; margin: 0;"><%= ranking.item.name %></h6>
+          <small class="text-muted text-start" style="line-height: 0.95; margin: 0; font-size: 0.75rem;">
+            <%= shorten_name(tier_list.name) %>
+          </small>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-end ms-auto" style="height: 30px;">
+        <img src="/assets/custom_icons/top_bucket_icon.svg" alt="Top Bucket Icon" style="width: 30px; height: 30px; margin-right: 5px;">
+        <span class="text-muted text-start" style="line-height: 1; font-size: 0.7rem;">
+          <%= @user_ranking_counts_tb[ranking.tier_list_id] || 0 %>
+          <span class="text-start" style="display: block;">rankings</span>
+        </span>
+      </div>
+    </div>
+  </div>
+<% end %>
