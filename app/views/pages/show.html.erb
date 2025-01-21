@@ -9,14 +9,14 @@
     </div>
 
     <!-- Cover Image -->
-    <img src="<%= @page.cover_image.attached? ? url_for(@page.cover_image) : 'https://via.placeholder.com/1200x400' %>" 
+    <img src="<%= @page.cover_image.attached? ? url_for(@page.cover_image) : image_path('placeholders/pages/cover.jpeg') %>" 
         alt="Page Banner" 
         class="img-fluid w-100 rounded" 
         style="object-fit: cover; max-height: 400px;">
 
     <!-- Logo Overlay -->
     <div class="position-absolute" style="bottom: -50px; left: 20px;">
-      <img src="<%= @page.profile_image.attached? ? url_for(@page.profile_image) : 'https://via.placeholder.com/100' %>" 
+      <img src="<%= @page.profile_image.attached? ? url_for(@page.profile_image) : image_path('placeholders/pages/profile.jpeg') %>" 
           alt="Page Logo" 
           class="rounded-circle border border-white shadow-lg"
           style="width: 100px; height: 100px; object-fit: cover;">

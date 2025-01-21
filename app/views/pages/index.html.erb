@@ -1,8 +1,52 @@
-<h1>All Pages</h1>
-<ul class="list-group">
-  <% @pages.each do |page| %>
-    <li class="list-group-item">
-      <%= link_to page.name, page_path(page.slug), class: 'text-decoration-none' %>
-    </li>
-  <% end %>
-</ul>
+<div class="container mb-4 mt-4">
+  <div class="card shadow-sm position-relative">
+    <!-- Back Button -->
+    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">Knowledge Hub</h1>
+      <p class="text-muted" style="font-size: 14px;">What you know is a drop, what you don't know is an ocean</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Pages List -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">List</h5>
+    </div>
+    <div class="accordion" id="pagesAccordion">
+      <% @pages.where(parent_id: nil).each do |page| %>
+        <div class="accordion-item">
+          <h2 class="accordion-header d-flex justify-content-between align-items-center" id="heading-<%= page.id %>">
+            <button class="accordion-button collapsed flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<%= page.id %>" aria-expanded="false" aria-controls="collapse-<%= page.id %>">
+              <%= page.name %>
+            </button>
+            <%= link_to 'View', page_path(page.slug), class: 'btn btn-dark btn-sm me-3' %>
+          </h2>
+          <div id="collapse-<%= page.id %>" class="accordion-collapse collapse" aria-labelledby="heading-<%= page.id %>" data-bs-parent="#pagesAccordion">
+            <div class="accordion-body">
+              <!-- Subpages -->
+              <% child_pages = @pages.where(parent_id: page.id) %>
+              <% if child_pages.any? %>
+                <ul class="list-group list-group-flush">
+                  <% child_pages.each do |child_page| %>
+                    <li class="list-group-item">
+                      <%= link_to child_page.name, page_path(child_page.slug), class: 'text-decoration-none text-dark' %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <p class="text-muted">No subpages available.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

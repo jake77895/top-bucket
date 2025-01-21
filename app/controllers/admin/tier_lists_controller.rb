@@ -117,7 +117,8 @@ class Admin::TierListsController < ApplicationController
   def tier_list_params
     params.require(:tier_list).permit(
       :name, 
-      :description, 
+      :description,
+      :category, 
       :published,
       :tier_list_template_id,
       :picture, 

@@ -42,7 +42,7 @@ class Page < ApplicationRecord
 
   before_validation :generate_slug, on: :create
 
-  CATEGORY_OPTIONS = ['General', 'Banking'].freeze
+  CATEGORY_OPTIONS = ['General', 'Banking', 'Consulting', 'Venture Capital','Hedge Funds'].freeze
 
   private
 

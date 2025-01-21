@@ -3,9 +3,10 @@
 # Table name: tier_lists
 #
 #  id                    :bigint           not null, primary key
+#  category              :string
 #  custom_fields         :json
 #  description           :text
-#  name                  :string
+#  name                  :string           not null
 #  published             :boolean
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
