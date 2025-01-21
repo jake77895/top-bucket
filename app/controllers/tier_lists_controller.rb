@@ -20,29 +20,29 @@ class TierListsController < ApplicationController
                                   .includes(:item)
                                   .map { |rank| { item_id: rank.item_id, custom_values: rank.custom_values } }
 
-    if current_user.present?
-      # Fetch item ranks for the current user
-      @item_ranks = ItemRank.where(tier_list_id: @tier_list.id, user_id: current_user.id)
-                            .index_by(&:item_id) # Index ranks by item_id for efficient lookup
+  if current_user.present?
+    # Fetch item ranks for the current user
+    @item_ranks = ItemRank.where(tier_list_id: @tier_list.id, user_id: current_user.id)
+                          .index_by(&:item_id) # Index ranks by item_id for efficient lookup
 
-      # Combine items with their rank and custom values
-      @items_with_ranks = @items.map do |item|
-        {
-          item: item,
-          item_rank: @item_ranks[item.id], # Pass the full ItemRank object
-          custom_values: @item_custom_values.find { |cv| cv[:item_id] == item.id }&.dig(:custom_values),
-        }
-      end
-    else
-      # Handle the case when the user is not signed in
-      @items_with_ranks = @items.map do |item|
-        {
-          item: item,
-          item_rank: nil, # No rank since user is not signed in
-          custom_values: @item_custom_values.find { |cv| cv[:item_id] == item.id }&.dig(:custom_values),
-        }
-      end
+    # Combine items with their rank and custom values
+    @items_with_ranks = @items.map do |item|
+      {
+        item: item,
+        item_rank: @item_ranks[item.id], # Pass the full ItemRank object
+        custom_values: @item_custom_values.find { |cv| cv[:item_id] == item.id }&.dig(:custom_values),
+      }
     end
+  else
+    # Handle the case when the user is not signed in
+    @items_with_ranks = @items.map do |item|
+      {
+        item: item,
+        item_rank: nil, # No rank since user is not signed in
+        custom_values: @item_custom_values.find { |cv| cv[:item_id] == item.id }&.dig(:custom_values),
+      }
+    end
+  end
 
 
     # Determine the current item
