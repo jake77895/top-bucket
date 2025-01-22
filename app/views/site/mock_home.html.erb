@@ -9,7 +9,6 @@
               <h5 class="text-start m-2">Top Bucket</h5>
               <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
             </div>
-            <%#= render 'site/ratings_home/rating_card'%>
             <%= render partial: 'site/ratings_home/list_of_rating_cards_tb' %>
           </div>
         </div>
@@ -19,7 +18,6 @@
               <h5 class="text-start m-2">Bottom Bucket</h5>
               <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
             </div>
-            <%#= render 'site/ratings_home/rating_card'%>
             <%= render partial: 'site/ratings_home/list_of_rating_cards_bb' %>
           </div>
         </div>
@@ -112,17 +110,14 @@
 
           </div>
         </div>
-        <!-- Bottom Card -->
-
-<!--        <div class="card mb-4 shadow-sm border-0" style="height: 250px;">
-          <div class="card-body text-center">
-            <h5 class="text-start">Explore Trending Discussions</h5>
-            <nav class="nav" style="font-size: 0.8rem;">-->
 
         <div class="card mb-4 shadow-sm border-0" style="height: 246px;">
           <div class="card-body text-center">
             <!-- Title -->
-            <h5 class="text-start">Explore Career Paths</h5>
+            <div class="d-flex justify-content-between">
+              <h5 class="text-start">Explore Career Paths</h5>
+              <%= link_to "View all", pages_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
+            </div>
             <!-- Description -->
             <p class="text-start" style="font-size: 0.8rem;">
               Dive deeper into specific career areas with tailored insights, resources, and guidance.

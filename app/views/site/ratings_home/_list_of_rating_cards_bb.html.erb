@@ -1,6 +1,6 @@
 <div class="rating-cards-list">
   <% @group_rankings_tb.each do |ranking| %>
     <%= render partial: 'site/ratings_home/rating_card_bb', locals: { ranking: ranking } %>
-    <hr class="m-0 mb-1">
+    <hr class="m-0 mb-1 text-muted" style="opacity: 0.1;">
   <% end %>
 </div>
