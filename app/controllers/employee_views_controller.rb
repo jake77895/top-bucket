@@ -23,12 +23,12 @@ class EmployeeViewsController < ApplicationController
       .includes(:user)
       .order(created_at: :desc)
 
-    if params[:form_context].to_s.downcase == "networking" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "networking" && @employee.investment_banker?
       calculate_ib_networking_summary_metrics(@filtered_ratings)
       overall_ib_networking_impression(@filtered_ratings)
     end
 
-    if params[:form_context].to_s.downcase == "interview" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "interview" && @employee.investment_banker?
       calculate_ib_interview_summary_metrics(@filtered_ratings)
       overall_ib_interview_impression(@filtered_ratings)
       recieved_job_offer_ib_interview(@filtered_ratings)
@@ -120,7 +120,7 @@ class EmployeeViewsController < ApplicationController
     responses = ratings.pluck(:responses).map(&:compact)
 
     # Dynamically find question IDs based on question texts
-    if params[:form_context] == "networking" && @employee.position_type_id == 2
+    if params[:form_context] == "networking" && @employee.investment_banker?
       technical_question_id = FormTemplate.find_by(question_text: "Were you asked any technical questions?", form_context: params[:form_context])&.id.to_s
       deal_question_id = FormTemplate.find_by(question_text: "Were you asked about a deal?", form_context: params[:form_context].to_s.downcase)&.id.to_s
       trend_question_id = FormTemplate.find_by(question_text: "Were you asked about a market trend?", form_context: params[:form_context].to_s.downcase)&.id.to_s
@@ -134,7 +134,7 @@ class EmployeeViewsController < ApplicationController
     end
 
     # Most common tones
-    if params[:form_context].to_s.downcase == "networking" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "networking" && @employee.investment_banker?
       tone_question_id = FormTemplate.find_by(question_text: "How would you describe the tone of the conversation?", form_context: params[:form_context].to_s.downcase)&.id.to_s
       tones = responses.map { |r| r[tone_question_id] }.compact
       tone_counts = tones.tally
@@ -151,7 +151,7 @@ class EmployeeViewsController < ApplicationController
     responses = ratings.pluck(:responses).map(&:compact)
 
     # Dynamically find question IDs based on question texts
-    if params[:form_context].to_s.downcase == "interview" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "interview" && @employee.investment_banker?
       deal_question_id = FormTemplate.find_by(question_text: "Were you asked about a deal?", form_context: params[:form_context].to_s.downcase)&.id.to_s
       trend_question_id = FormTemplate.find_by(question_text: "Were you asked about a market trend?", form_context: params[:form_context].to_s.downcase)&.id.to_s
 
@@ -161,7 +161,7 @@ class EmployeeViewsController < ApplicationController
     end
 
     # Most common tones
-    if params[:form_context].to_s.downcase == "interview" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "interview" && @employee.investment_banker?
       tone_question_id = FormTemplate.find_by(question_text: "How would you describe the tone of the interview?", form_context: params[:form_context].to_s.downcase)&.id.to_s
       tones = responses.map { |r| r[tone_question_id] }.compact
       tone_counts = tones.tally
@@ -175,7 +175,7 @@ class EmployeeViewsController < ApplicationController
   end
 
   def overall_ib_networking_impression(ratings)
-    if params[:form_context].to_s.downcase == "networking" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "networking" && @employee.investment_banker?
       # Fetch the ID dynamically based on the question text
       impression_id = FormTemplate.find_by(question_text: "How would you rate your interaction?", form_context: params[:form_context].to_s.downcase)&.id.to_s
 
@@ -193,7 +193,7 @@ class EmployeeViewsController < ApplicationController
   end
 
   def overall_ib_interview_impression(ratings)
-    if params[:form_context].to_s.downcase == "interview" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "interview" && @employee.investment_banker?
       # Fetch the ID dynamically based on the question text
       impression_id = FormTemplate.find_by(question_text: "What was your overall impression of the interview?", form_context: params[:form_context].to_s.downcase)&.id.to_s
 
@@ -210,7 +210,7 @@ class EmployeeViewsController < ApplicationController
   end
 
   def recieved_job_offer_ib_interview(ratings)
-    if params[:form_context].to_s.downcase == "interview" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "interview" && @employee.investment_banker?
       # Fetch the ID dynamically based on the question text
       offer_id = FormTemplate.find_by(question_text: "Did you receive a job offer?", form_context: params[:form_context].to_s.downcase)&.id.to_s
 
@@ -228,7 +228,7 @@ class EmployeeViewsController < ApplicationController
   end
 
   def technical_difficulty_ib_interview(ratings)
-    if params[:form_context].to_s.downcase == "interview" && @employee.position_type_id == 2
+    if params[:form_context].to_s.downcase == "interview" && @employee.investment_banker?
       # Fetch the ID dynamically based on the question text
       technical_difficulty_id = FormTemplate.find_by(question_text: "How difficult were the technical questions?", form_context: params[:form_context].to_s.downcase)&.id.to_s
 

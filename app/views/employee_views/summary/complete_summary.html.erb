@@ -27,15 +27,21 @@
   </div>
 
   <!-- Context-Specific Rendering -->
-  <% if params[:form_context].to_s.downcase == 'networking' && @employee.position_type_id == 1 %>
+  <% if params[:form_context].to_s.downcase == 'networking' && @employee.position_type&.name == "Investment Banking" %>
+
+  <% Rails.logger.info "Form Context test: #{params[:form_context]}" %>
+<% Rails.logger.info "Employee Position Type Name: #{@employee.position_type&.name}" %>
+
     <!-- Networking Overview for Position Type 2 -->
     <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_networking', employee: @employee, employee_view: @employee_view %>
     <%= render 'employee_views/summary/recap_cards', ratings: @filtered_ratings %>
-  <% elsif params[:form_context].to_s.downcase == 'interview' && @employee.position_type_id == 2 %>
+  <% elsif params[:form_context].to_s.downcase == 'interview' && @employee.investment_banker? %>
     <!-- Interview Overview for Position Type 2 -->
     <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_interview', employee: @employee, employee_view: @employee_view %>
     <%= render 'employee_views/summary/recap_cards', ratings: @filtered_ratings %>
   <% else %>
+    <% Rails.logger.info "Form Context test2: #{params[:form_context]}" %>
+<% Rails.logger.info "Employee Position Type Name: #{@employee.position_type&.name}" %>
     <p class="text-center">This view is not applicable for the selected context or employee position type.</p>
   <% end %>
 </div>
