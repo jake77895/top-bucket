@@ -9,9 +9,9 @@ class ForumCommentsController < ApplicationController
     @forum_comment.parent_id = params[:forum_comment][:parent_id] if params[:forum_comment][:parent_id].present?
 
     if @forum_comment.save
-      redirect_to post_path(@post), notice: 'Comment added successfully.'
+      redirect_to forum_room_post_path(@post.forum_room, @post), notice: 'Comment added successfully.'
     else
-      redirect_to post_path(@post), alert: 'Failed to add comment.'
+      redirect_to forum_room_post_path(@post.forum_room, @post), alert: 'Failed to add comment.'
     end
   end
 
@@ -19,9 +19,9 @@ class ForumCommentsController < ApplicationController
     @forum_comment = ForumComment.find(params[:id])
     if @forum_comment.user == current_user
       @forum_comment.destroy
-      redirect_to post_path(@forum_comment.post), notice: 'Comment deleted successfully.'
+      redirect_to forum_room_post_path(@forum_comment.post.forum_room, @forum_comment.post), notice: 'Comment deleted successfully.'
     else
-      redirect_to post_path(@forum_comment.post), alert: 'You can only delete your own comments.'
+      redirect_to orum_room_post_path(@forum_comment.post.forum_room, @forum_comment.post), alert: 'You can only delete your own comments.'
     end
   end
 

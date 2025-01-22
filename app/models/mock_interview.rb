@@ -58,13 +58,13 @@ class MockInterview < ApplicationRecord
 
   # Update statuses based on the current time
   def self.update_statuses_for_current_user(current_user)
+
     # Define time range for today
     today_start = Time.current.beginning_of_day
     today_end = Time.current.end_of_day
   
     # Narrow down the scope to only today's meetings involving the current_user
-    scope = where(check_date_time: today_start..today_end)
-            .where("created_by_id = ? OR accepted_by_id = ?", current_user.id, current_user.id)
+    scope = where("created_by_id = ? OR accepted_by_id = ?", current_user.id, current_user.id)
   
     # Cancel pending interviews that are overdue
     scope.where(status: "pending")
@@ -87,12 +87,9 @@ class MockInterview < ApplicationRecord
         end
       end
     end
+
   end
   
-  
-  
-  
-
   private
   
   def start_time_in_future
@@ -102,8 +99,6 @@ class MockInterview < ApplicationRecord
     
     now = Time.current
 
-    Rails.logger.debug("Check Date Time: #{check_date_time }")
-    Rails.logger.debug("Check Now: #{now}")
 
     # Validate that the start time is at least 30 minutes in the future
     if check_date_time < now + 30.minutes

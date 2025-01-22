@@ -1,27 +1,43 @@
 <h5>Comments</h5>
 <% if @forum_comments.present? %>
   <ul class="list-group mb-4">
-    <% @forum_comments.each do |forum_comment| %>
+    <% @forum_comments.where(parent_id: nil).each do |forum_comment| %>
       <li class="list-group-item">
-        <p class="fw-bold"><%= forum_comment.user.user_name %> says:</p>
-        <p><%= forum_comment.body %></p>
+        <p class="fw-bold mb-2">
+          <%= forum_comment.user.user_name %>
+          <span class="text-muted small">· <%= time_ago_in_words(forum_comment.created_at) %> ago</span>
+        </p>
+        <p class="mb-0"><%= forum_comment.body %></p>
 
-        <!-- Nested Replies -->
-        <% forum_comment.replies.each do |reply| %>
-          <div class="ms-4 border-start ps-3">
-            <p class="fw-bold"><%= reply.user.user_name %> replies:</p>
-            <p><%= reply.body %></p>
-          </div>
-        <% end %>
+        <!-- Reply Section -->
+        <div class="reply-section">
+          <!-- Reply Button with Icon -->
+          <button 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#reply-form-<%= forum_comment.id %>" 
+            aria-expanded="false" 
+            aria-controls="reply-form-<%= forum_comment.id %>" 
+            class="p-0 border-0 bg-transparent">
+            <%= image_tag "icons/chat.svg", alt: "Reply", class: "icon-class" %>
+          </button>
 
-        <!-- Reply Form -->
-        <%= form_with(model: [@post.forum_room, @post, ForumComment.new], local: true) do |form| %>
-          <div class="mb-2">
-            <%= form.hidden_field :parent_id, value: forum_comment.id %>
-            <%= form.text_area :body, class: 'form-control', rows: 2, placeholder: 'Write a reply...' %>
+          <!-- Collapsible Reply Form -->
+          <div class="collapse mt-2" id="reply-form-<%= forum_comment.id %>">
+            <%= form_with(model: [@post.forum_room, @post, ForumComment.new], local: true) do |form| %>
+              <div class="mb-2">
+                <%= form.hidden_field :parent_id, value: forum_comment.id %>
+                <%= form.text_area :body, class: 'form-control', rows: 2, placeholder: 'Write a reply...' %>
+              </div>
+              <div class="d-flex justify-content-end">
+                <%= form.submit 'Reply', class: 'btn btn-sm btn-dark' %>
+              </div>
+            <% end %>
           </div>
-          <%= form.submit 'Reply', class: 'btn btn-sm btn-dark' %>
-        <% end %>
+        </div>
+
+        <!-- Render Nested Replies -->
+        <%= render partial: "posts/nested_comment", locals: { forum_comment: forum_comment } %>
       </li>
     <% end %>
   </ul>

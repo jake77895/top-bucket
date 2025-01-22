@@ -1,0 +1,96 @@
+<% replies = forum_comment.replies %>
+
+<!-- Only render replies if they exist -->
+<% if replies.any? %>
+  <% if replies.count > 2 %>
+    <!-- Collapsible Replies Section -->
+    <button 
+      type="button" 
+      class="btn btn-link text-decoration-none p-0" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#nested-replies-<%= forum_comment.id %>" 
+      aria-expanded="false" 
+      aria-controls="nested-replies-<%= forum_comment.id %>">
+      View all replies (<%= replies.count %>)
+    </button>
+
+    <div class="collapse mt-2" id="nested-replies-<%= forum_comment.id %>">
+      <% replies.each do |reply| %>
+        <div class="ms-4 border-start ps-3 mb-2">
+          <p class="fw-bold mb-2">
+            <%= reply.user.user_name %>
+            <span class="text-muted small">· <%= time_ago_in_words(reply.created_at) %> ago</span>
+          </p>
+          <p class="mb-0"><%= reply.body %></p>
+
+          <!-- Reply Section for Each Nested Reply -->
+          <div class="reply-section">
+            <button 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#reply-form-<%= reply.id %>" 
+              aria-expanded="false" 
+              aria-controls="reply-form-<%= reply.id %>" 
+              class="p-0 border-0 bg-transparent mb-2">
+              <%= image_tag "icons/chat.svg", alt: "Reply", class: "icon-class" %>
+            </button>
+
+            <div class="collapse mt-2" id="reply-form-<%= reply.id %>">
+              <%= form_with(model: [@post.forum_room, @post, ForumComment.new], local: true) do |form| %>
+                <div class="mb-2">
+                  <%= form.hidden_field :parent_id, value: reply.id %>
+                  <%= form.text_area :body, class: 'form-control', rows: 2, placeholder: 'Write a reply...' %>
+                </div>
+                <div class="d-flex justify-content-end">
+                  <%= form.submit 'Reply', class: 'btn btn-sm btn-dark' %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Recursively Render Nested Replies -->
+          <%= render partial: "posts/nested_comment", locals: { forum_comment: reply } %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- Render replies directly if 2 or fewer -->
+    <% replies.each do |reply| %>
+      <div class="ms-4 border-start ps-3 mb-2">
+        <p class="fw-bold mb-2">
+          <%= reply.user.user_name %>
+          <span class="text-muted small">· <%= time_ago_in_words(reply.created_at) %> ago</span>
+        </p>
+        <p class="mb-0"><%= reply.body %></p>
+
+        <!-- Reply Section for Each Nested Reply -->
+        <div class="reply-section">
+          <button 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#reply-form-<%= reply.id %>" 
+            aria-expanded="false" 
+            aria-controls="reply-form-<%= reply.id %>" 
+            class="p-0 border-0 bg-transparent mb-2">
+            <%= image_tag "icons/chat.svg", alt: "Reply", class: "icon-class" %>
+          </button>
+
+          <div class="collapse mt-2" id="reply-form-<%= reply.id %>">
+            <%= form_with(model: [@post.forum_room, @post, ForumComment.new], local: true) do |form| %>
+              <div class="mb-2">
+                <%= form.hidden_field :parent_id, value: reply.id %>
+                <%= form.text_area :body, class: 'form-control', rows: 2, placeholder: 'Write a reply...' %>
+              </div>
+              <div class="d-flex justify-content-end">
+                <%= form.submit 'Reply', class: 'btn btn-sm btn-dark' %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Recursively Render Nested Replies -->
+        <%= render partial: "posts/nested_comment", locals: { forum_comment: reply } %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

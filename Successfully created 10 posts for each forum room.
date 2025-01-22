@@ -1,0 +1,24 @@
+=> [[32m#<ForumRoom:0x000077c148dc35d0[0m
+  id: [1;34m4[0m,
+  name: [31m[1;31m"[0m[31mFinance[1;31m"[0m[31m[0m,
+  description: [31m[1;31m"[0m[31mDiscussions about financial topics and industry insights.[1;31m"[0m[31m[0m,
+  created_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m758710000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m,
+  updated_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m758710000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m[32m>[0m,
+ [32m#<ForumRoom:0x000077c148dc3350[0m
+  id: [1;34m5[0m,
+  name: [31m[1;31m"[0m[31mTechnical Questions[1;31m"[0m[31m[0m,
+  description: [31m[1;31m"[0m[31mAsk and answer technical questions related to coding, debugging, and problem-solving.[1;31m"[0m[31m[0m,
+  created_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m768622000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m,
+  updated_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m768622000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m[32m>[0m,
+ [32m#<ForumRoom:0x000077c148dc30d0[0m
+  id: [1;34m6[0m,
+  name: [31m[1;31m"[0m[31mRate My Chances[1;31m"[0m[31m[0m,
+  description: [31m[1;31m"[0m[31mGet feedback on your chances for jobs, admissions, or opportunities.[1;31m"[0m[31m[0m,
+  created_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m771053000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m,
+  updated_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m771053000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m[32m>[0m,
+ [32m#<ForumRoom:0x000077c148dc2e50[0m
+  id: [1;34m7[0m,
+  name: [31m[1;31m"[0m[31mRecruiting Results[1;31m"[0m[31m[0m,
+  description: [31m[1;31m"[0m[31mShare and discuss outcomes of recruiting processes and experiences.[1;31m"[0m[31m[0m,
+  created_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m773810000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m,
+  updated_at: [1;34;4mWed[0m, [1;34m22[0m [1;34;4mJan[0m [1;34m2025[0m [1;34m18[0m:[1;34m20[0m:[1;34m07[0m.[1;37;41m773810000[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m[32m>[0m]
