@@ -63,19 +63,48 @@
           </div>
         </div>
         <!-- Wide Card -->
-        <div class="card mb-4 shadow-sm" style="height: 250px;">
+        <div class="card mb-4 shadow-sm border-0" style="height: 250px;">
           <div class="card-body text-center">
             <h5 class="text-start">Explore Trending Discussions</h5>
             <nav class="nav" style="font-size: 0.8rem;">
-              <a class="nav-link text-black fw-bold p-0" href="#" style="text-decoration: none;">Finance</a>
+              <a 
+                class="nav-link text-black fw-bold p-0" 
+                href="<%= forum_room_path(ForumRoom.find_by(name: 'Finance')) %>" 
+                style="text-decoration: none;">
+                Finance
+              </a>
+
               <span class="px-2">|</span>
-              <a class="nav-link text-muted p-0" href="#" style="text-decoration: none;">Technical Questions</a>
+              <a 
+                class="nav-link text-muted p-0" 
+                href="<%= forum_room_path(ForumRoom.find_by(name: 'Technical Questions')) %>" 
+                style="text-decoration: none;">
+                Technical Questions
+              </a>
               <span class="px-2">|</span>
-              <a class="nav-link text-muted p-0" href="#" style="text-decoration: none;">Rate My Chances</a>
+              <a 
+                class="nav-link text-muted p-0" 
+                href="<%= forum_room_path(ForumRoom.find_by(name: 'Rate My Chances')) %>" 
+                style="text-decoration: none;">
+                Rate My Chances
+              </a>
+
               <span class="px-2">|</span>
-              <a class="nav-link text-muted p-0" href="#" style="text-decoration: none;">Recruiting Results</a>
+              <a 
+                class="nav-link text-muted p-0" 
+                href="<%= forum_room_path(ForumRoom.find_by(name: 'Recruiting Results')) %>" 
+                style="text-decoration: none;">
+                Recruiting Results
+              </a>
+
               <span class="px-2">|</span>
-              <a class="nav-link text-muted p-0" href="#" style="text-decoration: none;">All Categories</a>
+              <a 
+                class="nav-link text-muted p-0" 
+                href="<%= forum_rooms_path %>" 
+                style="text-decoration: none;">
+                All Forum Rooms
+              </a>
+              
             </nav>
           </div>
         </div>
