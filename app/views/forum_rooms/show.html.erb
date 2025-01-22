@@ -15,31 +15,46 @@
     </div>
   </div>
 
+  <div class="container">
 
-<div class="container">
-
-  <!-- Button to Create Post -->
-  <div class="d-flex justify-content-end mb-3">
-    <%= link_to 'Create Post', new_forum_room_post_path(@forum_room), class: 'btn btn-dark' %>
-  </div>
-
-  <!-- List of Posts -->
-  <div class="card shadow-sm border-0">
-    <div class="card-header bg-dark text-white">
-      <h5 class="mb-0">Posts in <%= @forum_room.name %></h5>
+    <!-- Button to Create Post -->
+    <div class="d-flex justify-content-end mb-3">
+      <%= link_to 'Create Post', new_forum_room_post_path(@forum_room), class: 'btn btn-dark' %>
     </div>
-    <ul class="list-group list-group-flush">
-      <% @posts.each do |post| %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong><%= link_to post.title, forum_room_post_path(post.forum_room, post), class: 'text-dark'  %></strong>
-            <div class="text-muted">
-              Posted by: <%= post.user.user_name %> | <%= time_ago_in_words(post.created_at) %> ago
-            </div>
-          </div>
-        </li>
-      <% end %>
-    </ul>
+
+   <!-- List of Posts -->
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-dark text-white">
+    <h5 class="mb-0">Posts in <%= @forum_room.name %></h5>
   </div>
+  <ul class="list-group list-group-flush">
+    <% @posts.each do |post| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <!-- Left Section: Title and Meta Info -->
+        <div>
+          <strong>
+            <%= link_to post.title, forum_room_post_path(post.forum_room, post), class: 'text-dark' %>
+          </strong>
+          <div class="text-muted">
+            Posted by: <%= post.user.user_name %> | <%= time_ago_in_words(post.created_at) %> ago
+          </div>
+        </div>
+
+        <!-- Right Section: Comment Count -->
+        <div>
+          <span 
+            class="badge rounded-pill bg-light text-secondary border border-secondary" 
+            style="width: 100px; text-align: center; padding: 0.25rem 0; white-space: nowrap;">
+            <%= pluralize(post.forum_comments.size, 'comment') %>
+          </span>
+        </div>
+
+
+
+      </li>
+    <% end %>
+  </ul>
 </div>
+
+  </div>
 </div>
