@@ -1,4 +1,13 @@
 class EmployeeViewsController < ApplicationController
+  def index
+    @employee_views = EmployeeView
+    .left_joins(:employees)
+    .select('employee_views.*, COUNT(employees.id) AS employee_count')
+    .group('employee_views.id')
+    .order(created_at: :desc)
+
+  end
+  
   def summary
     @employee_view = EmployeeView.find(params[:id])
     @employee = Employee.find(params[:employee_id])

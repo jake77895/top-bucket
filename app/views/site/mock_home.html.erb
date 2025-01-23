@@ -133,12 +133,17 @@
 
       <!-- Right Column -->
       <div class="col-lg-3 col-md-4 col-sm-12">
-        <div class="card mb-4 me-3 shadow-sm" style="height: 150px;">
+        <div class="card mb-4 me-3 shadow-sm border-0" style="height: 150px;">
           <div class="card-body text-center">
-            <h5>Top Card</h5>
+            <div class="d-flex justify-content-between">
+              <h5 class="text-start">Networking & Interview Recaps</h5>
+              <%= link_to "View all", employee_views_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
+            </div>
+            <hr class="m-0 mb-1 text-muted" style="opacity: 0.1;">
           </div>
+          <%= render 'site/recaps_home/recap_card'%>
         </div>
-        <div class="card mb-4 me-3 shadow-sm" style="height: 200px;">
+        <div class="mt-5 card mb-4 me-3 shadow-sm" style="height: 200px;">
           <div class="card-body text-center">
             <h5>Middle Card</h5>
           </div>
