@@ -68,10 +68,6 @@ class Employee < ApplicationRecord
 
   before_save :purge_picture, if: -> { remove_picture == '1' }
 
-  def investment_banker?
-    position_type&.name == "Investment Banker"
-  end
-
    # Ransack: Allowlisted searchable attributes
    def self.ransackable_attributes(auth_object = nil)
     [

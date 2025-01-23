@@ -16,32 +16,35 @@
 
       <!-- Switch Buttons -->
       <div class="btn-group mt-0" role="group">
-        <%= link_to 'Networking', 
-                      summary_employee_view_path(@employee_view, @employee, form_context: 'networking'), 
-                      class: "btn btn-outline-dark #{params[:form_context].to_s.downcase == 'networking' ? 'active' : ''}" %>
-        <%= link_to 'Interviews', 
-                      summary_employee_view_path(@employee_view, @employee, form_context: 'interview'), 
-                      class: "btn btn-outline-dark #{params[:form_context].to_s.downcase == 'interview' ? 'active' : ''}" %>
-      </div>
+          <%= link_to summary_employee_view_path(@employee_view, @employee, form_context: 'networking'),
+                      class: "btn btn-outline-dark #{params[:form_context].to_s.downcase == 'networking' ? 'active' : ''} #{'disabled' if @filtered_ratings.nil?}",
+                      data: { bs_toggle: 'tooltip' },
+                      title: (@filtered_ratings == 0 ? 'No recaps available' : '') do %>
+            Networking
+          <% end %>
+
+          <%= link_to summary_employee_view_path(@employee_view, @employee, form_context: 'interview'),
+                      class: "btn btn-outline-dark #{params[:form_context].to_s.downcase == 'interview' ? 'active' : ''} #{'disabled' if @filtered_ratings.nil?}",
+                      data: { bs_toggle: 'tooltip' },
+                      title: (@filtered_ratings == 0 ? 'No recaps available' : '') do %>
+            Interviews
+          <% end %>
+        </div>
+
     </div>
   </div>
 
   <!-- Context-Specific Rendering -->
-  <% if params[:form_context].to_s.downcase == 'networking' && @employee.position_type&.name == "Investment Banking" %>
-
-  <% Rails.logger.info "Form Context test: #{params[:form_context]}" %>
-<% Rails.logger.info "Employee Position Type Name: #{@employee.position_type&.name}" %>
-
-    <!-- Networking Overview for Position Type 2 -->
+  <% if params[:form_context].to_s.downcase == 'networking' && @employee.position_type&.name == "Investment Banking" && @filtered_ratings.count != 0 %>
+    <!-- Networking Overview for Investment Banking -->
     <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_networking', employee: @employee, employee_view: @employee_view %>
     <%= render 'employee_views/summary/recap_cards', ratings: @filtered_ratings %>
-  <% elsif params[:form_context].to_s.downcase == 'interview' && @employee.investment_banker? %>
-    <!-- Interview Overview for Position Type 2 -->
+  <% elsif params[:form_context].to_s.downcase == 'interview' && @employee.position_type&.name == "Investment Banking" && @filtered_ratings.count != 0 %>
+    <!-- Interview Overview for Investment Banking -->
     <%= render 'employee_views/summary/overview_summaries/overview_summary_IB_interview', employee: @employee, employee_view: @employee_view %>
     <%= render 'employee_views/summary/recap_cards', ratings: @filtered_ratings %>
   <% else %>
-    <% Rails.logger.info "Form Context test2: #{params[:form_context]}" %>
-<% Rails.logger.info "Employee Position Type Name: #{@employee.position_type&.name}" %>
     <p class="text-center">This view is not applicable for the selected context or employee position type.</p>
   <% end %>
 </div>
+

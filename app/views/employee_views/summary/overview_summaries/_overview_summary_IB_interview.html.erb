@@ -8,7 +8,9 @@
           <h5 class="card-title">Overall Impression</h5>
           <% total_responses = @impression_data.values.sum %>
           <% @impression_data.each do |label, count| %>
-            <% percentage = (count * 100 / total_responses).round(0) %>
+            <% if total_responses > 0 %>
+              <% percentage = (count * 100 / total_responses).round(0) %>
+            <% end %>
             <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="fw-bold"><%= label %></span>
               <span class="badge bg-primary"><%= percentage %>%</span>
