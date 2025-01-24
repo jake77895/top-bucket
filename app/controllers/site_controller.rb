@@ -1,5 +1,6 @@
 class SiteController < ApplicationController
   helper_method :shorten_name
+  include EmployeeRecapOverviewStats
 
   def home
   end
@@ -20,7 +21,7 @@ class SiteController < ApplicationController
     top_forum_posts
 
     # Fetch the data for the recap card
-    @recap_card_data = recap_card_logic
+    @recap_card_data = recap_card_logic_ib_networking
 
   end
 
@@ -107,19 +108,45 @@ class SiteController < ApplicationController
   end
 
     # Main logic for recap card
-    def recap_card_logic
-      employee = fetch_random_employee_with_ratings
-      return nil unless employee
-  
+    def recap_card_logic_ib_networking
+      # Fetch a random employee
+      @employee = fetch_random_employee_with_ratings
+      Rails.logger.debug "Selected Employee: #{@employee.inspect}"
+      return nil unless @employee
+    
+      # Load ratings for the employee
+      ratings = load_ratings("networking")
+      Rails.logger.debug "Loaded Ratings: #{ratings.size}"
+      return nil if ratings.empty?
+    
+      # Fetch networking metrics
+      calculate_ib_networking_summary_metrics(ratings)
+      Rails.logger.debug "Metrics: Technical=#{@asked_technical}, Deal=#{@asked_deal}, Trend=#{@asked_trend}"
+    
+      # Fetch overall impressions
+      overall_ib_networking_impression(ratings)
+      Rails.logger.debug "Overall Impression Data: #{@impression_data.inspect}"
+    
+      # Calculate positive percentage
+      impression_counts = calculate_impression_counts_ib_networking(ratings, "How would you rate your interaction?")
+      Rails.logger.debug "Impression Counts: #{impression_counts.inspect}"
+    
+      positive_percentage = calculate_positive_impressions_percentage_ib_networking(impression_counts)
+      Rails.logger.debug "Positive Percentage: #{positive_percentage}"
+    
+      # Build recap card data
       {
-        name: employee.name,
-        position: fetch_position(employee),
-        recaps: employee.ratings.count,
-        positive_percentage: calculate_positive_percentage(employee),
-        tag: "Networking", # Example tag
-        market_trend: calculate_market_trend_percentage(employee),
-        deal: calculate_deal_percentage(employee),
-        technical: calculate_technical_percentage(employee)
+        name: @employee.name,
+        company: fetch_company(@employee),
+        level: fetch_level(@employee),
+        recaps: @total_recaps,
+        positive_percentage: positive_percentage,
+        tag: "Networking",
+        market_trend: @asked_trend,
+        deal: @asked_deal,
+        technical: @asked_technical,
+        most_common_tones: @most_common_tones,
+        overall_impression: @impression_data
       }
     end
   
@@ -134,8 +161,13 @@ class SiteController < ApplicationController
     end
   
     # Fetch employee position (modify as per your schema)
-    def fetch_position(employee)
-      employee.company&.name || "Unknown Position"
+    def fetch_company(employee)
+      employee.company&.name || "Unknown Company"
+    end
+
+    # Fetch employee position (modify as per your schema)
+    def fetch_level(employee)
+      employee.job_level&.name || ""
     end
   
     # Calculate positive or very positive percentage
@@ -145,27 +177,6 @@ class SiteController < ApplicationController
       total.zero? ? 0 : (positive.to_f / total * 100).round
     end
   
-    # Calculate market trend percentage
-    def calculate_market_trend_percentage(employee)
-      calculate_context_percentage(employee, "Market Trend")
-    end
-  
-    # Calculate deal percentage
-    def calculate_deal_percentage(employee)
-      calculate_context_percentage(employee, "Deal")
-    end
-  
-    # Calculate technical question percentage
-    def calculate_technical_percentage(employee)
-      calculate_context_percentage(employee, "Technical Question")
-    end
-  
-    # Helper to calculate percentage for a specific form_context
-    def calculate_context_percentage(employee, context)
-      total = employee.ratings.count
-      count = employee.ratings.where(form_context: context).count
-      total.zero? ? 0 : (count.to_f / total * 100).round
-    end
-
+    
 
 end

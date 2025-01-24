@@ -12,7 +12,7 @@
           <%= recap_card[:tag] %>
         </span>
       </div>
-      <p class="mb-1" style="font-size: 0.7rem;"><%= recap_card[:position] %></p>
+      <p class="mb-1" style="font-size: 0.7rem;"><%= recap_card[:level] %> at <%= recap_card[:company] %></p>
       <p class="text-muted mb-0" style="font-size: 0.7rem;">
         Rated Positive or Very Positive: <strong><%= recap_card[:positive_percentage] %>%</strong>
         | Market Trend: <strong><%= recap_card[:market_trend] %>%</strong>
@@ -24,4 +24,3 @@
     </div>
   </div>
 </div>
-
