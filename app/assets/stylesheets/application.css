@@ -14,3 +14,41 @@
  *= require_self
  */
 
+ /* Container for the ticker */
+.ticker-container {
+  width: 100%; /* Full width */
+  overflow: hidden; /* Hide overflowing content */
+  position: relative; /* Ensure it's positioned correctly within the footer */
+}
+
+/* Inner ticker wrapper */
+.ticker {
+  display: flex; /* Horizontally align items */
+  animation: scroll 15s linear infinite; /* Smooth scrolling animation */
+  white-space: nowrap; /* Prevent line breaks */
+  align-items: center; /* Vertically center items if needed */
+}
+
+/* Individual ticker items (cards) */
+.ticker-item {
+  flex: 0 0 auto; /* Prevent shrinking or growing */
+  margin-right: 20px; /* Space between ticker items */
+  padding: 10px;
+  background-color: #fff; /* White background for contrast */
+  color: #000; /* Black text for readability */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-block; /* Ensures proper sizing */
+}
+
+/* Keyframes for scrolling animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(100%); /* Start offscreen to the right */
+  }
+  100% {
+    transform: translateX(-100%); /* End offscreen to the left */
+  }
+}
+

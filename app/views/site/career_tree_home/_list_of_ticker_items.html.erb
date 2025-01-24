@@ -1,0 +1,11 @@
+<div class="ticker-container">
+  <div class="ticker">
+    <% 10.times do %>
+      <%= render partial: "site/career_tree_home/ticker_item", locals: { 
+        name: names.sample, 
+        position: positions.sample, 
+        location: locations.sample 
+      } %>
+    <% end %>
+  </div>
+</div>

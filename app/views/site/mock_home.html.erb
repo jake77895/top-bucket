@@ -171,8 +171,20 @@
     </div>
   </div>
 
+  <% names = ["John Doe", "Jane Smith", "Mike Johnson", "Emily Davis", "Chris Lee"] %>
+<% positions = ["Developer", "Designer", "Manager", "Engineer", "Analyst"] %>
+<% locations = ["New York", "London", "Sydney", "Toronto", "San Francisco"] %>
+
+
+
   <!-- Footer -->
   <div style="background-color: #000; color: #fff; text-align: center; padding: 10px 0; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;">
-    Career
+    <div style="font-weight: bold; margin-bottom: 5px;">Career</div>
+    <%= render partial: "site/career_tree_home/list_of_ticker_items", locals: { 
+  names: names, 
+  positions: positions, 
+  locations: locations 
+} %>
   </div>
+
 </body>
