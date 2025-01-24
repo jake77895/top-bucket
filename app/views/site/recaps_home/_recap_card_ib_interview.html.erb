@@ -1,0 +1,26 @@
+<div class="card shadow-sm rounded-lg p-2 mb-2" style="max-width: 400px; position: relative;">
+  <!-- Content -->
+  <div class="d-flex align-items-center mt-1">
+    <div class="flex-grow-1">
+      <div class="d-flex justify-content-between">
+        <h6 class="font-weight-bold mb-0" style="font-size: 0.9rem;">
+          <%= recap_card[:name] %>
+          <span class="text-muted" style="font-size: 0.75rem;">•</span>
+          <span style="font-size: 0.75rem; color: gray;"><%= recap_card[:recaps] %> Recaps</span>
+        </h6>
+        <span class="badge badge-pill badge-primary" style="font-size: 0.7rem; background-color: var(--bs-primary) !important; color: white !important;">
+          <%= recap_card[:tag] %>
+        </span>
+      </div>
+      <p class="mb-1" style="font-size: 0.7rem;"><%= recap_card[:level] %> at <%= recap_card[:company] %></p>
+      <p class="text-muted mb-0" style="font-size: 0.7rem;">
+        Rated Positive: <strong><%= recap_card[:positive_percentage] %>%</strong>
+          | Rated Techn Q's Hard or Very Hard: <strong><%= recap_card[:technical] %>%</strong>
+      </p>
+      <p class="text-muted mb-0" style="font-size: 0.7rem;">
+        Deal: <strong><%= recap_card[:deal] %>%</strong>
+        | Market Trend: <strong><%= recap_card[:market_trend] %>%</strong>
+      </p>
+    </div>
+  </div>
+</div>
