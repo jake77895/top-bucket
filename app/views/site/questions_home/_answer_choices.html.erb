@@ -1,0 +1,13 @@
+<div class="row row-cols-1 row-cols-md-2 g-2">
+  <% if @question_of_the_day.present? %>
+    <% (1..4).each do |i| %>
+      <div class="col">
+        <%= link_to question_packet_path(id: "qotd", random_questions: [@question_of_the_day.id]), class: "btn btn-outline-dark btn-lg w-100", style: "font-size: 0.8rem; height: 55px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" do %>
+          <%= @question_of_the_day.send("answer_choice_#{i}").truncate(20) %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No question available at the moment.</p>
+  <% end %>
+</div>

@@ -44,4 +44,10 @@ class Question < ApplicationRecord
   validates :question_text, :answer_choice_1, :answer_choice_2, :answer_choice_3, :answer_choice_4, :correct_answer, :explanation_text, :category, presence: true
   validates :correct_answer, inclusion: { in: 1..4 }
   validates :difficulty_level, inclusion: { in: 1..5 }, allow_nil: true
+
+  def self.question_of_the_day
+    Rails.cache.fetch("question_of_the_day", expires_in: 24.hours) do
+      Question.order("RANDOM()").first
+    end
+  end
 end

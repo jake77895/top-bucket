@@ -23,6 +23,8 @@ class SiteController < ApplicationController
     # Fetch the data for the recap card
     recap_mock_display
 
+    # Fetch the question ot the day
+    question_of_the_day
 
 
   end
@@ -262,10 +264,16 @@ class SiteController < ApplicationController
     total.zero? ? 0 : (positive.to_f / total * 100).round
   end
 
-
-
   def load_ratings_for_employee(employee, form_context)
     employee.ratings.includes(:user).where(form_context: form_context)
+  end
+
+  ##################################################################
+  # Question of the day logic
+
+  def question_of_the_day
+    # Fetch a random question
+    @question_of_the_day = Question.question_of_the_day
   end
 
     

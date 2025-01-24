@@ -2,6 +2,9 @@ class QuestionPacketsController < ApplicationController
   def index
     @question_packets = QuestionPacket.all.order(:name)
 
+    # Add the dynamic packet
+    @dynamic_packet = dynamic_packet
+
     # Calculate the display count for each packet
     @grouped_question_counts = @question_packets.each_with_object({}) do |packet, counts|
       counts[packet.id] = count_question_groups(packet.questions, packet.questions.size - 1)
@@ -9,11 +12,21 @@ class QuestionPacketsController < ApplicationController
   end
 
   def show
-    @question_packet = QuestionPacket.find(params[:id])
+    if params[:id] == "qotd"
+      # Use the method from the Question model to fetch the Question of the Day
+      question_of_the_day = Question.question_of_the_day
   
-    # Use filtered_questions to determine the questions being navigated
-    question_ids = params[:filtered_questions] || @question_packet.questions.pluck(:id)
-    @questions = Question.where(id: question_ids)
+      # Use the Question of the Day for the "qotd" packet
+      @questions = [question_of_the_day]
+  
+      # Create a temporary object for the "qotd" packet
+      @question_packet = OpenStruct.new(name: "Question of the Day", id: "qotd")
+    else
+      # Handle regular packets as before
+      @question_packet = QuestionPacket.find(params[:id])
+      question_ids = params[:filtered_questions] || @question_packet.questions.pluck(:id)
+      @questions = Question.where(id: question_ids)
+    end
   
     # Apply final ordering for linked questions
     @questions = final_ordering(@questions)
@@ -35,6 +48,17 @@ class QuestionPacketsController < ApplicationController
   
     # Store filtered questions for navigation links
     @filtered_question_ids = @questions.pluck(:id)
+  end
+
+  def dynamic_packet
+    # Fetch the Question of the Day from the Rails cache
+    question_of_the_day = Rails.cache.fetch("question_of_the_day") { Question.order("RANDOM()").first }
+    
+    # Fetch random questions excluding the Question of the Day
+    random_questions = Question.where.not(id: question_of_the_day.id).order("RANDOM()").limit(9) # Adjust the limit as needed
+  
+    # Combine QOTD with the random questions
+    [question_of_the_day] + random_questions
   end
   
 
@@ -134,5 +158,3 @@ class QuestionPacketsController < ApplicationController
     questions.where(question_link: nil)
   end
 end
-
-

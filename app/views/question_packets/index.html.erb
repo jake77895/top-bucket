@@ -11,7 +11,7 @@
       <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
         Question Bank
       </h1>
-      <p class="text-muted" style="font-size: 15px;">"You can't be a top bucket banker if you never become a banker" - Kevin Lim</p>
+      <p class="text-muted" style="font-size: 15px;">You can't be a top bucket banker if you never become a banker</p>
     </div>
   </div>
 
@@ -21,7 +21,7 @@
         <div class="col">
           <div class="card shadow-sm border border-secondary"> <!-- Added border-secondary -->
             <div class="card-body">
-              <h5 class="card-title"><%= packet.name %></h5>
+              <h5 class="card-title"><%= truncate(packet.name, length: 40, separator: ' ') %></h5>
               <p class="card-text text-muted">
                 <%= pluralize(@grouped_question_counts[packet.id], "question") %>
               </p>
@@ -31,6 +31,23 @@
         </div>
       <% end %>
     </div>
+    <% question_of_the_day = Question.question_of_the_day %>
+    <% if question_of_the_day.present? %>
+      <%= link_to question_packet_path(id: "qotd", random_questions: [question_of_the_day.id]), class: "d-block text-decoration-none" do %>
+        <div class="card shadow-sm mb-3 mt-3 bg-dark text-white text-center" style="height: 50px; display: flex; align-items: center; justify-content: center;">
+          <h4 class="card-title mb-0">
+            Question of the Day
+          </h4>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="card shadow-sm border border-secondary mb-3 mt-3 text-center" style="height: 50px; display: flex; align-items: center; justify-content: center;">
+        <h4 class="card-title mb-0 text-danger">
+          The Question of the Day is currently unavailable.
+        </h4>
+      </div>
+    <% end %>
+
   </div>
 
 </div>

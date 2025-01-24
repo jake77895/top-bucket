@@ -51,9 +51,12 @@
 
       <!-- Question Number and Open Options -->
       <div class="d-flex align-items-center">
-        <button type="button" class="btn btn-outline-dark me-3" data-bs-toggle="modal" data-bs-target="#optionsModal">
-          Options
-        </button>
+
+        <% unless @question_packet.name == "Question of the Day" %>
+          <button type="button" class="btn btn-outline-dark me-3" data-bs-toggle="modal" data-bs-target="#optionsModal">
+            Options
+          </button>
+        <% end %>
         <span class="text-muted me-2" style="font-size: 0.9rem;"><%= @display_count %> of <%= @total_question_groups %></span>
       </div>
     </div>
