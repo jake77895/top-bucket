@@ -19,6 +19,9 @@ class SiteController < ApplicationController
     # Forum section of home view
     top_forum_posts
 
+    # Fetch the data for the recap card
+    @recap_card_data = recap_card_logic
+
   end
 
   private
@@ -102,5 +105,67 @@ class SiteController < ApplicationController
     end
     name
   end
+
+    # Main logic for recap card
+    def recap_card_logic
+      employee = fetch_random_employee_with_ratings
+      return nil unless employee
+  
+      {
+        name: employee.name,
+        position: fetch_position(employee),
+        recaps: employee.ratings.count,
+        positive_percentage: calculate_positive_percentage(employee),
+        tag: "Networking", # Example tag
+        market_trend: calculate_market_trend_percentage(employee),
+        deal: calculate_deal_percentage(employee),
+        technical: calculate_technical_percentage(employee)
+      }
+    end
+  
+    # Fetch a random employee with at least 10 ratings
+    def fetch_random_employee_with_ratings
+      Employee
+        .joins(:ratings) # Join with ratings
+        .group('employees.id') # Group by employee ID
+        .having('COUNT(ratings.id) >= 10') # At least 10 ratings
+        .order('RANDOM()') # Random order
+        .first
+    end
+  
+    # Fetch employee position (modify as per your schema)
+    def fetch_position(employee)
+      employee.company&.name || "Unknown Position"
+    end
+  
+    # Calculate positive or very positive percentage
+    def calculate_positive_percentage(employee)
+      total = employee.ratings.count
+      positive = employee.ratings.where(form_context: %w[Positive Very Positive]).count
+      total.zero? ? 0 : (positive.to_f / total * 100).round
+    end
+  
+    # Calculate market trend percentage
+    def calculate_market_trend_percentage(employee)
+      calculate_context_percentage(employee, "Market Trend")
+    end
+  
+    # Calculate deal percentage
+    def calculate_deal_percentage(employee)
+      calculate_context_percentage(employee, "Deal")
+    end
+  
+    # Calculate technical question percentage
+    def calculate_technical_percentage(employee)
+      calculate_context_percentage(employee, "Technical Question")
+    end
+  
+    # Helper to calculate percentage for a specific form_context
+    def calculate_context_percentage(employee, context)
+      total = employee.ratings.count
+      count = employee.ratings.where(form_context: context).count
+      total.zero? ? 0 : (count.to_f / total * 100).round
+    end
+
 
 end
