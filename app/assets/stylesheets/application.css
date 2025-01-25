@@ -14,6 +14,8 @@
  *= require_self
  */
 
+/* For the ticker scroll at the bottom of the home page */
+
  /* Container for the ticker */
 .ticker-container {
   width: 100%; /* Full width */
@@ -24,7 +26,7 @@
 /* Inner ticker wrapper */
 .ticker {
   display: flex; /* Horizontally align items */
-  animation: scroll 15s linear infinite; /* Smooth scrolling animation */
+  animation: scroll 80s linear infinite; /* Smooth scrolling animation */
   white-space: nowrap; /* Prevent line breaks */
   align-items: center; /* Vertically center items if needed */
 }
@@ -32,14 +34,35 @@
 /* Individual ticker items (cards) */
 .ticker-item {
   flex: 0 0 auto; /* Prevent shrinking or growing */
-  margin-right: 20px; /* Space between ticker items */
-  padding: 10px;
-  background-color: #fff; /* White background for contrast */
-  color: #000; /* Black text for readability */
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  margin-right: 0px; /* Space between ticker items */
+  padding: 5px 10px;
+  /* background-color: #fff; White background for contrast */
+  background-color: #0D1B2A; 
+  color: #000;
+  box-sizing: border-box; 
+  /* border: 1px solid #ccc; */
+  overflow: hidden;
+  width: 160px;
   text-align: center;
   display: inline-block; /* Ensures proper sizing */
+}
+
+
+/* Individual ticker items (cards) */
+.ticker-item p {
+  margin: 0; /* Completely removes margins */
+  line-height: 1; /* Ensures compact spacing */
+  padding: 0; /* Removes unnecessary padding */
+
+}
+
+.primary-text {
+  color: white; /* First paragraph color */
+  font-weight: bold; /* Makes the text bold */
+}
+
+.secondary-text .badge {
+  color: black !important; /* Ensure the text inside the badge is black */
 }
 
 /* Keyframes for scrolling animation */
@@ -52,3 +75,11 @@
   }
 }
 
+/* Add responsiveness (optional) */
+@media (max-width: 768px) {
+  .ticker-item {
+    width: 150px; /* Make it even smaller on smaller screens */
+  }
+}
+
+/* ********************************************************* */

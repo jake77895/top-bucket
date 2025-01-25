@@ -2,16 +2,13 @@ class SiteController < ApplicationController
   helper_method :shorten_name
   include EmployeeRecapOverviewStats
 
-  def home
-  end
-
   def about
   end
 
   def contact
   end
 
-  def mock_home
+  def home
 
     # Ratings section of home view
     tb_ratings

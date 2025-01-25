@@ -31,18 +31,16 @@
         <%= alert %>
       </div>
     <% end %>
-    
 
-    <nav class="navbar navbar-expand-lg mt-0" style="background-color: #0D1B2A;">
-      <div class="container d-flex align-items-center justify-content-between" style="padding-top: 0.25rem; padding-bottom: 0.25rem;">
-        
+    <nav class="navbar navbar-expand-lg mt-0" style="background-color: #0D1B2A; width: 100vw; margin: 0; padding: 0 10px;">
+      <div class="container-fluid d-flex align-items-center justify-content-between" style="padding-top: 0.25rem; padding-bottom: 0.25rem;">
         <!-- Logo -->
         <div class="d-flex align-items-center">
           <%= link_to root_path, class: 'navbar-brand d-flex align-items-center' do %>
             <%= image_tag 'logo/logo-white.png', 
-              alt: 'Site Logo', 
-              class: 'd-inline-block align-top', 
-              style: 'height: 25px; width: auto; object-fit: contain; margin-top: -50px; margin-bottom: -45px;' %>
+          alt: 'Site Logo', 
+          class: 'd-inline-block align-top', 
+          style: 'height: 25px; width: auto; object-fit: contain; margin-top: -50px; margin-bottom: -45px;' %>
           <% end %>
         </div>
 
@@ -54,9 +52,6 @@
             </li>
             <li class="nav-item">
               <%= link_to 'Contact', contact_path, class: 'nav-link text-white' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Mock Home', mock_home_path, class: 'nav-link text-white' %>
             </li>
             <li class="nav-item">
               <%= link_to 'Shop', 'https://shop.thetopbucket.com/', class: 'nav-link text-white', target: '_blank', rel: 'noopener noreferrer' %>
@@ -94,15 +89,13 @@
             <% end %>
           </ul>
         </div>
-        
+
         <!-- Toggler Button for Mobile View -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
       </div>
     </nav>
-
-
 
     <%= yield %>
   </body>

@@ -148,9 +148,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Public Routes for Viewing Career Path Views
-  resources :career_views, only: :show
-
   # Public Routes for Viewing Interview Question Views
   resources :interview_questions, only: [:index, :show]
 
@@ -194,7 +191,9 @@ Rails.application.routes.draw do
       patch :update_no_show
     end
   end
-  
+
+  # Public Routes for Career Data
+  resources :career_data, only: [:show]
 
 
 
@@ -208,7 +207,6 @@ Rails.application.routes.draw do
   root "site#home"
   get "/about", to: "site#about"
   get "/contact", to: "site#contact"
-  get "/mock_home", to: "site#mock_home"
 
 
 
