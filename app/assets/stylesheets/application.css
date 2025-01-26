@@ -106,6 +106,7 @@
 
 /* Career Tree Home Page */
 
+/* Industry Button Categories */
 
 .career_tree_industry_button {
   fill: #fcfcfc; /* Light background color */
@@ -127,29 +128,14 @@
   text-anchor: middle; /* Align text horizontally */
 }
 
-/* <!--Industry header buttons-->
-    <div class="categories text-center mb-4 px-3">
-      <div class="d-flex justify-content-between flex-wrap">
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Venture Capital">
-          Venture Capital
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Private Equity">
-          Private Equity
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Hedge Fund">
-          Hedge Fund
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Investment Banking">
-          Investment Banking
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Corporate Development">
-          Corporate Development
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="FP&A">
-          FP&A
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Other">
-          Other
-        </button>
-      </div>
-    </div> */
+/* Nodes */
+
+.node circle {
+  fill: #f8f9fa;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+.node text {
+  font-size: 10px;
+  fill: #333;
+}
