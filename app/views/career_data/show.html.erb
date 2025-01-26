@@ -3,34 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chart</title>
-    <!-- Optional: Add Bootstrap or custom styles -->
+    <title>Career Tree</title>
+    <!-- Include Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
-      .link {
-        stroke: #aaa;
-        stroke-width: 2px;
-      }
-      .link:hover {
-        stroke: #007bff;
-      }
       .node circle {
         fill: #f8f9fa;
-        stroke: #343a40;
-        stroke-width: 1.5px;
+        stroke: #ccc;
+        stroke-width: 2px;
       }
       .node text {
         font-size: 12px;
         fill: #333;
       }
-      .node circle:hover {
-        fill: #e9ecef;
-        stroke: #007bff;
-        cursor: pointer;
-      }
     </style>
   </head>
   <body>
-
+    
     <div class="mb-4 mt-4 px-4">
       <div class="card shadow-sm position-relative">
         <!-- Back Button -->
@@ -45,80 +37,92 @@
         </div>
       </div>
     </div>
-
-    <!--Industry header buttons-->
-    <div class="categories text-center mb-4 px-3">
-      <div class="d-flex justify-content-between flex-wrap">
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Venture Capital">
-          Venture Capital
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Private Equity">
-          Private Equity
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Hedge Fund">
-          Hedge Fund
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Investment Banking">
-          Investment Banking
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Corporate Development">
-          Corporate Development
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="FP&A">
-          FP&A
-        </button>
-        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Other">
-          Other
-        </button>
-      </div>
-    </div>
-
-    <!-- Add the chart container -->
+    
+    <div id="categories" class="text-center py-0 px-3"></div>
     <div id="chart"></div>
 
     <!-- Include D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <!-- Embed your D3.js code -->
-    <script>
+      <script>
       document.addEventListener("DOMContentLoaded", () => {
         const data = [
           {
-      category: "Venture Capital",
-      nodes: [
-        { id: 1, name: "Analyst", level: 1 },
-        { id: 2, name: "Pre-MBA associate", level: 2 },
-        { id: 3, name: "Senior associate", level: 3 },
-        { id: 4, name: "Principal", level: 4 },
-        { id: 5, name: "Partner", level: 5 },
-      ],
-      links: [
-        { source: 1, target: 2 },
-        { source: 2, target: 3 },
-        { source: 3, target: 4 },
-        { source: 4, target: 5 },
-      ],
+            category: "Venture Capital",
+            nodes: [
+              { id: 1, name: "Analyst", level: 1 },
+              { id: 2, name: "Pre-MBA associate", level: 2 },
+              { id: 3, name: "Senior associate", level: 3 },
+              { id: 4, name: "Principal", level: 4 },
+              { id: 5, name: "Partner", level: 5 },
+            ],
           },
           {
-      category: "Investment Banking",
-      nodes: [
-        { id: 6, name: "Analyst", level: 1 },
-        { id: 7, name: "Associate", level: 2 },
-        { id: 8, name: "Vice president", level: 3 },
-        { id: 9, name: "Senior vice president", level: 4 },
-        { id: 10, name: "Managing director", level: 5 },
-      ],
-      links: [
-        { source: 6, target: 7 },
-        { source: 7, target: 8 },
-        { source: 8, target: 9 },
-        { source: 9, target: 10 },
-      ],
+            category: "Private Equity",
+            nodes: [
+              { id: 6, name: "Analyst", level: 1 },
+              { id: 7, name: "Associate", level: 2 },
+              { id: 8, name: "Vice president", level: 3 },
+              { id: 9, name: "Principal", level: 4 },
+              { id: 10, name: "Partner", level: 5 },
+            ],
+          },
+          {
+            category: "Hedge Fund",
+            nodes: [
+              { id: 11, name: "Junior Analyst", level: 1 },
+              { id: 12, name: "Research Associate", level: 2 },
+              { id: 13, name: "Fund Analyst", level: 3 },
+              { id: 14, name: "Sector Head", level: 4 },
+              { id: 15, name: "Portfolio Manager", level: 5 },
+            ],
+          },
+          {
+            category: "Investment Banking",
+            nodes: [
+              { id: 16, name: "Analyst", level: 1 },
+              { id: 17, name: "Associate", level: 2 },
+              { id: 18, name: "Vice president", level: 3 },
+              { id: 19, name: "Senior vice president", level: 4 },
+              { id: 20, name: "Managing director", level: 5 },
+            ],
+          },
+          {
+            category: "Corporate Development",
+            nodes: [
+              { id: 21, name: "Analyst", level: 1 },
+              { id: 22, name: "Associate", level: 2 },
+              { id: 23, name: "Manager", level: 3 },
+              { id: 24, name: "Director", level: 4 },
+              { id: 25, name: "Vice president", level: 5 },
+            ],
+          },
+          {
+            category: "FP&A",
+            nodes: [
+              { id: 26, name: "Analyst", level: 1 },
+              { id: 27, name: "Senior Analyst", level: 2 },
+              { id: 28, name: "Manager", level: 3 },
+              { id: 29, name: "Director", level: 4 },
+              { id: 30, name: "Vice president", level: 5 },
+            ],
+          },
+          {
+            category: "Other",
+            nodes: [
+              { id: 31, name: "Entry Level", level: 1 },
+              { id: 32, name: "Mid Level", level: 2 },
+              { id: 33, name: "Senior Level", level: 3 },
+              { id: 34, name: "Lead", level: 4 },
+              { id: 35, name: "Executive", level: 5 },
+            ],
           },
         ];
 
-        const width = 1200;
-        const height = 600;
-        const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+        const width = window.innerWidth; // Dynamically set width to screen width // Total width of the chart
+        const height = 750; // Total height of the chart
+        const margin = { top: 60, right: 50, bottom: 50, left: 50 };
+        const levelSpacing = (height - margin.top - margin.bottom) / 5;
+        const categoryWidth = width / data.length;
 
         const svg = d3
           .select("#chart")
@@ -127,75 +131,79 @@
           .attr("height", height)
           .style("font-family", "Arial");
 
-        // Function to render the chart for a specific category
-        function renderChart(category) {
-          // Clear previous chart
-          svg.selectAll("*").remove();
+        data.forEach((categoryData, i) => {
+        const group = svg.append("g");
 
-          const categoryData = data.find(d => d.category === category);
-
-          if (!categoryData) return;
-
-          const categoryWidth = width / 1; // Single category width
-          const group = svg
-      .append("g")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-          const levelSpacing = (height - margin.top - margin.bottom) / 5;
-
-          // Draw links
-          group
-      .selectAll(".link")
-      .data(categoryData.links)
-      .enter()
-      .append("line")
-      .attr("class", "link")
-      .attr("x1", categoryWidth / 2)
-      .attr("y1", d => d.source * levelSpacing - levelSpacing / 2)
-      .attr("x2", categoryWidth / 2)
-      .attr("y2", d => d.target * levelSpacing - levelSpacing / 2)
-      .attr("stroke", "#ccc")
-      .attr("stroke-width", 2);
-
-          // Draw nodes
-          group
-      .selectAll(".node")
-      .data(categoryData.nodes)
-      .enter()
-      .append("g")
-      .attr("class", "node")
-      .attr(
-        "transform",
-        d => `translate(${categoryWidth / 2}, ${d.level * levelSpacing - levelSpacing / 2})`
-      )
-      .call(node => {
-        node
-          .append("circle")
-          .attr("r", 20)
-          .attr("fill", "#f8f9fa")
-          .attr("stroke", "#ccc")
-          .attr("stroke-width", 2);
-
-        node
+        // Create text element first to measure its length
+        const textElement = group
           .append("text")
+          .attr("x", i * categoryWidth + categoryWidth / 2) // Center horizontally
+          .attr("y", margin.top - 30) // Position text within the rectangle
           .attr("text-anchor", "middle")
-          .attr("dy", 5)
-          .attr("font-size", 12)
-          .text(d => d.name);
+          .attr("class", "career_tree_industry_button_text") // Use external class
+          .text(categoryData.category);
+
+        // Measure the text width
+        const textWidth = textElement.node().getComputedTextLength();
+
+        // Add some padding for the button
+        const padding = 20; // 10px padding on each side
+        const minButtonWidth = 200; // Minimum button width in pixels
+        const buttonWidth = Math.max(textWidth + padding, minButtonWidth); // Ensure minimum size
+
+        // Add a rectangle for the button background
+        group
+          .append("rect")
+          .attr("x", i * categoryWidth + categoryWidth / 2 - buttonWidth / 2) // Center horizontally
+          .attr("y", margin.top - 50) // Position above the nodes
+          .attr("width", buttonWidth) // Dynamically set width based on text or minimum
+          .attr("height", 40) // Height of the button
+          .attr("rx", 20) // Rounded corners
+          .attr("ry", 20)
+          .attr("class", "career_tree_industry_button"); // Use external class
+
+        // Reorder the text element to appear on top of the rectangle
+        textElement.raise();
       });
-        }
 
-        // Initial render
-        renderChart("Venture Capital");
 
-        // Add event listeners to buttons
-        document.querySelectorAll(".categories button").forEach(button => {
-          button.addEventListener("click", () => {
-      const category = button.dataset.category;
-      renderChart(category);
-          });
+        // Draw nodes for each category
+        data.forEach((categoryData, i) => {
+          const group = svg
+            .append("g")
+            .attr(
+              "transform",
+              `translate(${i * categoryWidth + categoryWidth / 2}, ${margin.top})`
+            );
+
+          group
+            .selectAll(".node")
+            .data(categoryData.nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .attr(
+              "transform",
+              d => `translate(0, ${d.level * levelSpacing - levelSpacing / 2})`
+            )
+            .call(node => {
+              node
+                .append("circle")
+                .attr("r", 20)
+                .attr("fill", "#f8f9fa")
+                .attr("stroke", "#ccc")
+                .attr("stroke-width", 2);
+
+              node
+                .append("text")
+                .attr("text-anchor", "middle")
+                .attr("dy", 5)
+                .attr("font-size", 12)
+                .text(d => d.name);
+            });
         });
       });
-    </script>
+      </script>
+
   </body>
 </html>
