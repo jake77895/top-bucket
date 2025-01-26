@@ -27,229 +27,229 @@
       </div>
     </div>
     
-    <div id="categories" class="text-center py-0 px-3"></div>
-    <div id="chart"></div>
+    <div class="mb-4 mt-4 px-4">
+      <div class="card shadow-sm position-relative">
+        <div class="card-body">
+        <div id="categories" class="text-center py-0 px-3"></div>
+        <div id="chart" style="overflow-x: auto; white-space: nowrap;"></div>
+      </div>
+
+      </div>
+    <div>
 
     <!-- Include D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-      <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const data = [
-          {
-            category: "Venture Capital",
-            nodes: [
-              { id: 1, name: "Analyst", level: 1 },
-              { id: 2, name: "Pre-MBA associate", level: 2 },
-              { id: 3, name: "Senior associate", level: 3 },
-              { id: 4, name: "Principal", level: 4 },
-              { id: 5, name: "Partner", level: 5 },
-            ],
-          },
-          {
-            category: "Private Equity",
-            nodes: [
-              { id: 6, name: "Analyst", level: 1 },
-              { id: 7, name: "Associate", level: 2 },
-              { id: 8, name: "Vice president", level: 3 },
-              { id: 9, name: "Principal", level: 4 },
-              { id: 10, name: "Partner", level: 5 },
-            ],
-          },
-          {
-            category: "Hedge Fund",
-            nodes: [
-              { id: 11, name: "Junior Analyst", level: 1 },
-              { id: 12, name: "Research Associate", level: 2 },
-              { id: 13, name: "Fund Analyst", level: 3 },
-              { id: 14, name: "Sector Head", level: 4 },
-              { id: 15, name: "Portfolio Manager", level: 5 },
-            ],
-          },
-          {
-            category: "Investment Banking",
-            nodes: [
-              { id: 16, name: "Analyst", level: 1 },
-              { id: 17, name: "Associate", level: 2 },
-              { id: 18, name: "Vice president", level: 3 },
-              { id: 19, name: "Senior vice president", level: 4 },
-              { id: 20, name: "Managing director", level: 5 },
-            ],
-          },
-          {
-            category: "Corporate Development",
-            nodes: [
-              { id: 21, name: "Analyst", level: 1 },
-              { id: 22, name: "Associate", level: 2 },
-              { id: 23, name: "Manager", level: 3 },
-              { id: 24, name: "Director", level: 4 },
-              { id: 25, name: "Vice president", level: 5 },
-            ],
-          },
-          {
-            category: "FP&A",
-            nodes: [
-              { id: 26, name: "Analyst", level: 1 },
-              { id: 27, name: "Senior Analyst", level: 2 },
-              { id: 28, name: "Manager", level: 3 },
-              { id: 29, name: "Director", level: 4 },
-              { id: 30, name: "Vice president", level: 5 },
-            ],
-          },
-          {
-            category: "Other",
-            nodes: [
-              { id: 31, name: "Entry Level", level: 1 },
-              { id: 32, name: "Mid Level", level: 2 },
-              { id: 33, name: "Senior Level", level: 3 },
-              { id: 34, name: "Lead", level: 4 },
-              { id: 35, name: "Executive", level: 5 },
-            ],
-          },
-        ];
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const data = [
+    {
+      category: "Venture Capital",
+      nodes: [
+        { id: 1, name: "Analyst", level: 1 },
+        { id: 2, name: "Pre-MBA associate", level: 2 },
+        { id: 3, name: "Senior associate", level: 3 },
+        { id: 4, name: "Principal", level: 4 },
+        { id: 5, name: "Partner", level: 5 },
+      ],
+      links: [
+        { source: 1, target: 2 },
+        { source: 2, target: 3 },
+        { source: 3, target: 4 },
+        { source: 4, target: 5 },
+      ],
+    },
+    {
+      category: "Private Equity",
+      nodes: [
+        { id: 6, name: "Analyst", level: 1 },
+        { id: 7, name: "Associate", level: 2 },
+        { id: 8, name: "Vice president", level: 3 },
+        { id: 9, name: "Principal", level: 4 },
+        { id: 10, name: "Partner", level: 5 },
+      ],
+    },
+    {
+      category: "Hedge Fund",
+      nodes: [
+        { id: 11, name: "Junior Analyst", level: 1 },
+        { id: 12, name: "Research Associate", level: 2 },
+        { id: 13, name: "Fund Analyst", level: 3 },
+        { id: 14, name: "Sector Head", level: 4 },
+        { id: 15, name: "Portfolio Manager", level: 5 },
+      ],
+    },
+    {
+      category: "Investment Banking",
+      nodes: [
+        { id: 16, name: "Analyst", level: 1 },
+        { id: 17, name: "Associate", level: 2 },
+        { id: 18, name: "Vice president", level: 3 },
+        { id: 19, name: "Senior vice president", level: 4 },
+        { id: 20, name: "Managing director", level: 5 },
+      ],
+    },
+    {
+      category: "Corporate Development",
+      nodes: [
+        { id: 21, name: "Analyst", level: 1 },
+        { id: 22, name: "Associate", level: 2 },
+        { id: 23, name: "Manager", level: 3 },
+        { id: 24, name: "Director", level: 4 },
+        { id: 25, name: "Vice president", level: 5 },
+      ],
+    },
+    {
+      category: "FP&A",
+      nodes: [
+        { id: 26, name: "Analyst", level: 1 },
+        { id: 27, name: "Senior Analyst", level: 2 },
+        { id: 28, name: "Manager", level: 3 },
+        { id: 29, name: "Director", level: 4 },
+        { id: 30, name: "Vice president", level: 5 },
+      ],
+    },
+    {
+      category: "Other",
+      nodes: [
+        { id: 31, name: "Entry Level", level: 1 },
+        { id: 32, name: "Mid Level", level: 2 },
+        { id: 33, name: "Senior Level", level: 3 },
+        { id: 34, name: "Lead", level: 4 },
+        { id: 35, name: "Executive", level: 5 },
+      ],
+    },
+  ];
 
-        const width = window.innerWidth; // Dynamically set width to screen width // Total width of the chart
-        const height = 750; // Total height of the chart
-        const margin = { top: 60, right: 50, bottom: 50, left: 50 };
-        const levelSpacing = (height - margin.top - margin.bottom) / 5;
-        const categoryWidth = width / data.length;
+  const minCategoryWidth = 200; // Minimum width per category
+  const calculatedWidth = data.length * minCategoryWidth; // Total width based on categories
+  const width = Math.max(window.innerWidth, calculatedWidth); // Ensure the chart fits the screen
+  const height = 750;
+  const buttonHeight = 40; // Button height
+  const buttonMarginBelow = 20; // Space below the button
+  const margin = { top: buttonHeight + buttonMarginBelow + 20, right: 50, bottom: 50, left: 50 };
+  const levelSpacing = (height - margin.top - margin.bottom) / 5;
+  const categoryWidth = width / data.length;
 
-        const svg = d3
-          .select("#chart")
-          .append("svg")
-          .attr("width", width)
-          .attr("height", height)
-          .style("font-family", "Arial");
+  const svg = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("font-family", "Arial");
 
-        data.forEach((categoryData, i) => {
-        const group = svg.append("g");
+  const levelIconPaths = {
+    1: "<%= asset_path('icons/career_tree_icons/level_1.svg') %>",
+    2: "<%= asset_path('icons/career_tree_icons/level_2.svg') %>",
+    3: "<%= asset_path('icons/career_tree_icons/level_3.svg') %>",
+    4: "<%= asset_path('icons/career_tree_icons/level_4.svg') %>",
+    5: "<%= asset_path('icons/career_tree_icons/level_5.svg') %>",
+  };
 
-        // Create text element first to measure its length
-        const textElement = group
-          .append("text")
-          .attr("x", i * categoryWidth + categoryWidth / 2) // Center horizontally
-          .attr("y", margin.top - 30) // Position text within the rectangle
-          .attr("text-anchor", "middle")
-          .attr("class", "career_tree_industry_button_text") // Use external class
-          .text(categoryData.category);
+  data.forEach((categoryData, i) => {
+    const group = svg
+      .append("g")
+      .attr(
+        "transform",
+        `translate(${i * categoryWidth + categoryWidth / 2}, ${
+          margin.top + buttonHeight + buttonMarginBelow
+        })`
+      );
 
-        // Measure the text width
-        const textWidth = textElement.node().getComputedTextLength();
+    // Create button background
+    const textElement = svg
+      .append("text")
+      .attr("x", i * categoryWidth + categoryWidth / 2)
+      .attr("y", margin.top - 30)
+      .attr("class", "career_tree_industry_button_text")
+      .attr("text-anchor", "middle")
+      .style("font-weight", "bold")
+      .style("font-size", "16px")
+      .text(categoryData.category);
 
-        // Add some padding for the button
-        const padding = 20; // 10px padding on each side
-        const minButtonWidth = 200; // Minimum button width in pixels
-        const buttonWidth = Math.max(textWidth + padding, minButtonWidth); // Ensure minimum size
+    const textWidth = textElement.node().getComputedTextLength();
+    const buttonWidth = Math.max(textWidth + 20, 200);
 
-        // Add a rectangle for the button background
-        group
-          .append("rect")
-          .attr("x", i * categoryWidth + categoryWidth / 2 - buttonWidth / 2) // Center horizontally
-          .attr("y", margin.top - 50) // Position above the nodes
-          .attr("width", buttonWidth) // Dynamically set width based on text or minimum
-          .attr("height", 40) // Height of the button
-          .attr("rx", 20) // Rounded corners
-          .attr("ry", 20)
-          .attr("class", "career_tree_industry_button"); // Use external class
+    svg
+      .append("rect")
+      .attr("x", i * categoryWidth + categoryWidth / 2 - buttonWidth / 2)
+      .attr("y", margin.top - 50)
+      .attr("width", buttonWidth)
+      .attr("height", buttonHeight)
+      .attr("rx", 20)
+      .attr("ry", 20)
+      .attr("fill", "#f8f9fa")
+      .attr("stroke", "#ddd")
+      .attr("stroke-width", 1);
 
-        // Reorder the text element to appear on top of the rectangle
-        textElement.raise();
-      });
+    textElement.raise();
 
-      // For the SVG elements in the node paths
-      const level1IconPath = "<%= asset_path('icons/career_tree_icons/level_1.svg') %>";
-      const level2IconPath = "<%= asset_path('icons/career_tree_icons/level_2.svg') %>";
-      const level3IconPath = "<%= asset_path('icons/career_tree_icons/level_3.svg') %>";
-      const level4IconPath = "<%= asset_path('icons/career_tree_icons/level_4.svg') %>";
-      const level5IconPath = "<%= asset_path('icons/career_tree_icons/level_5.svg') %>";
+    // Add links
+    group
+      .selectAll(".link")
+      .data(categoryData.links || [])
+      .enter()
+      .append("line")
+      .attr("class", "link")
+      .attr("x1", 0)
+      .attr(
+        "y1",
+        (d) =>
+          (categoryData.nodes.find((node) => node.id === d.source).level - 1) *
+          levelSpacing
+      )
+      .attr("x2", 0)
+      .attr(
+        "y2",
+        (d) =>
+          (categoryData.nodes.find((node) => node.id === d.target).level - 1) *
+          levelSpacing
+      )
+      .attr("stroke", "#ccc")
+      .attr("stroke-width", 2);
 
-        // Draw nodes for each category
-        data.forEach((categoryData, i) => {
-          const group = svg
-            .append("g")
-            .attr(
-              "transform",
-              `translate(${i * categoryWidth + categoryWidth / 2}, ${margin.top})`
-            );
+    // Add nodes
+    const nodeGroup = group
+      .selectAll(".node")
+      .data(categoryData.nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr(
+        "transform",
+        (d) => `translate(0, ${(d.level - 1) * levelSpacing})`
+      );
 
-          group
-            .selectAll(".node")
-            .data(categoryData.nodes)
-            .enter()
-            .append("g")
-            .attr("class", "node")
-            .attr(
-              "transform",
-              d => `translate(0, ${d.level * levelSpacing - levelSpacing / 2})`
-            )
-            .call(node => {
-              // Add the background circle
-              node
-                .append("circle")
-                .attr("r", 20)
-                .attr("fill", "#f8f9fa")
-                .attr("stroke", "#ccc")
-                .attr("stroke-width", 2);
+    // Add background circles
+    nodeGroup
+      .append("circle")
+      .attr("r", 20)
+      .attr("fill", "#f8f9fa")
+      .attr("stroke", "#ccc")
+      .attr("stroke-width", 2);
 
-              // Add the SVG icon for level 1 nodes
-              node
-                .filter(d => d.level === 1)
-                  .append("image")
-                  .attr("href", level1IconPath)
-                  .attr("width", 24)
-                  .attr("height", 24)
-                  .attr("x", -12)
-                  .attr("y", -10);
-              
-              // Add the SVG icon for level 2 nodes
-              node
-                .filter(d => d.level === 2)
-                  .append("image")
-                  .attr("href", level2IconPath)
-                  .attr("width", 24)
-                  .attr("height", 24)
-                  .attr("x", -12)
-                  .attr("y", -10);
+    // Add icons
+    Object.entries(levelIconPaths).forEach(([level, path]) => {
+      nodeGroup
+        .filter((d) => d.level === +level)
+        .append("image")
+        .attr("href", path)
+        .attr("width", 24)
+        .attr("height", 24)
+        .attr("x", -12)
+        .attr("y", -12);
+    });
 
-              // Add the SVG icon for level 3 nodes
-              node
-                .filter(d => d.level === 3)
-                  .append("image")
-                  .attr("href", level3IconPath)
-                  .attr("width", 24)
-                  .attr("height", 24)
-                  .attr("x", -12)
-                  .attr("y", -10);
-              
-              // Add the SVG icon for level 4 nodes
-              node
-                .filter(d => d.level === 4)
-                  .append("image")
-                  .attr("href", level4IconPath)
-                  .attr("width", 24)
-                  .attr("height", 24)
-                  .attr("x", -12)
-                  .attr("y", -10);
+    // Add labels
+    nodeGroup
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", 35)
+      .text((d) => d.name);
+  });
+});
 
-              // Add the SVG icon for level 4 nodes
-              node
-                .filter(d => d.level === 5)
-                  .append("image")
-                  .attr("href", level5IconPath)
-                  .attr("width", 24)
-                  .attr("height", 24)
-                  .attr("x", -12)
-                  .attr("y", -10);
+</script>
 
-              // Add text for the node name
-              node
-                .append("text")
-                .attr("text-anchor", "middle")
-                .attr("dy", 35) // Position text below the node
-                .text(d => d.name);
-            });
-        });
-      });
-      </script>
 
   </body>
 </html>
