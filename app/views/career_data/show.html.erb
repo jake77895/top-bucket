@@ -1,156 +1,201 @@
-<div class="container mb-4 mt-4">
-  <h2 class="text-center text-light fw-bold mb-4">Career Path</h2>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chart</title>
+    <!-- Optional: Add Bootstrap or custom styles -->
+    <style>
+      .link {
+        stroke: #aaa;
+        stroke-width: 2px;
+      }
+      .link:hover {
+        stroke: #007bff;
+      }
+      .node circle {
+        fill: #f8f9fa;
+        stroke: #343a40;
+        stroke-width: 1.5px;
+      }
+      .node text {
+        font-size: 12px;
+        fill: #333;
+      }
+      .node circle:hover {
+        fill: #e9ecef;
+        stroke: #007bff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
 
-  <!-- Career Paths -->
-  <div class="row text-center">
-    <!-- Investment Banking Path -->
-    <div class="col-md-2">
-      <h5 class="text-light mb-3">Investment Banking</h5>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Analyst</h6>
-        <small>Level 1</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Associate</h6>
-        <small>Level 2</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Vice President</h6>
-        <small>Level 3</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Director</h6>
-        <small>Level 4</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm">
-        <h6 class="mb-1">Partner</h6>
-        <small>Level 5</small>
+    <div class="mb-4 mt-4 px-4">
+      <div class="card shadow-sm position-relative">
+        <!-- Back Button -->
+        <%= link_to params[:origin_page] || root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px;' do %>
+          <span class="fs-6">&larr;</span>
+        <% end %>
+
+        <!-- Title and Description -->
+        <div class="card-body text-center bg-light">
+          <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">Career Tree</h1>
+          <p class="text-muted" style="font-size: 14px;">Explore your future</p>
+        </div>
       </div>
     </div>
 
-    <!-- Private Equity Path -->
-    <div class="col-md-2">
-      <h5 class="text-light mb-3">Private Equity</h5>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Associate</h6>
-        <small>Level 1</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Senior Associate</h6>
-        <small>Level 2</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Vice President</h6>
-        <small>Level 3</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Principal</h6>
-        <small>Level 4</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm">
-        <h6 class="mb-1">Partner</h6>
-        <small>Level 5</small>
-      </div>
-    </div>
-
-    <!-- Corporate Development Path -->
-    <div class="col-md-2">
-      <h5 class="text-light mb-3">Corporate Development</h5>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Analyst</h6>
-        <small>Level 1</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Associate</h6>
-        <small>Level 2</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Manager</h6>
-        <small>Level 3</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Director</h6>
-        <small>Level 4</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm">
-        <h6 class="mb-1">Head of Corporate Dev</h6>
-        <small>Level 5</small>
+    <!--Industry header buttons-->
+    <div class="categories text-center mb-4 px-3">
+      <div class="d-flex justify-content-between flex-wrap">
+        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Venture Capital">
+          Venture Capital
+        </button>
+        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Private Equity">
+          Private Equity
+        </button>
+        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Hedge Fund">
+          Hedge Fund
+        </button>
+        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Investment Banking">
+          Investment Banking
+        </button>
+        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Corporate Development">
+          Corporate Development
+        </button>
+        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="FP&A">
+          FP&A
+        </button>
+        <button class="career_tree_industry_button btn btn-light flex-fill m-2 rounded-pill" data-category="Other">
+          Other
+        </button>
       </div>
     </div>
 
-    <!-- Venture Capital Path -->
-    <div class="col-md-2">
-      <h5 class="text-light mb-3">Venture Capital</h5>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Associate</h6>
-        <small>Level 1</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Senior Associate</h6>
-        <small>Level 2</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Principal</h6>
-        <small>Level 3</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Partner</h6>
-        <small>Level 4</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm">
-        <h6 class="mb-1">Managing Partner</h6>
-        <small>Level 5</small>
-      </div>
-    </div>
+    <!-- Add the chart container -->
+    <div id="chart"></div>
 
-    <!-- FP&A Path -->
-    <div class="col-md-2">
-      <h5 class="text-light mb-3">FP&A</h5>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Analyst</h6>
-        <small>Level 1</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Senior Analyst</h6>
-        <small>Level 2</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Manager</h6>
-        <small>Level 3</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Director</h6>
-        <small>Level 4</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm">
-        <h6 class="mb-1">Head of FP&A</h6>
-        <small>Level 5</small>
-      </div>
-    </div>
+    <!-- Include D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Embed your D3.js code -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const data = [
+          {
+      category: "Venture Capital",
+      nodes: [
+        { id: 1, name: "Analyst", level: 1 },
+        { id: 2, name: "Pre-MBA associate", level: 2 },
+        { id: 3, name: "Senior associate", level: 3 },
+        { id: 4, name: "Principal", level: 4 },
+        { id: 5, name: "Partner", level: 5 },
+      ],
+      links: [
+        { source: 1, target: 2 },
+        { source: 2, target: 3 },
+        { source: 3, target: 4 },
+        { source: 4, target: 5 },
+      ],
+          },
+          {
+      category: "Investment Banking",
+      nodes: [
+        { id: 6, name: "Analyst", level: 1 },
+        { id: 7, name: "Associate", level: 2 },
+        { id: 8, name: "Vice president", level: 3 },
+        { id: 9, name: "Senior vice president", level: 4 },
+        { id: 10, name: "Managing director", level: 5 },
+      ],
+      links: [
+        { source: 6, target: 7 },
+        { source: 7, target: 8 },
+        { source: 8, target: 9 },
+        { source: 9, target: 10 },
+      ],
+          },
+        ];
 
-    <!-- Family Office Path -->
-    <div class="col-md-2">
-      <h5 class="text-light mb-3">Family Office</h5>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Analyst</h6>
-        <small>Level 1</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Associate</h6>
-        <small>Level 2</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Vice President</h6>
-        <small>Level 3</small>
-      </div>
-      <div class="bg-secondary text-white p-3 rounded shadow-sm mb-3">
-        <h6 class="mb-1">Director</h6>
-        <small>Level 4</small>
-      </div>
-      <div class="bg-dark text-white p-3 rounded shadow-sm">
-        <h6 class="mb-1">Head of Investments</h6>
-        <small>Level 5</small>
-      </div>
-    </div>
-  </div>
-</div>
+        const width = 1200;
+        const height = 600;
+        const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+
+        const svg = d3
+          .select("#chart")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .style("font-family", "Arial");
+
+        // Function to render the chart for a specific category
+        function renderChart(category) {
+          // Clear previous chart
+          svg.selectAll("*").remove();
+
+          const categoryData = data.find(d => d.category === category);
+
+          if (!categoryData) return;
+
+          const categoryWidth = width / 1; // Single category width
+          const group = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+          const levelSpacing = (height - margin.top - margin.bottom) / 5;
+
+          // Draw links
+          group
+      .selectAll(".link")
+      .data(categoryData.links)
+      .enter()
+      .append("line")
+      .attr("class", "link")
+      .attr("x1", categoryWidth / 2)
+      .attr("y1", d => d.source * levelSpacing - levelSpacing / 2)
+      .attr("x2", categoryWidth / 2)
+      .attr("y2", d => d.target * levelSpacing - levelSpacing / 2)
+      .attr("stroke", "#ccc")
+      .attr("stroke-width", 2);
+
+          // Draw nodes
+          group
+      .selectAll(".node")
+      .data(categoryData.nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr(
+        "transform",
+        d => `translate(${categoryWidth / 2}, ${d.level * levelSpacing - levelSpacing / 2})`
+      )
+      .call(node => {
+        node
+          .append("circle")
+          .attr("r", 20)
+          .attr("fill", "#f8f9fa")
+          .attr("stroke", "#ccc")
+          .attr("stroke-width", 2);
+
+        node
+          .append("text")
+          .attr("text-anchor", "middle")
+          .attr("dy", 5)
+          .attr("font-size", 12)
+          .text(d => d.name);
+      });
+        }
+
+        // Initial render
+        renderChart("Venture Capital");
+
+        // Add event listeners to buttons
+        document.querySelectorAll(".categories button").forEach(button => {
+          button.addEventListener("click", () => {
+      const category = button.dataset.category;
+      renderChart(category);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

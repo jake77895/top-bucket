@@ -83,3 +83,35 @@
 }
 
 /* ********************************************************* */
+
+/* Responveness for the cards on the right size of the home screen on various screen sizes (to be refined later) */
+
+.card-responsive {
+  height: 375px; /* Default height for larger screens */
+}
+
+@media (max-width: 768px) {
+  .card-responsive {
+    height: 180px; /* Adjust for smaller screens (e.g., tablets) */
+  }
+}
+
+@media (max-width: 576px) {
+  .card-responsive {
+    height: 250px; /* Adjust for mobile screens */
+  }
+}
+
+/* ********************************************************* */
+
+/* Career Tree Home Page */
+
+.career_tree_industry_button {
+  background-color: #FCFCFC !important; /* Light background color */
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 50px; /* Rounded-pill effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  padding: 0.5rem 1rem; /* Adjust padding for a consistent look */
+  cursor: pointer; /* Change cursor to pointer for better UX */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+}
