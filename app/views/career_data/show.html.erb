@@ -11,7 +11,6 @@
     />
   </head>
   <body>
-    
     <div class="mb-4 mt-4 px-4">
       <div class="card shadow-sm position-relative">
         <!-- Back Button -->
@@ -24,22 +23,43 @@
           <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">Career Tree</h1>
           <p class="text-muted" style="font-size: 14px;">Explore your future</p>
         </div>
+
+
+
+      </div>
+
+    </div>
+
+    <div class="px-4">
+      <div class="row">
+        <div class="col-4">
+          <%= link_to "Overview", overview_career_data_path, class: "btn btn-dark w-100" %>
+        </div>
+        <div class="col-4">
+          <%= link_to "Career Change", change_career_data_path, class: "btn btn-dark w-100" %>
+        </div>
+        <div class="col-4">
+          <%= link_to "Career Start", start_career_data_path, class: "btn btn-dark w-100" %>
+        </div>
       </div>
     </div>
-    
+
+
     <div class="mb-4 mt-4 px-4">
       <div class="card shadow-sm position-relative">
         <div class="card-body">
-        <div id="categories" class="text-center py-0 px-3"></div>
-        <div id="chart" style="overflow-x: auto; white-space: nowrap;"></div>
+          <div id="categories" class="text-center py-0 px-3"></div>
+          <div id="chart" style="overflow-x: auto; white-space: nowrap;"></div>
+        </div>
       </div>
+    </div>
 
-      </div>
-    <div>
+    
+
 
     <!-- Include D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-      <script>
+    <script>
       document.addEventListener("DOMContentLoaded", () => {
         const data = [
           {
@@ -120,12 +140,12 @@
           },
         ];
 
-        const minCategoryWidth = 200; // Minimum width per category
-        const calculatedWidth = data.length * minCategoryWidth; // Total width based on categories
-        const width = Math.max(window.innerWidth, calculatedWidth); // Ensure the chart fits the screen
+        const minCategoryWidth = 200;
+        const calculatedWidth = data.length * minCategoryWidth;
+        const width = Math.max(window.innerWidth, calculatedWidth);
         const height = 750;
-        const buttonHeight = 40; // Button height
-        const buttonMarginBelow = 20; // Space below the button
+        const buttonHeight = 40;
+        const buttonMarginBelow = 20;
         const margin = { top: buttonHeight + buttonMarginBelow + 20, right: 50, bottom: 50, left: 50 };
         const levelSpacing = (height - margin.top - margin.bottom) / 5;
         const categoryWidth = width / data.length;
@@ -136,6 +156,44 @@
           .attr("width", width)
           .attr("height", height)
           .style("font-family", "Arial");
+
+        const defs = svg.append("defs");
+
+        defs.append("marker")
+          .attr("id", "arrowhead-solid")
+          .attr("viewBox", "0 0 10 10")
+          .attr("refX", 25)
+          .attr("refY", 5)
+          .attr("markerWidth", 6)
+          .attr("markerHeight", 6)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+          .attr("fill", "#333");
+
+        defs.append("marker")
+          .attr("id", "arrowhead-dashed")
+          .attr("viewBox", "0 0 10 10")
+          .attr("refX", 6)
+          .attr("refY", 5)
+          .attr("markerWidth", 6)
+          .attr("markerHeight", 6)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+          .attr("fill", "#ff0000");
+
+        defs.append("marker")
+          .attr("id", "arrowhead-thick")
+          .attr("viewBox", "0 0 10 10")
+          .attr("refX", 6)
+          .attr("refY", 5)
+          .attr("markerWidth", 8)
+          .attr("markerHeight", 8)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+          .attr("fill", "#007bff");
 
         const levelIconPaths = {
           1: "<%= asset_path('icons/career_tree_icons/level_1.svg') %>",
@@ -155,7 +213,6 @@
               })`
             );
 
-          // Create button background
           const textElement = svg
             .append("text")
             .attr("x", i * categoryWidth + categoryWidth / 2)
@@ -177,9 +234,7 @@
             .attr("height", buttonHeight)
             .attr("rx", 20)
             .attr("ry", 20)
-            .attr("fill", "#f8f9fa")
-            .attr("stroke", "#ddd")
-            .attr("stroke-width", 1);
+            .attr("class", "career_tree_industry_button"); // Use external class for styling;
 
           textElement.raise();
 
@@ -204,10 +259,10 @@
                 (categoryData.nodes.find((node) => node.id === d.target).level - 1) *
                 levelSpacing
             )
-            .attr("stroke", "#ccc")
-            .attr("stroke-width", 2);
+            .attr("stroke", "#333")
+            .attr("stroke-width", 2)
+            .attr("marker-end", "url(#arrowhead-solid)"); // Add arrowhead marker
 
-          // Add nodes
           const nodeGroup = group
             .selectAll(".node")
             .data(categoryData.nodes)
@@ -219,7 +274,6 @@
               (d) => `translate(0, ${(d.level - 1) * levelSpacing})`
             );
 
-          // Add background circles
           nodeGroup
             .append("circle")
             .attr("r", 20)
@@ -227,7 +281,6 @@
             .attr("stroke", "#ccc")
             .attr("stroke-width", 2);
 
-          // Add icons
           Object.entries(levelIconPaths).forEach(([level, path]) => {
             nodeGroup
               .filter((d) => d.level === +level)
@@ -239,39 +292,30 @@
               .attr("y", -12);
           });
 
-          // Add labels with background
           nodeGroup.each(function (d) {
             const group = d3.select(this);
-
-            // Create the text element
             const textElement = group
               .append("text")
               .attr("text-anchor", "middle")
-              .attr("dy", 35) // Position text below the node
-              .text(d.name)
-              .attr("class", "node-label");
+              .attr("dy", 35)
+              .text(d.name);
 
-            // Measure text size
             const textWidth = textElement.node().getComputedTextLength();
-            const textHeight = 11; // Approximate text height, adjust as needed
+            const textHeight = 11;
 
-            // Add a rectangle behind the text
             group
-              .insert("rect", "text") // Insert rect before the text
-              .attr("x", -textWidth / 2 - 5) // Center the rectangle horizontally with padding
-              .attr("y", 35 - textHeight / 2 - 2) // Align vertically with padding
-              .attr("width", textWidth + 10) // Add padding to the width
-              .attr("height", textHeight) // Add padding to the height
-              .attr("rx", 4) // Rounded corners
+              .insert("rect", "text")
+              .attr("x", -textWidth / 2 - 5)
+              .attr("y", 35 - textHeight / 2 - 2)
+              .attr("width", textWidth + 10)
+              .attr("height", textHeight)
+              .attr("rx", 4)
               .attr("ry", 4)
-              .attr("fill", "white") // Background color
-              .attr("opacity", 1); // Adjust opacity
+              .attr("fill", "white")
+              .attr("opacity", 1);
           });
         });
       });
-
-</script>
-
-
+    </script>
   </body>
 </html>

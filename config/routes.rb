@@ -193,7 +193,14 @@ Rails.application.routes.draw do
   end
 
   # Public Routes for Career Data
-  resources :career_data, only: [:show]
+  resources :career_data, only: [:show] do
+    collection do
+      get :overview
+      get :change
+      get :start
+    end
+
+  end
 
 
 

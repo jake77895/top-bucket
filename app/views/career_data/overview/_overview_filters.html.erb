@@ -1,0 +1,75 @@
+<div class="card shadow-sm my-2">
+  <div class="card-body">
+    <form action="#" method="get">
+      <div class="row g-3">
+        <!-- Industry Filter -->
+        <div class="col-md-4">
+          <label for="industry-filter" class="form-label fw-bold">Industry</label>
+          <select id="industry-filter" class="form-select" multiple>
+            <option value="technology">Technology</option>
+            <option value="finance">Finance</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="education">Education</option>
+            <option value="manufacturing">Manufacturing</option>
+          </select>
+        </div>
+
+        <!-- Company Filter -->
+        <div class="col-md-4">
+          <label for="company-filter" class="form-label fw-bold">Company</label>
+          <select id="company-filter" class="form-select" multiple>
+            <option value="google">Google</option>
+            <option value="apple">Apple</option>
+            <option value="microsoft">Microsoft</option>
+            <option value="amazon">Amazon</option>
+            <option value="meta">Meta</option>
+          </select>
+        </div>
+
+        <!-- Location Filter -->
+        <div class="col-md-4">
+          <label for="location-filter" class="form-label fw-bold">Location</label>
+          <select id="location-filter" class="form-select" multiple>
+            <option value="new-york">New York</option>
+            <option value="san-francisco">San Francisco</option>
+            <option value="chicago">Chicago</option>
+            <option value="seattle">Seattle</option>
+            <option value="austin">Austin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-3">
+        <!-- Level Filter -->
+        <div class="col-md-6">
+          <label for="level-filter" class="form-label fw-bold">Level</label>
+          <select id="level-filter" class="form-select" multiple>
+            <option value="entry">Entry</option>
+            <option value="mid">Mid</option>
+            <option value="senior">Senior</option>
+            <option value="lead">Lead</option>
+            <option value="executive">Executive</option>
+          </select>
+        </div>
+
+        <!-- Sub-Level Filter -->
+        <div class="col-md-6">
+          <label for="sub-level-filter" class="form-label fw-bold">Sub-Level</label>
+          <select id="sub-level-filter" class="form-select" multiple>
+            <option value="associate">Associate</option>
+            <option value="manager">Manager</option>
+            <option value="director">Director</option>
+            <option value="vp">Vice President</option>
+            <option value="c-suite">C-Suite</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Apply and Reset Buttons -->
+      <div class="mt-4 text-center">
+        <button type="submit" class="btn btn-dark me-2">Apply</button>
+        <button type="reset" class="btn btn-outline-secondary">Clear</button>
+      </div>
+    </form>
+  </div>
+</div>

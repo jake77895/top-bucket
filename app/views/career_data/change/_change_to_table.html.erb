@@ -1,0 +1,47 @@
+<div class="table-responsive">
+  <table class="table table-hover shadow-sm">
+    <thead style="background-color: #0D1B2A; color: white;">
+      <tr>
+        <th>Company</th>
+        <th>Industry</th>
+        <th>Level</th>
+        <th>Sub-Level</th>
+        <th>Avg. Salary</th>
+        <th>Avg. Bonus</th>
+        <th>Avg. Total Comp</th>
+        <th>Avg. Hours Worked</th>
+        <th>Avg. Comp per Hour</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% 5.times do %> <!-- Placeholder rows -->
+        <tr>
+          <td>Company <%= rand(1..10) %></td>
+          <td>Industry <%= rand(1..5) %></td>
+          <td>Level <%= ["Analyst", "Associate", "Manager", "Director"].sample %></td>
+          <td>Sub-Level <%= ["Junior", "Senior", "Lead"].sample %></td>
+          <td>
+            $<%= rand(60..120) %>K
+            <br><small class="text-muted">(25th: $<%= rand(50..59) %>K - 75th: $<%= rand(121..150) %>K)</small>
+          </td>
+          <td>
+            $<%= rand(10..50) %>K
+            <br><small class="text-muted">(25th: $<%= rand(5..9) %>K - 75th: $<%= rand(51..75) %>K)</small>
+          </td>
+          <td>
+            $<%= rand(70..170) %>K
+            <br><small class="text-muted">(25th: $<%= rand(60..69) %>K - 75th: $<%= rand(171..200) %>K)</small>
+          </td>
+          <td>
+            <%= rand(40..80) %> hrs/week
+            <br><small class="text-muted">(25th: <%= rand(30..39) %> - 75th: <%= rand(81..100) %>)</small>
+          </td>
+          <td>
+            $<%= rand(20..50) %>/hour
+            <br><small class="text-muted">(25th: $<%= rand(10..19) %> - 75th: $<%= rand(51..75) %>)</small>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

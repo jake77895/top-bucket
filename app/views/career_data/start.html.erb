@@ -1,0 +1,18 @@
+<div class="mb-4 mt-4 px-4">
+  <div class="card shadow-sm position-relative">
+    <!-- Back Button -->
+    <%= link_to career_datum_path(id: 1), class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">Career Start</h1>
+      <p class="text-muted" style="font-size: 14px;">See how careers start</p>
+    </div>
+  </div>
+</div>
+
+<div class="px-4">
+  <%= render 'career_data/start/start_filters' %>
+</div>

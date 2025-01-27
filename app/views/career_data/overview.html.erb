@@ -1,0 +1,44 @@
+<div class="mb-4 mt-4 px-4">
+  <div class="card shadow-sm position-relative">
+    <!-- Back Button -->
+    <%= link_to career_datum_path(id: 1), class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">Career Overview</h1>
+      <p class="text-muted" style="font-size: 14px;">Overview of your career</p>
+    </div>
+  </div>
+</div>
+
+<div class="px-4">
+  <%= render 'career_data/overview/overview_summary' %>
+</div>
+
+<!-- Open Filter Button -->
+<div class="text-center mt-4 px-4">
+  <button type="button" class="btn btn-outline-dark w-100" data-bs-toggle="modal" data-bs-target="#filterModal">
+    Open Filters
+  </button>
+</div>
+
+<div class="mt-4 px-4">
+  <%= render 'career_data/overview/overview_table' %>
+</div>
+
+<!-- Modal for Filters -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterModalLabel">Filter Options</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= render 'career_data/overview/overview_filters' %>
+      </div>
+    </div>
+  </div>
+</div>
