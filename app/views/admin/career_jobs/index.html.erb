@@ -1,0 +1,39 @@
+<h1 class="text-center my-4">Career Jobs</h1>
+
+<div class="container">
+  <!-- Create New Job Button -->
+  <div class="d-flex justify-content-end mb-3">
+    <%= link_to 'Create New Job', step_one_admin_career_jobs_path, class: 'btn btn-dark' %>
+  </div>
+
+  <!-- Career Jobs Table -->
+  <div class="card shadow-sm border-0">
+    <table class="table mb-0">
+      <thead class="table-dark text-white">
+        <tr>
+          <th>ID</th>
+          <th>Company</th>
+          <th>Location</th>
+          <th class="text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @career_jobs.each do |job| %>
+          <tr>
+            <td><%= job.id %></td>
+            <td><%= job.company %></td>
+            <td><%= job.location %></td>
+            <td class="text-left">
+              <%= link_to 'Show', admin_career_job_path(job), class: 'btn btn-outline-secondary btn-sm me-2' %>
+              <%= link_to 'Edit', edit_admin_career_job_path(job), class: 'btn btn-outline-warning btn-sm me-2' %>
+              <%= link_to 'Delete', admin_career_job_path(job), 
+                          method: :delete, 
+                          data: { confirm: 'Are you sure you want to delete this job?' }, 
+                          class: 'btn btn-outline-danger btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

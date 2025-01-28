@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_28_023204) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_28_175352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_28_023204) do
     t.string "sub_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "location"
   end
 
   create_table "career_compensations", force: :cascade do |t|
@@ -68,6 +69,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_28_023204) do
     t.integer "hours_worked_per_week"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "group"
     t.index ["career_job_id"], name: "index_career_compensations_on_career_job_id"
   end
 
@@ -82,6 +84,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_28_023204) do
     t.bigint "next_job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "location"
     t.index ["next_job_id"], name: "index_career_jobs_on_next_job_id"
     t.index ["previous_job_id"], name: "index_career_jobs_on_previous_job_id"
     t.index ["user_id"], name: "index_career_jobs_on_user_id"

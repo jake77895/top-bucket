@@ -4,6 +4,7 @@
 #
 #  id                    :bigint           not null, primary key
 #  bonus                 :decimal(10, 2)
+#  group                 :string
 #  hours_worked_per_week :integer
 #  level                 :string
 #  salary                :decimal(10, 2)
@@ -23,4 +24,6 @@
 #
 class CareerCompensation < ApplicationRecord
   belongs_to :career_job
+
+  validates :salary, presence: true
 end

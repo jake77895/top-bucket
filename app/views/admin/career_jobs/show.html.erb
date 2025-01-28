@@ -1,0 +1,30 @@
+<h1>Job Details</h1>
+<p><strong>Company:</strong> <%= @career_job.company %></p>
+<p><strong>Location:</strong> <%= @career_job.location %></p>
+
+<h2>Compensations</h2>
+<%= link_to 'Add Compensation', new_admin_career_job_career_compensation_path(@career_job), class: 'btn btn-secondary' %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Salary</th>
+      <th>Bonus</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @compensations.each do |compensation| %>
+      <tr>
+        <td><%= compensation.year %></td>
+        <td><%= number_to_currency(compensation.salary) %></td>
+        <td><%= number_to_currency(compensation.bonus) %></td>
+        <td>
+          <%= link_to 'Edit', edit_admin_career_job_career_compensation_path(@career_job, compensation) %>
+          <%= link_to 'Delete', admin_career_job_career_compensation_path(@career_job, compensation), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

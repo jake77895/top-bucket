@@ -6,6 +6,7 @@
 #  company         :string
 #  group           :string
 #  industry        :string
+#  location        :string
 #  start_year      :integer
 #  years_at_job    :integer
 #  created_at      :datetime         not null
@@ -27,7 +28,14 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class CareerJob < ApplicationRecord
+  has_many :career_compensations, dependent: :destroy
+
+  # Add these virtual attributes
+  attr_accessor :matching_groups, :matching_job_levels
+
+  validates :user_id, :company, presence: true
+
   belongs_to :user
-  belongs_to :previous_job
-  belongs_to :next_job
+  # belongs_to :previous_job
+  # belongs_to :next_job
 end

@@ -11,6 +11,7 @@
 #  industry                      :string
 #  job_title                     :string
 #  level                         :string
+#  location                      :string
 #  sample_size                   :integer
 #  sub_level                     :string
 #  year                          :integer

@@ -111,6 +111,19 @@ Rails.application.routes.draw do
     end
 
     resources :forum_rooms, only: [:index, :new, :create, :edit, :update, :destroy]
+
+    resources :career_jobs do
+      collection do
+        get :step_one       # Step 1: Display the job details form
+        post :save_step_one # Handle form submission for Step 1
+        get :step_two       # Step 2: Display the compensation details form
+        post :create        # Handle form submission for Step 2 and create jobs
+      end
+    
+      # Nested routes for career_compensations
+      resources :career_compensations, only: [:new, :create, :edit, :update, :destroy]
+    end
+
   end
 
   ########################

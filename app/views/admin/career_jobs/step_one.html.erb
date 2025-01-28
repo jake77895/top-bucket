@@ -1,0 +1,51 @@
+<h1 class="text-center my-4">Step 1: Job Details</h1>
+
+<div class="container">
+  <%= form_with url: save_step_one_admin_career_jobs_path, method: :post, local: true do |form| %>
+  <% 3.times do |index| %>
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Job <%= index + 1 %></h5>
+      </div>
+      <div class="card-body">
+        <!-- Company -->
+        <div class="mb-3">
+          <%= form.label "career_jobs[#{index}][company_id]", 'Company', class: 'form-label fw-bold' %>
+          <%= form.select "career_jobs[#{index}][company_id]", options_from_collection_for_select(@companies, :id, :name), { include_blank: 'Select a Company' }, class: 'form-control' %>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-3">
+          <%= form.label "career_jobs[#{index}][location_id]", 'Location', class: 'form-label fw-bold' %>
+          <%= form.select "career_jobs[#{index}][location_id]", options_from_collection_for_select(@locations, :id, :name), { include_blank: 'Select a Location' }, class: 'form-control' %>
+        </div>
+
+        <!-- Industry -->
+        <div class="mb-3">
+          <%= form.label "career_jobs[#{index}][industry_id]", 'Industry', class: 'form-label fw-bold' %>
+          <%= form.select "career_jobs[#{index}][industry_id]", options_from_collection_for_select(@industries, :id, :name), { include_blank: 'Select an Industry' }, class: 'form-control' %>
+        </div>
+
+        <!-- Years Worked -->
+        <div class="mb-3">
+          <%= form.label "career_jobs[#{index}][years_at_job]", 'Years Worked', class: 'form-label fw-bold' %>
+          <%= form.number_field "career_jobs[#{index}][years_at_job]", min: 0, class: 'form-control', placeholder: 'Enter years worked' %>
+        </div>
+
+        <!-- Start Year -->
+        <div class="mb-3">
+          <%= form.label "career_jobs[#{index}][start_year]", 'Start Year', class: 'form-label fw-bold' %>
+          <%= form.number_field "career_jobs[#{index}][start_year]", min: 1900, max: Date.today.year, class: 'form-control', placeholder: 'Enter start year' %>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+
+  <div class="d-flex justify-content-between mt-3">
+    <%= link_to 'Cancel', admin_career_jobs_path, class: 'btn btn-outline-secondary px-4' %>
+    <%= form.submit 'Next', class: 'btn btn-dark px-4' %>
+  </div>
+<% end %>
+
+</div>

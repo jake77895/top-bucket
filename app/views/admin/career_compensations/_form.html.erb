@@ -1,0 +1,35 @@
+<%= form_with model: [@career_job, @career_compensation], local: true do |form| %>
+  <div>
+    <%= form.label :year, "Year" %>
+    <%= form.number_field :year, min: 1900, max: Time.current.year, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :level, "Job Level" %>
+    <%= form.text_field :level %>
+  </div>
+
+  <div>
+    <%= form.label :sub_level, "Sub-Level" %>
+    <%= form.text_field :sub_level %>
+  </div>
+
+  <div>
+    <%= form.label :salary, "Salary" %>
+    <%= form.number_field :salary, step: 0.01, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :bonus, "Bonus" %>
+    <%= form.number_field :bonus, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= form.label :hours_worked_per_week, "Hours Worked per Week" %>
+    <%= form.number_field :hours_worked_per_week, min: 0, max: 168 %>
+  </div>
+
+  <div>
+    <%= form.submit @career_compensation.persisted? ? "Update Compensation" : "Create Compensation", class: "btn btn-primary" %>
+  </div>
+<% end %>

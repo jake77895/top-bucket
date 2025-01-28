@@ -1,0 +1,51 @@
+<h1 class="text-center my-4">Step 2: Add Career Jobs</h1>
+
+<div class="container">
+  <%= form_with url: admin_career_jobs_path, method: :post, local: true do |form| %>
+    <% @career_jobs.each_with_index do |career_job, index| %>
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Job <%= index + 1 %></h5>
+        </div>
+        <div class="card-body">
+          <!-- Group -->
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][group]", 'Group', class: 'form-label fw-bold' %>
+            <%= form.select "career_jobs[#{index}][group]", options_from_collection_for_select(@groups, :name, :name),
+                { include_blank: 'Select a group' }, class: 'form-control' %>
+          </div>
+
+          <!-- Start Year -->
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][start_year]", 'Start Year', class: 'form-label fw-bold' %>
+            <%= form.number_field "career_jobs[#{index}][start_year]", min: 1900, max: Time.current.year, class: 'form-control' %>
+          </div>
+
+          <!-- Compensation Fields -->
+          <h6 class="fw-bold">Compensation</h6>
+          <%= form.fields_for "career_jobs[#{index}][compensations]", CareerCompensation.new do |comp_form| %>
+            <div class="row">
+              <div class="col-md-4">
+                <%= comp_form.label :salary, 'Salary', class: 'form-label' %>
+                <%= comp_form.number_field :salary, class: 'form-control', placeholder: 'Enter salary' %>
+              </div>
+              <div class="col-md-4">
+                <%= comp_form.label :bonus, 'Bonus', class: 'form-label' %>
+                <%= comp_form.number_field :bonus, class: 'form-control', placeholder: 'Enter bonus' %>
+              </div>
+              <div class="col-md-4">
+                <%= comp_form.label :hours_worked_per_week, 'Hours Worked/Week', class: 'form-label' %>
+                <%= comp_form.number_field :hours_worked_per_week, min: 0, max: 168, class: 'form-control', placeholder: 'Enter hours' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="d-flex justify-content-between mt-3">
+      <%= link_to 'Back', step_one_admin_career_jobs_path, class: 'btn btn-outline-secondary px-4' %>
+      <%= form.submit 'Save Jobs', class: 'btn btn-dark px-4' %>
+    </div>
+  <% end %>
+</div>
