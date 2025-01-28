@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_22_221427) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_28_023204) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,51 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_22_221427) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "career_aggregate_jobs", force: :cascade do |t|
+    t.string "job_title"
+    t.string "company"
+    t.string "industry"
+    t.string "group"
+    t.decimal "average_salary", precision: 10, scale: 2
+    t.decimal "average_bonus", precision: 10, scale: 2
+    t.integer "average_hours_worked_per_week"
+    t.integer "sample_size"
+    t.integer "year"
+    t.string "level"
+    t.string "sub_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "career_compensations", force: :cascade do |t|
+    t.bigint "career_job_id", null: false
+    t.integer "year"
+    t.string "level"
+    t.string "sub_level"
+    t.decimal "salary", precision: 10, scale: 2
+    t.decimal "bonus", precision: 10, scale: 2
+    t.integer "hours_worked_per_week"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["career_job_id"], name: "index_career_compensations_on_career_job_id"
+  end
+
+  create_table "career_jobs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "company"
+    t.string "industry"
+    t.string "group"
+    t.integer "start_year"
+    t.integer "years_at_job"
+    t.bigint "previous_job_id"
+    t.bigint "next_job_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["next_job_id"], name: "index_career_jobs_on_next_job_id"
+    t.index ["previous_job_id"], name: "index_career_jobs_on_previous_job_id"
+    t.index ["user_id"], name: "index_career_jobs_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -392,6 +437,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_22_221427) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "career_compensations", "career_jobs"
+  add_foreign_key "career_jobs", "career_jobs", column: "next_job_id"
+  add_foreign_key "career_jobs", "career_jobs", column: "previous_job_id"
+  add_foreign_key "career_jobs", "users"
   add_foreign_key "comments", "tier_lists"
   add_foreign_key "comments", "users"
   add_foreign_key "companies", "position_types"
