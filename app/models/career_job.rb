@@ -4,7 +4,6 @@
 #
 #  id              :bigint           not null, primary key
 #  company         :string
-#  group           :string
 #  industry        :string
 #  location        :string
 #  start_year      :integer
