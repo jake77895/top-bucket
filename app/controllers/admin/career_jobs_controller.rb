@@ -13,7 +13,7 @@ class Admin::CareerJobsController < ApplicationController
     @locations = Location.all.order(:name)
     @industries = PositionType.all.order(:name) # Assuming PositionType represents industries
   end
-
+  
   def save_step_one
     # Permit and process parameters
     session[:jobs] = params.require(:career_jobs).to_unsafe_h.values.map do |job|
@@ -25,21 +25,10 @@ class Admin::CareerJobsController < ApplicationController
         start_year: job["start_year"]
       }
     end
-
-    # Set the selected values in the session for groups filtering
-    # selected_companies = params[:career_jobs].values.map { |job| job["company_id"] }.reject(&:blank?).uniq
-    # selected_locations = params[:career_jobs].values.map { |job| job["location_id"] }.reject(&:blank?).uniq
-    # selected_industries = params[:career_jobs].values.map { |job| job["industry_id"] }.reject(&:blank?).uniq
-
-    # Store these arrays in the session
-    # session[:selected_companies] = selected_companies
-    # session[:selected_locations] = selected_locations
-    # session[:selected_industries] = selected_industries
-
   
     redirect_to step_two_admin_career_jobs_path
   end
-
+  
   def step_two
     unless session[:jobs].present?
       redirect_to step_one_admin_career_jobs_path, alert: "Please complete Step 1 first."
@@ -162,10 +151,7 @@ class Admin::CareerJobsController < ApplicationController
       Rails.logger.debug "All CareerJobs saved successfully!"
       redirect_to admin_career_jobs_path, notice: 'Career jobs created successfully.'
     else
-      @career_jobs.each_with_index do |job, index|
-        Rails.logger.error "Errors for CareerJob ##{index}: #{job.errors.full_messages.inspect}"
-      end
-      render :step_two, status: :unprocessable_entity
+      redirect_to admin_career_jobs_path, alert: 'Some fields are missing or invalid. Please correct them.'
     end
   end
   

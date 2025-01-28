@@ -25,5 +25,11 @@
 class CareerCompensation < ApplicationRecord
   belongs_to :career_job
 
-  validates :salary, presence: true
+  validates :group, presence: true
+  validates :level, presence: true
+  validates :sub_level, presence: true
+  validates :salary, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 3000000}
+  validates :bonus, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 3000000 }
+  validates :hours_worked_per_week, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 120 }
+
 end

@@ -124,6 +124,9 @@ Rails.application.routes.draw do
       resources :career_compensations, only: [:new, :create, :edit, :update, :destroy]
     end
 
+    resources :career_aggregate_jobs, except: [:show]
+
+
   end
 
   ########################

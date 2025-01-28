@@ -1,11 +1,13 @@
+<h1 class="text-center my-4">Step 2: Compensation Details</h1>
+
 <div class="container">
   <%= form_with url: admin_career_jobs_path, method: :post, local: true do |form| %>
     <% @career_jobs.each_with_index do |career_job, index| %>
-      <%= form.hidden_field "career_jobs[#{index}][company]", value: career_job.company %>
-      <%= form.hidden_field "career_jobs[#{index}][location]", value: career_job.location %>
-      <%= form.hidden_field "career_jobs[#{index}][industry]", value: career_job.industry %>
-      <%= form.hidden_field "career_jobs[#{index}][years_at_job]", value: career_job.years_at_job %>
-      <%= form.hidden_field "career_jobs[#{index}][start_year]", value: career_job.start_year %>
+      <%= form.hidden_field "career_jobs[#{index}][company]", value: career_job.company, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][location]", value: career_job.location, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][industry]", value: career_job.industry, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][years_at_job]", value: career_job.years_at_job, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][start_year]", value: career_job.start_year, required: true %>
 
       <div class="accordion mb-4" id="accordionJob<%= index %>">
         <div class="accordion-item">
@@ -36,7 +38,7 @@
                       <%= form.select "career_jobs[#{index}][career_compensations][#{year_index}][group]",
                           options_from_collection_for_select(career_job.matching_groups || [], :name, :name),
                           { include_blank: 'Select Group' },
-                          class: 'form-control' %>
+                          class: 'form-control', required: true %>
                     </div>
 
                     <!-- Level -->
@@ -44,7 +46,7 @@
                       <%= form.select "career_jobs[#{index}][career_compensations][#{year_index}][level]",
                           options_from_collection_for_select(career_job.matching_job_levels || [], :name, :name),
                           { include_blank: 'Select Level' },
-                          class: 'form-control' %>
+                          class: 'form-control', required: true %>
                     </div>
 
                     <!-- Sub-Level -->
@@ -52,7 +54,7 @@
                       <%= form.select "career_jobs[#{index}][career_compensations][#{year_index}][sub_level]",
                           [['Stub', 'Stub'], ['1', '1'], ['2', '2'], ['3', '3'], ['4+', '4+']],
                           { include_blank: 'Sub-Level' },
-                          class: 'form-control' %>
+                          class: 'form-control', required: true %>
                     </div>
                   </div>
 
@@ -63,7 +65,7 @@
                       <%= form.number_field "career_jobs[#{index}][career_compensations][#{year_index}][salary]",
                           value: compensation.salary,
                           class: 'form-control', 
-                          placeholder: 'Salary' %>
+                          placeholder: 'Salary', required: true, min: 0 %>
                     </div>
 
                     <!-- Bonus -->
@@ -71,7 +73,7 @@
                       <%= form.number_field "career_jobs[#{index}][career_compensations][#{year_index}][bonus]",
                           value: compensation.bonus,
                           class: 'form-control', 
-                          placeholder: 'Bonus' %>
+                          placeholder: 'Bonus', required: true, min: 0 %>
                     </div>
 
                     <!-- Hours Worked -->
@@ -80,7 +82,7 @@
                           value: compensation.hours_worked_per_week,
                           min: 0, max: 168, 
                           class: 'form-control', 
-                          placeholder: 'Hours/Week' %>
+                          placeholder: 'Hours/Week', required: true %>
                     </div>
                   </div>
 

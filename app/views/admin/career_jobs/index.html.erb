@@ -14,6 +14,10 @@
           <th>ID</th>
           <th>Company</th>
           <th>Location</th>
+          <th>Group</th>
+          <th>Salary</th>
+          <th>Bonus</th>
+          <th>Level</th>
           <th class="text-left">Actions</th>
         </tr>
       </thead>
@@ -23,9 +27,25 @@
             <td><%= job.id %></td>
             <td><%= job.company %></td>
             <td><%= job.location %></td>
+            
+            <!-- Show Group, Salary, Bonus, and Level (from CareerCompensations) -->
+            <td>
+              <%= job.career_compensations.first&.group || 'N/A' %>
+            </td>
+            <td>
+              <%= number_to_currency(job.career_compensations.first&.salary) || 'N/A' %>
+            </td>
+            <td>
+              <%= number_to_currency(job.career_compensations.first&.bonus) || 'N/A' %>
+            </td>
+            <td>
+              <%= job.career_compensations.first&.level || 'N/A' %>
+            </td>
+
+            <!-- Actions -->
             <td class="text-left">
-              <%= link_to 'Show', admin_career_job_path(job), class: 'btn btn-outline-secondary btn-sm me-2' %>
-              <%= link_to 'Edit', edit_admin_career_job_path(job), class: 'btn btn-outline-warning btn-sm me-2' %>
+              <%= link_to 'Edit', step_one_admin_career_jobs_path(job_id: job.id), 
+                          class: 'btn btn-outline-warning btn-sm me-2' %>
               <%= link_to 'Delete', admin_career_job_path(job), 
                           method: :delete, 
                           data: { confirm: 'Are you sure you want to delete this job?' }, 

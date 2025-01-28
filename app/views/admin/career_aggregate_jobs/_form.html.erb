@@ -1,0 +1,117 @@
+<h1 class="text-center my-4">
+  <%= @career_aggregate_job.new_record? ? 'Create New Career Aggregate Job' : 'Edit Career Aggregate Job' %>
+</h1>
+
+<div class="container">
+  <%= form_with(model: @career_aggregate_job, 
+                url: @career_aggregate_job.new_record? ? admin_career_aggregate_jobs_path : admin_career_aggregate_job_path(@career_aggregate_job), 
+                local: true) do |form| %>
+
+    <div class="card shadow-sm border-0">
+
+      <!-- Header -->
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">
+          <%= @career_aggregate_job.new_record? ? 'Create New Career Aggregate Job' : 'Edit Career Aggregate Job' %>
+        </h5>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Company -->
+        <div class="mb-3">
+          <%= form.label :company, "Company", class: 'form-label fw-bold' %>
+          <%= form.select :company, 
+              options_from_collection_for_select(@companies, :name, :name, @career_aggregate_job.company), 
+              { include_blank: "Select a Company" }, 
+              class: 'form-control' %>
+        </div>
+
+        <!-- Industry -->
+        <div class="mb-3">
+          <%= form.label :industry, "Industry", class: 'form-label fw-bold' %>
+          <%= form.select :industry, 
+              options_from_collection_for_select(@industries, :name, :name, @career_aggregate_job.industry), 
+              { include_blank: "Select an Industry" }, 
+              class: 'form-control' %>
+        </div>
+
+        <!-- Group -->
+        <div class="mb-3">
+          <%= form.label :group, "Group", class: 'form-label fw-bold' %>
+          <%= form.select :group, 
+              options_from_collection_for_select(@groups, :name, :name, @career_aggregate_job.group), 
+              { include_blank: "Select a Group" }, 
+              class: 'form-control' %>
+        </div>
+
+        <!-- Level -->
+        <div class="mb-3">
+          <%= form.label :level, "Level", class: 'form-label fw-bold' %>
+          <%= form.select :level, 
+              options_from_collection_for_select(@job_levels, :name, :name, @career_aggregate_job.level), 
+              { include_blank: "Select a Level" }, 
+              class: 'form-control' %>
+        </div>
+
+        <!-- Sub Level -->
+        <div class="mb-3">
+          <%= form.label :sub_level, "Sub Level", class: 'form-label fw-bold' %>
+          <%= form.text_field :sub_level, value: @career_aggregate_job.sub_level, 
+                              class: 'form-control', placeholder: 'Enter sub level' %>
+        </div>
+
+        <!-- Average Salary -->
+        <div class="mb-3">
+          <%= form.label :average_salary, "Average Salary", class: 'form-label fw-bold' %>
+          <%= form.number_field :average_salary, value: @career_aggregate_job.average_salary, 
+                                step: 0.01, class: 'form-control', placeholder: 'Enter average salary' %>
+        </div>
+
+        <!-- Average Bonus -->
+        <div class="mb-3">
+          <%= form.label :average_bonus, "Average Bonus", class: 'form-label fw-bold' %>
+          <%= form.number_field :average_bonus, value: @career_aggregate_job.average_bonus, 
+                                step: 0.01, class: 'form-control', placeholder: 'Enter average bonus' %>
+        </div>
+
+        <!-- Average Hours Worked Per Week -->
+        <div class="mb-3">
+          <%= form.label :average_hours_worked_per_week, "Average Hours Worked Per Week", class: 'form-label fw-bold' %>
+          <%= form.number_field :average_hours_worked_per_week, 
+                                value: @career_aggregate_job.average_hours_worked_per_week, 
+                                class: 'form-control', placeholder: 'Enter hours per week' %>
+        </div>
+
+        <!-- Sample Size -->
+        <div class="mb-3">
+          <%= form.label :sample_size, "Sample Size", class: 'form-label fw-bold' %>
+          <%= form.number_field :sample_size, value: @career_aggregate_job.sample_size, 
+                                class: 'form-control', placeholder: 'Enter sample size' %>
+        </div>
+
+        <!-- Year -->
+        <div class="mb-3">
+          <%= form.label :year, "Year", class: 'form-label fw-bold' %>
+          <%= form.number_field :year, value: @career_aggregate_job.year, 
+                                class: 'form-control', placeholder: 'Enter year' %>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-3">
+          <%= form.label :location, "Location", class: 'form-label fw-bold' %>
+          <%= form.select :location, 
+              options_from_collection_for_select(@locations, :name, :name, @career_aggregate_job.location), 
+              { include_blank: "Select a Location" }, 
+              class: 'form-control' %>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer d-flex justify-content-between">
+        <%= link_to 'Back', admin_career_aggregate_jobs_path, class: 'btn btn-outline-secondary px-4' %>
+        <%= form.submit @career_aggregate_job.new_record? ? 'Create Career Aggregate Job' : 'Update Career Aggregate Job', class: 'btn btn-dark px-4' %>
+      </div>
+    </div>
+  <% end %>
+</div>

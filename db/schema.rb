@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_28_183345) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_28_221219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -79,13 +79,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_28_183345) do
     t.string "industry"
     t.integer "start_year"
     t.integer "years_at_job"
-    t.bigint "previous_job_id"
-    t.bigint "next_job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "location"
-    t.index ["next_job_id"], name: "index_career_jobs_on_next_job_id"
-    t.index ["previous_job_id"], name: "index_career_jobs_on_previous_job_id"
+    t.integer "job_grouping"
+    t.integer "job_order"
+    t.string "previous_undergrad"
+    t.string "previous_grad"
+    t.string "previous_mba"
     t.index ["user_id"], name: "index_career_jobs_on_user_id"
   end
 
@@ -397,6 +398,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_28_183345) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "undergraduate", default: false, null: false
+    t.boolean "mba", default: false, null: false
+    t.boolean "other_graduate", default: false, null: false
+    t.boolean "other", default: false, null: false
   end
 
   create_table "tier_list_templates", force: :cascade do |t|
@@ -440,8 +445,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_28_183345) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "career_compensations", "career_jobs"
-  add_foreign_key "career_jobs", "career_jobs", column: "next_job_id"
-  add_foreign_key "career_jobs", "career_jobs", column: "previous_job_id"
   add_foreign_key "career_jobs", "users"
   add_foreign_key "comments", "tier_lists"
   add_foreign_key "comments", "users"
