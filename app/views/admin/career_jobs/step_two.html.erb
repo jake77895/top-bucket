@@ -8,6 +8,11 @@
       <%= form.hidden_field "career_jobs[#{index}][industry]", value: career_job.industry, required: true %>
       <%= form.hidden_field "career_jobs[#{index}][years_at_job]", value: career_job.years_at_job, required: true %>
       <%= form.hidden_field "career_jobs[#{index}][start_year]", value: career_job.start_year, required: true %>
+      <!-- Adding fields for previous educational institutions -->
+      <%= form.hidden_field "career_jobs[#{index}][previous_undergrad]", value: career_job.previous_undergrad %>
+      <%= form.hidden_field "career_jobs[#{index}][previous_mba]", value: career_job.previous_mba %>
+      <%= form.hidden_field "career_jobs[#{index}][previous_grad]", value: career_job.previous_grad %>
+
 
       <div class="accordion mb-4" id="accordionJob<%= index %>">
         <div class="accordion-item">
