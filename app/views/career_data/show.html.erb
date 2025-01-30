@@ -54,7 +54,9 @@
       </div>
     </div>
 
-    
+    <!--Rendering the node modal-->
+    <%= render 'career_data/node_modal' %>
+
 
 
     <!-- Include D3.js -->
@@ -313,6 +315,20 @@
               .attr("ry", 4)
               .attr("fill", "white")
               .attr("opacity", 1);
+
+                group.style("cursor", "pointer").on("click", () => {
+                // Update modal content
+                  document.getElementById("modal-industry").textContent = categoryData.category;
+                  document.getElementById("modal-level").textContent = d.name;
+                  document.getElementById("modal-record-count").textContent = "10"; // Replace with actual data if available
+                  document.getElementById("modal-avg-salary").textContent = "$100,000"; // Replace with actual data
+                  document.getElementById("modal-avg-bonus").textContent = "$20,000";
+                  document.getElementById("modal-avg-total-comp").textContent = "$120,000";
+                  document.getElementById("modal-avg-comp-per-hour").textContent = "$50";
+
+                  // Show the modal using Bootstrap
+                  new bootstrap.Modal(document.getElementById("nodeModal")).show();
+                });
           });
         });
       });
