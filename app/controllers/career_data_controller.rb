@@ -19,15 +19,7 @@ class CareerDataController < ApplicationController
 
   def nodes_data
     # Define static nodes with their correct IDs
-    node_mapping = [
-      { id: 1, name: "Analyst", level: 1, industry: "Venture Capital" },
-      { id: 2, name: "Associate", level: 2, industry: "Venture Capital" },
-      { id: 6, name: "Analyst", level: 1, industry: "Private Equity" },
-      { id: 7, name: "Associate", level: 2, industry: "Private Equity" },
-      { id: 16, name: "Analyst", level: 1, industry: "Investment Banking" },
-      { id: 17, name: "Associate", level: 2, industry: "Investment Banking" }
-      # Add more nodes as needed...
-    ]
+    node_mapping
   
     # Fetch and group compensation data from the database
     grouped_compensations = CareerCompensation
@@ -126,39 +118,70 @@ class CareerDataController < ApplicationController
   def link_data
     # Step 1: Fetch career jobs with their associated compensation levels
     grouped_jobs = CareerJob
-      .joins(:career_compensations) # Join with career_compensations table
+      .joins(:career_compensations)
       .select(
-        "career_jobs.id", 
-        "career_jobs.job_grouping", 
-        "career_jobs.job_order", 
-        "career_jobs.industry", 
-        "career_compensations.level AS level" # Fetch level from career_compensations
+        "career_jobs.id",
+        "career_jobs.job_grouping",
+        "career_jobs.job_order",
+        "career_jobs.industry",
+        "career_compensations.level AS level"
       )
-      .where.not(job_grouping: nil, job_order: nil) # Only consider rows with valid grouping and order
-      .order(:job_grouping, :job_order)            # Ensure proper ordering within grouping
+      .where.not(job_grouping: nil, job_order: nil) # Ensure valid grouping and order
+      .order(:job_grouping, :job_order)            # Sort by grouping and job order
   
-    # Step 2: Build links
-    links = []
-    grouped_jobs.group_by(&:job_grouping).each do |grouping, jobs|
-      jobs.each_cons(2) do |from_job, to_job|
-        # Skip if the industry and level are the same
-        next if from_job.industry == to_job.industry && from_job.level == to_job.level
+    # Debugging grouped jobs
+    Rails.logger.debug "Grouped Jobs: #{grouped_jobs.map { |job| { id: job.id, industry: job.industry, level: job.level, order: job.job_order } }}"
   
-        # Add a valid link
-        links << {
-          source: from_job.id,
-          target: to_job.id,
-          avg_salary: calculate_link_data(to_job, from_job)[:source_avg_salary],
-          avg_bonus: calculate_link_data(to_job, from_job)[:source_avg_bonus],
-          avg_total_comp: calculate_link_data(to_job, from_job)[:source_avg_salary] + calculate_link_data(to_job, from_job)[:source_avg_bonus],
-          avg_comp_per_hour: calculate_link_data(to_job, from_job)[:source_avg_comp_per_hour]
-        }
+    # Step 2: Map jobs to nodes using industry and name
+    job_to_node_mapping = node_mapping.index_by { |node| [node[:industry], node[:name]] }
+  
+    # Debugging the mapping keys
+    Rails.logger.debug "Job to Node Mapping Keys: #{job_to_node_mapping.keys}"
+  
+    # Step 3: Build links
+    links = grouped_jobs.group_by(&:job_grouping).flat_map do |_grouping, jobs|
+      jobs.each_cons(2).filter_map do |from_job, to_job|
+        # Use industry and name (level) to find corresponding node IDs
+        source_node = job_to_node_mapping[[from_job.industry, from_job.level]]
+        target_node = job_to_node_mapping[[to_job.industry, to_job.level]]
+  
+        # Debugging source and target nodes
+        Rails.logger.debug "From Job: ID=#{from_job.id}, Industry=#{from_job.industry}, Level=#{from_job.level}, Job Order=#{from_job.job_order}"
+        Rails.logger.debug "To Job: ID=#{to_job.id}, Industry=#{to_job.industry}, Level=#{to_job.level}, Job Order=#{to_job.job_order}"
+        Rails.logger.debug "Source Node: #{source_node.inspect}"
+        Rails.logger.debug "Target Node: #{target_node.inspect}"
+  
+        if source_node && target_node
+          {
+            source: source_node[:id],
+            source_industry: source_node[:industry],
+            source_level: source_node[:name],
+            target: target_node[:id],
+            target_industry: target_node[:industry],
+            target_level: target_node[:name],
+            avg_salary: calculate_link_data(to_job, from_job)[:source_avg_salary],
+            avg_bonus: calculate_link_data(to_job, from_job)[:source_avg_bonus],
+            avg_total_comp: calculate_link_data(to_job, from_job)[:source_avg_salary] + calculate_link_data(to_job, from_job)[:source_avg_bonus],
+            avg_comp_per_hour: calculate_link_data(to_job, from_job)[:source_avg_comp_per_hour]
+          }
+        else
+          Rails.logger.warn "Source or target node not found for jobs: #{from_job.id} -> #{to_job.id}"
+          nil
+        end
       end
     end
   
-    # Step 3: Return links as JSON
+    # Step 4: Debug final links
+    Rails.logger.debug "Final Links: #{links}"
+  
+    # Step 5: Return links as JSON
     render json: links
   end
+  
+  
+  
+  
+  
   
   
   
@@ -191,6 +214,71 @@ class CareerDataController < ApplicationController
       target_avg_hours_worked_per_week: target_data[:avg_hours_worked_per_week].to_i,
       target_avg_comp_per_hour: target_data[:avg_comp_per_hour].to_f.round(2)
     }
+  end
+
+  private
+
+  def node_mapping
+
+    node_mapping = [
+    # Venture Capital
+    { id: 1, name: "Analyst", level: 1, industry: "Venture Capital" },
+    { id: 2, name: "Pre-MBA associate", level: 2, industry: "Venture Capital" },
+    { id: 3, name: "Senior associate", level: 3, industry: "Venture Capital" },
+    { id: 4, name: "Principal", level: 4, industry: "Venture Capital" },
+    { id: 5, name: "Partner", level: 5, industry: "Venture Capital" },
+
+    # Private Equity
+    { id: 6, name: "Analyst", level: 1, industry: "Private Equity" },
+    { id: 7, name: "Associate", level: 2, industry: "Private Equity" },
+    { id: 8, name: "Vice president", level: 3, industry: "Private Equity" },
+    { id: 9, name: "Principal", level: 4, industry: "Private Equity" },
+    { id: 10, name: "Partner", level: 5, industry: "Private Equity" },
+
+    # Hedge Fund
+    { id: 11, name: "Junior Analyst", level: 1, industry: "Hedge Fund" },
+    { id: 12, name: "Research Associate", level: 2, industry: "Hedge Fund" },
+    { id: 13, name: "Fund Analyst", level: 3, industry: "Hedge Fund" },
+    { id: 14, name: "Sector Head", level: 4, industry: "Hedge Fund" },
+    { id: 15, name: "Portfolio Manager", level: 5, industry: "Hedge Fund" },
+
+    # Investment Banking
+    { id: 16, name: "Analyst", level: 1, industry: "Investment Banking" },
+    { id: 17, name: "Associate", level: 2, industry: "Investment Banking" },
+    { id: 18, name: "Vice president", level: 3, industry: "Investment Banking" },
+    { id: 19, name: "Senior vice president", level: 4, industry: "Investment Banking" },
+    { id: 20, name: "Managing director", level: 5, industry: "Investment Banking" },
+
+    # Corporate Development
+    { id: 21, name: "Analyst", level: 1, industry: "Corporate Development" },
+    { id: 22, name: "Associate", level: 2, industry: "Corporate Development" },
+    { id: 23, name: "Manager", level: 3, industry: "Corporate Development" },
+    { id: 24, name: "Director", level: 4, industry: "Corporate Development" },
+    { id: 25, name: "Vice president", level: 5, industry: "Corporate Development" },
+
+    # Investment Management
+    { id: 26, name: "Analyst", level: 1, industry: "Investment Management" },
+    { id: 27, name: "Associate", level: 2, industry: "Investment Management" },
+    { id: 28, name: "Senior Associate", level: 3, industry: "Investment Management" },
+    { id: 29, name: "Portfolio Manager", level: 4, industry: "Investment Management" },
+    { id: 30, name: "Director", level: 5, industry: "Investment Management" },
+
+    # FP&A
+    { id: 31, name: "Analyst", level: 1, industry: "FP&A" },
+    { id: 32, name: "Senior Analyst", level: 2, industry: "FP&A" },
+    { id: 33, name: "Manager", level: 3, industry: "FP&A" },
+    { id: 34, name: "Director", level: 4, industry: "FP&A" },
+    { id: 35, name: "Vice president", level: 5, industry: "FP&A" },
+
+    # Other
+    { id: 36, name: "Entry Level", level: 1, industry: "Other" },
+    { id: 37, name: "Mid Level", level: 2, industry: "Other" },
+    { id: 38, name: "Senior Level", level: 3, industry: "Other" },
+    { id: 39, name: "Lead", level: 4, industry: "Other" },
+    { id: 40, name: "Executive", level: 5, industry: "Other" },
+  ]
+
+
   end
   
   

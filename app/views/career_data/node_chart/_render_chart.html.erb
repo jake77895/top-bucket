@@ -1,121 +1,168 @@
 <script>
 function renderChart(nodesData, nodeDataMap) {
-  const data = [
-    {
-      category: "Venture Capital",
-      nodes: [
-        { id: 1, name: "Analyst", level: 1 },
-        { id: 2, name: "Pre-MBA associate", level: 2 },
-        { id: 3, name: "Senior associate", level: 3 },
-        { id: 4, name: "Principal", level: 4 },
-        { id: 5, name: "Partner", level: 5 },
-      ],
-      links: [
-        { source: 1, target: 2 },
-        { source: 2, target: 3 },
-        { source: 3, target: 4 },
-        { source: 4, target: 5 },
-      ],
-    },
-    {
-      category: "Private Equity",
-      nodes: [
-        { id: 6, name: "Analyst", level: 1 },
-        { id: 7, name: "Associate", level: 2 },
-        { id: 8, name: "Vice president", level: 3 },
-        { id: 9, name: "Principal", level: 4 },
-        { id: 10, name: "Partner", level: 5 },
-      ],
-      links: [
-        { source: 6, target: 7 },
-        { source: 7, target: 8 },
-        { source: 8, target: 9 },
-        { source: 9, target: 10 },
-      ],
-    },
-    {
-      category: "Hedge Fund",
-      nodes: [
-        { id: 11, name: "Junior Analyst", level: 1 },
-        { id: 12, name: "Research Associate", level: 2 },
-        { id: 13, name: "Fund Analyst", level: 3 },
-        { id: 14, name: "Sector Head", level: 4 },
-        { id: 15, name: "Portfolio Manager", level: 5 },
-      ],
-      links: [
-        { source: 11, target: 12 },
-        { source: 12, target: 13 },
-        { source: 13, target: 14 },
-        { source: 14, target: 15 },
-      ],
-    },
-    {
-      category: "Investment Banking",
-      nodes: [
-        { id: 16, name: "Analyst", level: 1 },
-        { id: 17, name: "Associate", level: 2 },
-        { id: 18, name: "Vice president", level: 3 },
-        { id: 19, name: "Senior vice president", level: 4 },
-        { id: 20, name: "Managing director", level: 5 },
-      ],
-      links: [
-        { source: 16, target: 17 },
-        { source: 17, target: 18 },
-        { source: 18, target: 19 },
-        { source: 19, target: 20 },
-      ],
-    },
-    {
-      category: "Corporate Development",
-      nodes: [
-        { id: 21, name: "Analyst", level: 1 },
-        { id: 22, name: "Associate", level: 2 },
-        { id: 23, name: "Manager", level: 3 },
-        { id: 24, name: "Director", level: 4 },
-        { id: 25, name: "Vice president", level: 5 },
-      ],
-      links: [
-        { source: 21, target: 22 },
-        { source: 22, target: 23 },
-        { source: 23, target: 24 },
-        { source: 24, target: 25 },
-      ],
-    },
-    {
-      category: "FP&A",
-      nodes: [
-        { id: 26, name: "Analyst", level: 1 },
-        { id: 27, name: "Senior Analyst", level: 2 },
-        { id: 28, name: "Manager", level: 3 },
-        { id: 29, name: "Director", level: 4 },
-        { id: 30, name: "Vice president", level: 5 },
-      ],
-      links: [
-        { source: 26, target: 27 },
-        { source: 27, target: 28 },
-        { source: 28, target: 29 },
-        { source: 29, target: 30 },
-      ],
-    },
-    {
-      category: "Other",
-      nodes: [
-        { id: 31, name: "Entry Level", level: 1 },
-        { id: 32, name: "Mid Level", level: 2 },
-        { id: 33, name: "Senior Level", level: 3 },
-        { id: 34, name: "Lead", level: 4 },
-        { id: 35, name: "Executive", level: 5 },
-      ],
-      links: [
-        { source: 31, target: 32 },
-        { source: 32, target: 33 },
-        { source: 33, target: 34 },
-        { source: 34, target: 35 },
-      ],
-    },
-  ];
+const data = [
+  {
+    category: "Venture Capital",
+    nodes: [
+      { id: 1, name: "Analyst", level: 1 },
+      { id: 2, name: "Pre-MBA associate", level: 2 },
+      { id: 3, name: "Senior associate", level: 3 },
+      { id: 4, name: "Principal", level: 4 },
+      { id: 5, name: "Partner", level: 5 },
+    ],
+    links: [], // No links by default
+  },
+  {
+    category: "Private Equity",
+    nodes: [
+      { id: 6, name: "Analyst", level: 1 },
+      { id: 7, name: "Associate", level: 2 },
+      { id: 8, name: "Vice president", level: 3 },
+      { id: 9, name: "Principal", level: 4 },
+      { id: 10, name: "Partner", level: 5 },
+    ],
+    links: [],
+  },
+  {
+    category: "Hedge Fund",
+    nodes: [
+      { id: 11, name: "Junior Analyst", level: 1 },
+      { id: 12, name: "Research Associate", level: 2 },
+      { id: 13, name: "Fund Analyst", level: 3 },
+      { id: 14, name: "Sector Head", level: 4 },
+      { id: 15, name: "Portfolio Manager", level: 5 },
+    ],
+    links: [],
+  },
+  {
+    category: "Investment Banking",
+    nodes: [
+      { id: 16, name: "Analyst", level: 1 },
+      { id: 17, name: "Associate", level: 2 },
+      { id: 18, name: "Vice president", level: 3 },
+      { id: 19, name: "Senior vice president", level: 4 },
+      { id: 20, name: "Managing director", level: 5 },
+    ],
+    links: [],
+  },
+  {
+    category: "Corporate Development",
+    nodes: [
+      { id: 21, name: "Analyst", level: 1 },
+      { id: 22, name: "Associate", level: 2 },
+      { id: 23, name: "Manager", level: 3 },
+      { id: 24, name: "Director", level: 4 },
+      { id: 25, name: "Vice president", level: 5 },
+    ],
+    links: [],
+  },
+  {
+    category: "Investment Management", // New category
+    nodes: [
+      { id: 26, name: "Analyst", level: 1 },
+      { id: 27, name: "Associate", level: 2 },
+      { id: 28, name: "Senior Associate", level: 3 },
+      { id: 29, name: "Portfolio Manager", level: 4 },
+      { id: 30, name: "Director", level: 5 },
+    ],
+    links: [],
+  },
+  {
+    category: "FP&A",
+    nodes: [
+      { id: 31, name: "Analyst", level: 1 },
+      { id: 32, name: "Senior Analyst", level: 2 },
+      { id: 33, name: "Manager", level: 3 },
+      { id: 34, name: "Director", level: 4 },
+      { id: 35, name: "Vice president", level: 5 },
+    ],
+    links: [],
+  },
+  {
+    category: "Other",
+    nodes: [
+      { id: 36, name: "Entry Level", level: 1 },
+      { id: 37, name: "Mid Level", level: 2 },
+      { id: 38, name: "Senior Level", level: 3 },
+      { id: 39, name: "Lead", level: 4 },
+      { id: 40, name: "Executive", level: 5 },
+    ],
+    links: [],
+  },
+];
 
-  const width = Math.max(window.innerWidth, data.length * 200);
+
+  // Ensure links are rendered only if data exists
+// Function to render links based on provided link data
+function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
+  // Ensure linkData exists and is an array
+  if (!Array.isArray(linkData) || linkData.length === 0) {
+    console.warn("No link data available for rendering.");
+    return;
+  }
+
+  console.log(`Rendering ${linkData.length} links...`);
+
+  const group = svg.append("g").attr("class", "links-group");
+
+  // Render links
+  group
+    .selectAll(".link")
+    .data(linkData)
+    .enter()
+    .append("line")
+    .attr("class", "link")
+    .attr("x1", 0)
+    .attr("y1", (d) => {
+      const sourceNode = nodeDataMap[d.source];
+      if (!sourceNode) {
+        console.error(`Source node with ID ${d.source} not found.`);
+        return 0; // Default to 0 to avoid errors
+      }
+      return (sourceNode.level - 1) * levelSpacing;
+    })
+    .attr("x2", 0)
+    .attr("y2", (d) => {
+      const targetNode = nodeDataMap[d.target];
+      if (!targetNode) {
+        console.error(`Target node with ID ${d.target} not found.`);
+        return 0; // Default to 0 to avoid errors
+      }
+      return (targetNode.level - 1) * levelSpacing;
+    })
+    .attr("stroke", "#333")
+    .attr("stroke-width", 2)
+    .attr("marker-end", "url(#arrowhead-solid)")
+    .style("cursor", "pointer")
+    .on("click", function (event, d) {
+      // Show modal with link data
+      console.log("Link clicked:", d);
+
+      // Update modal content
+      document.getElementById("modal-source").textContent =
+        nodeDataMap[d.source]?.name || "N/A";
+      document.getElementById("modal-target").textContent =
+        nodeDataMap[d.target]?.name || "N/A";
+      document.getElementById("modal-avg-salary").textContent = `${
+        d.avg_salary?.toLocaleString() || "N/A"
+      }`;
+      document.getElementById("modal-avg-bonus").textContent = `${
+        d.avg_bonus?.toLocaleString() || "N/A"
+      }`;
+      document.getElementById("modal-avg-total-comp").textContent = `${
+        d.avg_total_comp?.toLocaleString() || "N/A"
+      }`;
+      document.getElementById("modal-avg-comp-per-hour").textContent = `${
+        d.avg_comp_per_hour?.toFixed(2) || "N/A"
+      }`;
+
+      // Show the modal using Bootstrap
+      new bootstrap.Modal(document.getElementById("linkModal")).show();
+    });
+}
+
+
+  const width = Math.max(window.innerWidth, data.length * 200)+100;
   const height = 750;
   const margin = { top: 100, right: 50, bottom: 50, left: 50 };
   const levelSpacing = (height - margin.top - margin.bottom) / 5;
@@ -186,7 +233,7 @@ function renderChart(nodesData, nodeDataMap) {
   data.forEach((categoryData, i) => {
     const group = svg
       .append("g")
-      .attr("transform", `translate(${i * categoryWidth + categoryWidth / 2}, ${margin.top + 30})`);
+      .attr("transform", `translate(${i * categoryWidth + categoryWidth / 2}, ${margin.top + 50})`);
 
     // Add links
     group

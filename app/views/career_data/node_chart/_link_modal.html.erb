@@ -1,22 +1,33 @@
-<div class="modal fade" id="linkModal" tabindex="-1" aria-labelledby="linkModalLabel" aria-hidden="true">
+<div class="modal fade" id="linkModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="linkModalLabel">Link Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Link Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
-        <p><strong>From:</strong> <span id="modal-link-from"></span></p>
-        <p><strong>To:</strong> <span id="modal-link-to"></span></p>
-        <p><strong>Industry:</strong> <span id="modal-link-industry"></span></p>
-        <p><strong>Average Salary:</strong> $<span id="modal-link-avg-salary"></span></p>
-        <p><strong>Average Bonus:</strong> $<span id="modal-link-avg-bonus"></span></p>
-        <p><strong>Average Total Compensation:</strong> $<span id="modal-link-avg-total-comp"></span></p>
-        <p><strong>Average Compensation per Hour:</strong> $<span id="modal-link-avg-comp-per-hour"></span></p>
+        <p><strong>Source:</strong> <span id="modal-source">N/A</span></p>
+        <p><strong>Target:</strong> <span id="modal-target">N/A</span></p>
+        <p><strong>Average Salary:</strong> <span id="modal-avg-salary">N/A</span></p>
+        <p><strong>Average Bonus:</strong> <span id="modal-avg-bonus">N/A</span></p>
+        <p><strong>Total Compensation:</strong> <span id="modal-avg-total-comp">N/A</span></p>
+        <p><strong>Compensation per Hour:</strong> <span id="modal-avg-comp-per-hour">N/A</span></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
+
