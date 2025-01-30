@@ -1,5 +1,7 @@
 <script>
 console.log("fetch_and_render partial loaded");
+console.log(typeof renderChart); // Should log 'function'
+console.log(typeof renderLinks); // Should log 'function'
 
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/nodes_data")
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Call renderChart to draw nodes
       if (typeof renderChart === "function") {
-        renderChart(nodesData);
+        renderChart(nodesData, nodeDataMap); // Pass nodeDataMap
         document.dispatchEvent(new Event("nodesRendered"));
       } else {
         console.error("renderChart function is not defined.");
@@ -29,4 +31,5 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching nodes:", error));
 });
+
 </script>

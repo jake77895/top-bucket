@@ -1,6 +1,8 @@
 <script>
 function renderLinks(svg, data, nodeDataMap, levelSpacing) {
   data.forEach((categoryData, i) => {
+    console.log(`Processing category: ${categoryData.category}`);
+
     const group = svg
       .append("g")
       .attr(
@@ -8,31 +10,40 @@ function renderLinks(svg, data, nodeDataMap, levelSpacing) {
         `translate(${i * (200 + categoryData.nodes.length * 50) + 150}, 100)`
       );
 
-    if (categoryData.links) {
+    if (categoryData.links && categoryData.links.length > 0) {
+      console.log(`Rendering ${categoryData.links.length} links for category: ${categoryData.category}`);
+
       group
         .selectAll(".link")
-        .data(categoryData.links || [])
+        .data(categoryData.links)
         .enter()
         .append("line")
         .attr("class", "link")
         .attr("x1", 0)
-        .attr(
-          "y1",
-          (d) =>
-            (categoryData.nodes.find((node) => node.id === d.source).level - 1) *
-            levelSpacing
-        )
+        .attr("y1", (d) => {
+          const sourceNode = nodeDataMap[d.source];
+          if (!sourceNode) {
+            console.error(`Source node with ID ${d.source} not found.`);
+            return 0; // Default value to avoid errors
+          }
+          return (sourceNode.level - 1) * levelSpacing;
+        })
         .attr("x2", 0)
-        .attr(
-          "y2",
-          (d) =>
-            (categoryData.nodes.find((node) => node.id === d.target).level - 1) *
-            levelSpacing
-        )
+        .attr("y2", (d) => {
+          const targetNode = nodeDataMap[d.target];
+          if (!targetNode) {
+            console.error(`Target node with ID ${d.target} not found.`);
+            return 0; // Default value to avoid errors
+          }
+          return (targetNode.level - 1) * levelSpacing;
+        })
         .attr("stroke", "#333")
         .attr("stroke-width", 2)
         .attr("marker-end", "url(#arrowhead-solid)");
+    } else {
+      console.warn(`No links found for category: ${categoryData.category}`);
     }
   });
 }
+
 </script>
