@@ -1,0 +1,38 @@
+<script>
+function renderLinks(svg, data, nodeDataMap, levelSpacing) {
+  data.forEach((categoryData, i) => {
+    const group = svg
+      .append("g")
+      .attr(
+        "transform",
+        `translate(${i * (200 + categoryData.nodes.length * 50) + 150}, 100)`
+      );
+
+    if (categoryData.links) {
+      group
+        .selectAll(".link")
+        .data(categoryData.links || [])
+        .enter()
+        .append("line")
+        .attr("class", "link")
+        .attr("x1", 0)
+        .attr(
+          "y1",
+          (d) =>
+            (categoryData.nodes.find((node) => node.id === d.source).level - 1) *
+            levelSpacing
+        )
+        .attr("x2", 0)
+        .attr(
+          "y2",
+          (d) =>
+            (categoryData.nodes.find((node) => node.id === d.target).level - 1) *
+            levelSpacing
+        )
+        .attr("stroke", "#333")
+        .attr("stroke-width", 2)
+        .attr("marker-end", "url(#arrowhead-solid)");
+    }
+  });
+}
+</script>

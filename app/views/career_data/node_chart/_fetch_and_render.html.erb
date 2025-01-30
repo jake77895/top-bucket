@@ -1,0 +1,32 @@
+<script>
+console.log("fetch_and_render partial loaded");
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/nodes_data")
+    .then((response) => response.json())
+    .then((nodesData) => {
+      // Create a map of node data
+      const nodeDataMap = nodesData.reduce((map, node) => {
+        map[node.id] = node;
+        return map;
+      }, {});
+
+      // Call renderChart to draw nodes
+      if (typeof renderChart === "function") {
+        renderChart(nodesData);
+        document.dispatchEvent(new Event("nodesRendered"));
+      } else {
+        console.error("renderChart function is not defined.");
+      }
+
+      // Call renderLinks to connect nodes
+      if (typeof renderLinks === "function") {
+        const svg = d3.select("svg");
+        renderLinks(svg, nodesData, nodeDataMap, 150);
+      } else {
+        console.error("renderLinks function is not defined.");
+      }
+    })
+    .catch((error) => console.error("Error fetching nodes:", error));
+});
+</script>

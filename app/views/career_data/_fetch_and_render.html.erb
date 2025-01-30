@@ -1,0 +1,25 @@
+<script>
+  console.log("fetch_and_render partial loaded");
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    fetch("/nodes_data")
+      .then(response => response.json())
+      .then(nodesData => {
+        // Prepare Node Data Map
+        const nodeDataMap = nodesData.reduce((map, node) => {
+          map[node.id] = node;
+          return map;
+        }, {});
+
+        // Render Nodes
+        if (typeof renderChart === "function") {
+          renderChart(nodesData); // Pass node data
+          document.dispatchEvent(new Event("nodesRendered")); // Notify that nodes are rendered
+        } else {
+          console.error("renderChart function is not defined.");
+        }
+      })
+      .catch(error => console.error("Error fetching nodes:", error));
+  });
+</script>

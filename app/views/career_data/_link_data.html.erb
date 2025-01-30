@@ -1,0 +1,48 @@
+<script>
+  document.addEventListener("nodesRendered", () => {
+    fetch("/link_data")
+      .then((response) => response.json())
+      .then((linkData) => {
+        const svg = d3.select("svg");
+
+        // Render Links
+        svg.selectAll(".link")
+          .data(linkData)
+          .enter()
+          .append("line")
+          .attr("class", "link")
+          .attr("x1", (d) => calculateX(d.source))
+          .attr("y1", (d) => calculateY(d.source))
+          .attr("x2", (d) => calculateX(d.target))
+          .attr("y2", (d) => calculateY(d.target))
+          .attr("stroke", "#333")
+          .attr("stroke-width", 2)
+          .attr("marker-end", "url(#arrowhead-solid)")
+          .style("cursor", "pointer")
+          .on("click", (event, d) => {
+            // Populate and Show Modal
+            document.getElementById("modal-link-from").textContent = d.source_name || "N/A";
+            document.getElementById("modal-link-to").textContent = d.target_name || "N/A";
+            document.getElementById("modal-link-industry").textContent = d.industry || "N/A";
+            document.getElementById("modal-link-avg-salary").textContent = `$${d.avg_salary?.toLocaleString() || 0}`;
+            document.getElementById("modal-link-avg-bonus").textContent = `$${d.avg_bonus?.toLocaleString() || 0}`;
+            document.getElementById("modal-link-avg-total-comp").textContent = `$${d.avg_total_comp?.toLocaleString() || 0}`;
+            document.getElementById("modal-link-avg-comp-per-hour").textContent = `$${d.avg_comp_per_hour?.toFixed(2) || 0}`;
+
+            const modal = new bootstrap.Modal(document.getElementById("linkModal"));
+            modal.show();
+          });
+      })
+      .catch((error) => console.error("Error fetching links:", error));
+  });
+
+  function calculateX(nodeId) {
+    // Example logic for X position calculation
+    return d3.select(`#node-${nodeId}`).attr("cx");
+  }
+
+  function calculateY(nodeId) {
+    // Example logic for Y position calculation
+    return d3.select(`#node-${nodeId}`).attr("cy");
+  }
+</script>

@@ -1,0 +1,34 @@
+<script>
+function renderChart(nodesData) {
+  const svg = d3.select("#chart").select("svg");
+
+  // Render Nodes
+  svg.selectAll(".node")
+    .data(nodesData)
+    .enter()
+    .append("circle")
+    .attr("class", "node")
+    .attr("id", (d) => `node-${d.id}`) // Unique ID for each node
+    .attr("cx", (d, i) => i * 100 + 50) // Example X position
+    .attr("cy", (d) => (d.level - 1) * 150) // Example Y position
+    .attr("r", 20)
+    .attr("fill", "#007bff")
+    .style("cursor", "pointer")
+    .on("click", (event, d) => {
+      // Populate Node Modal
+      document.getElementById("modal-industry").textContent = d.industry || "N/A";
+      document.getElementById("modal-level").textContent = d.name || "N/A";
+      document.getElementById("modal-record-count").textContent = d.record_count || 0;
+      document.getElementById("modal-avg-salary").textContent = `$${d.avg_salary?.toLocaleString() || 0}`;
+      document.getElementById("modal-avg-bonus").textContent = `$${d.avg_bonus?.toLocaleString() || 0}`;
+      document.getElementById("modal-avg-total-comp").textContent = `$${d.avg_total_comp?.toLocaleString() || 0}`;
+      document.getElementById("modal-avg-comp-per-hour").textContent = `$${d.avg_comp_per_hour?.toFixed(2) || 0}`;
+
+      const modal = new bootstrap.Modal(document.getElementById("nodeModal"));
+      modal.show();
+    });
+
+  // Dispatch custom event after rendering nodes
+  document.dispatchEvent(new Event("nodesRendered"));
+}
+</script>

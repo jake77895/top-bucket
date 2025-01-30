@@ -1,0 +1,63 @@
+<script>
+function renderLinks(svg, data, nodeDataMap, levelSpacing) {
+  data.forEach((categoryData, i) => {
+    const group = svg
+      .append("g")
+      .attr(
+        "transform",
+        `translate(${i * 200 + 150}, 0)` // Adjust horizontal positioning dynamically
+      );
+
+    if (categoryData.links) {
+      group
+        .selectAll(".link")
+        .data(categoryData.links)
+        .enter()
+        .append("line")
+        .attr("class", "link")
+        .attr("x1", (d) => calculateNodeX(d.source, categoryData, i)) // X coordinate of source
+        .attr("y1", (d) => calculateNodeY(d.source, categoryData, levelSpacing)) // Y coordinate of source
+        .attr("x2", (d) => calculateNodeX(d.target, categoryData, i)) // X coordinate of target
+        .attr("y2", (d) => calculateNodeY(d.target, categoryData, levelSpacing)) // Y coordinate of target
+        .attr("stroke", "#333")
+        .attr("stroke-width", 2)
+        .attr("marker-end", "url(#arrowhead-solid)")
+        .style("cursor", "pointer")
+        .on("click", (event, d) => {
+          // Handle click event for links
+          const sourceNode = nodeDataMap[d.source] || {};
+          const targetNode = nodeDataMap[d.target] || {};
+
+          // Populate the modal with link details
+          document.getElementById("modal-link-from").textContent = sourceNode.name || "N/A";
+          document.getElementById("modal-link-to").textContent = targetNode.name || "N/A";
+          document.getElementById("modal-link-industry").textContent = sourceNode.industry || "N/A";
+          document.getElementById("modal-link-avg-salary").textContent =
+            `$${sourceNode.avg_salary?.toLocaleString() || "N/A"}`;
+          document.getElementById("modal-link-avg-bonus").textContent =
+            `$${sourceNode.avg_bonus?.toLocaleString() || "N/A"}`;
+          document.getElementById("modal-link-avg-total-comp").textContent =
+            `$${sourceNode.avg_total_comp?.toLocaleString() || "N/A"}`;
+          document.getElementById("modal-link-avg-comp-per-hour").textContent =
+            `$${sourceNode.avg_comp_per_hour?.toFixed(2) || "N/A"}`;
+
+          // Show the modal
+          const modal = new bootstrap.Modal(document.getElementById("linkModal"));
+          modal.show();
+        });
+    }
+  });
+}
+
+function calculateNodeX(nodeId, categoryData, categoryIndex) {
+  const nodeIndex = categoryData.nodes.findIndex((node) => node.id === nodeId);
+  const categoryWidth = 200; // Adjust this based on your layout
+  return categoryIndex * categoryWidth + categoryWidth / 2;
+}
+
+function calculateNodeY(nodeId, categoryData, levelSpacing) {
+  const node = categoryData.nodes.find((node) => node.id === nodeId);
+  return (node.level - 1) * levelSpacing + 100; // Adjust the base offset if needed
+}
+
+</script>

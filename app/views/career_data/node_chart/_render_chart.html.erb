@@ -1,0 +1,287 @@
+<script>
+function renderChart(nodesData) {
+  const data = [
+    {
+      category: "Venture Capital",
+      nodes: [
+        { id: 1, name: "Analyst", level: 1 },
+        { id: 2, name: "Pre-MBA associate", level: 2 },
+        { id: 3, name: "Senior associate", level: 3 },
+        { id: 4, name: "Principal", level: 4 },
+        { id: 5, name: "Partner", level: 5 },
+      ],
+      links: [
+        { source: 1, target: 2 },
+        { source: 2, target: 3 },
+        { source: 3, target: 4 },
+        { source: 4, target: 5 },
+      ],
+    },
+    {
+      category: "Private Equity",
+      nodes: [
+        { id: 6, name: "Analyst", level: 1 },
+        { id: 7, name: "Associate", level: 2 },
+        { id: 8, name: "Vice president", level: 3 },
+        { id: 9, name: "Principal", level: 4 },
+        { id: 10, name: "Partner", level: 5 },
+      ],
+      links: [
+        { source: 6, target: 7 },
+        { source: 7, target: 8 },
+        { source: 8, target: 9 },
+        { source: 9, target: 10 },
+      ],
+    },
+    {
+      category: "Hedge Fund",
+      nodes: [
+        { id: 11, name: "Junior Analyst", level: 1 },
+        { id: 12, name: "Research Associate", level: 2 },
+        { id: 13, name: "Fund Analyst", level: 3 },
+        { id: 14, name: "Sector Head", level: 4 },
+        { id: 15, name: "Portfolio Manager", level: 5 },
+      ],
+      links: [
+        { source: 11, target: 12 },
+        { source: 12, target: 13 },
+        { source: 13, target: 14 },
+        { source: 14, target: 15 },
+      ],
+    },
+    {
+      category: "Investment Banking",
+      nodes: [
+        { id: 16, name: "Analyst", level: 1 },
+        { id: 17, name: "Associate", level: 2 },
+        { id: 18, name: "Vice president", level: 3 },
+        { id: 19, name: "Senior vice president", level: 4 },
+        { id: 20, name: "Managing director", level: 5 },
+      ],
+      links: [
+        { source: 16, target: 17 },
+        { source: 17, target: 18 },
+        { source: 18, target: 19 },
+        { source: 19, target: 20 },
+      ],
+    },
+    {
+      category: "Corporate Development",
+      nodes: [
+        { id: 21, name: "Analyst", level: 1 },
+        { id: 22, name: "Associate", level: 2 },
+        { id: 23, name: "Manager", level: 3 },
+        { id: 24, name: "Director", level: 4 },
+        { id: 25, name: "Vice president", level: 5 },
+      ],
+      links: [
+        { source: 21, target: 22 },
+        { source: 22, target: 23 },
+        { source: 23, target: 24 },
+        { source: 24, target: 25 },
+      ],
+    },
+    {
+      category: "FP&A",
+      nodes: [
+        { id: 26, name: "Analyst", level: 1 },
+        { id: 27, name: "Senior Analyst", level: 2 },
+        { id: 28, name: "Manager", level: 3 },
+        { id: 29, name: "Director", level: 4 },
+        { id: 30, name: "Vice president", level: 5 },
+      ],
+      links: [
+        { source: 26, target: 27 },
+        { source: 27, target: 28 },
+        { source: 28, target: 29 },
+        { source: 29, target: 30 },
+      ],
+    },
+    {
+      category: "Other",
+      nodes: [
+        { id: 31, name: "Entry Level", level: 1 },
+        { id: 32, name: "Mid Level", level: 2 },
+        { id: 33, name: "Senior Level", level: 3 },
+        { id: 34, name: "Lead", level: 4 },
+        { id: 35, name: "Executive", level: 5 },
+      ],
+      links: [
+        { source: 31, target: 32 },
+        { source: 32, target: 33 },
+        { source: 33, target: 34 },
+        { source: 34, target: 35 },
+      ],
+    },
+  ];
+
+  const width = Math.max(window.innerWidth, data.length * 200);
+  const height = 750;
+  const margin = { top: 100, right: 50, bottom: 50, left: 50 };
+  const levelSpacing = (height - margin.top - margin.bottom) / 5;
+  const categoryWidth = width / data.length;
+  const buttonHeight = 40;
+
+  const svg = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("font-family", "Arial");
+
+  // Add category buttons
+  data.forEach((categoryData, i) => {
+    // Add button rectangle
+    svg
+      .append("rect")
+      .attr("x", i * categoryWidth + categoryWidth / 2 - 100)
+      .attr("y", margin.top - 60)
+      .attr("width", 200)
+      .attr("height", buttonHeight)
+      .attr("rx", 20)
+      .attr("ry", 20)
+      .attr("fill", "#f8f9fa")
+      .attr("stroke", "#ccc")
+      .attr("stroke-width", 1)
+      .attr("class", "career_tree_industry_button"); // External styling for buttons
+
+    // Add button text with external styling
+    const textElement = svg
+      .append("text")
+      .attr("x", i * categoryWidth + categoryWidth / 2)
+      .attr("y", margin.top - 40)
+      .attr("class", "career_tree_industry_button_text") // External class
+      .text(categoryData.category);
+
+    // Optional: Raise text to be above the rectangle
+    textElement.raise();
+  });
+
+    const levelIconPaths = {
+    1: "<%= asset_path('icons/career_tree_icons/level_1.svg') %>",
+    2: "<%= asset_path('icons/career_tree_icons/level_2.svg') %>",
+    3: "<%= asset_path('icons/career_tree_icons/level_3.svg') %>",
+    4: "<%= asset_path('icons/career_tree_icons/level_4.svg') %>",
+    5: "<%= asset_path('icons/career_tree_icons/level_5.svg') %>",
+  };
+
+  const defs = svg.append("defs");
+
+  // Add markers for links
+  defs
+    .append("marker")
+    .attr("id", "arrowhead-solid")
+    .attr("viewBox", "0 0 10 10")
+    .attr("refX", 25)
+    .attr("refY", 5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+    .append("path")
+    .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+    .attr("fill", "#333");
+
+  // Render nodes and links
+    // Render nodes and links
+  data.forEach((categoryData, i) => {
+    const group = svg
+      .append("g")
+      .attr("transform", `translate(${i * categoryWidth + categoryWidth / 2}, ${margin.top + 30})`);
+
+    // Add links
+    group
+      .selectAll(".link")
+      .data(categoryData.links)
+      .enter()
+      .append("line")
+      .attr("x1", 0)
+      .attr("y1", (d) => (categoryData.nodes.find((n) => n.id === d.source).level - 1) * levelSpacing)
+      .attr("x2", 0)
+      .attr("y2", (d) => (categoryData.nodes.find((n) => n.id === d.target).level - 1) * levelSpacing)
+      .attr("stroke", "#333")
+      .attr("stroke-width", 2)
+      .attr("marker-end", "url(#arrowhead-solid)");
+
+    // Add nodes
+    const nodes = group
+      .selectAll(".node")
+      .data(categoryData.nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr("transform", (d) => `translate(0, ${(d.level - 1) * levelSpacing})`);
+
+    nodes
+      .append("circle")
+      .attr("r", 20)
+      .attr("fill", "#f8f9fa")
+      .attr("stroke", "#ccc")
+      .attr("stroke-width", 2);
+
+    // Add level-specific icons
+    const levelIconPaths = {
+      1: "<%= asset_path('icons/career_tree_icons/level_1.svg') %>",
+      2: "<%= asset_path('icons/career_tree_icons/level_2.svg') %>",
+      3: "<%= asset_path('icons/career_tree_icons/level_3.svg') %>",
+      4: "<%= asset_path('icons/career_tree_icons/level_4.svg') %>",
+      5: "<%= asset_path('icons/career_tree_icons/level_5.svg') %>",
+    };
+
+    Object.entries(levelIconPaths).forEach(([level, path]) => {
+      nodes
+        .filter((d) => d.level === +level)
+        .append("image")
+        .attr("href", path)
+        .attr("width", 24)
+        .attr("height", 24)
+        .attr("x", -12)
+        .attr("y", -12);
+    });
+
+    // Add text and rectangle background
+    nodes.each(function (d) {
+      const group = d3.select(this);
+
+      // Append the text element
+      const textElement = group
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", 35) // Position the text below the node
+        .text(d.name);
+
+      // Get the text dimensions
+      const textWidth = textElement.node().getComputedTextLength();
+      const textHeight = 12; // Approximate height for text
+
+      // Insert a rectangle behind the text
+      group
+        .insert("rect", "text")
+        .attr("x", -textWidth / 2 - 5) // Center the rectangle
+        .attr("y", 35 - textHeight / 2 - 2) // Position the rectangle
+        .attr("width", textWidth + 10) // Add padding
+        .attr("height", textHeight) // Add padding
+        .attr("rx", 4) // Rounded corners
+        .attr("ry", 4) // Rounded corners
+        .attr("fill", "white") // Background color
+        .attr("opacity", 1); // Ensure it is visible
+
+        group.style("cursor", "pointer").on("click", () => {
+                const nodeData = nodeDataMap[d.id] || {}; // Get data or empty object
+                // Update modal content
+                document.getElementById("modal-industry").textContent = nodeData.industry || "N/A";
+                document.getElementById("modal-level").textContent = nodeData.name || "N/A";
+                document.getElementById("modal-record-count").textContent = nodeData.record_count || 0;
+                document.getElementById("modal-avg-salary").textContent = `$${nodeData.avg_salary?.toLocaleString() || 0}`;
+                document.getElementById("modal-avg-bonus").textContent = `$${nodeData.avg_bonus?.toLocaleString() || 0}`;
+                document.getElementById("modal-avg-total-comp").textContent = `$${nodeData.avg_total_comp?.toLocaleString() || 0}`;
+                document.getElementById("modal-avg-comp-per-hour").textContent = `$${nodeData.avg_comp_per_hour?.toFixed(2) || 0}`;
+
+                  // Show the modal using Bootstrap
+                  new bootstrap.Modal(document.getElementById("nodeModal")).show();
+                });
+    });
+  });
+
+  document.dispatchEvent(new Event("chartRendered"));
+}
+</script>
