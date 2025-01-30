@@ -218,6 +218,9 @@ Rails.application.routes.draw do
 
   end
 
+  get 'nodes_data', to: 'career_data#nodes_data'
+
+
 
 
 

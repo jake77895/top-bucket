@@ -63,6 +63,22 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+
+        let nodeDataMap = {}; 
+
+        fetch("/nodes_data")
+        .then(response => response.json())
+        .then(nodesData => {
+          nodeDataMap = nodesData.reduce((map, node) => {
+            map[node.id] = node;
+            return map;
+          }, {});
+
+          renderChart(nodesData); // Make sure you pass the data properly
+        })
+        .catch(error => console.error("Error fetching nodes:", error));
+
+
         const data = [
           {
             category: "Venture Capital",
@@ -241,6 +257,7 @@
           textElement.raise();
 
           // Add links
+          if (categoryData.links) {
           group
             .selectAll(".link")
             .data(categoryData.links || [])
@@ -264,7 +281,7 @@
             .attr("stroke", "#333")
             .attr("stroke-width", 2)
             .attr("marker-end", "url(#arrowhead-solid)"); // Add arrowhead marker
-
+          }
           const nodeGroup = group
             .selectAll(".node")
             .data(categoryData.nodes)
@@ -294,6 +311,8 @@
               .attr("y", -12);
           });
 
+          
+
           nodeGroup.each(function (d) {
             const group = d3.select(this);
             const textElement = group
@@ -317,14 +336,15 @@
               .attr("opacity", 1);
 
                 group.style("cursor", "pointer").on("click", () => {
+                const nodeData = nodeDataMap[d.id] || {}; // Get data or empty object
                 // Update modal content
-                  document.getElementById("modal-industry").textContent = categoryData.category;
-                  document.getElementById("modal-level").textContent = d.name;
-                  document.getElementById("modal-record-count").textContent = "10"; // Replace with actual data if available
-                  document.getElementById("modal-avg-salary").textContent = "$100,000"; // Replace with actual data
-                  document.getElementById("modal-avg-bonus").textContent = "$20,000"; // Replace with actual data
-                  document.getElementById("modal-avg-total-comp").textContent = "$120,000";
-                  document.getElementById("modal-avg-comp-per-hour").textContent = "$50";
+                document.getElementById("modal-industry").textContent = nodeData.industry || "N/A";
+                document.getElementById("modal-level").textContent = nodeData.name || "N/A";
+                document.getElementById("modal-record-count").textContent = nodeData.record_count || 0;
+                document.getElementById("modal-avg-salary").textContent = `$${nodeData.avg_salary?.toLocaleString() || 0}`;
+                document.getElementById("modal-avg-bonus").textContent = `$${nodeData.avg_bonus?.toLocaleString() || 0}`;
+                document.getElementById("modal-avg-total-comp").textContent = `$${nodeData.avg_total_comp?.toLocaleString() || 0}`;
+                document.getElementById("modal-avg-comp-per-hour").textContent = `$${nodeData.avg_comp_per_hour?.toFixed(2) || 0}`;
 
                   // Show the modal using Bootstrap
                   new bootstrap.Modal(document.getElementById("nodeModal")).show();
