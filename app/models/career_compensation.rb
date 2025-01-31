@@ -20,7 +20,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (career_job_id => career_jobs.id)
+#  fk_rails_...  (career_job_id => career_jobs.id) ON DELETE => cascade
 #
 class CareerCompensation < ApplicationRecord
   belongs_to :career_job
