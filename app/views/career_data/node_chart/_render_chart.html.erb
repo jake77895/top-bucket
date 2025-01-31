@@ -1,5 +1,5 @@
 <script>
-function renderChart(nodesData, nodeDataMap) {
+function renderChart(nodesData, nodeDataMap, linkdata) {
 const data = [
   {
     category: "Venture Capital",
@@ -10,7 +10,12 @@ const data = [
       { id: 4, name: "Principal", level: 4 },
       { id: 5, name: "Partner", level: 5 },
     ],
-    links: [], // No links by default
+      links: [
+    { source: 1, target: 2 },
+    { source: 2, target: 3 },
+    { source: 3, target: 4 },
+    { source: 4, target: 5 },
+  ],
   },
   {
     category: "Private Equity",
@@ -172,9 +177,11 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   const svg = d3
     .select("#chart")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("id", "career-tree")
+    .attr("width", 1700)
+    .attr("height", 750)
     .style("font-family", "Arial");
+
 
   // Add category buttons
   data.forEach((categoryData, i) => {
@@ -190,7 +197,19 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
       .attr("fill", "#f8f9fa")
       .attr("stroke", "#ccc")
       .attr("stroke-width", 1)
-      .attr("class", "career_tree_industry_button"); // External styling for buttons
+      .attr("class", "career_tree_industry_button") // External styling for buttons
+              // Highlight nodes in this category
+       .on("click", () => {
+          // Highlight nodes in this category
+          d3.selectAll(".node").select("circle").attr("fill", function () {
+            console.log("Category button clicked:", categoryData.category);
+            const nodeData = d3.select(this).datum();
+            console.log("Node data:", nodeData);
+            // Access the node data
+            return categoryData.nodes.some((n) => n.id === nodeData.id) ? "#ffc107" : "#f8f9fa";
+          });
+        });
+
 
     // Add button text with external styling
     const textElement = svg
@@ -228,12 +247,15 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
     .attr("d", "M 0 0 L 10 5 L 0 10 Z")
     .attr("fill", "#333");
 
+  const nodePositions = {};
 
   // Render nodes and links
   data.forEach((categoryData, i) => {
     const group = svg
       .append("g")
       .attr("transform", `translate(${i * categoryWidth + categoryWidth / 2}, ${margin.top + 50})`);
+
+
 
     // Add links
     group
@@ -250,13 +272,18 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
       .attr("marker-end", "url(#arrowhead-solid)");
 
     // Add nodes
-    const nodes = group
-      .selectAll(".node")
-      .data(categoryData.nodes)
-      .enter()
-      .append("g")
-      .attr("class", "node")
-      .attr("transform", (d) => `translate(0, ${(d.level - 1) * levelSpacing})`);
+  const nodes = group
+    .selectAll(".node")
+    .data(categoryData.nodes)
+    .enter()
+    .append("g")
+    .attr("class", "node")
+    .attr("transform", (d) => {
+      const x = i * categoryWidth + categoryWidth / 2;
+      const y = (d.level - 1) * levelSpacing;
+      nodePositions[d.id] = { x, y }; // Store for links
+      return `translate(0, ${y})`;
+    });
 
     nodes
       .append("circle")
@@ -264,6 +291,8 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
       .attr("fill", "#f8f9fa")
       .attr("stroke", "#ccc")
       .attr("stroke-width", 2);
+
+      
 
     // Add level-specific icons
     const levelIconPaths = {
@@ -317,17 +346,23 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
                 // Update modal content
                 document.getElementById("modal-industry").textContent = nodeData.industry || "N/A";
                 document.getElementById("modal-level").textContent = nodeData.name || "N/A";
-                document.getElementById("modal-record-count").textContent = nodeData.record_count || 0;
-                document.getElementById("modal-avg-salary").textContent = `$${nodeData.avg_salary?.toLocaleString() || 0}`;
-                document.getElementById("modal-avg-bonus").textContent = `$${nodeData.avg_bonus?.toLocaleString() || 0}`;
-                document.getElementById("modal-avg-total-comp").textContent = `$${nodeData.avg_total_comp?.toLocaleString() || 0}`;
-                document.getElementById("modal-avg-comp-per-hour").textContent = `$${nodeData.avg_comp_per_hour?.toFixed(2) || 0}`;
+                document.getElementById("modal-record-count").textContent = nodeData.record_count || "0";
+                document.getElementById("modal-avg-salary").textContent = `$${(nodeData.salary || 0).toLocaleString()}`;
+                document.getElementById("modal-avg-bonus").textContent = `$${(nodeData.bonus || 0).toLocaleString()}`;
+                document.getElementById("modal-avg-total-comp").textContent = `$${(nodeData.total_comp || 0).toLocaleString()}`;
+                document.getElementById("modal-avg-comp-per-hour").textContent = `$${(nodeData.comp_per_hour || 0).toFixed(2)}`;
 
                   // Show the modal using Bootstrap
                   new bootstrap.Modal(document.getElementById("nodeModal")).show();
-                });
+              });
     });
+
+    
+
+    
   });
+
+  
 
   document.dispatchEvent(new Event("chartRendered"));
 }

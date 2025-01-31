@@ -1,6 +1,6 @@
 <script>
 // Function to render links based on provided link data
-function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
+function renderLinks(svg, linkData, nodeDataMap) {
   // Ensure linkData exists and is an array
   if (!Array.isArray(linkData) || linkData.length === 0) {
     console.warn("No link data available for rendering.");
@@ -8,7 +8,10 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   }
 
   console.log(`Rendering ${linkData.length} links...`);
+  console.log("Node Data Map:", nodeDataMap);
+  console.log("Link Data:", linkData);
 
+  // Create a group for links
   const group = svg.append("g").attr("class", "links-group");
 
   // Render links
@@ -18,55 +21,80 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
     .enter()
     .append("line")
     .attr("class", "link")
-    .attr("x1", 0)
+    .attr("x1", (d) => {
+      const sourceNode = nodeDataMap[d.source];
+      if (!sourceNode) {
+        console.error(`Source node with ID ${d.source} not found.`);
+        return 0; // Default to 0 to avoid errors
+      }
+      console.log(`Source Node (${d.source}):`, sourceNode); // Log source node details
+      return sourceNode.x; // Use x-coordinate from nodeDataMap
+    })
     .attr("y1", (d) => {
       const sourceNode = nodeDataMap[d.source];
       if (!sourceNode) {
         console.error(`Source node with ID ${d.source} not found.`);
         return 0; // Default to 0 to avoid errors
       }
-      return (sourceNode.level - 1) * levelSpacing;
+      return sourceNode.y; // Use y-coordinate from nodeDataMap
     })
-    .attr("x2", 0)
+    .attr("x2", (d) => {
+      const targetNode = nodeDataMap[d.target];
+      if (!targetNode) {
+        console.error(`Target node with ID ${d.target} not found.`);
+        return 0; // Default to 0 to avoid errors
+      }
+      console.log(`Target Node (${d.target}):`, targetNode); // Log target node details
+      return targetNode.x; // Use x-coordinate from nodeDataMap
+    })
     .attr("y2", (d) => {
       const targetNode = nodeDataMap[d.target];
       if (!targetNode) {
         console.error(`Target node with ID ${d.target} not found.`);
         return 0; // Default to 0 to avoid errors
       }
-      return (targetNode.level - 1) * levelSpacing;
+      return targetNode.y; // Use y-coordinate from nodeDataMap
     })
     .attr("stroke", "#333")
     .attr("stroke-width", 2)
-    .attr("marker-end", "url(#arrowhead-solid)")
+    .attr("marker-end", "url(#arrowhead-solid)") // Add arrowhead marker
     .style("cursor", "pointer")
     .on("click", function (event, d) {
       // Show modal with link data
       console.log("Link clicked:", d);
 
-      // Update modal content
+      // Update modal content with link data
       document.getElementById("modal-source").textContent =
         nodeDataMap[d.source]?.name || "N/A";
       document.getElementById("modal-target").textContent =
         nodeDataMap[d.target]?.name || "N/A";
-      document.getElementById("modal-avg-salary").textContent = `${
-        d.avg_salary?.toLocaleString() || "N/A"
+      document.getElementById("modal-source-industry").textContent =
+        d.source_industry || "N/A";
+      document.getElementById("modal-source-level").textContent =
+        d.source_level || "N/A";
+      document.getElementById("modal-target-industry").textContent =
+        d.target_industry || "N/A";
+      document.getElementById("modal-target-level").textContent =
+        d.target_level || "N/A";
+      document.getElementById("modal-avg-salary-diff").textContent = `${
+        d.avg_salary_diff?.toLocaleString() || "N/A"
       }`;
-      document.getElementById("modal-avg-bonus").textContent = `${
-        d.avg_bonus?.toLocaleString() || "N/A"
+      document.getElementById("modal-avg-bonus-diff").textContent = `${
+        d.avg_bonus_diff?.toLocaleString() || "N/A"
       }`;
-      document.getElementById("modal-avg-total-comp").textContent = `${
-        d.avg_total_comp?.toLocaleString() || "N/A"
+      document.getElementById("modal-avg-total-comp-diff").textContent = `${
+        d.avg_total_comp_diff?.toLocaleString() || "N/A"
       }`;
-      document.getElementById("modal-avg-comp-per-hour").textContent = `${
-        d.avg_comp_per_hour?.toFixed(2) || "N/A"
+      document.getElementById("modal-avg-comp-per-hour-diff").textContent = `${
+        d.avg_comp_per_hour_diff?.toFixed(2) || "N/A"
+      }`;
+      document.getElementById("modal-avg-hours-worked-diff").textContent = `${
+        d.avg_hours_worked_diff?.toFixed(2) || "N/A"
       }`;
 
       // Show the modal using Bootstrap
       new bootstrap.Modal(document.getElementById("linkModal")).show();
     });
 }
-
-
-
 </script>
+

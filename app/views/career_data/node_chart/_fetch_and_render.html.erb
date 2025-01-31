@@ -1,19 +1,56 @@
 <script>
 console.log("fetch_and_render partial loaded");
-console.log(typeof renderChart); // Should log 'function'
-console.log(typeof renderLinks); // Should log 'function'
+
+// Function to normalize node coordinates
+function normalizeNodeCoordinates(nodeDataMap, svgWidth, svgHeight, margin = 50) {
+  const nodes = Object.values(nodeDataMap);
+
+  // Find the min and max x and y values
+  const xValues = nodes.map((node) => node.x);
+  const yValues = nodes.map((node) => node.y);
+
+  const xMin = Math.min(...xValues);
+  const xMax = Math.max(...xValues);
+  const yMin = Math.min(...yValues);
+  const yMax = Math.max(...yValues);
+
+  // Calculate scaling factors
+  const xScale = (svgWidth - 2 * margin) / (xMax - xMin || 1); // Avoid division by zero
+  const yScale = (svgHeight - 2 * margin) / (yMax - yMin || 1);
+
+  // Normalize each node's x and y coordinates
+  Object.values(nodeDataMap).forEach((node) => {
+    node.x = margin + (node.x - xMin) * xScale;
+    node.y = margin + (node.y - yMin) * yScale;
+  });
+
+  console.log("Normalized Node Data Map:", nodeDataMap); // Debug normalized nodes
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/nodes_data")
-    .then((response) => response.json())
-    .then((nodesData) => {
+  const fetchNodes = fetch("/nodes_data").then((response) => response.json());
+  const fetchLinks = fetch("/link_data").then((response) => response.json());
+
+  Promise.all([fetchNodes, fetchLinks])
+    .then(([nodesData, linkData]) => {
+      console.log("Nodes and links data fetched successfully.");
+
+      // Debug fetched data
+      console.log("Nodes Data:", nodesData);
+      console.log("Link Data:", linkData);
+
       // Create a map of node data
       const nodeDataMap = nodesData.reduce((map, node) => {
         map[node.id] = node;
         return map;
       }, {});
 
-      // Call renderChart to draw nodes
+      // Normalize node coordinates
+      const svgWidth = 1700; // Defined in your SVG
+      const svgHeight = 750; // Defined in your SVG
+      normalizeNodeCoordinates(nodeDataMap, svgWidth, svgHeight); // Call normalization here
+
+      // Render nodes
       if (typeof renderChart === "function") {
         renderChart(nodesData, nodeDataMap); // Pass nodeDataMap
         document.dispatchEvent(new Event("nodesRendered"));
@@ -21,15 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("renderChart function is not defined.");
       }
 
-      // Call renderLinks to connect nodes
+      // Render links
       if (typeof renderLinks === "function") {
-        const svg = d3.select("svg");
-        renderLinks(svg, nodesData, nodeDataMap, 150);
+        const svg = d3.select("#career-tree");
+        renderLinks(svg, linkData, nodeDataMap); // Removed levelSpacing
       } else {
         console.error("renderLinks function is not defined.");
       }
     })
-    .catch((error) => console.error("Error fetching nodes:", error));
+    .catch((error) => console.error("Error fetching nodes or links:", error));
 });
-
 </script>

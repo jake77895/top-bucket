@@ -16,6 +16,72 @@ class CareerDataController < ApplicationController
     # @partial = params[:partial] || "change_from_table" # Default partial
   end
 
+  def nodes_data
+    number_of_weeks_worked = 48
+  
+    # Constants for spacing
+    industry_spacing = 200 # Horizontal spacing between industries
+    level_spacing = 100    # Vertical spacing between levels
+  
+    # Create a hash to store aggregated node data
+    node_aggregates = node_mapping.map.with_index do |node, industry_index|
+      {
+        id: node[:id],
+        name: node[:names].first, # Use the first name as the node's main name
+        level: node[:level],
+        industry: node[:industry],
+        x: industry_index * industry_spacing, # Calculate x-coordinate based on industry index
+        y: (node[:level] - 1) * level_spacing, # Calculate y-coordinate based on level
+        salary: 0.0,
+        bonus: 0.0,
+        total_comp: 0.0,
+        hours_per_week: 0.0,
+        comp_per_hour: 0.0,
+        record_count: 0
+      }
+    end
+  
+    # Fetch and aggregate compensation data grouped by industry and level
+    compensations = CareerCompensation
+      .joins(:career_job)
+      .group("career_jobs.industry", "career_compensations.level")
+      .select(
+        "career_jobs.industry AS industry",
+        "career_compensations.level AS level",
+        "AVG(career_compensations.salary) AS avg_salary",
+        "AVG(career_compensations.bonus) AS avg_bonus",
+        "AVG(career_compensations.hours_worked_per_week) AS avg_hours_worked_per_week",
+        "COUNT(*) AS record_count"
+      )
+  
+    # Map aggregated data back to nodes
+    compensations.each do |compensation|
+      node = node_mapping.find do |node|
+        node[:industry].strip.downcase == compensation.industry.strip.downcase &&
+          node[:names].map(&:downcase).include?(compensation.level.strip.downcase)
+      end
+  
+      next unless node
+  
+      # Find the corresponding node aggregate
+      aggregate = node_aggregates.find { |n| n[:id] == node[:id] }
+      next unless aggregate
+  
+      # Update node data with aggregated values
+      aggregate[:salary] = compensation.avg_salary.to_f.round(2)
+      aggregate[:bonus] = compensation.avg_bonus.to_f.round(2)
+      aggregate[:total_comp] = (compensation.avg_salary.to_f + compensation.avg_bonus.to_f).round(2)
+      aggregate[:hours_per_week] = compensation.avg_hours_worked_per_week.to_f.round(2)
+      aggregate[:comp_per_hour] = ((compensation.avg_salary.to_f + compensation.avg_bonus.to_f) /
+                                   (compensation.avg_hours_worked_per_week.to_f * number_of_weeks_worked).nonzero? || 1).round(2)
+      aggregate[:record_count] = compensation.record_count
+    end
+  
+    # Return the final node aggregates as JSON
+    render json: node_aggregates
+  end
+  
+  
 
   def link_data
     # Step 1: Fetch and build standard job order links
