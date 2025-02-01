@@ -1,6 +1,8 @@
 <script>
 console.log("fetch_and_render partial loaded");
 
+let exitOpportunitiesMapping = {};
+
 // Function to normalize node coordinates
 function normalizeNodeCoordinates(nodeDataMap, svgWidth, svgHeight, margin = 50) {
   const nodes = Object.values(nodeDataMap);
@@ -30,15 +32,18 @@ function normalizeNodeCoordinates(nodeDataMap, svgWidth, svgHeight, margin = 50)
 document.addEventListener("DOMContentLoaded", () => {
   const fetchNodes = fetch("/nodes_data").then((response) => response.json());
   const fetchLinks = fetch("/link_data").then((response) => response.json());
+  const fetchExitOpportunities = fetch("/exit_opportunities")
+                                  .then((response) => response.json());
 
-  Promise.all([fetchNodes, fetchLinks])
-    .then(([nodesData, linkData]) => {
-      console.log("Nodes and links data fetched successfully.");
-
-      // Debug fetched data
-      console.log("Nodes Data:", nodesData);
-      console.log("Link Data:", linkData);
-
+  Promise.all([fetchNodes, fetchLinks, fetchExitOpportunities])
+     .then(([nodesData, linkData, fetchedExitMapping]) => {
+    console.log("Nodes, links, and exit opportunities data fetched successfully.");
+    console.log("Exit Opportunities Mapping:", fetchedExitMapping);
+    
+    // Correct assignment:
+    exitOpportunitiesMapping = fetchedExitMapping;
+    console.log("exitOpportunitiesMapping in fetch and render:", exitOpportunitiesMapping);
+    
       // Create a map of node data
       const nodeDataMap = nodesData.reduce((map, node) => {
         map[node.id] = node;
@@ -52,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Render nodes
       if (typeof renderChart === "function") {
-        renderChart(nodesData, nodeDataMap); // Pass nodeDataMap
+        renderChart(nodesData, nodeDataMap, exitOpportunitiesMapping) // Pass nodeDataMap
         document.dispatchEvent(new Event("nodesRendered"));
       } else {
         console.error("renderChart function is not defined.");

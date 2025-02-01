@@ -179,11 +179,7 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
 
     // Mapping of exit opportunities by category.
   // For Investment Banking, node with id 7 (Private Equity Associate) is considered an exit opportunity.
-  const exitOpportunitiesMapping = {
-    "Investment Banking": [7],
-    // Add other mappings as needed.
-  };
-
+  
 
 
   const svg = d3
@@ -212,34 +208,42 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
       .attr("class", "career_tree_industry_button") // External styling for buttons
               // Highlight nodes in this category
               .on("click", () => {
-                d3.selectAll(".node").select("circle")
-                  .attr("fill", function () {
-                    const nodeData = d3.select(this).datum();
-                    if (categoryData.nodes.some((n) => n.id === nodeData.id)) {
-                      return highlightColor;
-                    } else if (
-                      exitOpportunitiesMapping[categoryData.category] &&
-                      exitOpportunitiesMapping[categoryData.category].includes(nodeData.id)
-                    ) {
-                      return exitOpportunityColor;
-                    } else {
-                      return defaultColor;
-                    }
-                  })
-                  .attr("stroke", function () {
-                    const nodeData = d3.select(this).datum();
-                    if (categoryData.nodes.some((n) => n.id === nodeData.id)) {
-                      return highlightStroke;
-                    } else if (
-                      exitOpportunitiesMapping[categoryData.category] &&
-                      exitOpportunitiesMapping[categoryData.category].includes(nodeData.id)
-                    ) {
-                      return exitOpportunityStroke;
-                    } else {
-                      return defaultStroke;
-                    }
-                  });
-              });
+  d3.selectAll(".node").select("circle")
+    .attr("fill", function () {
+      const nodeData = d3.select(this).datum();
+      const isPrimary = categoryData.nodes.some((n) => n.id === nodeData.id);
+      const exitMapping = exitOpportunitiesMapping[categoryData.category];
+      const isExit = exitMapping && exitMapping.some(exitObj => exitObj.node_id === nodeData.id);
+      
+      console.log("Button for:", categoryData.category);
+      console.log("Node Data:", nodeData);
+      console.log("isPrimary:", isPrimary);
+      console.log("exitMapping:", exitMapping);
+      console.log("isExit:", isExit);
+      
+      if (isPrimary) {
+        return highlightColor;
+      } else if (isExit) {
+        return exitOpportunityColor;
+      } else {
+        return defaultColor;
+      }
+    })
+    .attr("stroke", function () {
+      const nodeData = d3.select(this).datum();
+      const isPrimary = categoryData.nodes.some((n) => n.id === nodeData.id);
+      const exitMapping = exitOpportunitiesMapping[categoryData.category];
+      const isExit = exitMapping && exitMapping.some(exitObj => exitObj.node_id === nodeData.id);
+      
+      if (isPrimary) {
+        return highlightStroke;
+      } else if (isExit) {
+        return exitOpportunityStroke;
+      } else {
+        return defaultStroke;
+      }
+    });
+});
 
 
     // Add button text with external styling

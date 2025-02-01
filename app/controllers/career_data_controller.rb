@@ -80,6 +80,75 @@ class CareerDataController < ApplicationController
     # Return the final node aggregates as JSON
     render json: node_aggregates
   end
+
+  def generate_exit_opportunities
+    # Get all non-null job_grouping values.
+    grouping_ids = CareerJob.where("job_grouping IS NOT NULL")
+                            .group(:job_grouping)
+                            .pluck(:job_grouping)
+    
+    # Get a list of industries from the static node mapping.
+    industries = node_mapping.map { |nm| nm[:industry].strip }.uniq
+    
+    # Initialize the dynamic mapping hash.
+    # The keys will be each industry (from the node mapping) and the values
+    # will be arrays of exit opportunity objects.
+    dynamic_mapping = Hash.new { |hash, key| hash[key] = [] }
+    
+    # Process each job grouping.
+    grouping_ids.each do |grouping_id|
+      jobs = CareerJob.where(job_grouping: grouping_id)
+      next if jobs.empty?
+      
+      # For each industry in our base list...
+      industries.each do |industry|
+        # Get all jobs in this grouping that belong to this industry.
+        industry_jobs = jobs.select { |job| job.industry.strip.downcase == industry.strip.downcase }
+        next if industry_jobs.empty?  # No jobs for this industry in the grouping
+        
+        # Determine a threshold for this industry.
+        # (For example, use the maximum job_order among these jobs.)
+        threshold = industry_jobs.map { |j| j.job_order.to_i }.max
+        
+        # Now, consider jobs in the grouping from other industries whose job_order is lower than the threshold.
+        exit_jobs = jobs.select do |job|
+          job.industry.strip.downcase != industry.strip.downcase &&
+          job.job_order.to_i < threshold
+        end
+        
+        exit_jobs.each do |exit_job|
+          # Look up the corresponding compensation to determine the job's level.
+          comp = CareerCompensation.find_by(career_job_id: exit_job.id)
+          next unless comp
+          
+          # Normalize the compensation level string.
+          comp_level_normalized = comp.level.to_s.strip.downcase
+          
+          # Look up the node mapping for the exit job's industry based on its level (via names).
+          mapping = node_mapping.find do |nm|
+            nm[:industry].strip.downcase == exit_job.industry.strip.downcase &&
+            nm[:names].any? { |name| name.strip.downcase == comp_level_normalized }
+          end
+          
+          if mapping
+            # Build the exit opportunity object.
+            exit_opportunity = { 
+              exit_industry: exit_job.industry,  # the industry of the exit job
+              node_id: mapping[:id],              # the matching node mapping's id
+              job_level: comp.level,              # the compensation level (as stored in career_compensation)
+              job_order: exit_job.job_order         # the job_order from the career_job record
+            }
+            # Add this opportunity to the array for the current industry.
+            dynamic_mapping[industry] << exit_opportunity unless dynamic_mapping[industry].include?(exit_opportunity)
+          end
+        end
+      end
+    end
+    
+    render json: dynamic_mapping
+  end
+  
+  
   
   
 

@@ -220,6 +220,7 @@ Rails.application.routes.draw do
 
   get 'nodes_data', to: 'career_data#nodes_data'
   get 'link_data', to: 'career_data#link_data'
+  get 'exit_opportunities', to: 'career_data#generate_exit_opportunities'
 
 
 
