@@ -10,12 +10,7 @@ const data = [
       { id: 4, name: "Principal", level: 4 },
       { id: 5, name: "Partner", level: 5 },
     ],
-      links: [
-    { source: 1, target: 2 },
-    { source: 2, target: 3 },
-    { source: 3, target: 4 },
-    { source: 4, target: 5 },
-  ],
+      links: [],
   },
   {
     category: "Private Equity",
@@ -174,11 +169,28 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   const categoryWidth = width / data.length;
   const buttonHeight = 40;
 
+  // Define colors for normal highlighting, exit opportunities, and defaults
+  const highlightColor = "#fff";
+  const defaultColor = "#6F6F6F";
+  const highlightStroke = "#102B3F";
+  const defaultStroke = "#ccc";
+  const exitOpportunityColor = "#ffc107";  // exit opportunity fill color
+  const exitOpportunityStroke = "#b38e00";   // exit opportunity stroke color
+
+    // Mapping of exit opportunities by category.
+  // For Investment Banking, node with id 7 (Private Equity Associate) is considered an exit opportunity.
+  const exitOpportunitiesMapping = {
+    "Investment Banking": [7],
+    // Add other mappings as needed.
+  };
+
+
+
   const svg = d3
     .select("#chart")
     .append("svg")
     .attr("id", "career-tree")
-    .attr("width", 1700)
+    .attr("width", width)
     .attr("height", 750)
     .style("font-family", "Arial");
 
@@ -199,16 +211,35 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
       .attr("stroke-width", 1)
       .attr("class", "career_tree_industry_button") // External styling for buttons
               // Highlight nodes in this category
-       .on("click", () => {
-          // Highlight nodes in this category
-          d3.selectAll(".node").select("circle").attr("fill", function () {
-            console.log("Category button clicked:", categoryData.category);
-            const nodeData = d3.select(this).datum();
-            console.log("Node data:", nodeData);
-            // Access the node data
-            return categoryData.nodes.some((n) => n.id === nodeData.id) ? "#ffc107" : "#f8f9fa";
-          });
-        });
+              .on("click", () => {
+                d3.selectAll(".node").select("circle")
+                  .attr("fill", function () {
+                    const nodeData = d3.select(this).datum();
+                    if (categoryData.nodes.some((n) => n.id === nodeData.id)) {
+                      return highlightColor;
+                    } else if (
+                      exitOpportunitiesMapping[categoryData.category] &&
+                      exitOpportunitiesMapping[categoryData.category].includes(nodeData.id)
+                    ) {
+                      return exitOpportunityColor;
+                    } else {
+                      return defaultColor;
+                    }
+                  })
+                  .attr("stroke", function () {
+                    const nodeData = d3.select(this).datum();
+                    if (categoryData.nodes.some((n) => n.id === nodeData.id)) {
+                      return highlightStroke;
+                    } else if (
+                      exitOpportunitiesMapping[categoryData.category] &&
+                      exitOpportunitiesMapping[categoryData.category].includes(nodeData.id)
+                    ) {
+                      return exitOpportunityStroke;
+                    } else {
+                      return defaultStroke;
+                    }
+                  });
+              });
 
 
     // Add button text with external styling
@@ -288,9 +319,9 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
     nodes
       .append("circle")
       .attr("r", 20)
-      .attr("fill", "#f8f9fa")
-      .attr("stroke", "#ccc")
-      .attr("stroke-width", 2);
+      .attr("stroke", defaultStroke)
+      .attr("stroke-width", 2)
+      .attr("fill", defaultColor);
 
       
 
@@ -356,6 +387,26 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
                   new bootstrap.Modal(document.getElementById("nodeModal")).show();
               });
     });
+
+    // Find the Investment Banking category data from the data array
+    const investmentBankingData = data.find(d => d.category === "Investment Banking");
+
+    if (investmentBankingData) {
+      // Update the nodes immediately on page load
+      d3.selectAll(".node").select("circle")
+        .attr("fill", function () {
+          const nodeData = d3.select(this).datum();
+          return investmentBankingData.nodes.some((n) => n.id === nodeData.id)
+            ? highlightColor
+            : defaultColor;
+        })
+        .attr("stroke", function () {
+          const nodeData = d3.select(this).datum();
+          return investmentBankingData.nodes.some((n) => n.id === nodeData.id)
+            ? highlightStroke
+            : defaultStroke;
+        });
+    }
 
     
 

@@ -131,7 +131,6 @@
 /* Nodes */
 
 .node circle {
-  stroke: #ccc;
   stroke-width: 2px;
 }
 .node text {
