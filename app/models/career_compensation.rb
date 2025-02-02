@@ -32,4 +32,21 @@ class CareerCompensation < ApplicationRecord
   validates :bonus, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 3000000 }
   validates :hours_worked_per_week, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 120 }
 
+   # Define searchable attributes for Ransack
+   def self.ransackable_attributes(auth_object = nil)
+    [
+      "id",
+      "career_job_id",
+      "year",
+      "level",
+      "sub_level",
+      "salary",
+      "bonus",
+      "hours_worked_per_week",
+      "group",
+      "created_at",
+      "updated_at"
+    ]
+  end
+
 end

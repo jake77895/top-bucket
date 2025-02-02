@@ -2,74 +2,46 @@
   <div class="card-body">
     <form action="#" method="get">
       <div class="row g-3">
-        <!-- Industry Filter -->
-        <div class="col-md-4">
-          <label for="industry-filter" class="form-label fw-bold">Industry</label>
-          <select id="industry-filter" class="form-select" multiple>
-            <option value="technology">Technology</option>
-            <option value="finance">Finance</option>
-            <option value="healthcare">Healthcare</option>
-            <option value="education">Education</option>
-            <option value="manufacturing">Manufacturing</option>
-          </select>
-        </div>
+<%= search_form_for @q, url: overview_career_data_path, method: :get, class: "filter-form" do |f| %>
+  <div class="row g-3">
+    <!-- Industry -->
+    <div class="col-md-4">
+      <%= f.label :industry_cont, "Industry" %>
+      <%= f.select :industry_cont, CareerJob.distinct.pluck(:industry), { include_blank: "All Industries" }, class: "form-select" %>
+    </div>
 
-        <!-- Company Filter -->
-        <div class="col-md-4">
-          <label for="company-filter" class="form-label fw-bold">Company</label>
-          <select id="company-filter" class="form-select" multiple>
-            <option value="google">Google</option>
-            <option value="apple">Apple</option>
-            <option value="microsoft">Microsoft</option>
-            <option value="amazon">Amazon</option>
-            <option value="meta">Meta</option>
-          </select>
-        </div>
+    <!-- Company -->
+    <div class="col-md-4">
+      <%= f.label :company_cont, "Company" %>
+      <%= f.select :company_cont, CareerJob.distinct.pluck(:company), { include_blank: "All Companies" }, class: "form-select" %>
+    </div>
 
-        <!-- Location Filter -->
-        <div class="col-md-4">
-          <label for="location-filter" class="form-label fw-bold">Location</label>
-          <select id="location-filter" class="form-select" multiple>
-            <option value="new-york">New York</option>
-            <option value="san-francisco">San Francisco</option>
-            <option value="chicago">Chicago</option>
-            <option value="seattle">Seattle</option>
-            <option value="austin">Austin</option>
-          </select>
-        </div>
-      </div>
+    <!-- Location -->
+    <div class="col-md-4">
+      <%= f.label :location_cont, "Location" %>
+      <%= f.select :location_cont, CareerJob.distinct.pluck(:location), { include_blank: "All Locations" }, class: "form-select" %>
+    </div>
 
-      <div class="row g-3 mt-3">
-        <!-- Level Filter -->
-        <div class="col-md-6">
-          <label for="level-filter" class="form-label fw-bold">Level</label>
-          <select id="level-filter" class="form-select" multiple>
-            <option value="entry">Entry</option>
-            <option value="mid">Mid</option>
-            <option value="senior">Senior</option>
-            <option value="lead">Lead</option>
-            <option value="executive">Executive</option>
-          </select>
-        </div>
+    <!-- Level -->
+    <div class="col-md-4">
+      <%= f.label :career_compensations_level_cont, "Level" %>
+      <%= f.select :career_compensations_level_cont, CareerCompensation.distinct.pluck(:level), { include_blank: "All Levels" }, class: "form-select" %>
+    </div>
 
-        <!-- Sub-Level Filter -->
-        <div class="col-md-6">
-          <label for="sub-level-filter" class="form-label fw-bold">Sub-Level</label>
-          <select id="sub-level-filter" class="form-select" multiple>
-            <option value="associate">Associate</option>
-            <option value="manager">Manager</option>
-            <option value="director">Director</option>
-            <option value="vp">Vice President</option>
-            <option value="c-suite">C-Suite</option>
-          </select>
-        </div>
-      </div>
+    <!-- Sub-Level -->
+    <div class="col-md-4">
+      <%= f.label :career_compensations_sub_level_cont, "Sub-Level" %>
+      <%= f.select :career_compensations_sub_level_cont, CareerCompensation.distinct.pluck(:sub_level), { include_blank: "All Sub-Levels" }, class: "form-select" %>
+    </div>
 
-      <!-- Apply and Reset Buttons -->
-      <div class="mt-4 text-center">
-        <button type="submit" class="btn btn-dark me-2">Apply</button>
-        <button type="reset" class="btn btn-outline-secondary">Clear</button>
-      </div>
-    </form>
+    <!-- Apply Button -->
+    <div class="col-md-4 align-self-end">
+      <%= f.submit "Apply", class: "btn btn-primary w-100" %>
+    </div>
+  </div>
+<% end %>
+
+
+
   </div>
 </div>

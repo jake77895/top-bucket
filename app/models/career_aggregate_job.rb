@@ -19,4 +19,25 @@
 #  updated_at                    :datetime         not null
 #
 class CareerAggregateJob < ApplicationRecord
+  # Define the list of searchable attributes for Ransack
+  def self.ransackable_attributes(auth_object = nil)
+    [
+      "average_bonus",
+      "average_hours_worked_per_week",
+      "average_salary",
+      "company",
+      "created_at",
+      "group",
+      "id",
+      "industry",
+      "job_title",
+      "level",
+      "location",
+      "sample_size",
+      "sub_level",
+      "updated_at",
+      "year"
+    ]
+  end
 end
+

@@ -4,9 +4,48 @@ class CareerDataController < ApplicationController
   end
 
   def overview
-    
-
+    # Initialize Ransack search objects for filtering
+    @q = CareerJob.joins(:career_compensations).ransack(params[:q]) # Filter options come from CareerJob
+  
+    # Filter the data
+    filtered_jobs = @q.result
+  
+    # Perform aggregation queries
+    job_comp_data = filtered_jobs.select(
+      "SUM(career_compensations.salary) / NULLIF(COUNT(career_compensations.id), 0) AS avg_salary",
+      "SUM(career_compensations.bonus) / NULLIF(COUNT(career_compensations.id), 0) AS avg_bonus",
+      "SUM(career_compensations.salary + career_compensations.bonus) / NULLIF(COUNT(career_compensations.id), 0) AS avg_total_comp",
+      "SUM(career_compensations.hours_worked_per_week) / NULLIF(COUNT(career_compensations.id), 0) AS avg_hours_worked",
+      "COUNT(career_compensations.id) AS total_records"
+    ).take
+  
+    # Use CareerAggregateJob for supplementary data, if needed
+    aggregate_data = CareerAggregateJob.select(
+      "SUM(average_salary * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_salary",
+      "SUM(average_bonus * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_bonus",
+      "SUM((average_salary + average_bonus) * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_total_comp",
+      "SUM(average_hours_worked_per_week * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_hours_worked",
+      "SUM(sample_size) AS total_records"
+    ).take
+  
+    # Combine results into a hash
+    @summary = {
+      avg_salary: (aggregate_data.avg_salary.to_f + job_comp_data.avg_salary.to_f) / 2,
+      avg_bonus: (aggregate_data.avg_bonus.to_f + job_comp_data.avg_bonus.to_f) / 2,
+      avg_total_comp: (aggregate_data.avg_total_comp.to_f + job_comp_data.avg_total_comp.to_f) / 2,
+      avg_hours_worked: (aggregate_data.avg_hours_worked.to_f + job_comp_data.avg_hours_worked.to_f) / 2,
+      total_records: aggregate_data.total_records.to_i + job_comp_data.total_records.to_i
+    }
+  
+    # Calculate average compensation per hour
+    @avg_comp_per_hour = (@summary[:avg_total_comp] / @summary[:avg_hours_worked]).round(2) if @summary[:avg_hours_worked] > 0
   end
+  
+  
+  
+  
+
+
 
   def change
     @partial = params[:partial] || "change_from_table" # Default partial

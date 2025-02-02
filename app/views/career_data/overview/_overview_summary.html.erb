@@ -1,44 +1,31 @@
 <div class="card shadow-sm my-4">
   <div class="card-body">
-    <!-- First Row -->
     <div class="row text-center border-bottom pb-3 mb-3">
-      <!-- Number of Records -->
       <div class="col-md-4 border-end">
         <h5 class="fw-bold mb-1">Number of Records</h5>
-        <small class="text-muted">450</small>
+        <small class="text-muted"><%= @summary[:total_records] %></small>
       </div>
-
-      <!-- Average Salary -->
       <div class="col-md-4 border-end">
         <h5 class="fw-bold mb-1">Avg. Salary</h5>
-        <small class="text-muted">$120K</small>
+        <small class="text-muted">$<%= number_with_delimiter(@summary[:avg_salary].round) %></small>
       </div>
-
-      <!-- Average Bonus -->
       <div class="col-md-4">
         <h5 class="fw-bold mb-1">Avg. Bonus</h5>
-        <small class="text-muted">$30K</small>
+        <small class="text-muted">$<%= number_with_delimiter(@summary[:avg_bonus].round) %></small>
       </div>
     </div>
-
-    <!-- Second Row -->
     <div class="row text-center">
-      <!-- Average Total Compensation -->
       <div class="col-md-4 border-end">
         <h5 class="fw-bold mb-1">Avg. Total Comp</h5>
-        <small class="text-muted">$150K</small>
+        <small class="text-muted">$<%= number_with_delimiter(@summary[:avg_total_comp].round) %></small>
       </div>
-
-      <!-- Average Hours Worked -->
       <div class="col-md-4 border-end">
         <h5 class="fw-bold mb-1">Avg. Hours Worked</h5>
-        <small class="text-muted">45 hrs/week</small>
+        <small class="text-muted"><%= @summary[:avg_hours_worked].round %> hrs/week</small>
       </div>
-
-      <!-- Average Compensation per Hour -->
       <div class="col-md-4">
         <h5 class="fw-bold mb-1">Avg. Comp per Hour</h5>
-        <small class="text-muted">$50/hour</small>
+        <small class="text-muted">$<%= number_with_delimiter(@avg_comp_per_hour) %>/hour</small>
       </div>
     </div>
   </div>

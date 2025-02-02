@@ -43,4 +43,31 @@ class CareerJob < ApplicationRecord
   belongs_to :user
   # belongs_to :previous_job
   # belongs_to :next_job
-end
+
+  
+    # Define searchable attributes for Ransack
+    def self.ransackable_attributes(auth_object = nil)
+      [
+        "id",
+        "user_id",
+        "company",
+        "industry",
+        "start_year",
+        "years_at_job",
+        "location",
+        "job_grouping",
+        "job_order",
+        "created_at",
+        "updated_at",
+        "previous_undergrad",
+        "previous_grad",
+        "previous_mba"
+      ]
+    end
+  
+    # Define searchable associations for Ransack
+    def self.ransackable_associations(auth_object = nil)
+      ["career_compensations"]
+    end
+  end
+  
