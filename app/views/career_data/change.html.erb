@@ -21,23 +21,4 @@
   <%= render 'career_data/change/change_filters' %>
 </div>
 
-<div class="d-flex px-4 mb-3">
-  <div class="row w-100">
-    <div class="col-4">
-      <%= link_to "Change", change_career_data_path(partial: "change_difference_table"), 
-            class: "btn #{params[:partial] == 'change_difference_table' || params[:partial].nil? ? 'btn-dark' : 'btn-outline-dark'} w-100" %>
-    </div>
-    <div class="col-4">
-      <%= link_to "From", change_career_data_path(partial: "change_from_table"), 
-            class: "btn #{params[:partial] == 'change_from_table' ? 'btn-dark' : 'btn-outline-dark'} w-100" %>
-    </div>
-    <div class="col-4">
-      <%= link_to "To", change_career_data_path(partial: "change_to_table"), 
-            class: "btn #{params[:partial] == 'change_to_table' ? 'btn-dark' : 'btn-outline-dark'} w-100" %>
-    </div>
-  </div>
-</div>
 
-<div class="px-4">
-  <%= render "career_data/change/#{@partial || 'change_from_table'}" %>
-</div>

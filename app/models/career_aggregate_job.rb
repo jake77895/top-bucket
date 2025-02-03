@@ -12,6 +12,9 @@
 #  job_title                     :string
 #  level                         :string
 #  location                      :string
+#  previous_grad                 :string
+#  previous_mba                  :string
+#  previous_undergrad            :string
 #  sample_size                   :integer
 #  sub_level                     :string
 #  year                          :integer

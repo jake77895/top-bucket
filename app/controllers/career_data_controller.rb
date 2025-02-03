@@ -4,23 +4,22 @@ class CareerDataController < ApplicationController
   end
 
   def overview
-    # Initialize Ransack search objects for filtering
-    @q = CareerJob.joins(:career_compensations).ransack(params[:q]) # Filter options come from CareerJob
+    # Remove empty filter values from params[:q]
+    puts "Filter Parameters (params[:q]): #{params[:q].inspect}"
+    clean_params = params[:q]&.reject { |_key, value| value.blank? }
+    puts "Filter Parameters: #{clean_params.inspect}" # Debugging line
+
+    
+
   
-    # Filter the data
-    filtered_jobs = @q.result
+    # Initialize Ransack search object with cleaned parameters
+    @q = CombinedJob.ransack(clean_params)
+  
+    # Apply filtering
+    @filtered_jobs = @q.result
   
     # Perform aggregation queries
-    job_comp_data = filtered_jobs.select(
-      "SUM(career_compensations.salary) / NULLIF(COUNT(career_compensations.id), 0) AS avg_salary",
-      "SUM(career_compensations.bonus) / NULLIF(COUNT(career_compensations.id), 0) AS avg_bonus",
-      "SUM(career_compensations.salary + career_compensations.bonus) / NULLIF(COUNT(career_compensations.id), 0) AS avg_total_comp",
-      "SUM(career_compensations.hours_worked_per_week) / NULLIF(COUNT(career_compensations.id), 0) AS avg_hours_worked",
-      "COUNT(career_compensations.id) AS total_records"
-    ).take
-  
-    # Use CareerAggregateJob for supplementary data, if needed
-    aggregate_data = CareerAggregateJob.select(
+    aggregate_data = @filtered_jobs.select(
       "SUM(average_salary * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_salary",
       "SUM(average_bonus * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_bonus",
       "SUM((average_salary + average_bonus) * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_total_comp",
@@ -28,28 +27,78 @@ class CareerDataController < ApplicationController
       "SUM(sample_size) AS total_records"
     ).take
   
-    # Combine results into a hash
+    # Build the summary hash
     @summary = {
-      avg_salary: (aggregate_data.avg_salary.to_f + job_comp_data.avg_salary.to_f) / 2,
-      avg_bonus: (aggregate_data.avg_bonus.to_f + job_comp_data.avg_bonus.to_f) / 2,
-      avg_total_comp: (aggregate_data.avg_total_comp.to_f + job_comp_data.avg_total_comp.to_f) / 2,
-      avg_hours_worked: (aggregate_data.avg_hours_worked.to_f + job_comp_data.avg_hours_worked.to_f) / 2,
-      total_records: aggregate_data.total_records.to_i + job_comp_data.total_records.to_i
+      avg_salary: aggregate_data.avg_salary.to_f,
+      avg_bonus: aggregate_data.avg_bonus.to_f,
+      avg_total_comp: aggregate_data.avg_total_comp.to_f,
+      avg_hours_worked: aggregate_data.avg_hours_worked.to_f,
+      total_records: aggregate_data.total_records.to_i
     }
   
     # Calculate average compensation per hour
-    @avg_comp_per_hour = (@summary[:avg_total_comp] / @summary[:avg_hours_worked]).round(2) if @summary[:avg_hours_worked] > 0
+    if @summary[:avg_hours_worked] > 0
+      annual_hours = @summary[:avg_hours_worked] * 48 # Multiply avg hours worked by 48 weeks
+      @avg_comp_per_hour = (@summary[:avg_total_comp] / annual_hours).round(0)
+    else
+      @avg_comp_per_hour = 0
+    end
   end
-  
-  
   
   
 
 
 
   def change
-    @partial = params[:partial] || "change_from_table" # Default partial
+  
+    # Permit parameters
+    clean_params = params.permit(
+      :q_from_industry_cont, :q_from_company_cont, :q_from_level_cont, :q_from_sub_level_cont,
+      :q_to_industry_cont, :q_to_company_cont, :q_to_level_cont, :q_to_sub_level_cont
+    )
+  
+    # Map to Ransack filters
+    @q_from = CombinedJob.ransack(
+      industry_cont: clean_params[:q_from_industry_cont],
+      company_cont: clean_params[:q_from_company_cont],
+      level_cont: clean_params[:q_from_level_cont],
+      sub_level_cont: clean_params[:q_from_sub_level_cont]
+    )
+  
+    @q_to = CombinedJob.ransack(
+      industry_cont: clean_params[:q_to_industry_cont],
+      company_cont: clean_params[:q_to_company_cont],
+      level_cont: clean_params[:q_to_level_cont],
+      sub_level_cont: clean_params[:q_to_sub_level_cont]
+    )
+  
+    @from_jobs = @q_from.result
+    @to_jobs = @q_to.result
+  
+    # Calculate change summary
+    @change_summary = if @from_jobs.exists? && @to_jobs.exists?
+      calculate_change_summary(@from_jobs, @to_jobs)
+    else
+      {
+        salary_change: 0.0,
+        bonus_change: 0.0,
+        total_comp_change: 0.0,
+        hours_worked_change: 0.0,
+        comp_per_hour_change: 0.0,
+        salary_percent_change: 0.0,
+        bonus_percent_change: 0.0,
+        total_comp_percent_change: 0.0,
+        comp_per_hour_percent_change: 0.0
+      }
+    end
+
   end
+  
+  
+  
+
+  
+  
 
   def start
     # @partial = params[:partial] || "change_from_table" # Default partial
@@ -80,17 +129,16 @@ class CareerDataController < ApplicationController
       }
     end
   
-    # Fetch and aggregate compensation data grouped by industry and level
-    compensations = CareerCompensation
-      .joins(:career_job)
-      .group("career_jobs.industry", "career_compensations.level")
+    # Fetch and aggregate compensation data from the CombinedJob view
+    compensations = CombinedJob
+      .group(:industry, :level)
       .select(
-        "career_jobs.industry AS industry",
-        "career_compensations.level AS level",
-        "AVG(career_compensations.salary) AS avg_salary",
-        "AVG(career_compensations.bonus) AS avg_bonus",
-        "AVG(career_compensations.hours_worked_per_week) AS avg_hours_worked_per_week",
-        "COUNT(*) AS record_count"
+        "industry",
+        "level",
+        "SUM(average_salary * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_salary",
+        "SUM(average_bonus * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_bonus",
+        "SUM(average_hours_worked_per_week * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_hours_worked_per_week",
+        "SUM(sample_size) AS record_count"
       )
   
     # Map aggregated data back to nodes
@@ -119,6 +167,7 @@ class CareerDataController < ApplicationController
     # Return the final node aggregates as JSON
     render json: node_aggregates
   end
+  
 
   def generate_exit_opportunities
     # Get all non-null job_grouping values.
@@ -471,6 +520,57 @@ class CareerDataController < ApplicationController
       { id: 39, names: ["Lead"], level: 4, industry: "Other" },
       { id: 40, names: ["Executive"], level: 5, industry: "Other" },
     ]
+  end
+
+  def calculate_change_summary(from_jobs, to_jobs)
+    from_avg_salary = from_jobs.average(:average_salary).to_f || 0.0
+    to_avg_salary = to_jobs.average(:average_salary).to_f || 0.0
+
+    from_avg_bonus = from_jobs.average(:average_bonus).to_f || 0.0
+    to_avg_bonus = to_jobs.average(:average_bonus).to_f || 0.0
+
+    from_avg_total_comp = (from_avg_salary + from_avg_bonus) || 0.0
+    to_avg_total_comp = (to_avg_salary + to_avg_bonus) || 0.0
+
+    from_avg_hours = from_jobs.average(:average_hours_worked_per_week).to_f || 0.0
+    to_avg_hours = to_jobs.average(:average_hours_worked_per_week).to_f || 0.0
+
+    {
+      salary_change: ((to_avg_salary - from_avg_salary) || 0.0).round,
+      salary_percent_change: (percent_change(from_avg_salary, to_avg_salary) || 0.0).round(2),
+      bonus_change: ((to_avg_bonus - from_avg_bonus) || 0.0).round,
+      bonus_percent_change: (percent_change(from_avg_bonus, to_avg_bonus) || 0.0).round(2),
+      total_comp_change: ((to_avg_total_comp - from_avg_total_comp) || 0.0).round,
+      total_comp_percent_change: (percent_change(from_avg_total_comp, to_avg_total_comp) || 0.0).round(2),
+      hours_worked_change: ((to_avg_hours - from_avg_hours) || 0.0).round,
+      comp_per_hour_change: (compensation_per_hour_change(from_avg_total_comp, to_avg_total_comp, from_avg_hours, to_avg_hours) || 0.0).round(2),
+      comp_per_hour_percent_change: (percent_change(from_avg_total_comp / (from_avg_hours.nonzero? || 1), to_avg_total_comp / (to_avg_hours.nonzero? || 1)) || 0.0).round(2)
+    }
+end
+
+  
+  def percent_change(from, to)
+    return 0 if from.zero?
+    ((to - from) / from * 100).round(2)
+  end
+  
+  def compensation_per_hour_change(from_total_comp, to_total_comp, from_hours, to_hours)
+    from_per_hour = from_total_comp / (from_hours.nonzero? || 1)
+    to_per_hour = to_total_comp / (to_hours.nonzero? || 1)
+    (to_per_hour - from_per_hour).round(2)
+  end
+
+  def strong_params
+    params.permit(
+      :q_from_industry_cont,
+      :q_from_company_cont,
+      :q_from_level_cont,
+      :q_from_sub_level_cont,
+      :q_to_industry_cont,
+      :q_to_company_cont,
+      :q_to_level_cont,
+      :q_to_sub_level_cont
+    )
   end
   
   

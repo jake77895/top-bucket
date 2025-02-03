@@ -17,28 +17,6 @@
   <%= render 'career_data/overview/overview_summary' %>
 </div>
 
-<!-- Open Filter Button -->
-<div class="text-center mt-4 px-4">
-  <button type="button" class="btn btn-outline-dark w-100" data-bs-toggle="modal" data-bs-target="#filterModal">
-    Open Filters
-  </button>
-</div>
-
 <div class="mt-4 px-4">
-  <%= render 'career_data/overview/overview_table' %>
-</div>
-
-<!-- Modal for Filters -->
-<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="filterModalLabel">Filter Options</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <%= render 'career_data/overview/overview_filters' %>
-      </div>
-    </div>
-  </div>
+  <%= render 'career_data/overview/overview_filters' %>
 </div>

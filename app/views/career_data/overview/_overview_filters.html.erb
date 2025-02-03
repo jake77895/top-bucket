@@ -1,47 +1,71 @@
+<h5 class="fw-bold">Filters</h5>
 <div class="card shadow-sm my-2">
   <div class="card-body">
-    <form action="#" method="get">
+    <%= search_form_for @q, url: overview_career_data_path, method: :get, class: "filter-form" do |f| %>
       <div class="row g-3">
-<%= search_form_for @q, url: overview_career_data_path, method: :get, class: "filter-form" do |f| %>
-  <div class="row g-3">
-    <!-- Industry -->
-    <div class="col-md-4">
-      <%= f.label :industry_cont, "Industry" %>
-      <%= f.select :industry_cont, CareerJob.distinct.pluck(:industry), { include_blank: "All Industries" }, class: "form-select" %>
-    </div>
+        <!-- Industry -->
+        <div class="col-md-4">
+          <%= f.label :industry_cont, "Industry" %>
+          <%= f.select :industry_cont,
+                       [["All Industries", ""]] + CombinedJob.where.not(industry: [nil, ""]).distinct.pluck(:industry).map { |i| [i, i] },
+                       {},
+                       class: "form-select",
+                       selected: params.dig(:q, :industry_cont) || "" %>
+        </div>
 
-    <!-- Company -->
-    <div class="col-md-4">
-      <%= f.label :company_cont, "Company" %>
-      <%= f.select :company_cont, CareerJob.distinct.pluck(:company), { include_blank: "All Companies" }, class: "form-select" %>
-    </div>
+        <!-- Company -->
+        <div class="col-md-4">
+          <%= f.label :company_cont, "Company" %>
+          <%= f.select :company_cont,
+                       [["All Companies", ""]] + CombinedJob.where.not(company: [nil, ""]).distinct.pluck(:company).map { |c| [c, c] },
+                       {},
+                       class: "form-select",
+                       selected: params.dig(:q, :company_cont) || "" %>
+        </div>
 
-    <!-- Location -->
-    <div class="col-md-4">
-      <%= f.label :location_cont, "Location" %>
-      <%= f.select :location_cont, CareerJob.distinct.pluck(:location), { include_blank: "All Locations" }, class: "form-select" %>
-    </div>
+        <!-- Location -->
+        <div class="col-md-4">
+          <%= f.label :location_cont, "Location" %>
+          <%= f.select :location_cont,
+                       [["All Locations", ""]] + CombinedJob.where.not(location: [nil, ""]).distinct.pluck(:location).map { |l| [l, l] },
+                       {},
+                       class: "form-select",
+                       selected: params.dig(:q, :location_cont) || "" %>
+        </div>
 
-    <!-- Level -->
-    <div class="col-md-4">
-      <%= f.label :career_compensations_level_cont, "Level" %>
-      <%= f.select :career_compensations_level_cont, CareerCompensation.distinct.pluck(:level), { include_blank: "All Levels" }, class: "form-select" %>
-    </div>
+        <!-- Level -->
+        <div class="col-md-6">
+          <%= f.label :level_cont, "Level" %>
+          <%= f.select :level_cont,
+               [["All Levels", ""]] + CombinedJob.where.not(level: [nil, ""]).distinct.pluck(:level).map { |l| [l, l] },
+               {},
+               class: "form-select",
+               selected: params.dig(:q, :level_cont) || "" %>
+        </div>
 
-    <!-- Sub-Level -->
-    <div class="col-md-4">
-      <%= f.label :career_compensations_sub_level_cont, "Sub-Level" %>
-      <%= f.select :career_compensations_sub_level_cont, CareerCompensation.distinct.pluck(:sub_level), { include_blank: "All Sub-Levels" }, class: "form-select" %>
-    </div>
+        <!-- Sub-Level -->
+        <div class="col-md-6">
+          <%= f.label :sub_level_cont, "Sub-Level" %>
+          <%= f.select :sub_level_cont,
+              [["All Sub-Levels", ""]] +
+              CombinedJob.where.not(sub_level: [nil, ""])
+                        .distinct
+                        .pluck(:sub_level)
+                        .sort_by { |s| [s =~ /^[a-zA-Z]/ ? 0 : 1, s =~ /^[0-9]/ ? s.to_i : s] }
+                        .map { |s| [s, s] },
+              {},
+              class: "form-select",
+              selected: params.dig(:q, :sub_level_cont) || "" %>
+        </div>
 
-    <!-- Apply Button -->
-    <div class="col-md-4 align-self-end">
-      <%= f.submit "Apply", class: "btn btn-primary w-100" %>
-    </div>
-  </div>
-<% end %>
-
-
-
+        <!-- Buttons -->
+        <div class="col-md-6 align-self-end">
+          <%= f.submit "Apply", class: "btn btn-dark w-100" %>
+        </div>
+        <div class="col-md-6 align-self-end">
+          <%= link_to "Clear Filters", overview_career_data_path, class: "btn btn-outline-dark w-100" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

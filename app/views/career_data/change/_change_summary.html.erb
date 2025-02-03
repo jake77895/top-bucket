@@ -1,44 +1,68 @@
+<% # Ensure @change_summary is always initialized with default values %>
+<% @change_summary ||= {
+  salary_change: 0.0, salary_percent_change: 0.0,
+  bonus_change: 0.0, bonus_percent_change: 0.0,
+  total_comp_change: 0.0, total_comp_percent_change: 0.0,
+  hours_worked_change: 0.0,
+  comp_per_hour_change: 0.0, comp_per_hour_percent_change: 0.0
+} %>
+
+<% Rails.logger.debug "Rendering Change Summary: #{@change_summary.inspect}" %>
+
 <div class="card shadow-sm my-4">
   <div class="card-body">
     <!-- First Row -->
     <div class="row text-center border-bottom pb-3 mb-3">
-      <!-- Common Path -->
-      <div class="col-md-4 border-end">
-        <h5 class="fw-bold mb-1">Common Path</h5>
-        <small class="text-muted">24% of people made a similar transition</small>
-      </div>
-
       <!-- Change in Salary -->
+      <% Rails.logger.debug "Salary Change: #{@change_summary[:salary_change]}" %>
       <div class="col-md-4 border-end">
         <h5 class="fw-bold mb-1">Change in Salary</h5>
-        <small class="text-success">+$60K (35% Inc)</small>
+        <small class="<%= @change_summary[:salary_change] >= 0 ? 'text-success' : 'text-danger' %>">
+          <%= @change_summary[:salary_change] >= 0 ? "+" : "" %><%= number_to_currency(@change_summary[:salary_change].round(0), unit: "$", precision: 0) %> 
+          (<%= number_to_percentage(@change_summary[:salary_percent_change], precision: 0) %>)
+        </small>
       </div>
 
       <!-- Change in Bonus -->
-      <div class="col-md-4">
+      <% Rails.logger.debug "Bonus Change: #{@change_summary[:bonus_change]}" %>
+      <div class="col-md-4 border-end">
         <h5 class="fw-bold mb-1">Change in Bonus</h5>
-        <small class="text-success">+$20K (20% Inc)</small>
+        <small class="<%= @change_summary[:bonus_change] >= 0 ? 'text-success' : 'text-danger' %>">
+          <%= @change_summary[:bonus_change] >= 0 ? "+" : "" %><%= number_to_currency(@change_summary[:bonus_change].round(0), unit: "$", precision: 0) %>  
+          (<%= number_to_percentage(@change_summary[:bonus_percent_change], precision: 0) %>)
+        </small>
+      </div>
+
+      <!-- Change in Total Compensation -->
+      <% Rails.logger.debug "Total Compensation Change: #{@change_summary[:total_comp_change]}" %>
+      <div class="col-md-4">
+        <h5 class="fw-bold mb-1">Change in Total Comp</h5>
+        <small class="<%= @change_summary[:total_comp_change] >= 0 ? 'text-success' : 'text-danger' %>">
+          <%= @change_summary[:total_comp_change] >= 0 ? "+" : "" %><%= number_to_currency(@change_summary[:total_comp_change].round, unit: "$", precision: 0) %>
+          (<%= number_to_percentage(@change_summary[:total_comp_percent_change], precision: 0) %>)
+        </small>
       </div>
     </div>
 
     <!-- Second Row -->
     <div class="row text-center">
-      <!-- Change in Total Compensation -->
-      <div class="col-md-4 border-end">
-        <h5 class="fw-bold mb-1">Change in Total Comp</h5>
-        <small class="text-success">+$80K (45% Inc)</small>
-      </div>
-
       <!-- Change in Working Hours -->
-      <div class="col-md-4 border-end">
+      <% Rails.logger.debug "Hours Worked Change: #{@change_summary[:hours_worked_change]}" %>
+      <div class="col border-end">
         <h5 class="fw-bold mb-1">Change in Working Hours</h5>
-        <small class="text-danger">-10 hours/week</small>
+        <small class="<%= @change_summary[:hours_worked_change] >= 0 ? 'text-danger' : 'text-success' %>">
+          <%= @change_summary[:hours_worked_change] > 0 ? "+" : "" %><%= @change_summary[:hours_worked_change] || 0 %> hours/week
+        </small>
       </div>
 
       <!-- Change in Compensation per Hour -->
-      <div class="col-md-4">
+      <% Rails.logger.debug "Compensation per Hour Change: #{@change_summary[:comp_per_hour_change]}" %>
+      <div class="col">
         <h5 class="fw-bold mb-1">Compensation / Hour</h5>
-        <small class="text-success">+$35/hour (110% Inc)</small>
+        <small class="<%= @change_summary[:comp_per_hour_change] >= 0 ? 'text-success' : 'text-danger' %>">
+          <%= @change_summary[:comp_per_hour_change] >= 0 ? "+" : "" %><%= number_to_currency(@change_summary[:comp_per_hour_change].round(0), unit: "$", precision: 0) %>/hour   
+          (<%= number_to_percentage(@change_summary[:comp_per_hour_percent_change], precision: 0) %>)
+        </small>
       </div>
     </div>
   </div>
