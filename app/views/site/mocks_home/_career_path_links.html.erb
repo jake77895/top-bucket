@@ -1,9 +1,15 @@
 <div class="container p-0">
   <div class="row g-3">
-    <% pages = ['Investment Banking', 'Private Equity', 'Venture Capital', 'Hedge Funds'] %>
+      <% pages = ['Investment Banking', 'Private Equity', 'Venture Capital', 'Hedge Funds'] %>
     <% pages.each do |page_name| %>
-      <div class="col-md-6"> <!-- Two cards per row -->
-        <%= link_to page_path(Page.find_by(name: page_name)&.slug), class: 'text-decoration-none text-dark' do %>
+      <% if (page = Page.find_by(name: page_name)) %> <!-- Store page once -->
+        <div class="col-md-6"> <!-- Two cards per row -->
+
+          <!-- Conditionally render link if page exists -->
+          <%= link_to page_path(page.slug), class: 'text-decoration-none text-dark' do %>
+            <%= page_name %>
+          <% end %>
+
         <div 
           class="card h-100 shadow-sm border-0 d-flex flex-row align-items-center p-2" 
           style="height: 100px;">

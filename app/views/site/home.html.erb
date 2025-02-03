@@ -61,47 +61,27 @@
           </div>
         </div>
         <!-- Middle Card -->
-        <div class="card mb-4 shadow-sm border-0" style="height: 250px;">
-          <div class="card-body text-center">
-            <h5 class="text-start">Explore Trending Discussions</h5>
-            <nav class="nav" style="font-size: 0.8rem;">
-              <a 
-                class="nav-link text-black fw-bold p-0" 
-                href="<%= forum_room_path(ForumRoom.find_by(name: 'Finance')) %>" 
-                style="text-decoration: none;">
-                Finance
-              </a>
+            <div class="card mb-4 shadow-sm border-0" style="height: 250px;">
+              <div class="card-body text-center">
+                <h5 class="text-start">Explore Trending Discussions</h5>
+                <nav class="nav" style="font-size: 0.8rem;">
+                  <% rooms = ['Finance', 'Technical Questions', 'Rate My Chances', 'Recruiting Results'] %>
+                  <% room_links = [] %>
 
-              <span class="px-2">|</span>
-              <a 
-                class="nav-link text-muted p-0" 
-                href="<%= forum_room_path(ForumRoom.find_by(name: 'Technical Questions')) %>" 
-                style="text-decoration: none;">
-                Technical Questions
-              </a>
-              <span class="px-2">|</span>
-              <a 
-                class="nav-link text-muted p-0" 
-                href="<%= forum_room_path(ForumRoom.find_by(name: 'Rate My Chances')) %>" 
-                style="text-decoration: none;">
-                Rate My Chances
-              </a>
+                  <% rooms.each do |room_name| %>
+                    <% forum_room = ForumRoom.find_by(name: room_name) %>
+                    <% if forum_room.present? %>
+                      <% room_links << link_to(room_name, forum_room_path(forum_room), class: "nav-link text-muted p-0", style: "text-decoration: none;") %>
+                    <% end %>
+                  <% end %>
 
-              <span class="px-2">|</span>
-              <a 
-                class="nav-link text-muted p-0" 
-                href="<%= forum_room_path(ForumRoom.find_by(name: 'Recruiting Results')) %>" 
-                style="text-decoration: none;">
-                Recruiting Results
-              </a>
+                  <%= room_links.join('<span class="px-2">|</span>').html_safe %>
 
-              <span class="px-2">|</span>
-              <a 
-                class="nav-link text-muted p-0" 
-                href="<%= forum_rooms_path %>" 
-                style="text-decoration: none;">
-                All Forum Rooms
-              </a>
+                  <span class="px-2">|</span>
+                  <%= link_to "All Forum Rooms", forum_rooms_path, class: "nav-link text-muted p-0", style: "text-decoration: none;" %>
+                </nav>
+              </div>
+            </div>
 
             </nav>
 
@@ -153,7 +133,10 @@
 
             <!-- Centered question text -->
             <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-              <p style="text-align: center; margin: 0;"><%= @question_of_the_day.question_text %></p>
+              <% if @question_of_the_day.present? && @question_of_the_day.question_text.present? %>
+                <p style="text-align: center; margin: 0;"><%= @question_of_the_day.question_text %></p>
+              <% end %>
+
             </div>
           </div>
         </div>

@@ -35,4 +35,7 @@
 </div>
 
 <!-- Render the Modal Partial -->
-<%= render 'profile_modal', interview_coach: (current_user.interview_coach || current_user.build_interview_coach) %>
+<% if current_user&.is_interview_coach? %>
+  <%= render 'profile_modal', interview_coach: (current_user.interview_coach || current_user.build_interview_coach) %>
+<% end %>
+
