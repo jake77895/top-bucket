@@ -1,0 +1,9 @@
+<div class="container px-0">
+  <div class="row">
+    <% interview_coaches.each do |interview_coach| %>
+      <div class="col-md-12">
+        <%= render partial: "interview_coach_card", locals: { interview_coach: interview_coach } %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -162,6 +162,8 @@ class MockInterviewsController < ApplicationController
       MockInterview.update_statuses_for_current_user(current_user)
     end
 
+    MockInterview.update_statuses
+
     # Set the default time zone based on the user's MockInterviewProfile
     if current_user.present?
       @default_time_zone = current_user.mock_interview_profile&.time_zone || "Eastern Time (US & Canada)"

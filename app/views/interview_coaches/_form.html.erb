@@ -1,0 +1,52 @@
+<% if current_user.present? %>
+  <%= form_with model: interview_coach, local: true, html: { multipart: true } do |f| %>
+    <div class="mb-3">
+      <%= f.label :name, class: "form-label" %>
+      <%= f.text_field :name, class: "form-control", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :picture, "Profile Picture (Optional but suggested)", class: "form-label" %>
+      <%= f.file_field :picture, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :highlighted_job, "Highlighted Job", class: "form-label" %>
+      <%= f.text_field :highlighted_job, class: "form-control", placeholder: "Your top career highlight" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :linkedin_url, "LinkedIn URL (Optional)", class: "form-label" %>
+      <%= f.url_field :linkedin_url, class: "form-control", placeholder: "https://www.linkedin.com/in/your-profile" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :industry, "Industry", class: "form-label" %>
+      <%= f.text_field :industry, class: "form-control", placeholder: "e.g., Technology, Finance" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :description, "Description", class: "form-label" %>
+      <%= f.text_area :description, class: "form-control", rows: 4, placeholder: "Tell us a bit about your coaching experience" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :languages, "Languages Spoken (Optional)", class: "form-label" %>
+      <%= f.text_field :languages, class: "form-control", placeholder: "e.g., English, Spanish" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :coaching_industry, "Other Industries (Optional)", class: "form-label" %>
+      <%= f.text_field :coaching_industry, class: "form-control", placeholder: "Industry you coach for" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :picture, "Profile Picture (Optional but suggested)", class: "form-label" %>
+      <%= f.file_field :picture, class: "form-control" %>
+    </div>
+
+    <%= f.submit (interview_coach.new_record? ? "Create Profile" : "Update Profile"), class: "btn btn-dark w-100" %>
+  <% end %>
+<% else %>
+  <p>Please sign in to create or update your interview coach profile.</p>
+<% end %>

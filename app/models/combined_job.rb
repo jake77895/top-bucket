@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: combined_jobs
+#
+#  average_bonus                 :decimal(10, 2)
+#  average_hours_worked_per_week :integer
+#  average_salary                :decimal(10, 2)
+#  company                       :string
+#  group                         :string
+#  industry                      :string
+#  job_title                     :string
+#  level                         :string
+#  location                      :string
+#  previous_grad                 :string
+#  previous_mba                  :string
+#  previous_undergrad            :string
+#  sample_size                   :integer
+#  source_type                   :text
+#  sub_level                     :string
+#  year                          :integer
+#  job_id                        :bigint
+#
 class CombinedJob < ApplicationRecord
   self.table_name = 'combined_jobs'
 

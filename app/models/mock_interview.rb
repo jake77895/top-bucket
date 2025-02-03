@@ -56,12 +56,23 @@ class MockInterview < ApplicationRecord
     update!(status: "cancelled")
   end
 
+  def self.update_statuses
+    # (Optional) Define time range for today if you want to restrict to today's meetings.
+    # today_start = Time.current.beginning_of_day
+    # today_end   = Time.current.end_of_day
+
+    # Cancel all pending interviews that are overdue (i.e. where check_date_time is more than 10 minutes ago)
+    where(status: "pending")
+      .where("check_date_time < ?", Time.current - 10.minutes)
+      .update_all(status: "cancelled", updated_at: Time.current)
+  end
+
   # Update statuses based on the current time
   def self.update_statuses_for_current_user(current_user)
 
     # Define time range for today
-    today_start = Time.current.beginning_of_day
-    today_end = Time.current.end_of_day
+    # today_start = Time.current.beginning_of_day
+    # today_end = Time.current.end_of_day
   
     # Narrow down the scope to only today's meetings involving the current_user
     scope = where("created_by_id = ? OR accepted_by_id = ?", current_user.id, current_user.id)

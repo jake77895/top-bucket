@@ -6,6 +6,7 @@
 #  admin                  :boolean          default(FALSE)
 #  email                  :string           default("")
 #  encrypted_password     :string           default(""), not null
+#  is_interview_coach     :boolean          default(FALSE), not null
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -31,6 +32,9 @@ class User < ApplicationRecord
   # Mock interview profile
   has_one :mock_interview_profile, dependent: :destroy
 
+  # Career coach profile
+  has_one :interview_coach, dependent: :destroy
+
   # Accepts or rejects mock interview
   has_many :created_mock_interviews, class_name: "MockInterview", foreign_key: :created_by_id, dependent: :destroy
   has_many :accepted_mock_interviews, class_name: "MockInterview", foreign_key: :accepted_by_id, dependent: :nullify
@@ -45,6 +49,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :user_name, presence: true, uniqueness: true
+
 
   # In the User model
   def mock_interview_profile

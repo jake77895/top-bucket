@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_02_230831) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_03_183853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -211,6 +211,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_02_230831) do
     t.index ["company_id"], name: "index_groups_on_company_id"
     t.index ["location_id"], name: "index_groups_on_location_id"
     t.index ["position_type_id"], name: "index_groups_on_position_type_id"
+  end
+
+  create_table "interview_coaches", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.string "linkedin_url"
+    t.string "industry", null: false
+    t.text "description"
+    t.string "languages"
+    t.string "other_industries"
+    t.string "highlighted_job", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_interview_coaches_on_user_id"
   end
 
   create_table "item_ranks", force: :cascade do |t|
@@ -440,6 +454,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_02_230831) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_interview_coach", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["user_name"], name: "index_users_on_user_name", unique: true
@@ -468,9 +483,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_02_230831) do
   add_foreign_key "groups", "companies"
   add_foreign_key "groups", "locations"
   add_foreign_key "groups", "position_types"
+  add_foreign_key "interview_coaches", "users"
   add_foreign_key "item_ranks", "items"
   add_foreign_key "item_ranks", "tier_lists"
-  add_foreign_key "item_ranks", "users"
+  add_foreign_key "item_ranks", "users", on_delete: :cascade
   add_foreign_key "job_levels", "companies"
   add_foreign_key "job_levels", "position_types"
   add_foreign_key "mock_interview_profiles", "users"

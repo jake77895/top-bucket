@@ -22,7 +22,7 @@
 #
 #  fk_rails_...  (item_id => items.id)
 #  fk_rails_...  (tier_list_id => tier_lists.id)
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (user_id => users.id) ON DELETE => cascade
 #
 class ItemRank < ApplicationRecord
   belongs_to :user, optional: true

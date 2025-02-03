@@ -1,0 +1,38 @@
+<div class="container py-5">
+  <!-- Card Header with Back Button -->
+  <div class="card shadow-sm position-relative mb-4">
+    <!-- Back Button -->
+    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light position-relative">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
+        Book an Interview Coach
+      </h1>
+      <p class="text-muted" style="font-size: 15px;">
+        Work with someone who's done it before
+      </p>
+    </div>
+  </div>
+
+  <!-- Separate Button for Creating/Updating Profile (visible only if the current user is an interview coach) -->
+  <% if current_user && current_user.is_interview_coach? %>
+    <div class="mb-4 text-end">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#profileModal">
+      Create / Update Profile
+    </button>
+    </div>
+  <% end %>
+
+  <!-- List of Interview Coaches -->
+  <div class="container mt-4">
+    <h1 class="mb-4">Interview Coaches</h1>
+    <%= render partial: "interview_coach_list", locals: { interview_coaches: @interview_coaches } %>
+  </div>
+
+</div>
+
+<!-- Render the Modal Partial -->
+<%= render 'profile_modal', interview_coach: (current_user.interview_coach || current_user.build_interview_coach) %>

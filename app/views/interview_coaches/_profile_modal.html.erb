@@ -1,0 +1,22 @@
+<!-- app/views/interview_coaches/_profile_modal.html.erb -->
+<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileModalLabel">
+          <%= current_user.interview_coach.present? ? "Update Interview Coach Profile" : "Create Interview Coach Profile" %>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          This profile is for interview coaching. Please provide your details below.
+        </div>
+        <!-- Render the form partial -->
+        <%= render 'form', interview_coach: interview_coach %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'interview_coaches/index'
+  get 'interview_coaches/show'
   get 'interview_questions/index'
   get 'interview_questions/show'
 
@@ -31,7 +33,12 @@ Rails.application.routes.draw do
     get 'tier_lists/edit'
     get 'tier_lists/show'
     get 'dashboard', to: 'dashboard#index'
-    resources :users, only: [:index, :destroy]
+    resources :users, only: [:index, :destroy] do 
+      member do
+        patch :make_admin
+        patch :make_interview_coach
+      end
+    end
     resources :comments, only: [:index, :destroy]
     resources :form_templates, only: [:index, :new, :create, :edit, :update, :destroy]
     resources :ratings, only: [:index, :destroy]
@@ -198,7 +205,9 @@ Rails.application.routes.draw do
       get :meeting_board
     end
   end
-  
+
+  # Public Routes for Viewing Mock Interview Sessions
+  resources :interview_coaches, only: [:index, :show, :new, :create, :edit, :update]
 
   # Public Routes for Creating Mock Interview Profiles
   resources :mock_interview_profiles, only: [:new, :create, :edit, :update] do

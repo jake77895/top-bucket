@@ -1,0 +1,27 @@
+<h1><%= @interview_coach.name %></h1>
+
+<div class="mb-3">
+  <% if @interview_coach.linkedin_url.present? %>
+    <p>
+      <strong>LinkedIn:</strong>
+      <%= link_to @interview_coach.linkedin_url, @interview_coach.linkedin_url, target: "_blank" %>
+    </p>
+  <% end %>
+  <% if @interview_coach.industry.present? %>
+    <p><strong>Industry:</strong> <%= @interview_coach.industry %></p>
+  <% end %>
+  <% if @interview_coach.description.present? %>
+    <p><strong>Description:</strong> <%= @interview_coach.description %></p>
+  <% end %>
+  <% if @interview_coach.languages.present? %>
+    <p><strong>Languages:</strong> <%= @interview_coach.languages %></p>
+  <% end %>
+  <% if @interview_coach.coaching_industry.present? %>
+    <p><strong>Coaching Industry:</strong> <%= @interview_coach.coaching_industry %></p>
+  <% end %>
+  <% if @interview_coach.highlighted_job.present? %>
+    <p><strong>Highlighted Job:</strong> <%= @interview_coach.highlighted_job %></p>
+  <% end %>
+</div>
+
+<%= link_to "Back to all coaches", interview_coaches_path, class: "btn btn-secondary" %>

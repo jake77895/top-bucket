@@ -1,0 +1,49 @@
+<div class="card mb-4 shadow-sm w-100 position-relative p-3">
+  <div class="row no-gutters align-items-center">
+    <!-- Picture Section -->
+    <div class="col-auto pr-3">
+      <% if interview_coach.picture.attached? %>
+        <%= image_tag interview_coach.picture, class: "rounded img-fluid", alt: interview_coach.name, style: "height: 150px; width: 150px; object-fit: cover;" %>
+      <% else %>
+        <%= image_tag "placeholder.png", class: "rounded img-fluid", alt: "Default Profile Picture", style: "height: 150px; width: 150px; object-fit: cover;" %>
+      <% end %>
+    </div>
+
+    <!-- Details Section -->
+    <div class="col">
+      <div class="card-body p-0">
+        <!-- Name and LinkedIn -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="card-title font-weight-bold mb-0"><%= interview_coach.name %></h5>
+          <div class="d-flex align-items-center">
+            <a href="#" class="btn btn-dark btn-sm mx-2">Book an Intro Call </a>
+            <% if interview_coach.linkedin_url.present? %>
+              <a href="<%= interview_coach.linkedin_url %>" target="_blank">
+                <%= image_tag "external_logos/linkedIn.png", alt: "LinkedIn", class: "img-fluid", style: "width: 28px; height: 28px;" %>
+              </a>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Highlighted Job -->
+        <% if interview_coach.highlighted_job.present? %>
+          <p class="card-text mb-2">
+            <small class="text-muted"><strong>Highlighted Job(s):</strong> <%= interview_coach.highlighted_job %></small>
+          </p>
+        <% end %>
+
+        <!-- Coaching Focus -->
+        <% if interview_coach.industry.present? %>
+          <hr class="my-1">
+           <small class="text-muted"><strong>Coaching Focus:</strong> <%= interview_coach.industry %></small>
+        <% end %>
+
+        <!-- Description -->
+        <% if interview_coach.description.present? %>
+          <hr class="my-1">
+          <p class="card-text mb-0"><%= interview_coach.description %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
