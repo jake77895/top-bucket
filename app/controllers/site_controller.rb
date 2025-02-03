@@ -22,6 +22,10 @@ class SiteController < ApplicationController
 
     # Fetch the question ot the day
     question_of_the_day
+    
+    # Fetch the question ot the day
+    @ticker_items = random_ticker_items(50) # Fetch 5 random jobs
+
 
 
   end
@@ -272,6 +276,41 @@ class SiteController < ApplicationController
     # Fetch a random question
     @question_of_the_day = Question.question_of_the_day
   end
+
+  ##################################################################
+  # Career Info Logic
+
+  def random_ticker_items(limit = 50)
+    # Debugging to check the records in the database
+    Rails.logger.debug "Fetching records with non-blank company names and levels..."
+  
+    # Fetch a list of random records where both the company and level exist
+    random_records = CombinedJob.where.not(company: [nil, ""])
+                                 .where.not(level: [nil, ""])
+                                 .select(
+                                   :level, :company,
+                                   "average_salary + average_bonus AS total_comp"
+                                 )
+                                 .order(Arel.sql('RANDOM()'))
+                                 .limit(limit)
+  
+    if random_records.any?
+      Rails.logger.debug "Random records found: #{random_records.inspect}"
+      random_records.map do |record|
+        {
+          level: record.level,
+          company: record.company,
+          total_comp: record.total_comp.round
+        }
+      end
+    else
+      Rails.logger.debug "No valid records found"
+      []
+    end
+  end
+  
+  
+  
 
     
 

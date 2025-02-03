@@ -101,9 +101,62 @@ class CareerDataController < ApplicationController
   
 
   def start
-    # @partial = params[:partial] || "change_from_table" # Default partial
+    Rails.logger.debug "Raw Params Received: #{params.inspect}"
+  
+    # Clean and permit parameters
+    filter_params = params[:q]&.reject { |_key, value| value.blank? }
+    Rails.logger.debug "Filtered Params: #{filter_params.inspect}"
+  
+    # Initialize Ransack search object
+    @q = CombinedJob.ransack(filter_params)
+    @filtered_jobs = @q.result(distinct: true)
+  
+    Rails.logger.debug "Ransack SQL Query: #{@filtered_jobs.to_sql}"
+  
+    # If an industry or company is selected, limit the results
+    selected_industry = filter_params&.dig("to_industry_cont")
+    selected_company = filter_params&.dig("to_company_cont")
+  
+    # Filter industries and companies
+    filtered_jobs = @filtered_jobs
+    filtered_jobs = filtered_jobs.where(industry: selected_industry) if selected_industry.present?
+    filtered_jobs = filtered_jobs.where(company: selected_company) if selected_company.present?
+  
+    # Aggregate industries
+    @industries = filtered_jobs
+                  .select(
+                    "industry, SUM(sample_size) AS total_records, 
+                    SUM(average_salary * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_salary, 
+                    SUM(average_bonus * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_bonus, 
+                    SUM(average_hours_worked_per_week * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_hours, 
+                    SUM((average_salary + average_bonus) * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_total_comp, 
+                    SUM((average_salary + average_bonus) * sample_size) / NULLIF(SUM(sample_size * average_hours_worked_per_week), 0) AS avg_comp_hour"
+                  )
+                  .group(:industry)
+                  .order("total_records DESC")
+                  .limit(10)
+  
+    # Aggregate companies
+    @companies = filtered_jobs
+                  .select(
+                    "company, SUM(sample_size) AS total_records, 
+                    SUM(average_salary * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_salary, 
+                    SUM(average_bonus * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_bonus, 
+                    SUM(average_hours_worked_per_week * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_hours, 
+                    SUM((average_salary + average_bonus) * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_total_comp, 
+                    SUM((average_salary + average_bonus) * sample_size) / NULLIF(SUM(sample_size * average_hours_worked_per_week), 0) AS avg_comp_hour"
+                  )
+                  .group(:company)
+                  .order("total_records DESC")
+                  .limit(10)
+  
+    # Calculate summary data for all filtered jobs
+    @start_summary = calculate_start_summary(filtered_jobs)
   end
-
+  
+  
+  
+  
   def nodes_data
     number_of_weeks_worked = 48
   
@@ -560,19 +613,38 @@ end
     (to_per_hour - from_per_hour).round(2)
   end
 
-  def strong_params
-    params.permit(
-      :q_from_industry_cont,
-      :q_from_company_cont,
-      :q_from_level_cont,
-      :q_from_sub_level_cont,
-      :q_to_industry_cont,
-      :q_to_company_cont,
-      :q_to_level_cont,
-      :q_to_sub_level_cont
-    )
+def calculate_start_summary(jobs)
+  # Perform aggregation query using SUM(sample_size) for total_records
+  aggregate_data = jobs.select(
+    "SUM(average_salary * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_salary",
+    "SUM(average_bonus * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_bonus",
+    "SUM((average_salary + average_bonus) * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_total_comp",
+    "SUM(average_hours_worked_per_week * sample_size) / NULLIF(SUM(sample_size), 0) AS avg_hours_worked",
+    "SUM(sample_size) AS total_records"
+  ).take
+
+  # Calculate average compensation per hour based on 48 weeks per year
+  if aggregate_data.avg_hours_worked.to_f > 0
+    annual_hours = aggregate_data.avg_hours_worked.to_f * 48
+    avg_comp_per_hour = (aggregate_data.avg_total_comp.to_f / annual_hours).round
+  else
+    avg_comp_per_hour = 0
   end
+
+  # Build the summary hash using aggregated data
+  {
+    avg_salary: aggregate_data.avg_salary.to_f.round,
+    avg_bonus: aggregate_data.avg_bonus.to_f.round,
+    avg_total_comp: aggregate_data.avg_total_comp.to_f.round,
+    avg_hours_worked: aggregate_data.avg_hours_worked.to_f.round,
+    avg_comp_per_hour: avg_comp_per_hour,
+    total_records: aggregate_data.total_records.to_i
+  }
+end
+
   
+
+
   
   
 

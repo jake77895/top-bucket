@@ -5,17 +5,18 @@
       <div class="card-body">
         <h5 class="fw-bold text-center mb-3">Most Common Industries</h5>
         <div class="d-flex flex-column">
-          <% 10.times do %> <!-- Placeholder data -->
+          <% @industries.each do |industry| %>
             <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
               <div>
-                <h6 class="fw-bold mb-1">Industry <%= rand(1..10) %></h6>
-                <small class="text-muted"># Records: <%= rand(100..500) %></small>
+                <h6 class="fw-bold mb-1"><%= industry.industry.present? ? industry.industry : "Uncategorized" %></h6>
+                <small class="text-muted"># Records: <%= industry.total_records %></small>
               </div>
               <div class="text-end">
-                <small>Avg Salary: $<%= rand(60..120) %>K</small><br>
-                <small>Avg Bonus: $<%= rand(10..50) %>K</small><br>
-                <small>Avg Hours: <%= rand(35..70) %> hrs/week</small><br>
-                <small>Avg Comp/Hour: $<%= rand(20..50) %>/hour</small>
+                <small>Avg Salary: <%= number_to_currency(industry.avg_salary.round, precision: 0) %></small><br>
+                <small>Avg Bonus: <%= number_to_currency(industry.avg_bonus.round, precision: 0) %></small><br>
+                <small>Avg Hours: <%= industry.avg_hours.round %> hrs/week</small><br>
+                <small>Avg Comp/Hour: <%= number_to_currency((industry.avg_total_comp.to_f / (industry.avg_hours.to_f * 48)).round, precision: 0) %>/hour</small>
+
               </div>
             </div>
           <% end %>
@@ -30,17 +31,17 @@
       <div class="card-body">
         <h5 class="fw-bold text-center mb-3">Most Common Companies</h5>
         <div class="d-flex flex-column">
-          <% 10.times do %> <!-- Placeholder data -->
+          <% @companies.each do |company| %>
             <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
               <div>
-                <h6 class="fw-bold mb-1">Company <%= ["A", "B", "C", "D", "E"].sample %></h6>
-                <small class="text-muted"># Records: <%= rand(100..500) %></small>
+                <h6 class="fw-bold mb-1"><%= company.company.present? ? company.company : "Uncategorized" %></h6>
+                <small class="text-muted"># Records: <%= company.total_records %></small>
               </div>
               <div class="text-end">
-                <small>Avg Salary: $<%= rand(60..120) %>K</small><br>
-                <small>Avg Bonus: $<%= rand(10..50) %>K</small><br>
-                <small>Avg Hours: <%= rand(35..70) %> hrs/week</small><br>
-                <small>Avg Comp/Hour: $<%= rand(20..50) %>/hour</small>
+                <small>Avg Salary: <%= number_to_currency(company.avg_salary.round, precision: 0) %></small><br>
+                <small>Avg Bonus: <%= number_to_currency(company.avg_bonus.round, precision: 0) %></small><br>
+                <small>Avg Hours: <%= company.avg_hours.round %> hrs/week</small><br>
+                <small>Avg Comp/Hour: <%= number_to_currency((company.avg_total_comp.to_f / (company.avg_hours.to_f * 48)).round, precision: 0) %>/hour</small>
               </div>
             </div>
           <% end %>

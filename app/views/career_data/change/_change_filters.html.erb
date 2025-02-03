@@ -27,9 +27,15 @@
           </div>
           <div class="mb-3">
             <%= f.select :q_from_sub_level_cont,
-                         [["All Sub-Levels", ""]] + CombinedJob.where.not(sub_level: [nil, ""]).distinct.pluck(:sub_level).map { |s| [s, s] },
-                         { selected: params[:q_from_sub_level_cont] },
-                         { class: "form-select" } %>
+            [["All Sub-Levels", ""]] +
+            CombinedJob.where.not(sub_level: [nil, ""])
+                      .distinct
+                      .pluck(:sub_level)
+                      .sort_by { |s| [s =~ /^[a-zA-Z]/ ? 0 : 1, s =~ /^[0-9]/ ? s.to_i : s] }
+                      .map { |s| [s, s] },
+            { selected: params[:q_from_sub_level_cont] },
+            { class: "form-select" } %>
+
           </div>
         </div>
 
@@ -57,9 +63,15 @@
           </div>
           <div class="mb-3">
             <%= f.select :q_to_sub_level_cont,
-                         [["All Sub-Levels", ""]] + CombinedJob.where.not(sub_level: [nil, ""]).distinct.pluck(:sub_level).map { |s| [s, s] },
-                         { selected: params[:q_to_sub_level_cont] },
-                         { class: "form-select" } %>
+            [["All Sub-Levels", ""]] +
+            CombinedJob.where.not(sub_level: [nil, ""])
+                      .distinct
+                      .pluck(:sub_level)
+                      .sort_by { |s| [s =~ /^[a-zA-Z]/ ? 0 : 1, s =~ /^[0-9]/ ? s.to_i : s] }
+                      .map { |s| [s, s] },
+            { selected: params[:q_to_sub_level_cont] },
+            { class: "form-select" } %>
+
           </div>
         </div>
       </div>

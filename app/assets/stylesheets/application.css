@@ -51,7 +51,7 @@
 /* Individual ticker items (cards) */
 .ticker-item p {
   margin: 0; /* Completely removes margins */
-  line-height: 1; /* Ensures compact spacing */
+  line-height: 0; /* Ensures compact spacing */
   padding: 0; /* Removes unnecessary padding */
 
 }

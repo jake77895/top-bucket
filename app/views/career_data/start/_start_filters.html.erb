@@ -1,99 +1,73 @@
-<div class="accordion shadow-sm my-4" id="filtersAccordion">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="filtersHeading">
-      <button
-        class="accordion-button collapsed"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#filtersCollapse"
-        aria-expanded="false"
-        aria-controls="filtersCollapse"
-      >
-        Filters
-      </button>
-    </h2>
-    <div
-      id="filtersCollapse"
-      class="accordion-collapse collapse"
-      aria-labelledby="filtersHeading"
-      data-bs-parent="#filtersAccordion"
-    >
-      <div class="accordion-body">
-        <div class="row">
-          <!-- From Column -->
-          <div class="col-md-6">
-            <h6 class="fw-bold text-start mb-3">From</h6>
-            <hr />
-            <!-- Undergraduate Program Dropdown -->
-            <div class="mb-3">
-              <select id="undergraduateProgram" class="form-select from-select">
-                <option selected>Select Undergraduate Program</option>
-                <option value="1">Computer Science</option>
-                <option value="2">Economics</option>
-                <option value="3">Business Administration</option>
-                <option value="4">Engineering</option>
-              </select>
-            </div>
-
-            <!-- MBA Program Dropdown -->
-            <div class="mb-3">
-              <select id="mbaProgram" class="form-select from-select">
-                <option selected>Select MBA Program</option>
-                <option value="1">Finance</option>
-                <option value="2">Marketing</option>
-                <option value="3">Entrepreneurship</option>
-                <option value="4">Strategy</option>
-              </select>
-            </div>
-
-            <!-- Other Graduate Program Dropdown -->
-            <div class="mb-3">
-              <select id="otherGraduateProgram" class="form-select from-select">
-                <option selected>Select Other Graduate Program</option>
-                <option value="1">Public Policy</option>
-                <option value="2">Data Science</option>
-                <option value="3">Law</option>
-                <option value="4">Medicine</option>
-              </select>
-            </div>
+<h5 class="fw-bold">Filters</h5>
+<div class="card shadow-sm my-2">
+  <div class="card-body">
+    <%= search_form_for @q, url: start_career_data_path, method: :get, class: "filter-form" do |f| %>
+      <div class="row">
+        <!-- From Column -->
+        <div class="col-md-6">
+          <h6 class="fw-bold text-start mb-3">From</h6>
+          <hr />
+          <!-- Undergraduate Program Dropdown -->
+          <div class="mb-3">
+            <%= f.select :previous_undergrad_cont,
+                         [["Select Undergraduate Program", ""]] +
+                         CombinedJob.where.not(previous_undergrad: [nil, ""]).distinct.pluck(:previous_undergrad).map { |p| [p, p] },
+                         { selected: params.dig(:q, :previous_undergrad_cont) },
+                         { class: "form-select" } %>
           </div>
 
-          <!-- To Column -->
-          <div class="col-md-6">
-            <h6 class="fw-bold text-start mb-3">To</h6>
-            <hr />
-            <!-- Industry Dropdown -->
-            <div class="mb-3">
-              <select id="toIndustry" class="form-select">
-                <option selected>Select Industry</option>
-                <option value="1">Technology</option>
-                <option value="2">Finance</option>
-                <option value="3">Healthcare</option>
-                <option value="4">Consulting</option>
-              </select>
-            </div>
+          <!-- MBA Program Dropdown -->
+          <div class="mb-3">
+            <%= f.select :previous_mba_cont,
+                         [["Select MBA Program", ""]] +
+                         CombinedJob.where.not(previous_mba: [nil, ""]).distinct.pluck(:previous_mba).map { |p| [p, p] },
+                         { selected: params.dig(:q, :previous_mba_cont) },
+                         { class: "form-select" } %>
+          </div>
 
-            <!-- Company Dropdown -->
-            <div class="mb-3">
-              <select id="toCompany" class="form-select">
-                <option selected>Select Company</option>
-                <option value="1">Company A</option>
-                <option value="2">Company B</option>
-                <option value="3">Company C</option>
-              </select>
-            </div>
+          <!-- Other Graduate Program Dropdown -->
+          <div class="mb-3">
+            <%= f.select :previous_grad_cont,
+                         [["Select Other Graduate Program", ""]] +
+                         CombinedJob.where.not(previous_grad: [nil, ""]).distinct.pluck(:previous_grad).map { |p| [p, p] },
+                         { selected: params.dig(:q, :previous_grad_cont) },
+                         { class: "form-select" } %>
           </div>
         </div>
 
-        <!-- Buttons -->
-        <div class="text-center mt-4 d-flex justify-content-between">
-          <button class="btn btn-dark w-50 ms-2 me-2">Apply Filters</button>
-          <button class="btn btn-outline-dark w-50 me-2">Clear Filters</button>
+        <!-- To Column -->
+        <div class="col-md-6">
+          <h6 class="fw-bold text-start mb-3">To</h6>
+          <hr />
+          <!-- Industry Dropdown -->
+          <div class="mb-3">
+            <%= f.select :industry_cont,
+                         [["Select Industry", ""]] +
+                         CombinedJob.where.not(industry: [nil, ""]).distinct.pluck(:industry).map { |i| [i, i] },
+                         { selected: params.dig(:q, :industry_cont) },
+                         { class: "form-select" } %>
+          </div>
+
+          <!-- Company Dropdown -->
+          <div class="mb-3">
+            <%= f.select :company_cont,
+                         [["Select Company", ""]] +
+                         CombinedJob.where.not(company: [nil, ""]).distinct.pluck(:company).map { |c| [c, c] },
+                         { selected: params.dig(:q, :company_cont) },
+                         { class: "form-select" } %>
+          </div>
         </div>
       </div>
-    </div>
+
+      <!-- Buttons -->
+      <div class="text-center mt-4 d-flex justify-content-between">
+        <%= f.submit "Apply Filters", class: "btn btn-dark w-50 ms-2 me-2" %>
+        <%= link_to "Clear Filters", start_career_data_path, class: "btn btn-outline-dark w-50 me-2" %>
+      </div>
+    <% end %>
   </div>
 </div>
+
 
 <script>
   // Ensure only one dropdown in the 'From' column is selectable
@@ -105,7 +79,7 @@
         const selectedValue = select.value;
 
         // Enable all dropdowns if the user selects the default option
-        if (selectedValue === "Select Undergraduate Program" || selectedValue === "Select MBA Program" || selectedValue === "Select Other Graduate Program") {
+        if (selectedValue === "") {
           fromSelects.forEach((otherSelect) => {
             otherSelect.disabled = false;
           });
@@ -121,4 +95,3 @@
     });
   });
 </script>
-

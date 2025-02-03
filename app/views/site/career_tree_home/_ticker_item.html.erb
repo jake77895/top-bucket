@@ -1,11 +1,31 @@
-<div class="ticker-item">
-  <p class="text-start primary-text" style="font-size: 0.8rem; margin: 0; line-height: 1.2;">
-    <%= position %> to <%= position %>
-  </p>
-  <p class="text-start secondary-text" style="margin: 2px 0 0; padding: 0;">
-    <span class="badge rounded-pill bg-light" style="font-size: 0.6rem; padding: 3px 8px;">50K Comp Inc</span>
-  </p>
+<% level_mapping = { 
+  "Vice President" => "VP", 
+  "Managing Director" => "MD", 
+  "Executive Director" => "ED" 
+} %>
+
+<div class="ticker-items">
+  <% if @ticker_items.present? %>
+    <% @ticker_items.each do |ticker_item| %>
+      <% display_level = level_mapping[ticker_item[:level]] || ticker_item[:level] %>
+      
+      <div class="ticker-item">
+        <p class="text-start primary-text" style="font-size: 0.8rem; margin: 0; line-height: 1.2;">
+          <%= truncate("#{display_level} at #{ticker_item[:company]}", length: 22, separator: ' ', omission: '') %>
+        </p>
+        <p class="text-start secondary-text" style="margin: 2px 0 0; padding: 0;">
+          <span class="badge rounded-pill bg-light" style="font-size: 0.6rem; padding: 3px 8px;">
+            <%= number_to_currency(ticker_item[:total_comp], precision: 0) %> Comp
+          </span>
+        </p>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-danger">No valid records found. Please check the database.</p>
+  <% end %>
 </div>
+
+
 
 <!--Use color when the comp increase is over 50k-->
 <!--  background-color: #FDF583 !important;-->
