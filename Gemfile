@@ -2,7 +2,12 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Added gems
+
+# For apple calendar
 gem 'icalendar'
+
+# For sorting and filtering
+gem 'ransack'
 
 # Creates hierarchy logic for the pages
 gem 'acts_as_tree'
