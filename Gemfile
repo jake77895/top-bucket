@@ -3,6 +3,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Added gems
 
+# For aws s3
+gem 'aws-sdk-s3'
+
 # For apple calendar
 gem 'icalendar'
 
