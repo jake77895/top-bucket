@@ -25,7 +25,7 @@ class Admin::TierListsController < ApplicationController
       item = Item.find_by(id: item_id)
       next unless item # Skip invalid or non-existing items
   
-      item_rank = @tier_list.item_ranks.find_or_initialize_by(item: item)
+      item_rank = @tier_list.item_ranks.find_or_initialize_by(item: item, user: current_user)
   
       if @tier_list.custom_fields.present?
         custom_fields = @tier_list.custom_fields.is_a?(String) ? JSON.parse(@tier_list.custom_fields) : @tier_list.custom_fields

@@ -1772,7 +1772,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.active_storage_attachments (id, name, record_type, record_id, blob_id, created_at) FROM stdin;
-1	picture	Item	1	1	2025-02-04 20:51:52.155163
+2	picture	Item	2	2	2025-02-05 23:12:43.561164
 \.
 
 
@@ -1781,7 +1781,7 @@ COPY public.active_storage_attachments (id, name, record_type, record_id, blob_i
 --
 
 COPY public.active_storage_blobs (id, key, filename, content_type, metadata, service_name, byte_size, checksum, created_at) FROM stdin;
-1	fsnrmtyxmwzkppe0qzprml7wae3r	Sushi.jpg	image/jpeg	{"identified":true,"analyzed":true}	local	210888	R26fq1N+H/nIx890iPjMWg==	2025-02-04 20:51:52.153109
+2	1vnasmxutrllxxapc62rbm6nlllz	girafee.jpg	image/jpeg	{"identified":true,"analyzed":true}	amazon	771268	LA/wL6tZJFBI3kvSL4b6zg==	2025-02-05 23:12:43.558546
 \.
 
 
@@ -1931,7 +1931,7 @@ COPY public.item_ranks (id, item_id, tier_list_id, custom_values, rank, created_
 --
 
 COPY public.items (id, name, created_at, updated_at) FROM stdin;
-1	Sushi	2025-02-04 20:51:52.120675	2025-02-04 20:51:52.225584
+2	Giraffe	2025-02-05 23:12:43.542949	2025-02-05 23:12:44.101096
 \.
 
 
@@ -2155,6 +2155,7 @@ COPY public.tier_list_templates (id, name, short_description, custom_fields, cre
 --
 
 COPY public.tier_lists (id, name, description, published, custom_fields, created_at, updated_at, tier_list_template_id, category) FROM stdin;
+1	Testing again		t	\N	2025-02-04 22:04:05.352875	2025-02-04 22:04:07.797336	\N	Consulting
 \.
 
 
@@ -2171,14 +2172,14 @@ COPY public.users (id, user_name, admin, email, encrypted_password, reset_passwo
 -- Name: active_storage_attachments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: student
 --
 
-SELECT pg_catalog.setval('public.active_storage_attachments_id_seq', 1, true);
+SELECT pg_catalog.setval('public.active_storage_attachments_id_seq', 2, true);
 
 
 --
 -- Name: active_storage_blobs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: student
 --
 
-SELECT pg_catalog.setval('public.active_storage_blobs_id_seq', 1, true);
+SELECT pg_catalog.setval('public.active_storage_blobs_id_seq', 2, true);
 
 
 --
@@ -2297,7 +2298,7 @@ SELECT pg_catalog.setval('public.item_ranks_id_seq', 1, false);
 -- Name: items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: student
 --
 
-SELECT pg_catalog.setval('public.items_id_seq', 1, true);
+SELECT pg_catalog.setval('public.items_id_seq', 2, true);
 
 
 --
@@ -2409,7 +2410,7 @@ SELECT pg_catalog.setval('public.tier_list_templates_id_seq', 1, false);
 -- Name: tier_lists_id_seq; Type: SEQUENCE SET; Schema: public; Owner: student
 --
 
-SELECT pg_catalog.setval('public.tier_lists_id_seq', 1, false);
+SELECT pg_catalog.setval('public.tier_lists_id_seq', 1, true);
 
 
 --
