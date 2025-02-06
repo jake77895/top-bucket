@@ -227,6 +227,17 @@ Rails.application.routes.draw do
 
   end
 
+  # Public Routes for Career Jobs and Compensation
+  resources :career_jobs, only: [] do
+    collection do
+      get :step_one       # Display the job details form
+      post :save_step_one # Handle form submission for job details
+      get :step_two       # Display the compensation details form
+      post :create        # Save jobs and compensations
+    end
+  end
+  
+
   get 'nodes_data', to: 'career_data#nodes_data'
   get 'link_data', to: 'career_data#link_data'
   get 'exit_opportunities', to: 'career_data#generate_exit_opportunities'
