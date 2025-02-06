@@ -91,7 +91,7 @@ gem "active_link_to"
 gem "appdev_support"
 gem "awesome_print"
 gem "devise"
-gem "dotenv"
+gem 'dotenv-rails', groups: [:development, :test]
 gem "faker"
 gem "htmlbeautifier"
 gem "http"
