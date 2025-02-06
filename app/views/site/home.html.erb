@@ -1,10 +1,10 @@
 <body class="bg-light">
   <div class="container-fluid py-4">
-    <div class="row">
+    <div class="row d-flex flex-nowrap" style="min-height: 90vh;">
       <!-- Left Column -->
-      <div class="col-lg-3 col-md-4 col-sm-12">
-        <div class="card mb-4 ms-3 shadow-sm border-0" style="height: 375px;">
-          <div class="card-body text-center">
+      <div class="col-lg-3 col-md-4 col-sm-12 d-flex flex-column">
+        <div class="card mb-3 ms-3 shadow-sm border-0" style="min-height: 388px;">
+          <div class="card-body text-center p-3">
             <div class="d-flex justify-content-between">
               <h5 class="text-start m-2">Top Bucket</h5>
               <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
@@ -12,8 +12,8 @@
             <%= render partial: 'site/ratings_home/list_of_rating_cards_tb' %>
           </div>
         </div>
-        <div class="card mb-4 ms-3 shadow-sm border-0" style="height: 375px;"">
-          <div class="card-body text-center">
+        <div class="card mb-3 ms-3 shadow-sm border-0" style="min-height: 388px;">
+          <div class="card-body text-center p-3">
             <div class="d-flex justify-content-between">
               <h5 class="text-start m-2">Bottom Bucket</h5>
               <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
@@ -24,148 +24,91 @@
       </div>
 
       <!-- Middle Column -->
-      <div class="col-lg-6 col-md-8 col-sm-12">
-        <div class="row">
+      <div class="col-lg-6 col-md-8 col-sm-12 d-flex flex-column">
+        <div class="row gx-3 gy-0">
           <!-- Top Cards -->
-          <!--Left Card-->
           <div class="col-md-6">
-            <div class="card mb-4 shadow-sm border-0" style="height: 230px;">
-              <div class="card-body text-center">
-                <div class="d-flex justify-content-center ms-4">
-                  <%= render partial: 'site/mocks_home/overlapping_images_mocks' %>
-                </div>
-                <!-- Content in the middle of the card -->
-                <div class="mt-5 text-center" style="width: 300px; margin: 0 auto;">
+            <div class="card shadow-sm border-0" style="min-height: 300px;">
+              <div class="card-body d-flex justify-content-center align-items-center">
+                <div class="d-flex flex-column align-items-center text-center" style="width: 300px;">
+                  <div class="mb-5" style="margin-top: -30px;">
+                    <%= render partial: 'site/mocks_home/overlapping_images_mocks' %>
+                  </div>
                   <h5>Mock Interview Meeting Board</h5>
                   <p style="font-size: 0.8rem;">Practice mock interviews with peers pursuing similar career paths.</p>
-                  <%= link_to 'Book a Mock', meeting_board_mock_interviews_path, class: 'btn btn-dark rounded-pill py-1', style: 'width: 100%; background-color: #0D1B2A'; %>
+                  <%= link_to 'Book a Mock', meeting_board_mock_interviews_path, class: 'btn btn-dark rounded-pill py-1 mt-2', style: 'width: 100%; background-color: #0D1B2A;' %>
                 </div>
               </div>
             </div>
           </div>
-          <!--Right Card-->
           <div class="col-md-6">
-            <div class="card mb-4 shadow-sm border-0" style="height: 230px;">
-              <div class="card-body text-center">
-                <div class="d-flex justify-content-center ms-4">
-                  <%= render partial: 'site/mocks_home/overlapping_images_coaches' %>
-                </div>
-                <!-- Content in the middle of the card -->
-                <div class="mt-5 text-center" style="width: 300px; margin: 0 auto;">
+            <div class="card shadow-sm border-0" style="min-height: 300px;">
+              <div class="card-body d-flex justify-content-center align-items-center">
+                <div class="d-flex flex-column align-items-center text-center" style="width: 300px;">
+                  <div class="mb-5" style="margin-top: -30px;">
+                    <%= render partial: 'site/mocks_home/overlapping_images_coaches' %>
+                  </div>
                   <h5>Career Coach Scheduling</h5>
                   <p style="font-size: 0.8rem;">Work with a coach who’s succeeded in some of the world's most competitive interviews.</p>
-                  <%= link_to 'Book a Session', interview_coaches_index_path, class: 'btn btn-dark rounded-pill py-1', style: 'width: 100%; background-color: #0D1B2A'; %>
+                  <%= link_to 'Book a Session', interview_coaches_index_path, class: 'btn btn-dark rounded-pill py-1 mt-2', style: 'width: 100%; background-color: #0D1B2A;' %>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Middle Card -->
-            <div class="card mb-4 shadow-sm border-0" style="height: 250px;">
+        <div class="row mt-3 ">
+          <div class="col-12">
+            <div class="card shadow-sm border-0" style="min-height: 476px;">
               <div class="card-body text-center">
                 <h5 class="text-start">Explore Trending Discussions</h5>
-                <nav class="nav" style="font-size: 0.8rem;">
-                  <% rooms = ['Finance', 'Technical Questions', 'Rate My Chances', 'Recruiting Results'] %>
-                  <% room_links = [] %>
-
-                  <% rooms.each do |room_name| %>
-                    <% forum_room = ForumRoom.find_by(name: room_name) %>
-                    <% if forum_room.present? %>
-                      <% room_links << link_to(room_name, forum_room_path(forum_room), class: "nav-link text-muted p-0", style: "text-decoration: none;") %>
-                    <% end %>
-                  <% end %>
-
-                  <%= room_links.join('<span class="px-2">|</span>').html_safe %>
-
-                  <span class="px-2">|</span>
-                  <%= link_to "All Forum Rooms", forum_rooms_path, class: "nav-link text-muted p-0", style: "text-decoration: none;" %>
-                </nav>
+                <%= render "site/mocks_home/top_forum_posts" %>
               </div>
             </div>
-
-            </nav>
-
-            <!-- Top Posts -->
-            <%= render "site/mocks_home/top_forum_posts"%>
-
           </div>
         </div>
-
-        <div class="card mb-4 shadow-sm border-0" style="height: 246px;">
-          <div class="card-body text-center">
-            <!-- Title -->
-            <div class="d-flex justify-content-between">
-              <h5 class="text-start">Explore Career Paths</h5>
-              <%= link_to "View all", pages_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
-            </div>
-            <!-- Description -->
-            <p class="text-start" style="font-size: 0.8rem;">
-              Dive deeper into specific career areas with tailored insights, resources, and guidance.
-            </p>
-            <!-- Career Path Links -->
-            <div>
-              <%= render 'site/mocks_home/career_path_links' %>
-            </div>
-          </div>
-        </div>
-
       </div>
 
       <!-- Right Column -->
-      <div class="col-lg-3 col-md-4 col-sm-12">
-        <div class="card mb-4 me-3 shadow-sm border-0 card-responsive">
-          <div class="card-body text-center pb-0 m-0">
-            <div class="d-flex justify-content-between">
-              <h5 class="text-start">Networking & Interview Recaps</h5>
-              <%= link_to "View all", employee_views_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
-            </div>
-            <hr class="m-0 text-muted" style="opacity: 0.1;">
-          </div>
-          <%= render partial: 'site/recaps_home/list_of_recap_cards'%>
-        </div>
-        <div class="card mb-4 me-3 shadow-sm border-0" style="height: 150px; background-color: #0D1B2A; color: white;">
-          <div class="card-body text-center">
-            <!-- Title -->
-            <h5 class="text-start" style="font-size: 0.7rem;">Interview Question of the Day</h5>
-
-            <!-- Horizontal rule -->
-            <hr class="m-0" style="opacity: 0.5; border-color: white;">
-
-            <!-- Centered question text -->
-            <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-              <% if @question_of_the_day.present? && @question_of_the_day.question_text.present? %>
-                <p style="text-align: center; margin: 0;"><%= @question_of_the_day.question_text %></p>
-              <% end %>
-
-            </div>
-          </div>
-        </div>
-
-
-        <div class="card me-3 shadow-sm border-0 d-flex" style="height: 203px;">
-          <div class="card-body text-center d-flex flex-column justify-content-between align-items-center">
-            <%= render 'site/questions_home/answer_choices' %>
-
-            <!-- Button to See All Questions -->
-            <%= link_to "See All Questions", question_packets_path, class: "btn btn-dark rounded-pill w-100", style: "background-color: #0D1B2A;"%>
-          </div>
-        </div>
+<div class="col-lg-3 col-md-4 col-sm-12 d-flex flex-column">
+  <div class="card mb-4 me-3 shadow-sm border-0" style="min-height: 300px;">
+    <div class="card-body text-center pb-0 m-0">
+      <div class="d-flex justify-content-between">
+        <h5 class="text-start">Networking & Interview Recaps</h5>
+        <%= link_to "View all", employee_views_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
       </div>
+      <hr class="m-0 text-muted" style="opacity: 0.1;">
+    </div>
+    <%= render partial: 'site/recaps_home/list_of_recap_cards' %>
+  </div>
+  <div class="card mb-4 me-3 shadow-sm border-0" style="min-height: 150px; background-color: #0D1B2A; color: white;">
+    <div class="card-body text-center">
+      <h5 class="text-start" style="font-size: 0.7rem;">Interview Question of the Day</h5>
+      <hr class="m-0" style="opacity: 0.5; border-color: white;">
+      <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+        <% if @question_of_the_day.present? && @question_of_the_day.question_text.present? %>
+          <p style="text-align: center; margin: 0;"><%= @question_of_the_day.question_text %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="card me-3 shadow-sm border-0" style="min-height: 290px;">
+    <div class="card-body text-center d-flex flex-column justify-content-between align-items-center">
+      <%= render 'site/questions_home/answer_choices' %>
+      <%= link_to "See All Questions", question_packets_path, class: "btn btn-dark rounded-pill w-100", style: "background-color: #0D1B2A;" %>
+    </div>
+  </div>
+</div>
+
     </div>
   </div>
 
 
 
-
-
-
-
-
 <!-- Footer -->
 <!--Mock data to be deleted later-->
-  <% names = ["John Doe", "Jane Smith", "Mike Johnson", "Emily Davis", "Chris Lee"] %>
-<% positions = ["Developer", "Designer", "Manager", "Engineer", "Analyst"] %>
-<% locations = ["New York", "London", "Sydney", "Toronto", "San Francisco"] %>
+<%# names = ["John Doe", "Jane Smith", "Mike Johnson", "Emily Davis", "Chris Lee"] %>
+<%# positions = ["Developer", "Designer", "Manager", "Engineer", "Analyst"] %>
+<%# locations = ["New York", "London", "Sydney", "Toronto", "San Francisco"] %>
 
 <div style="
   background-color: #0D1B2A; 
@@ -181,7 +124,7 @@
   height: 50px; 
   display: flex; 
   align-items: center;">
-  
+
   <!-- "All Career Data" Text Centered -->
   <div style="
       font-size: 0.8rem; 
@@ -190,21 +133,13 @@
       max-width: 150px; 
       flex: 0 0 auto; 
       margin-left: 10px;">
-      <%= link_to 'All Career Data', career_datum_path(id: 1), style: 'color: inherit; text-decoration: none;' %>
+    <%= link_to 'All Career Data', career_datum_path(id: 1), style: 'color: inherit; text-decoration: none;' %>
   </div>
-
-
 
   <!-- Ticker Items -->
   <div style="flex: 5; margin-left: 20px; overflow: hidden; white-space: nowrap;">
-    <%= render partial: "site/career_tree_home/list_of_ticker_items", locals: { 
-      names: names, 
-      positions: positions, 
-      locations: locations 
-    } %>
+    <%= render partial: "site/career_tree_home/list_of_ticker_items", locals: { } %>
   </div>
 </div>
-
-
 
 </body>

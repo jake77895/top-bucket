@@ -227,6 +227,17 @@ Rails.application.routes.draw do
 
   end
 
+  # Public Routes for Career Jobs and Compensation
+  resources :career_jobs, only: [] do
+    collection do
+      get :step_one       # Display the job details form
+      post :save_step_one # Handle form submission for job details
+      get :step_two       # Display the compensation details form
+      post :create        # Save jobs and compensations
+    end
+  end
+  
+
   get 'nodes_data', to: 'career_data#nodes_data'
   get 'link_data', to: 'career_data#link_data'
   get 'exit_opportunities', to: 'career_data#generate_exit_opportunities'
@@ -243,8 +254,23 @@ Rails.application.routes.draw do
   
   # Navigation parts of the site
   root "site#home"
+
+  # authenticated :user do
+  #   # Set the authenticated user's homepage
+  #   root to: 'site#home', as: :authenticated_root
+  # end
+
+  # unauthenticated do
+  #   # Set the page for unauthenticated users
+  #   root to: 'site#about'
+  # end
+
   get "/about", to: "site#about"
   get "/contact", to: "site#contact"
+
+  # Privacy Policy and Terms of Service
+  get 'privacy_policy', to: 'site#privacy_policy', as: :privacy_policy
+  get 'terms_of_service', to: 'site#terms_of_service', as: :terms_of_service
 
 
 

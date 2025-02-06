@@ -1,0 +1,108 @@
+<h1 class="text-center my-4">Step 2: Compensation Details</h1>
+
+<div class="container">
+  <%= form_with url: career_jobs_path, method: :post, local: true do |form| %>
+    <% @career_jobs.each_with_index do |career_job, index| %>
+      <%= form.hidden_field "career_jobs[#{index}][company]", value: career_job.company, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][location]", value: career_job.location, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][industry]", value: career_job.industry, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][years_at_job]", value: career_job.years_at_job, required: true %>
+      <%= form.hidden_field "career_jobs[#{index}][start_year]", value: career_job.start_year, required: true %>
+      <!-- Adding fields for previous educational institutions -->
+      <%= form.hidden_field "career_jobs[#{index}][previous_undergrad]", value: career_job.previous_undergrad %>
+      <%= form.hidden_field "career_jobs[#{index}][previous_mba]", value: career_job.previous_mba %>
+      <%= form.hidden_field "career_jobs[#{index}][previous_grad]", value: career_job.previous_grad %>
+
+
+      <div class="accordion mb-4" id="accordionJob<%= index %>">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingJob<%= index %>">
+            <button 
+              class="accordion-button <%= index.zero? ? '' : 'collapsed' %>" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#collapseJob<%= index %>" 
+              aria-expanded="<%= index.zero? %>" 
+              aria-controls="collapseJob<%= index %>">
+              Compensation for Job <%= index + 1 %> (<%= career_job.company.presence || 'No Company' %>)
+            </button>
+          </h2>
+          <div 
+            id="collapseJob<%= index %>" 
+            class="accordion-collapse collapse <%= index.zero? ? 'show' : '' %>" 
+            aria-labelledby="headingJob<%= index %>">
+            <div class="accordion-body">
+              <% career_job.career_compensations.reverse.each_with_index do |compensation, year_index| %>
+                <div class="mb-4">
+                  <h6 class="fw-bold">Year <%= career_job.years_at_job.to_i - year_index %></h6>
+
+                  <!-- Group, Level, Sub-Level Row -->
+                  <div class="row align-items-center border-bottom mb-3 pb-3">
+                    <!-- Group -->
+                    <div class="col-md-4">
+                      <%= form.select "career_jobs[#{index}][career_compensations][#{year_index}][group]",
+                          options_from_collection_for_select(career_job.matching_groups || [], :name, :name),
+                          { include_blank: 'Select Group' },
+                          class: 'form-control', required: true %>
+                    </div>
+
+                    <!-- Level -->
+                    <div class="col-md-4">
+                      <%= form.select "career_jobs[#{index}][career_compensations][#{year_index}][level]",
+                          options_from_collection_for_select(career_job.matching_job_levels || [], :name, :name),
+                          { include_blank: 'Select Level' },
+                          class: 'form-control', required: true %>
+                    </div>
+
+                    <!-- Sub-Level -->
+                    <div class="col-md-4">
+                      <%= form.select "career_jobs[#{index}][career_compensations][#{year_index}][sub_level]",
+                          [['Stub', 'Stub'], ['1', '1'], ['2', '2'], ['3', '3'], ['4+', '4+']],
+                          { include_blank: 'Sub-Level' },
+                          class: 'form-control', required: true %>
+                    </div>
+                  </div>
+
+                  <!-- Salary, Bonus, Hours Worked Row -->
+                  <div class="row align-items-center mb-3">
+                    <!-- Salary -->
+                    <div class="col-md-4">
+                      <%= form.number_field "career_jobs[#{index}][career_compensations][#{year_index}][salary]",
+                          value: compensation.salary,
+                          class: 'form-control', 
+                          placeholder: 'Salary', required: true, min: 0 %>
+                    </div>
+
+                    <!-- Bonus -->
+                    <div class="col-md-4">
+                      <%= form.number_field "career_jobs[#{index}][career_compensations][#{year_index}][bonus]",
+                          value: compensation.bonus,
+                          class: 'form-control', 
+                          placeholder: 'Bonus', required: true, min: 0 %>
+                    </div>
+
+                    <!-- Hours Worked -->
+                    <div class="col-md-4">
+                      <%= form.number_field "career_jobs[#{index}][career_compensations][#{year_index}][hours_worked_per_week]",
+                          value: compensation.hours_worked_per_week,
+                          min: 0, max: 168, 
+                          class: 'form-control', 
+                          placeholder: 'Hours/Week', required: true %>
+                    </div>
+                  </div>
+
+                  <hr class="border border-2 opacity-50"> <!-- Bold horizontal line between years -->
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="d-flex justify-content-between mt-3">
+      <%= link_to 'Back', step_one_admin_career_jobs_path, class: 'btn btn-outline-secondary px-4' %>
+      <%= form.submit 'Save Jobs', class: 'btn btn-dark px-4' %>
+    </div>
+  <% end %>
+</div>

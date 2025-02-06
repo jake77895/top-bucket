@@ -32,7 +32,7 @@ class ItemRank < ApplicationRecord
 
   validate :custom_values_presence
   validate :user_must_be_signed_in
-  validates :rank, presence: { message: "cannot be nil" }
+  # validates :rank, presence: { message: "cannot be nil" }
   validates :item_id, uniqueness: { scope: [:tier_list_id, :user_id], message: "You have already ranked this item in this tier list" }
 
 

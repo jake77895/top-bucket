@@ -1,0 +1,78 @@
+<h1 class="text-center my-4">Step 1: Job Details</h1>
+
+
+
+
+<div class="container">
+
+  <div class="mb-4 p-3 rounded" style="background-color: #e7f7fc; border: 1px solid #b8dce8;">
+    <p class="text-center" style="color: #007b9c; font-size: 1rem; margin: 0;">
+      Thank you for uploading your employment information. It should take 5-10 minutes and is helpful for future recruits navigating their job search.
+    </p>
+  </div>
+
+  <%= form_with url: save_step_one_career_jobs_path, method: :post, local: true do |form| %>
+    <% labels = ["Most Recent Employer or Current Employer", "Previous Employer (Optional But Encouraged)", "Employer Before Previous Employer (Optional But Encouraged)"] %>
+    <% 3.times do |index| %>
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><%= labels[index] %></h5>
+        </div>
+        <div class="card-body">
+          <!-- Company -->
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][company_id]", 'Company', class: 'form-label fw-bold' %>
+            <%= form.select "career_jobs[#{index}][company_id]", options_from_collection_for_select(@companies, :id, :name), { include_blank: 'Select a Company' }, class: 'form-control' %>
+          </div>
+
+          <!-- Location -->
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][location_id]", 'Location', class: 'form-label fw-bold' %>
+            <%= form.select "career_jobs[#{index}][location_id]", options_from_collection_for_select(@locations, :id, :name), { include_blank: 'Select a Location' }, class: 'form-control' %>
+          </div>
+
+          <!-- Industry -->
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][industry_id]", 'Industry', class: 'form-label fw-bold' %>
+            <%= form.select "career_jobs[#{index}][industry_id]", options_from_collection_for_select(@industries, :id, :name), { include_blank: 'Select an Industry' }, class: 'form-control' %>
+          </div>
+
+          <!-- Years Worked -->
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][years_at_job]", 'Years Worked', class: 'form-label fw-bold' %>
+            <%= form.number_field "career_jobs[#{index}][years_at_job]", min: 0, class: 'form-control', placeholder: 'Enter years worked' %>
+          </div>
+
+          <!-- Start Year -->
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][start_year]", 'Start Year', class: 'form-label fw-bold' %>
+            <%= form.number_field "career_jobs[#{index}][start_year]", min: 1900, max: Date.today.year, class: 'form-control', placeholder: 'Enter start year' %>
+          </div>
+
+          <!-- Educational Institution -->
+          <hr>
+          <h6 class="fw-bold">Educational Institution Before This Job</h6>
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][previous_undergrad]", 'Undergraduate School', class: 'form-label fw-bold' %>
+            <%= form.select "career_jobs[#{index}][previous_undergrad]", options_from_collection_for_select(@undergrad_schools, :name, :name), { include_blank: 'Select Undergraduate School' }, class: 'form-control' %>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][previous_mba]", 'MBA Program', class: 'form-label fw-bold' %>
+            <%= form.select "career_jobs[#{index}][previous_mba]", options_from_collection_for_select(@mba_programs, :name, :name), { include_blank: 'Select MBA Program' }, class: 'form-control' %>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label "career_jobs[#{index}][previous_grad]", 'Other Graduate School', class: 'form-label fw-bold' %>
+            <%= form.select "career_jobs[#{index}][previous_grad]", options_from_collection_for_select(@grad_schools, :name, :name), { include_blank: 'Select Graduate School' }, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="d-flex justify-content-between mt-3">
+      <%= link_to 'Cancel', admin_career_jobs_path, class: 'btn btn-outline-secondary px-4' %>
+      <%= form.submit 'Next', class: 'btn btn-dark px-4' %>
+    </div>
+  <% end %>
+</div>
