@@ -268,6 +268,10 @@ Rails.application.routes.draw do
   get "/about", to: "site#about"
   get "/contact", to: "site#contact"
 
+  # Privacy Policy and Terms of Service
+  get 'privacy_policy', to: 'site#privacy_policy', as: :privacy_policy
+  get 'terms_of_service', to: 'site#terms_of_service', as: :terms_of_service
+
 
 
 
