@@ -254,6 +254,17 @@ Rails.application.routes.draw do
   
   # Navigation parts of the site
   root "site#home"
+
+  # authenticated :user do
+  #   # Set the authenticated user's homepage
+  #   root to: 'site#home', as: :authenticated_root
+  # end
+
+  # unauthenticated do
+  #   # Set the page for unauthenticated users
+  #   root to: 'site#about'
+  # end
+
   get "/about", to: "site#about"
   get "/contact", to: "site#contact"
 

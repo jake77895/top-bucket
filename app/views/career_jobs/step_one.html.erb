@@ -1,11 +1,22 @@
 <h1 class="text-center my-4">Step 1: Job Details</h1>
 
+
+
+
 <div class="container">
-<%= form_with url: save_step_one_career_jobs_path, method: :post, local: true do |form| %>
+
+  <div class="mb-4 p-3 rounded" style="background-color: #e7f7fc; border: 1px solid #b8dce8;">
+    <p class="text-center" style="color: #007b9c; font-size: 1rem; margin: 0;">
+      Thank you for uploading your employment information. It should take 5-10 minutes and is helpful for future recruits navigating their job search.
+    </p>
+  </div>
+
+  <%= form_with url: save_step_one_career_jobs_path, method: :post, local: true do |form| %>
+    <% labels = ["Most Recent Employer or Current Employer", "Previous Employer (Optional But Encouraged)", "Employer Before Previous Employer (Optional But Encouraged)"] %>
     <% 3.times do |index| %>
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-dark text-white">
-          <h5 class="mb-0">Job <%= index + 1 %></h5>
+          <h5 class="mb-0"><%= labels[index] %></h5>
         </div>
         <div class="card-body">
           <!-- Company -->

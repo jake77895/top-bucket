@@ -106,9 +106,9 @@
 
 <!-- Footer -->
 <!--Mock data to be deleted later-->
-<% names = ["John Doe", "Jane Smith", "Mike Johnson", "Emily Davis", "Chris Lee"] %>
-<% positions = ["Developer", "Designer", "Manager", "Engineer", "Analyst"] %>
-<% locations = ["New York", "London", "Sydney", "Toronto", "San Francisco"] %>
+<%# names = ["John Doe", "Jane Smith", "Mike Johnson", "Emily Davis", "Chris Lee"] %>
+<%# positions = ["Developer", "Designer", "Manager", "Engineer", "Analyst"] %>
+<%# locations = ["New York", "London", "Sydney", "Toronto", "San Francisco"] %>
 
 <div style="
   background-color: #0D1B2A; 
@@ -138,11 +138,7 @@
 
   <!-- Ticker Items -->
   <div style="flex: 5; margin-left: 20px; overflow: hidden; white-space: nowrap;">
-    <%= render partial: "site/career_tree_home/list_of_ticker_items", locals: { 
-      names: names, 
-      positions: positions, 
-      locations: locations 
-    } %>
+    <%= render partial: "site/career_tree_home/list_of_ticker_items", locals: { } %>
   </div>
 </div>
 

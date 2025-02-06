@@ -1,6 +1,8 @@
 class SiteController < ApplicationController
   helper_method :shorten_name
+  before_action :show_about_page_first
   include EmployeeRecapOverviewStats
+
 
   def about
   end
@@ -306,6 +308,16 @@ class SiteController < ApplicationController
     else
       Rails.logger.debug "No valid records found"
       []
+    end
+  end
+
+  private
+
+  def show_about_page_first
+    # Redirect to the about page only if the user is not signed in, it's their first visit, and they are visiting the root path
+    if !user_signed_in? && session[:about_page_shown].blank? && request.path == root_path
+      session[:about_page_shown] = true
+      redirect_to about_path
     end
   end
   
