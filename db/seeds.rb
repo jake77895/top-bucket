@@ -6,13 +6,9 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-# Create forum rooms
-ForumRoom.create(name: "General Discussion", description: "A place to talk about anything!")
-ForumRoom.create(name: "Tech Talk", description: "Discuss the latest in technology.")
-ForumRoom.create(name: "Help Desk", description: "Ask questions and get help.")
 
-# Add dummy posts if the Post model is already created
-if defined?(Post)
-  ForumRoom.first.posts.create(title: "Welcome to the General Discussion", body: "Feel free to introduce yourself!", user_id: 1)
+# Load specific seed files
+Dir[Rails.root.join('db/seeds/*.rb')].each do |file|
+  puts "Seeding: #{File.basename(file)}"
+  load file
 end
-
