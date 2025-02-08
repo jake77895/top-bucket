@@ -46,7 +46,7 @@ class Admin::QuestionsController < ApplicationController
     params.require(:question).permit(
       :question_text, :answer_choice_1, :answer_choice_2, :answer_choice_3, :answer_choice_4,
       :correct_answer, :explanation_text, :technical, :behavior, :category,
-      :position_type_id, :difficulty_level, :related_organization, :question_link, :question_link_order
+      :position_type_id, :difficulty_level, :related_organization, :question_link, :question_link_order, :related_group
     )
   end
 end

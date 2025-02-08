@@ -70,9 +70,14 @@
             <%= form.label :related_organization, 'Related Organization', class: 'form-label' %>
             <%= form.text_field :related_organization, class: 'form-control', placeholder: 'Enter related organization' %>
           </div>
+          <div class="col-md-6 mb-3">
+            <%= form.label :related_group, 'Related Group', class: 'form-label' %>
+            <%= form.text_field :related_group, class: 'form-control', placeholder: 'Enter related group' %>
+          </div>
         </div>
 
         <div class="row">
+          
           <div class="col-md-6 mb-3">
             <%= form.label :question_link, 'Question Link (for multi-part questions)', class: 'form-label' %>
             <%= form.text_field :question_link, class: 'form-control', placeholder: 'Enter question link' %>
@@ -101,4 +106,3 @@
     </div>
   <% end %>
 </div>
-

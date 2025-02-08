@@ -15,6 +15,7 @@
 #  question_link        :string
 #  question_link_order  :integer
 #  question_text        :string           not null
+#  related_group        :string
 #  related_organization :string
 #  technical            :boolean          default(FALSE), not null
 #  created_at           :datetime         not null
