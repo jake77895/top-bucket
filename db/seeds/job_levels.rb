@@ -1,5 +1,14 @@
 # db/seeds/job_levels.rb
 
+# Helper methods to find IDs by name
+def find_position_type_id(name)
+  PositionType.find_by(name: name)&.id
+end
+
+def find_company_id(name)
+  Company.find_by(name: name)&.id
+end
+
 job_levels = [
   # Investment Banking
   { name: 'Intern', level_rank: 0, is_global_default: false, is_position_type_default: true, position_type_id: find_position_type_id('Investment Banking'), company_id: nil },
