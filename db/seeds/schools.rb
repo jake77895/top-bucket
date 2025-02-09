@@ -2,49 +2,74 @@
 
 combined_schools = [
   { name: 'Amherst College', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Williams College', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Harvard University', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Harvard Business School', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'University of Pennsylvania', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'The Wharton School of the University of Pennsylvania', undergraduate: false, mba: true, other_graduate: false, other: false },
   { name: 'Columbia', undergraduate: true, mba: true, other_graduate: true, other: false },
   { name: 'Holy Cross', undergraduate: true, mba: false, other_graduate: false, other: false },
   { name: 'Georgetown', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Georgetown McDonough', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'Dartmouth', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Tuck School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'Cornell', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'S.C. Johnson Graduate School of Management', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'Vanderbilt University', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Owen Graduate School of Management', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'Washington University in St. Louis', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Olin Business School', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'Emory University', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Goizueta School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'University of California--Berkeley', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Haas School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'University of Southern California', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'USC Marshall School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'Carnegie Mellon University', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Tepper School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'University of California--Los Angeles', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'UCLA Anderson School of Management', undergraduate: false, mba: true, other_graduate: false, other: false },
-
-
+  { name: 'University of Virginia', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'UVA Darden School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'University of Michigan', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Ross School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Wake Forest University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Wake Forest University School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'University of North Carolina--Chapel Hill', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'UNC Kenan-Flagler Business School', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Boston College', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Carroll School of Management', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'College of William & Mary', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Mason School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'University of Rochester', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Simon Business School', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Brandeis University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Brandeis International Business School', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Georgia Institute of Technology', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Scheller College of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'New York University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'NYU Stern School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Fordham University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Fordham Gabelli School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Syracuse University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Whitman School of Management', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Rutgers University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Rutgers Business School', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'George Washington University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'GW School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'University of Texas', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'McCombs School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'University of Florida', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'UF Warrington College of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Southern Methodist University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Cox School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
+  { name: 'Babson College', undergraduate: true, mba: true, other_graduate: true, other: false },
+  { name: 'Bentley University', undergraduate: true, mba: true, other_graduate: true, other: false },
+  { name: 'Tufts University', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Brown University', undergraduate: true, mba: false, other_graduate: true, other: false },
-
   { name: 'Rice University', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Jones Graduate School of Business', undergraduate: false, mba: true, other_graduate: false, other: false },
-
   { name: 'California Institute of Technology', undergraduate: true, mba: false, other_graduate: true, other: false },
-
-
   { name: 'Johns Hopkins', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Johns Hopkins Carey Business School', undergraduate: false, mba: true, other_graduate: false, other: false },
   { name: 'Stanford University', undergraduate: true, mba: false, other_graduate: true, other: false },
@@ -122,8 +147,15 @@ combined_schools = [
   { name: 'Claremont McKenna College', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Haverford College', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'Washington and Lee University', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Villanova University', undergraduate: true, mba: true, other_graduate: true, other: false },
   { name: 'Colgate University', undergraduate: true, mba: false, other_graduate: true, other: false },
   { name: 'University of Richmond', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'The London School of Economics and Political Science', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'University of Cambridge', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Cambridge Judge Business School', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'University of Oxford', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'Oxford MBA Saïd Business School', undergraduate: true, mba: false, other_graduate: true, other: false },
+  { name: 'London Business School', undergraduate: true, mba: true, other_graduate: true, other: false },
   { name: 'Other', undergraduate: true, mba: true, other_graduate: true, other: true }
 ]
 
