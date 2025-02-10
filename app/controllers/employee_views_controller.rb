@@ -72,21 +72,73 @@ class EmployeeViewsController < ApplicationController
     @rating = Rating.new # Initialize a new rating for the form
   end
 
+  # def filter
+  #   # Ensure only permitted parameters are used
+  #   permitted_q = permitted_filter_params
+
+  #   @q = @employee_view.employees.ransack(permitted_q)
+  #   @filtered_employees = @q.result(distinct: true)
+
+  #   @job_levels = JobLevel.where(id: @filtered_employees.pluck(:job_level_id).uniq).order(level_rank: :desc)
+  #   @groups = Group.where(id: @filtered_employees.pluck(:group_id).uniq).order(:name)
+  #   @locations = Location.where(id: @filtered_employees.pluck(:location_id).uniq).order(:name)
+  #   @companies = Company.where(id: @filtered_employees.pluck(:company_id).uniq).order(:name)
+  #   @previous_companies = Company.where(id: @filtered_employees.pluck(:previous_company_id).uniq).order(:name)
+  #   @undergraduate_schools = School.where(id: @filtered_employees.pluck(:undergraduate_school_id).uniq).order(:name)
+  #   @graduate_schools = School.where(id: @filtered_employees.pluck(:graduate_school_id).uniq).order(:name)
+  # end
+
   def filter
     # Ensure only permitted parameters are used
     permitted_q = permitted_filter_params
-
+  
+    # Initialize the Ransack object
     @q = @employee_view.employees.ransack(permitted_q)
-    @filtered_employees = @q.result(distinct: true)
-
-    @job_levels = JobLevel.where(id: @filtered_employees.pluck(:job_level_id).uniq).order(level_rank: :desc)
-    @groups = Group.where(id: @filtered_employees.pluck(:group_id).uniq).order(:name)
-    @locations = Location.where(id: @filtered_employees.pluck(:location_id).uniq).order(:name)
-    @companies = Company.where(id: @filtered_employees.pluck(:company_id).uniq).order(:name)
-    @previous_companies = Company.where(id: @filtered_employees.pluck(:previous_company_id).uniq).order(:name)
-    @undergraduate_schools = School.where(id: @filtered_employees.pluck(:undergraduate_school_id).uniq).order(:name)
-    @graduate_schools = School.where(id: @filtered_employees.pluck(:graduate_school_id).uniq).order(:name)
+  
+    # Apply filters dynamically
+    query = @q.result(distinct: true)
+  
+    # Cache filtered employees in a variable
+    @filtered_employees = query
+  
+    # Fetch related filter data with optimized queries
+    @job_levels = JobLevel.joins(:employees)
+                          .where(employees: { id: @filtered_employees.pluck(:id) })
+                          .distinct
+                          .order(:level_rank)
+  
+    @groups = Group.joins(:employees)
+                   .where(employees: { id: @filtered_employees.pluck(:id) })
+                   .distinct
+                   .order(:name)
+  
+    @locations = Location.joins(:employees)
+                         .where(employees: { id: @filtered_employees.pluck(:id) })
+                         .distinct
+                         .order(:name)
+  
+    @companies = Company.joins(:employees)
+                        .where(employees: { id: @filtered_employees.pluck(:id) })
+                        .distinct
+                        .order(:name)
+  
+    @previous_companies = Company.joins(:employees)
+                                 .where(employees: { id: @filtered_employees.pluck(:id) })
+                                 .distinct
+                                 .order(:name)
+  
+    @undergraduate_schools = School.joins("INNER JOIN employees ON employees.undergraduate_school_id = schools.id")
+                                    .where(employees: { id: @filtered_employees.pluck(:id) })
+                                    .distinct
+                                    .order(:name)
+  
+    @graduate_schools = School.joins("INNER JOIN employees ON employees.graduate_school_id = schools.id")
+                               .where(employees: { id: @filtered_employees.pluck(:id) })
+                               .distinct
+                               .order(:name)
   end
+  
+  
 
   def flag
     @employee_view = EmployeeView.find(params[:id])
