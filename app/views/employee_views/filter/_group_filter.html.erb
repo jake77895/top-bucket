@@ -21,6 +21,7 @@
                 Group.joins(:employees)
                      .where(employees: { id: @employee_view.employee_ids })
                      .distinct
+                     .order(:name)
                      .pluck(:name)
                      .uniq, # Ensure unique group names
                 :to_s, :to_s, 

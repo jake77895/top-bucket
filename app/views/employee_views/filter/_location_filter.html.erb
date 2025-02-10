@@ -20,7 +20,9 @@
             <%= f.collection_select :location_id_eq, 
                 Location.joins(:employees)
                         .where(employees: { id: @employee_view.employee_ids })
-                        .distinct, 
+                        .distinct
+                        .select("locations.*, CASE WHEN locations.name = 'Other' THEN 1 ELSE 0 END AS is_other")
+                        .order("is_other ASC, locations.name ASC"), 
                 :id, :name, 
                 { prompt: 'All Locations', selected: params.dig(:q, :location_id_eq) }, 
                 { class: 'form-select' } %>

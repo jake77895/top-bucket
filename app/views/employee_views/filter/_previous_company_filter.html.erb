@@ -20,11 +20,14 @@
             <%= f.collection_select :previous_company_id_eq, 
                 Company.joins("INNER JOIN employees ON employees.previous_company_id = companies.id")
                        .where(employees: { id: @employee_view.employee_ids })
-                       .distinct, 
+                       .distinct
+                       .select("companies.*, CASE WHEN companies.name = 'Other' THEN 1 ELSE 0 END AS is_other")
+                       .order("is_other ASC, companies.name ASC"),
                 :id, :name, 
                 { prompt: 'All Previous Companies', selected: params.dig(:q, :previous_company_id_eq) }, 
                 { class: 'form-select' } %>
           </div>
+          
           <div class="text-end">
             <%= f.submit 'Apply Filter', class: 'btn btn-primary' %>
           </div>

@@ -15,26 +15,36 @@
 
 <!-- Employee Views Table -->
 <div class="container">
-  <div class="card shadow-sm border-0">
-    <table class="table mb-0">
-      <thead class="table-dark text-white">
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Number of Employees</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @employee_views.each do |employee_view| %>
-          <tr>
-            <td><%= link_to employee_view.name, employee_view_path(employee_view), style: "text-decoration: none; color: black;" %></td>
-            <td><%= employee_view.description %></td>
-            <td><%= employee_view.employee_count %></td>
-
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+  <div class="card shadow-sm border-0 rounded">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th class="py-3 ps-4">Name</th>
+              <th class="py-3 ps-4">Description</th>
+              <th class="py-3 ps-4">Number of Employees</th>
+              <th class="py-3"></th> <!-- Empty header for View button -->
+            </tr>
+          </thead>
+          <tbody>
+            <% @employee_views.each do |employee_view| %>
+              <tr>
+                <td class="ps-4">
+                  <%= link_to employee_view.name, employee_view_path(employee_view), class: "fw-bold text-dark text-decoration-none" %>
+                </td>
+                <td class="text-muted ps-4"><%= employee_view.description %></td>
+                <td class="ps-4">
+                  <span class="badge bg-primary fs-6"><%= employee_view.employee_count %></span>
+                </td>
+                <td class="text-end pe-4">
+                  <%= link_to "View", employee_view_path(employee_view), class: "btn btn-dark btn-sm" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
 </div>

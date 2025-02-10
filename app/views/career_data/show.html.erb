@@ -50,32 +50,26 @@
   </div>
 
 
-    <div class="mb-4 mt-4 px-4">
-      <div class="card shadow-sm position-relative">
-        <div class="card-body">
-          <div id="categories" class="text-center py-0 px-3"></div>
-          <div id="chart" style="overflow-x: auto; white-space: nowrap;"></div>
-        </div>
+  <div class="mb-4 mt-4 px-4">
+    <div class="card shadow-sm position-relative">
+      <div class="card-body">
+        <div id="categories" class="text-center py-0 px-3"></div>
+        <div id="chart" style="overflow-x: auto; white-space: nowrap;"></div>
       </div>
     </div>
+  </div>
 
 
 
 
 <!-- Include D3.js -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
-
-
-
-
-
-    <!-- Include D3.js -->
    
     
 
 <!-- Include the scripts that define renderChart() and renderLinks() FIRST -->
 <%= render 'career_data/node_chart/render_chart' %>
-<%= render 'career_data/node_chart/render_links' %>
+<%#= render 'career_data/node_chart/render_links' %>
 
 
 <!-- Fetching and rendering nodes and links -->
@@ -83,7 +77,7 @@
 
 <!-- Rendering the modals -->
 <%= render 'career_data/node_chart/node_modal' %>
-<%= render 'career_data/node_chart/link_modal' %>
+<%#= render 'career_data/node_chart/link_modal' %>
 
 
   </body>

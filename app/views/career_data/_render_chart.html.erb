@@ -1,5 +1,7 @@
 <script>
 function renderChart(nodesData) {
+  console.log("renderChart function is being called with data:", nodesData);
+
   const svg = d3.select("#chart").select("svg");
 
   // Render Nodes

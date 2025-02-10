@@ -1,5 +1,5 @@
-class CareerDataController < ApplicationController
-  include CareerDataShared
+module CareerDataShared
+  extend ActiveSupport::Concern
 
   def show
 
@@ -160,6 +160,8 @@ class CareerDataController < ApplicationController
   
   
   def nodes_data
+    Rails.logger.debug "DEBUG: Entering nodes_data method in CareerDataShared"
+
     number_of_weeks_worked = 48
   
     # Constants for spacing

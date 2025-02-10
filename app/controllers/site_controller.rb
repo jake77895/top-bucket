@@ -2,12 +2,32 @@ class SiteController < ApplicationController
   helper_method :shorten_name
   before_action :show_about_page_first
   include EmployeeRecapOverviewStats
+  include CareerDataShared
 
 
   def about
   end
 
   def contact
+
+    # Remove the below later - this is for testing
+
+     # Ratings section of home view
+     tb_ratings
+     bb_ratings
+ 
+     # Forum section of home view
+     top_forum_posts
+ 
+     # Fetch the data for the recap card
+     recap_mock_display
+ 
+     # Fetch the question ot the day
+     question_of_the_day
+     
+     # Fetch the question ot the day
+     @ticker_items = random_ticker_items(50) # Fetch 5 random jobs
+
   end
 
   def home

@@ -20,11 +20,14 @@
             <%= f.collection_select :undergraduate_school_id_eq, 
                 School.joins("INNER JOIN employees ON employees.undergraduate_school_id = schools.id")
                       .where(employees: { id: @employee_view.employee_ids })
-                      .distinct, 
+                      .distinct
+                      .select("schools.*, CASE WHEN schools.name = 'Other' THEN 1 ELSE 0 END AS is_other")
+                      .order("is_other ASC, schools.name ASC"),
                 :id, :name, 
                 { prompt: 'All Undergraduate Schools', selected: params.dig(:q, :undergraduate_school_id_eq) }, 
                 { class: 'form-select' } %>
           </div>
+
           <div class="text-end">
             <%= f.submit 'Apply Filter', class: 'btn btn-primary' %>
           </div>
@@ -33,4 +36,3 @@
     </div>
   </div>
 </div>
-
