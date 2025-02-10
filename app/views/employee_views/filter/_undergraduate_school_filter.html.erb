@@ -7,9 +7,23 @@
       </div>
       <div class="modal-body">
         <%= search_form_for @q, url: employee_view_path(@employee_view), method: :get, html: { class: 'filter-form' } do |f| %>
+          <%# Hidden fields to preserve other filters %>
+          <%= hidden_field_tag 'q[group_name_eq_any]', params.dig(:q, :group_name_eq_any) %>
+          <%= hidden_field_tag 'q[location_id_eq]', params.dig(:q, :location_id_eq) %>
+          <%= hidden_field_tag 'q[company_id_eq]', params.dig(:q, :company_id_eq) %>
+          <%= hidden_field_tag 'q[job_level_name_eq_any]', params.dig(:q, :job_level_name_eq_any) %>
+          <%= hidden_field_tag 'q[previous_company_id_eq]', params.dig(:q, :previous_company_id_eq) %>
+          <%= hidden_field_tag 'q[graduate_school_id_eq]', params.dig(:q, :graduate_school_id_eq) %>
+
           <div class="mb-3">
             <%= f.label :undergraduate_school_id_eq, "Select Undergraduate School", class: 'form-label' %>
-            <%= f.collection_select :undergraduate_school_id_eq, School.joins("INNER JOIN employees ON employees.undergraduate_school_id = schools.id").where(employees: { id: @employee_view.employee_ids }).distinct, :id, :name, { prompt: 'All Undergraduate Schools' }, { class: 'form-select' } %>
+            <%= f.collection_select :undergraduate_school_id_eq, 
+                School.joins("INNER JOIN employees ON employees.undergraduate_school_id = schools.id")
+                      .where(employees: { id: @employee_view.employee_ids })
+                      .distinct, 
+                :id, :name, 
+                { prompt: 'All Undergraduate Schools', selected: params.dig(:q, :undergraduate_school_id_eq) }, 
+                { class: 'form-select' } %>
           </div>
           <div class="text-end">
             <%= f.submit 'Apply Filter', class: 'btn btn-primary' %>
@@ -19,3 +33,4 @@
     </div>
   </div>
 </div>
+

@@ -89,16 +89,34 @@ class EmployeeViewsController < ApplicationController
   # end
 
   def filter
-    # Ensure only permitted parameters are used
+    # Safely extract permitted parameters
     permitted_q = permitted_filter_params
+  
+    # Handle group name filtering
+    if params.dig(:q, :group_name_eq_any).present?
+      group_names = params[:q][:group_name_eq_any]
+      group_ids = Group.where(name: group_names).pluck(:id)
+  
+      # Merge group_id_in into the permitted_q hash while keeping other filters
+      permitted_q = permitted_q.merge(group_id_in: group_ids)
+    end
+  
+    # Handle job level name filtering
+    if params.dig(:q, :job_level_name_eq_any).present?
+      level_names = params[:q][:job_level_name_eq_any]
+      level_ids = JobLevel.where(name: level_names).pluck(:id)
+  
+      # Merge job_level_id_in into the permitted_q hash while keeping other filters
+      permitted_q = permitted_q.merge(job_level_id_in: level_ids)
+    end
   
     # Initialize the Ransack object
     @q = @employee_view.employees.ransack(permitted_q)
   
-    # Apply filters dynamically
+    # Apply all filters dynamically
     query = @q.result(distinct: true)
   
-    # Cache filtered employees in a variable
+    # Cache filtered employees
     @filtered_employees = query
   
     # Fetch related filter data with optimized queries
@@ -137,6 +155,9 @@ class EmployeeViewsController < ApplicationController
                                .distinct
                                .order(:name)
   end
+  
+  
+  
   
   
 
@@ -326,7 +347,11 @@ class EmployeeViewsController < ApplicationController
       :company_id_eq,
       :previous_company_id_eq,
       :undergraduate_school_id_eq,
-      :graduate_school_id_eq
+      :graduate_school_id_eq,
+      :group_name_eq_any, # Custom filter by group name
+      :job_level_name_eq_any, 
+      group_id_in: [],
+      job_level_id_in: []
     )
   end
 
