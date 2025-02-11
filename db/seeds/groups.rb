@@ -29,6 +29,7 @@ groups = [
   { name: "Consumer & Retail", company_id: nil, location_id: nil, position_type_id: find_position_type_id("Investment Banking"), position_type_default: true },
   { name: "Real Estate, Gaming, & Lodging", company_id: nil, location_id: nil, position_type_id: find_position_type_id("Investment Banking"), position_type_default: true },
   { name: "Public Sector & Infrastructure", company_id: nil, location_id: nil, position_type_id: find_position_type_id("Investment Banking"), position_type_default: true },
+  { name: "Generalist", company_id: nil, location_id: nil, position_type_id: find_position_type_id("Investment Banking"), position_type_default: true },
 
   # -------------------- Industry-Specific Groups (Evercore) --------------------
   { name: "Chemicals", company_id: find_company_id("Evercore"), location_id: find_location_id("New York"), position_type_id: find_position_type_id("Investment Banking"), position_type_default: false },

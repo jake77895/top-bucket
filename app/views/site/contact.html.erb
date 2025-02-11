@@ -65,8 +65,13 @@
           <div class="col-12 d-flex flex-column">
             <div class="card shadow-sm border-0" style="min-height: 476px; overflow: hidden;">
               <div class="card-body">
-                <h5 class="text-start">Explore Career Paths</h5>
-                <div id="chart" style="height: 410px; overflow-x: auto; white-space: nowrap;" class="w-100">
+                <div class="d-flex justify-content-between">
+                  <h5 class="text-start m-2">Career Details and Common Exit Opportunities</h5>
+                  <%= link_to 'See Details', career_datum_path(id: 1), class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
+                </div>
+                <hr class="m-0 mb-2 text-muted" style="opacity: 0.1;">
+
+                <div id="chart" style="height: 390px; overflow-x: auto; white-space: nowrap;" class="w-100">
                   <!-- Chart will be rendered here -->
                 </div>
               </div>
@@ -74,15 +79,6 @@
           </div>
         </div>
       </div>
-
-<!--        <div class="mb-4 mt-4 px-4">
-    <div class="card shadow-sm position-relative">
-      <div class="card-body">
-        <div id="categories" class="text-center py-0 px-3"></div>
-        <div id="chart" style="overflow-x: auto; white-space: nowrap;"></div>
-      </div>
-    </div>
-  </div>-->
 
       <!-- Right Column -->
       <div class="col-lg-3 col-md-4 col-sm-12 d-flex flex-column">
@@ -119,11 +115,6 @@
   </div>
 
   <!-- Footer -->
-  <!--Mock data to be deleted later-->
-  <%# names = ["John Doe", "Jane Smith", "Mike Johnson", "Emily Davis", "Chris Lee"] %>
-  <%# positions = ["Developer", "Designer", "Manager", "Engineer", "Analyst"] %>
-  <%# locations = ["New York", "London", "Sydney", "Toronto", "San Francisco"] %>
-
   <div style="
   background-color: #0D1B2A; 
   color: #fff; 
@@ -163,20 +154,13 @@
 
 </body>
 
+<!--Script to render the D3 Career Details Chart with the correct scroll height and width-->
 <script>
-  function scrollChartToPosition(position = 500) {
-  const chart = document.getElementById("chart");
-  
-  if (chart) {
-    chart.scrollLeft = position;
-    console.log("Chart scrolled to:", chart.scrollLeft);
-  } else {
-    console.warn("Chart not found, retrying...");
-    setTimeout(() => scrollChartToPosition(position), 100);
-  }
-}
-
-// Call this function after D3 renders the chart
-setTimeout(() => scrollChartToPosition(500), 200);
-
+  document.addEventListener("nodesRendered", function () {
+    const chart = document.getElementById("chart");
+    if (chart) {
+      chart.scrollLeft = chart.scrollWidth / 4.5; // Center horizontally
+      chart.scrollTop = chart.scrollHeight / 23; // Center vertically (if needed)
+    }
+  });
 </script>

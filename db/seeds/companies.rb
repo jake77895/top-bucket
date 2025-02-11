@@ -17,6 +17,7 @@ investment_banking_companies = [
   { name: 'Barclays', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'UBS', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Lazard', position_type_id: find_position_type_id('Investment Banking') },
+  { name: 'Centerview', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Evercore', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Jefferies', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Houlihan Lokey', position_type_id: find_position_type_id('Investment Banking') },
