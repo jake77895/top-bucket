@@ -12,6 +12,7 @@ investment_banking_companies = [
   { name: 'Morgan Stanley', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Bank of America Merrill Lynch', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Citigroup', position_type_id: find_position_type_id('Investment Banking') },
+  { name: 'Baird', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Credit Suisse', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Deutsche Bank', position_type_id: find_position_type_id('Investment Banking') },
   { name: 'Barclays', position_type_id: find_position_type_id('Investment Banking') },
