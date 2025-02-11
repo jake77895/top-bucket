@@ -1,8 +1,15 @@
 <div class="container py-1">
 
+
+
   <!-- Networking Cards -->
   <% @recap_card_data_networking.each do |recap_card| %>
+
+
     <% if recap_card[:position] == "Investment Banking" %>
+
+    
+
       <% employee_view_id = 2 %>
       <% link_path = summary_employee_view_path(employee_view_id, recap_card[:employee_id], form_context: "networking") %>
       
@@ -31,4 +38,3 @@
   <% end %>
 
 </div>
-

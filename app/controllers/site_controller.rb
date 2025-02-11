@@ -20,7 +20,7 @@ class SiteController < ApplicationController
      top_forum_posts
  
      # Fetch the data for the recap card
-     recap_mock_display
+     recap_display
  
      # Fetch the question ot the day
      question_of_the_day
@@ -40,7 +40,7 @@ class SiteController < ApplicationController
     top_forum_posts
 
     # Fetch the data for the recap card
-    recap_mock_display
+    recap_display
 
     # Fetch the question ot the day
     question_of_the_day
@@ -56,13 +56,18 @@ class SiteController < ApplicationController
 
   private
 
-  def recap_mock_display
+  def recap_display
     # Initialize an empty array to track used employee IDs
     used_employee_ids = []
 
+    Rails.logger.debug "Testing Recap Function"
+
     # Generate multiple recap cards for networking
     @recap_card_data_networking = Array.new(2) do
-      employee = fetch_random_employee_with_ratings(used_employee_ids)
+
+      Rails.logger.debug "Testing Recap Variable"
+
+      employee = fetch_random_employee_with_networking_ratings(used_employee_ids)
       if employee
         used_employee_ids << employee.id
         recap_card_logic_ib_networking(employee)
@@ -71,7 +76,7 @@ class SiteController < ApplicationController
 
     # Generate multiple recap cards for interviews
     @recap_card_data_interview = Array.new(1) do
-      employee = fetch_random_employee_with_ratings(used_employee_ids)
+      employee = fetch_random_employee_with_interview_ratings(used_employee_ids)
       if employee
         used_employee_ids << employee.id
         recap_card_logic_ib_interview(employee)
@@ -251,19 +256,36 @@ class SiteController < ApplicationController
   end
   
 
-  # Fetch a random employee with at least 10 ratings
-  def fetch_random_employee_with_ratings(excluded_employee_ids = [])
+  # Fetch a random employee with at least n ratings
+  def fetch_random_employee_with_networking_ratings(excluded_employee_ids = [])
     employee = Employee
       .joins(:ratings)
+      .where(ratings: { form_context: "networking" }) # Filter by form_context
       .where.not(id: excluded_employee_ids) # Exclude already-used employees
       .group('employees.id')
-      .having('COUNT(ratings.id) >= 10')
+      .having('COUNT(ratings.id) >= 1')
       .order('RANDOM()')
       .first
   
-    Rails.logger.debug "Fetched Employee: #{employee.inspect}"
+    Rails.logger.debug "Fetched Employee with Networking Ratings: #{employee.inspect}"
     employee
   end
+
+  # Fetch a random employee with at least n interview ratings
+  def fetch_random_employee_with_interview_ratings(excluded_employee_ids = [])
+    employee = Employee
+      .joins(:ratings)
+      .where(ratings: { form_context: "interview" }) # Filter by form_context
+      .where.not(id: excluded_employee_ids) # Exclude already-used employees
+      .group('employees.id')
+      .having('COUNT(ratings.id) >= 1')
+      .order('RANDOM()')
+      .first
+  
+    Rails.logger.debug "Fetched Employee with Interview Ratings: #{employee.inspect}"
+    employee
+  end
+  
 
   # Fetch employee position (modify as per your schema)
   def fetch_company(employee)
