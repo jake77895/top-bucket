@@ -138,10 +138,11 @@
   fill: #333;
 }
 
-
 /* ********************************************************* */
 
 /* Career Overview - Pages */
+
+/* Accordion Styling */
 
 .pages-accordion .accordion-button:not(.collapsed) {
   background-color: #e0e0e0 !important; /* Light gray for pages only */
