@@ -7,10 +7,27 @@
       </div>
       <div class="modal-body">
         <%= search_form_for @q, url: employee_view_path(@employee_view), method: :get, html: { class: 'filter-form' } do |f| %>
+          <%# Hidden fields to preserve other filters %>
+          <%= hidden_field_tag 'q[group_name_eq_any]', params.dig(:q, :group_name_eq_any) %>
+          <%= hidden_field_tag 'q[location_id_eq]', params.dig(:q, :location_id_eq) %>
+          <%= hidden_field_tag 'q[job_level_name_eq_any]', params.dig(:q, :job_level_name_eq_any) %>
+          <%= hidden_field_tag 'q[company_id_eq]', params.dig(:q, :company_id_eq) %>
+          <%= hidden_field_tag 'q[previous_company_id_eq]', params.dig(:q, :previous_company_id_eq) %>
+          <%= hidden_field_tag 'q[undergraduate_school_id_eq]', params.dig(:q, :undergraduate_school_id_eq) %>
+
           <div class="mb-3">
             <%= f.label :graduate_school_id_eq, "Select Graduate School", class: 'form-label' %>
-            <%= f.collection_select :graduate_school_id_eq, School.joins("INNER JOIN employees ON employees.graduate_school_id = schools.id").where(employees: { id: @employee_view.employee_ids }).distinct, :id, :name, { prompt: 'All Graduate Schools' }, { class: 'form-select' } %>
+            <%= f.collection_select :graduate_school_id_eq, 
+                School.joins("INNER JOIN employees ON employees.graduate_school_id = schools.id")
+                      .where(employees: { id: @employee_view.employee_ids })
+                      .distinct
+                      .select("schools.*, CASE WHEN schools.name = 'Other' THEN 1 ELSE 0 END AS is_other")
+                      .order("is_other ASC, schools.name ASC"),
+                :id, :name, 
+                { prompt: 'All Graduate Schools', selected: params.dig(:q, :graduate_school_id_eq) }, 
+                { class: 'form-select' } %>
           </div>
+          
           <div class="text-end">
             <%= f.submit 'Apply Filter', class: 'btn btn-primary' %>
           </div>

@@ -30,4 +30,8 @@ class JobLevel < ApplicationRecord
   has_many :employees, dependent: :nullify
 
   validates :name, presence: true
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id name] + _ransackers.keys
+  end
 end

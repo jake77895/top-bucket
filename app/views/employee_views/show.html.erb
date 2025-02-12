@@ -18,18 +18,39 @@
 <div class="container">
   <div class="row g-4">
     <!-- Job Levels with Level Rank -->
-    <% @job_levels.each do |job_level| %>
+    <% @job_levels.group_by(&:level_rank).sort_by { |rank, _| -rank }.each do |level_rank, job_levels| %>
       <div class="col-12">
         <div class="card shadow-sm">
           <div class="card-header bg-black text-white">
-            <h5 class="mb-0"><%= job_level.name %></h5>
+            <% 
+              # Retrieve the position_type_id for "Investment Banking"
+              investment_banking_position_type_id = PositionType.find_by(name: 'Investment Banking')&.id
+              
+              # Find the default job level for the given level_rank and position_type_id
+              default_job_level = job_levels.find do |jl|
+                jl.level_rank == level_rank && 
+                jl.is_position_type_default && 
+                jl.position_type_id == investment_banking_position_type_id
+              end
+
+              # Determine the name to display
+              display_name = default_job_level&.name || job_levels.first&.name || "Other"
+            %>
+            <h5 class="mb-0"><%= display_name %> and Equivalent Positions</h5>
           </div>
           <div class="card-body">
             <div class="row">
-              <% job_level.employees.where(id: @filtered_employees.pluck(:id)).each do |employee| %>
-                <div class="col-md-4">
-                  <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
-                </div>
+              <% job_levels.each do |job_level| %>
+                <h6 class="mb-3">
+                  <%= job_level.name %>
+                </h6>
+                <hr> <!-- Horizontal line below job level name -->
+                <% job_level.employees.where(id: @filtered_employees.pluck(:id)).each do |employee| %>
+                  <!-- Adjusted column size for more cards per row -->
+                  <div class="col-md-3 col-sm-6"> 
+                    <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
+                  </div>
+                <% end %>
               <% end %>
             </div>
           </div>
@@ -46,7 +67,8 @@
         <div class="card-body">
           <div class="row">
             <% @other_employees.each do |employee| %>
-              <div class="col-md-4">
+              <!-- Adjusted column size for more cards per row -->
+              <div class="col-md-3 col-sm-6">
                 <%= render partial: 'employee_views/employee_display_card', locals: { employee: employee } %>
               </div>
             <% end %>

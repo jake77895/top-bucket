@@ -56,11 +56,28 @@ class EmployeeViewsController < ApplicationController
     filter
 
     # Fetches the job levels linked to employees in the employee_view, ordered by level_rank descending
+    # @job_levels = JobLevel
+    #   .joins(:employees)
+    #   .where(employees: { id: @employee_view.employee_ids })
+    #   .distinct
+    #   .order(level_rank: :desc)
+
+    # Dynamically find the `position_type_id` if filtering is required
+    if params[:position_type_name].present?
+      position_type_id = PositionType.find_by(name: params[:position_type_name])&.id
+    else
+      position_type_id = nil
+    end
+
+    # Filter job levels
     @job_levels = JobLevel
       .joins(:employees)
-      .where(employees: { id: @employee_view.employee_ids })
+      .where(employees: { id: @filtered_employees.pluck(:id) })
+      .then { |query| position_type_id ? query.where(position_type_id: position_type_id) : query } # Apply filter dynamically
       .distinct
       .order(level_rank: :desc)
+
+
 
     # Fetch employees under "Other" category (without job levels)
     @other_employees = @employee_view.employees.where(job_level_id: nil)
@@ -72,21 +89,94 @@ class EmployeeViewsController < ApplicationController
     @rating = Rating.new # Initialize a new rating for the form
   end
 
+  # def filter
+  #   # Ensure only permitted parameters are used
+  #   permitted_q = permitted_filter_params
+
+  #   @q = @employee_view.employees.ransack(permitted_q)
+  #   @filtered_employees = @q.result(distinct: true)
+
+  #   @job_levels = JobLevel.where(id: @filtered_employees.pluck(:job_level_id).uniq).order(level_rank: :desc)
+  #   @groups = Group.where(id: @filtered_employees.pluck(:group_id).uniq).order(:name)
+  #   @locations = Location.where(id: @filtered_employees.pluck(:location_id).uniq).order(:name)
+  #   @companies = Company.where(id: @filtered_employees.pluck(:company_id).uniq).order(:name)
+  #   @previous_companies = Company.where(id: @filtered_employees.pluck(:previous_company_id).uniq).order(:name)
+  #   @undergraduate_schools = School.where(id: @filtered_employees.pluck(:undergraduate_school_id).uniq).order(:name)
+  #   @graduate_schools = School.where(id: @filtered_employees.pluck(:graduate_school_id).uniq).order(:name)
+  # end
+
   def filter
-    # Ensure only permitted parameters are used
+    # Safely extract permitted parameters
     permitted_q = permitted_filter_params
-
+  
+    # Handle group name filtering
+    if params.dig(:q, :group_name_eq_any).present?
+      group_names = params[:q][:group_name_eq_any]
+      group_ids = Group.where(name: group_names).pluck(:id)
+  
+      # Merge group_id_in into the permitted_q hash while keeping other filters
+      permitted_q = permitted_q.merge(group_id_in: group_ids)
+    end
+  
+    # Handle job level name filtering
+    if params.dig(:q, :job_level_name_eq_any).present?
+      level_names = params[:q][:job_level_name_eq_any]
+      level_ids = JobLevel.where(name: level_names).pluck(:id)
+  
+      # Merge job_level_id_in into the permitted_q hash while keeping other filters
+      permitted_q = permitted_q.merge(job_level_id_in: level_ids)
+    end
+  
+    # Initialize the Ransack object
     @q = @employee_view.employees.ransack(permitted_q)
-    @filtered_employees = @q.result(distinct: true)
-
-    @job_levels = JobLevel.where(id: @filtered_employees.pluck(:job_level_id).uniq).order(level_rank: :desc)
-    @groups = Group.where(id: @filtered_employees.pluck(:group_id).uniq).order(:name)
-    @locations = Location.where(id: @filtered_employees.pluck(:location_id).uniq).order(:name)
-    @companies = Company.where(id: @filtered_employees.pluck(:company_id).uniq).order(:name)
-    @previous_companies = Company.where(id: @filtered_employees.pluck(:previous_company_id).uniq).order(:name)
-    @undergraduate_schools = School.where(id: @filtered_employees.pluck(:undergraduate_school_id).uniq).order(:name)
-    @graduate_schools = School.where(id: @filtered_employees.pluck(:graduate_school_id).uniq).order(:name)
+  
+    # Apply all filters dynamically
+    query = @q.result(distinct: true)
+  
+    # Cache filtered employees
+    @filtered_employees = query
+  
+    # Fetch related filter data with optimized queries
+    @job_levels = JobLevel.joins(:employees)
+                          .where(employees: { id: @filtered_employees.pluck(:id) })
+                          .distinct
+                          .order(:level_rank)
+  
+    @groups = Group.joins(:employees)
+                   .where(employees: { id: @filtered_employees.pluck(:id) })
+                   .distinct
+                   .order(:name)
+  
+    @locations = Location.joins(:employees)
+                         .where(employees: { id: @filtered_employees.pluck(:id) })
+                         .distinct
+                         .order(:name)
+  
+    @companies = Company.joins(:employees)
+                        .where(employees: { id: @filtered_employees.pluck(:id) })
+                        .distinct
+                        .order(:name)
+  
+    @previous_companies = Company.joins(:employees)
+                                 .where(employees: { id: @filtered_employees.pluck(:id) })
+                                 .distinct
+                                 .order(:name)
+  
+    @undergraduate_schools = School.joins("INNER JOIN employees ON employees.undergraduate_school_id = schools.id")
+                                    .where(employees: { id: @filtered_employees.pluck(:id) })
+                                    .distinct
+                                    .order(:name)
+  
+    @graduate_schools = School.joins("INNER JOIN employees ON employees.graduate_school_id = schools.id")
+                               .where(employees: { id: @filtered_employees.pluck(:id) })
+                               .distinct
+                               .order(:name)
   end
+  
+  
+  
+  
+  
 
   def flag
     @employee_view = EmployeeView.find(params[:id])
@@ -274,7 +364,11 @@ class EmployeeViewsController < ApplicationController
       :company_id_eq,
       :previous_company_id_eq,
       :undergraduate_school_id_eq,
-      :graduate_school_id_eq
+      :graduate_school_id_eq,
+      :group_name_eq_any, # Custom filter by group name
+      :job_level_name_eq_any, 
+      group_id_in: [],
+      job_level_id_in: []
     )
   end
 

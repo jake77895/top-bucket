@@ -41,7 +41,8 @@
                     <!-- Group -->
                     <div class="col-md-4">
                       <%= form.select "career_jobs[#{index}][career_compensations][#{year_index}][group]",
-                          options_from_collection_for_select(career_job.matching_groups || [], :name, :name),
+                          options_from_collection_for_select(career_job.matching_groups || [], :name, :name) + 
+                          options_for_select([['Not Specified', 'Not Specified']]), 
                           { include_blank: 'Select Group' },
                           class: 'form-control', required: true %>
                     </div>

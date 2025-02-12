@@ -137,3 +137,17 @@
   font-size: 10px;
   fill: #333;
 }
+
+
+/* ********************************************************* */
+
+/* Career Overview - Pages */
+
+.pages-accordion .accordion-button:not(.collapsed) {
+  background-color: #e0e0e0 !important; /* Light gray for pages only */
+  color: #000 !important; /* Ensures text remains visible */
+}
+
+.pages-accordion .accordion-button:focus {
+  box-shadow: none !important; /* Removes default blue outline */
+}

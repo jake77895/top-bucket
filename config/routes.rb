@@ -237,10 +237,16 @@ Rails.application.routes.draw do
     end
   end
   
-
+  # For the career data view
   get 'nodes_data', to: 'career_data#nodes_data'
   get 'link_data', to: 'career_data#link_data'
   get 'exit_opportunities', to: 'career_data#generate_exit_opportunities'
+
+  # For the home view
+  get 'nodes_data', to: 'site#nodes_data'
+  get 'link_data', to: 'site#link_data'
+  get 'exit_opportunities', to: 'site#generate_exit_opportunities'
+  
 
 
 
