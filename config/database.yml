@@ -24,7 +24,7 @@ default: &default
 development:
   <<: *default
   database: rails_template_development
-  username: student
+  username: jacobspitzer
   password: happySasha77!
 
   # The specified database role being used to connect to postgres.
