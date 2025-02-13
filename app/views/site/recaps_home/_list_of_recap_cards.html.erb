@@ -12,8 +12,6 @@
 
       <% employee_view_id = EmployeeViewsEmployee.where(employee_id: recap_card[:employee_id]).pluck(:employee_view_id).first %>
 
-      <% Rails.logger.debug "Employee View ID: #{employee_view_id}" %>
-
       <% link_path = summary_employee_view_path(employee_view_id, recap_card[:employee_id], form_context: "networking") %>
       
       <%= link_to link_path, style: "text-decoration: none; color: inherit; display: block;" do %>
