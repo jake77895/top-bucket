@@ -10,7 +10,10 @@
 
     
 
-      <% employee_view_id = 2 %>
+      <% employee_view_id = EmployeeViewsEmployee.where(employee_id: recap_card[:employee_id]).pluck(:employee_view_id).first %>
+
+      <% Rails.logger.debug "Employee View ID: #{employee_view_id}" %>
+
       <% link_path = summary_employee_view_path(employee_view_id, recap_card[:employee_id], form_context: "networking") %>
       
       <%= link_to link_path, style: "text-decoration: none; color: inherit; display: block;" do %>
@@ -25,7 +28,8 @@
   <!-- Interview Cards -->
   <% @recap_card_data_interview.each do |recap_card| %>
     <% if recap_card[:position] == "Investment Banking" %>
-      <% employee_view_id = 2 %>
+      <% employee_view_id = EmployeeViewsEmployee.where(employee_id: recap_card[:employee_id]).pluck(:employee_view_id).first %>
+
       <% link_path = summary_employee_view_path(employee_view_id, recap_card[:employee_id], form_context: "interview") %>
       
       <%= link_to link_path, style: "text-decoration: none; color: inherit; display: block;" do %>
