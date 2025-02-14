@@ -7,8 +7,8 @@
             <div class="card shadow-sm border-0 d-flex flex-row mx-auto" style="width: 100%; max-width: 400px; height: 80px;">
               <!-- Image Section -->
               <div class="flex-shrink-0">
-                <% if tier_list.picture.attached? %>
-                  <%= image_tag tier_list.picture, 
+                <% if tier_list.picture.present? %>
+                  <%= image_tag tier_list.picture.url(:thumb), 
                         class: 'rounded-start object-fit-cover', 
                         alt: tier_list.name, 
                         style: 'height: 80px; width: 80px; object-fit: cover;' %>

@@ -42,6 +42,7 @@
 #  fk_rails_...  (undergraduate_school_id => schools.id)
 #
 class Employee < ApplicationRecord
+  mount_uploader :picture, ImageUploader
   belongs_to :job_level, optional: true
   belongs_to :company, optional: true
   belongs_to :position_type, optional: true
@@ -56,8 +57,6 @@ class Employee < ApplicationRecord
   has_many :flags, as: :flaggable, dependent: :destroy
 
   has_many :ratings, dependent: :destroy
-
-  has_one_attached :picture
 
   validates :name, presence: true
   validates :linkedin_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true

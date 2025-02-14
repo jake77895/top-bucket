@@ -39,10 +39,14 @@
                   <div class="position-relative text-center flex-shrink-0 overflow-hidden rounded"
                        style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa;"
                        data-bs-toggle="modal" data-bs-target="#itemDetailsModal-<%= entry[:item].id %>">
-                    <% if entry[:item].picture.attached? %>
-                      <%= image_tag entry[:item].picture, alt: entry[:item].name, class: "img-fluid w-100 h-100 object-fit-cover" %>
+                    <% if entry[:item].picture.present? %>
+                      <%= image_tag entry[:item].picture.url(:thumb), 
+                                  alt: entry[:item].name, 
+                                  class: "img-fluid w-100 h-100 object-fit-cover" %>
                     <% else %>
-                      <%= image_tag "https://via.placeholder.com/62x62", alt: "Item Placeholder", class: "img-fluid w-100 h-100 object-fit-cover" %>
+                      <%= image_tag "https://via.placeholder.com/62x62", 
+                                  alt: "Item Placeholder", 
+                                  class: "img-fluid w-100 h-100 object-fit-cover" %>
                     <% end %>
                     <div class="position-absolute bottom-0 start-0 w-100 text-white bg-dark bg-opacity-75 px-1"
                          style="font-size: 0.7rem;">

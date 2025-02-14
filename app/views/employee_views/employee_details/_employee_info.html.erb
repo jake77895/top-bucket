@@ -3,7 +3,7 @@
   <div class="card-header bg-light text-black d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <%= image_tag(
-        employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
+        employee.picture.present? ? employee.picture.url(:thumb) : 'pictures/blank_profile.png',
         class: 'rounded-circle me-3',
         style: 'width: 50px; height: 50px; object-fit: cover;',
         alt: employee.name

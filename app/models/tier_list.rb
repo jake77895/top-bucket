@@ -22,8 +22,10 @@
 #  fk_rails_...  (tier_list_template_id => tier_list_templates.id)
 #
 class TierList < ApplicationRecord
+  # Image handling with CarrierWave
   mount_uploader :picture, ImageUploader
-  has_one_attached :picture
+
+  # Associations
   has_many :item_ranks, dependent: :destroy
   has_many :items, through: :item_ranks
   belongs_to :tier_list_template, optional: true
@@ -33,9 +35,11 @@ class TierList < ApplicationRecord
 
   has_many :comments, dependent: :destroy
 
+  # Validations
   validates :name, presence: true
   validates :published, inclusion: { in: [true, false] }
 
+  # Constants
   DATA_TYPE_MAPPING = {
     'Text' => 'string',
     'Number' => 'integer',
@@ -45,6 +49,7 @@ class TierList < ApplicationRecord
 
   REVERSE_DATA_TYPE_MAPPING = DATA_TYPE_MAPPING.invert.freeze
 
+  # Instance Methods
   def human_readable_type(type)
     REVERSE_DATA_TYPE_MAPPING[type] || type
   end
@@ -58,5 +63,4 @@ class TierList < ApplicationRecord
   def items_editable?
     published
   end
-  
 end

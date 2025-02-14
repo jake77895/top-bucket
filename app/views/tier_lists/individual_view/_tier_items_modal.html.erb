@@ -15,21 +15,24 @@
         <div class="container">
           <div class="row row-cols-2 row-cols-md-3 g-3">
             <% ranked_items.each do |rank| %>
-  <div class="position-relative text-center flex-shrink-0 overflow-hidden rounded"
-       style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa;"
-       data-bs-toggle="modal" data-bs-target="#itemDetailsModal-<%= rank[:item].id %>">
-    <% if rank[:item].picture.attached? %>
-      <%= image_tag rank[:item].picture, alt: rank[:item].name, class: "img-fluid w-100 h-100 object-fit-cover" %>
-    <% else %>
-      <%= image_tag "https://via.placeholder.com/62x62", alt: "Item Placeholder", class: "img-fluid w-100 h-100 object-fit-cover" %>
-    <% end %>
-    <div class="position-absolute bottom-0 start-0 w-100 text-white bg-dark bg-opacity-75 px-1"
-         style="font-size: 0.7rem;">
-      <strong><%= rank[:item].name %></strong>
-    </div>
-  </div>
-<% end %>
-
+              <div class="position-relative text-center flex-shrink-0 overflow-hidden rounded"
+                   style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa;"
+                   data-bs-toggle="modal" data-bs-target="#itemDetailsModal-<%= rank[:item].id %>">
+                <% if rank[:item].picture.present? %>
+                  <%= image_tag rank[:item].picture.url(:thumb), 
+                              alt: rank[:item].name, 
+                              class: "img-fluid w-100 h-100 object-fit-cover" %>
+                <% else %>
+                  <%= image_tag "https://via.placeholder.com/62x62", 
+                              alt: "Item Placeholder", 
+                              class: "img-fluid w-100 h-100 object-fit-cover" %>
+                <% end %>
+                <div class="position-absolute bottom-0 start-0 w-100 text-white bg-dark bg-opacity-75 px-1"
+                     style="font-size: 0.7rem;">
+                  <strong><%= rank[:item].name %></strong>
+                </div>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>

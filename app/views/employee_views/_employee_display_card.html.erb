@@ -20,7 +20,7 @@
     <!-- Employee Picture -->
     <%= link_to '#', data: { bs_toggle: 'modal', bs_target: "#employeeDetailsModal-#{employee.id}" } do %>
       <%= image_tag(
-        employee.picture.attached? ? employee.picture : 'pictures/blank_profile.png',
+        employee.picture.present? ? employee.picture.url(:thumb) : 'pictures/blank_profile.png',
         class: 'rounded-circle mb-3',
         style: 'width: 80px; height: 80px; object-fit: cover;',
         alt: employee.name

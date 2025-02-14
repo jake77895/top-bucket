@@ -1,39 +1,38 @@
 <div class="container p-0">
   <div class="row g-3">
-      <% pages = ['Investment Banking', 'Private Equity', 'Venture Capital', 'Hedge Funds'] %>
+    <% pages = ['Investment Banking', 'Private Equity', 'Venture Capital', 'Hedge Funds'] %>
     <% pages.each do |page_name| %>
       <% if (page = Page.find_by(name: page_name)) %> <!-- Store page once -->
         <div class="col-md-6"> <!-- Two cards per row -->
-
           <!-- Conditionally render link if page exists -->
           <%= link_to page_path(page.slug), class: 'text-decoration-none text-dark' do %>
             <%= page_name %>
           <% end %>
 
-        <div 
-          class="card h-100 shadow-sm border-0 d-flex flex-row align-items-center p-2" 
-          style="height: 100px;">
-          <!-- Image on the Left -->
           <div 
-            class="flex-shrink-0" 
-            style="width: 50px; height: 50px; overflow: hidden; border-radius: 5px;">
-            <%= image_tag(
-                  Page.find_by(name: page_name)&.profile_image&.attached? ? 
-                    url_for(Page.find_by(name: page_name).profile_image) : 
-                    'placeholders/pages/profile.jpg', 
-                  alt: page_name, 
-                  style: 'width: 100%; height: 100%; object-fit: cover;'
-                ) %>
-          </div>
+            class="card h-100 shadow-sm border-0 d-flex flex-row align-items-center p-2" 
+            style="height: 100px;">
+            <!-- Image on the Left -->
+            <div 
+              class="flex-shrink-0" 
+              style="width: 50px; height: 50px; overflow: hidden; border-radius: 5px;">
+              <%= image_tag(
+                    page.profile_image.present? ? 
+                      page.profile_image.url(:thumb) : 
+                      'placeholders/pages/profile.jpg', 
+                    alt: page_name, 
+                    style: 'width: 100%; height: 100%; object-fit: cover;'
+                  ) %>
+            </div>
 
-          <!-- Content on the Right -->
-          <div class="flex-grow-1 ms-3">
-            <h6 class="text-start card-title fw-bold mb-1" style="font-size: 0.9rem;"><%= page_name %></h6>
-            <p class="text-start card-text text-muted mb-0" style="font-size: 0.75rem;">
-              Learn more about <%= page_name.downcase %>.
-            </p>
+            <!-- Content on the Right -->
+            <div class="flex-grow-1 ms-3">
+              <h6 class="text-start card-title fw-bold mb-1" style="font-size: 0.9rem;"><%= page_name %></h6>
+              <p class="text-start card-text text-muted mb-0" style="font-size: 0.75rem;">
+                Learn more about <%= page_name.downcase %>.
+              </p>
+            </div>
           </div>
-        </div>
         <% end %>
       </div>
     <% end %>

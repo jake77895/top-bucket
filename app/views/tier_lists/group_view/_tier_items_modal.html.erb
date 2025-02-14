@@ -17,8 +17,8 @@
             <% ranked_items.each do |rank| %>
               <div class="col">
                 <div class="card text-center shadow-sm border rounded">
-                  <% if rank[:item].picture.attached? %>
-                    <%= image_tag rank[:item].picture,
+                  <% if rank[:item].picture.present? %>
+                    <%= image_tag rank[:item].picture.url(:medium),
                                   alt: rank[:item].name,
                                   class: "card-img-top img-fluid rounded",
                                   style: "height: 150px; object-fit: cover;" %>

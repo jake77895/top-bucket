@@ -18,8 +18,17 @@ class EmployeeView < ApplicationRecord
 
   validates :name, presence: true
 
-  has_one_attached :picture
+  # Mount CarrierWave uploader
+  mount_uploader :picture, ImageUploader
 
   # Virtual attribute for removing the picture
-  attr_accessor :remove_picture
+  def remove_picture=(value)
+    if value == '1' || value == true
+      self.remove_picture!
+    end
+  end
+
+  def remove_picture
+    false
+  end
 end
