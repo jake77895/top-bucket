@@ -18,10 +18,10 @@
         <div class="mb-3">
           <%= form.label :picture, 'Upload Picture', class: 'form-label fw-bold' %>
           <%= form.file_field :picture, class: 'form-control' %>
-          <% if @item.picture.attached? %>
+          <% if @item.picture.present? %>
             <div class="mt-2">
               <p>Current Picture</p>
-                  <%= image_tag @item.picture, class: 'img-thumbnail ms-2', style: 'width: 50px; height: 50px; object-fit: cover;' %>
+              <%= image_tag @item.picture.url(:thumb), class: 'img-thumbnail ms-2', style: 'width: 50px; height: 50px; object-fit: cover;' %>
             </div>
           <% end %>
         </div>

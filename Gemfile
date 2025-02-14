@@ -3,6 +3,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Added gems
 
+# For resizing images
+gem 'mini_magick'
+
 # For uploading and hosting images
 gem "carrierwave"
 gem "cloudinary"

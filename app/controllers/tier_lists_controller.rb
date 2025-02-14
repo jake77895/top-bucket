@@ -72,18 +72,17 @@ class TierListsController < ApplicationController
       .group(:item_id)
       .select("item_id, AVG(rank) as average_rank")
       .map do |rank|
-      {
-        item: Item.find(rank.item_id),
-        average_rank: rank.average_rank.round,
-      }
-    end
+        {
+          item: Item.find(rank.item_id),
+          average_rank: rank.average_rank&.round || 0  # Use &.round to safely handle nil, default to 0
+        }
+      end
 
     @item_custom_values = ItemRank
       .where(tier_list_id: @tier_list.id)
       .select(:item_id, :custom_values)
       .map { |ir| { item_id: ir.item_id, custom_values: ir.custom_values } }
 
-    # Count unique users who have ranked items in this tier list
     @user_ranking_count = ItemRank.where(tier_list_id: @tier_list.id).distinct.count(:user_id)
 
     render "tier_lists/group_view/show_group"

@@ -46,8 +46,8 @@
                   <div class="position-relative text-center flex-shrink-0 overflow-hidden rounded"
                        style="width: 62px; height: 62px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); background-color: #f8f9fa;"
                        data-bs-toggle="modal" data-bs-target="#itemDetailsModal-<%= rank[:item].id %>">
-                    <% if rank[:item].picture.attached? %>
-                      <%= image_tag rank[:item].picture, 
+                    <% if rank[:item].picture.present? %>
+                      <%= image_tag rank[:item].picture.url(:thumb), 
                                     alt: rank[:item].name, 
                                     class: "img-fluid w-100 h-100 object-fit-cover" %>
                     <% else %>
@@ -124,10 +124,15 @@
       
       <!-- Modal Body -->
       <div class="modal-body text-center">
-        <% if @tier_list.picture.attached? %>
-          <%= image_tag @tier_list.picture, class: 'img-thumbnail mb-3', style: 'width: 250px; height: 200px; object-fit: cover;' %>
+        <% if @tier_list.picture.present? %>
+          <%= image_tag @tier_list.picture.url(:medium), 
+                class: 'img-thumbnail mb-3', 
+                style: 'width: 250px; height: 200px; object-fit: cover;' %>
         <% else %>
-          <img src="https://via.placeholder.com/200x150" class="img-thumbnail mb-3" alt="Placeholder Image" style="width: 200px; height: 150px; object-fit: cover;">
+          <img src="https://via.placeholder.com/200x150" 
+                class="img-thumbnail mb-3" 
+                alt="Placeholder Image" 
+                style="width: 200px; height: 150px; object-fit: cover;">
         <% end %>
         
         <div class="border rounded p-3 text-start bg-light" style="max-height: 200px; overflow-y: auto;">

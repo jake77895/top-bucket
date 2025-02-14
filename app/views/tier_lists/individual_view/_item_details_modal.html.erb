@@ -11,8 +11,8 @@
       <div class="modal-body">
         <!-- Item Image -->
         <div class="text-center mb-4">
-          <% if item.picture.attached? %>
-            <%= image_tag item.picture, 
+          <% if item.picture.present? %>
+            <%= image_tag item.picture.url(:medium), 
                           class: 'img-fluid rounded shadow-sm', 
                           alt: item.name, 
                           style: 'max-width: 200px;' %>

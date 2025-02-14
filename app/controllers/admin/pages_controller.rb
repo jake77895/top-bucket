@@ -103,8 +103,8 @@ class Admin::PagesController < ApplicationController
       :parent_id, 
       :category, 
       :short_description, 
-      :about, 
-      :cover_image, 
+      :about,
+      :cover_image,
       :profile_image
     )
   end
