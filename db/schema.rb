@@ -10,27 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_14_000042) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_14_133054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
-    t.bigint "byte_size", null: false
-    t.string "checksum"
-    t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
-    t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
 
   create_table "career_aggregate_jobs", force: :cascade do |t|
     t.string "job_title"
@@ -109,6 +91,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_000042) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "picture"
   end
 
   create_table "employee_views_employees", force: :cascade do |t|
@@ -235,6 +218,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_000042) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "picture"
   end
 
   create_table "job_levels", force: :cascade do |t|
@@ -318,6 +302,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_000042) do
     t.text "about"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cover_image"
+    t.string "profile_image"
     t.index ["created_by"], name: "index_pages_on_created_by"
     t.index ["parent_id"], name: "index_pages_on_parent_id"
     t.index ["slug"], name: "index_pages_on_slug", unique: true
@@ -432,6 +418,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_000042) do
     t.datetime "updated_at", null: false
     t.bigint "tier_list_template_id"
     t.string "category"
+    t.string "picture"
     t.index ["tier_list_template_id"], name: "index_tier_lists_on_tier_list_template_id"
   end
 
@@ -451,7 +438,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_000042) do
     t.index ["user_name"], name: "index_users_on_user_name", unique: true
   end
 
-  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "career_compensations", "career_jobs", on_delete: :cascade
   add_foreign_key "career_jobs", "users"
   add_foreign_key "comments", "tier_lists"

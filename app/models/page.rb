@@ -5,8 +5,10 @@
 #  id                :bigint           not null, primary key
 #  about             :text
 #  category          :string           default("general"), not null
+#  cover_image       :string
 #  created_by        :integer
 #  name              :string           not null
+#  profile_image     :string
 #  short_description :text
 #  slug              :string           not null
 #  created_at        :datetime         not null
@@ -21,8 +23,8 @@
 #
 class Page < ApplicationRecord
 
-  has_one_attached :cover_image
-  has_one_attached :profile_image
+  mount_uploader :cover_image, ImageUploader
+  mount_uploader :profile_image, ImageUploader
 
   has_many :page_associations, dependent: :destroy
   has_many :employee_views, through: :page_associations

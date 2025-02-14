@@ -7,6 +7,7 @@
 #  custom_fields         :json
 #  description           :text
 #  name                  :string           not null
+#  picture               :string
 #  published             :boolean
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
@@ -21,6 +22,7 @@
 #  fk_rails_...  (tier_list_template_id => tier_list_templates.id)
 #
 class TierList < ApplicationRecord
+  mount_uploader :picture, ImageUploader
   has_one_attached :picture
   has_many :item_ranks, dependent: :destroy
   has_many :items, through: :item_ranks
