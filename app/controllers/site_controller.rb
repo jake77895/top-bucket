@@ -90,7 +90,7 @@ class SiteController < ApplicationController
   def top_forum_posts
     @top_posts = Post
       .joins(:forum_comments) # Join with comments to count them
-      .where('posts.created_at >= ?', 2.weeks.ago) # Filter posts created in the past 2 weeks
+      .where('posts.created_at >= ?', 3.weeks.ago) # Filter posts created in the past 2 weeks
       .group('posts.id') # Group by post ID to aggregate comments
       .select('posts.*, COUNT(forum_comments.id) AS comments_count') # Select posts and count comments
       .order('comments_count DESC') # Order by most comments
