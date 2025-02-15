@@ -15,8 +15,8 @@
                    data-bs-toggle="modal" 
                    data-bs-target="#itemDetailsModal-<%= item.id %>">
                 <!-- Item Image -->
-                <% if item.picture.attached? %>
-                  <%= image_tag item.picture, 
+                <% if item.picture.present? %>
+                  <%= image_tag item.picture.url(:thumb), 
                                 alt: item.name, 
                                 class: "card-img-top mx-auto mt-2 rounded-circle border", 
                                 style: "width: 80px; height: 80px; object-fit: cover;" %>

@@ -5,8 +5,10 @@
 #  id                :bigint           not null, primary key
 #  about             :text
 #  category          :string           default("general"), not null
+#  cover_image       :string
 #  created_by        :integer
 #  name              :string           not null
+#  profile_image     :string
 #  short_description :text
 #  slug              :string           not null
 #  created_at        :datetime         not null
@@ -21,8 +23,8 @@
 #
 class Page < ApplicationRecord
 
-  has_one_attached :cover_image
-  has_one_attached :profile_image
+  mount_uploader :cover_image, ImageUploader
+  mount_uploader :profile_image, ImageUploader
 
   has_many :page_associations, dependent: :destroy
   has_many :employee_views, through: :page_associations
@@ -51,25 +53,25 @@ class Page < ApplicationRecord
   end
 
   def acceptable_cover_image
-    return unless cover_image.attached?
+    return unless cover_image.present?
 
     unless cover_image.content_type.in?(%w[image/png image/jpg image/jpeg])
       errors.add(:cover_image, 'must be a PNG or JPG')
     end
 
-    if cover_image.byte_size > 5.megabytes
+    if cover_image.size > 5.megabytes
       errors.add(:cover_image, 'size must be less than 5MB')
     end
   end
 
   def acceptable_profile_image
-    return unless profile_image.attached?
+    return unless profile_image.present?
 
     unless profile_image.content_type.in?(%w[image/png image/jpg image/jpeg])
       errors.add(:profile_image, 'must be a PNG or JPG')
     end
 
-    if profile_image.byte_size > 5.megabytes
+    if profile_image.size > 5.megabytes
       errors.add(:profile_image, 'size must be less than 5MB')
     end
   end

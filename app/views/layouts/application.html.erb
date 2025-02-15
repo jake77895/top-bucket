@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TopBucket</title>
+    <title>TopBucket - Break into finance. Make your career TopBucket.</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -18,16 +18,18 @@
     <!-- Favicon -->
     <link rel="icon" href="<%= asset_path('custom_icons/top_bucket_favicon-16x16.png') %>" type="image/png">
 
-    <!-- Titles and Meta Tags -->
-    <title>TopBucket</title>
-    <meta name="description" content="Break into finance. Make your career TopBucket.">
+    <!-- Meta Tags -->
+    <meta name="description" content="Break into finance. Make your career TopBucket. Get insights, resources, and guidance for your finance career journey.">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="TopBucket">
     <meta property="og:description" content="Break into finance. Make your career TopBucket.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://thetopbucket.com">
+    <meta property="og:image" content="<%= asset_url('custom_icons/top_bucket_icon.svg') %>">
 
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 
   </head>
 
@@ -46,17 +48,23 @@
       </div>
     <% end %>
 
-    <nav class="navbar navbar-expand-lg mt-0" style="background-color: #0D1B2A; width: 100vw; margin: 0; padding: 0 10px;">
-      <div class="container-fluid d-flex align-items-center justify-content-between" style="padding-top: 0.25rem; padding-bottom: 0.25rem;">
+    <!-- Updated navbar container -->
+    <nav class="navbar navbar-expand-lg mt-0 p-0" style="background-color: #0D1B2A;">
+      <div class="container-fluid">
         <!-- Logo -->
         <div class="d-flex align-items-center">
           <%= link_to root_path, class: 'navbar-brand d-flex align-items-center' do %>
             <%= image_tag 'logo/logo-white.png', 
-          alt: 'Site Logo', 
-          class: 'd-inline-block align-top', 
-          style: 'height: 25px; width: auto; object-fit: contain; margin-top: -50px; margin-bottom: -45px;' %>
+                alt: 'Site Logo', 
+                class: 'd-inline-block align-top', 
+                style: 'height: 25px; width: auto; object-fit: contain;' %>
           <% end %>
         </div>
+
+        <!-- Toggler Button for Mobile View - Moved up -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
         <!-- Navigation Links and Profile -->
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -109,11 +117,6 @@
             <% end %>
           </ul>
         </div>
-
-        <!-- Toggler Button for Mobile View -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
       </div>
     </nav>
 

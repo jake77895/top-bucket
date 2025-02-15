@@ -24,23 +24,23 @@
         <div class="mb-3">
           <%= form.label :picture, 'Upload Picture', class: 'form-label fw-bold' %>
           <%= form.file_field :picture, class: 'form-control' %>
+          
+          <% if @employee_view.picture.present? %>
+            <div class="mt-2">
+              <strong>Current Picture:</strong><br>
+              <%= image_tag @employee_view.picture.url(:thumb), 
+                          class: 'img-thumbnail', 
+                          alt: @employee_view.name, 
+                          style: 'max-width: 150px; height: auto;' %>
+            </div>
+
+            <!--Remove Picture-->
+            <div class="form-check mt-2">
+              <%= form.check_box :remove_picture, class: 'form-check-input' %>
+              <%= form.label :remove_picture, 'Remove Picture', class: 'form-check-label' %>
+            </div>
+          <% end %>
         </div>
-
-        <!-- Picture Preview -->
-        <% if @employee_view.picture.attached? %>
-          <div class="mb-3">
-            <strong>Current Picture:</strong><br>
-            <%= image_tag @employee_view.picture, class: 'img-thumbnail', alt: @employee_view.name, style: 'max-width: 150px; height: auto;' %>
-          </div>
-        <% end %>
-
-        <!--Remove Picture-->
-        <% if @employee_view.picture.attached? %>
-          <div class="form-check mb-3">
-            <%= form.check_box :remove_picture, class: 'form-check-input' %>
-            <%= form.label :remove_picture, 'Remove Picture', class: 'form-check-label' %>
-          </div>
-        <% end %>
 
         <!-- Description -->
         <div class="mb-3">

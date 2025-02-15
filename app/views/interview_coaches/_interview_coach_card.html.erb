@@ -2,10 +2,16 @@
   <div class="row no-gutters align-items-center">
     <!-- Picture Section -->
     <div class="col-auto pr-3">
-      <% if interview_coach.picture.attached? %>
-        <%= image_tag interview_coach.picture, class: "rounded img-fluid", alt: interview_coach.name, style: "height: 150px; width: 150px; object-fit: cover;" %>
+      <% if interview_coach.picture.present? %>
+        <%= image_tag interview_coach.picture.url(:medium), 
+                      class: "rounded img-fluid", 
+                      alt: interview_coach.name, 
+                      style: "height: 150px; width: 150px; object-fit: cover;" %>
       <% else %>
-        <%= image_tag "placeholder.png", class: "rounded img-fluid", alt: "Default Profile Picture", style: "height: 150px; width: 150px; object-fit: cover;" %>
+        <%= image_tag "placeholder.png", 
+                      class: "rounded img-fluid", 
+                      alt: "Default Profile Picture", 
+                      style: "height: 150px; width: 150px; object-fit: cover;" %>
       <% end %>
     </div>
 
@@ -19,7 +25,10 @@
             <a href="#" class="btn btn-dark btn-sm mx-2">Book an Intro Call </a>
             <% if interview_coach.linkedin_url.present? %>
               <a href="<%= interview_coach.linkedin_url %>" target="_blank">
-                <%= image_tag "external_logos/linkedIn.png", alt: "LinkedIn", class: "img-fluid", style: "width: 28px; height: 28px;" %>
+                <%= image_tag "external_logos/linkedIn.png", 
+                            alt: "LinkedIn", 
+                            class: "img-fluid", 
+                            style: "width: 28px; height: 28px;" %>
               </a>
             <% end %>
           </div>

@@ -10,6 +10,7 @@
 #  linkedin_url     :string
 #  name             :string           not null
 #  other_industries :string
+#  picture          :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  user_id          :bigint           not null
@@ -27,9 +28,9 @@ class InterviewCoach < ApplicationRecord
 
   validates :name, presence: true
 
-  # Attach a profile picture using Active Storage
-  has_one_attached :picture
-  
+  # Mount CarrierWave uploader for profile picture
+  mount_uploader :picture, ImageUploader
+
   validates :linkedin_url, format: { 
     with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), 
     message: "must be a valid URL" 

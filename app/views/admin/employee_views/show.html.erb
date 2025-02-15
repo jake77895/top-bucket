@@ -7,13 +7,14 @@
 
 <div class="mb-3">
   <strong>Picture:</strong><br>
-  <% if @employee_view.picture.attached? %>
-    <%= image_tag @employee_view.picture, class: 'img-fluid rounded', alt: @employee_view.name %>
+  <% if @employee_view.picture.present? %>
+    <%= image_tag @employee_view.picture.url(:medium), 
+                  class: 'img-fluid rounded', 
+                  alt: @employee_view.name %>
   <% else %>
     <p>No picture uploaded.</p>
   <% end %>
 </div>
-
 
 <p>
   <strong>Description:</strong>

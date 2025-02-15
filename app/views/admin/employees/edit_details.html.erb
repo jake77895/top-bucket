@@ -47,19 +47,22 @@
         <div class="mb-3">
           <%= form.label :picture, 'Upload Picture', class: 'form-label' %>
           <%= form.file_field :picture, class: 'form-control' %>
-        </div>
-
-        <!-- Display Current Picture -->
-        <% if @employee.picture.attached? %>
-          <div class="mb-3">
-            <label class="form-label">Current Picture:</label>
-            <div>
-              <%= image_tag @employee.picture, class: 'img-thumbnail', style: 'width: 150px; height: 150px;' %>
+          
+          <% if @employee.picture.present? %>
+            <div class="mt-2">
+              <label class="form-label">Current Picture:</label>
+              <div>
+                <%= image_tag @employee.picture.url(:thumb), 
+                            class: 'img-thumbnail', 
+                            style: 'width: 150px; height: 150px; object-fit: cover;' %>
+              </div>
+              <div class="form-check mt-2">
+                <%= form.check_box :remove_picture, class: 'form-check-input' %>
+                <%= form.label :remove_picture, 'Remove Picture', class: 'form-check-label' %>
+              </div>
             </div>
-            <%= form.check_box :remove_picture, {}, '1', '0' %>
-            <%= form.label :remove_picture, 'Remove Picture', class: 'form-check-label' %>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
 
       <div class="card-footer d-flex justify-content-end">

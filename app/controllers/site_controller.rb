@@ -101,10 +101,16 @@ class SiteController < ApplicationController
 
 
   def tb_ratings
-    
-    # Fetch random tier lists to display on the home view
-    random_tier_list_ids = TierList.order("RANDOM()").limit(3).pluck(:id) # Example: 3 random tier lists
-  
+    # Find tier lists that have ANY items ranked in top tiers (1 or 2)
+    random_tier_list_ids = ItemRank
+      .where("rank <= 2")
+      .select(:tier_list_id)
+      .distinct
+      .pluck(:tier_list_id)
+      .sample(3)  # Use Ruby's sample instead of ORDER BY RANDOM()
+
+    return if random_tier_list_ids.empty?
+
     # Count unique user rankings for each tier list
     @user_ranking_counts_tb = ItemRank
       .where(tier_list_id: random_tier_list_ids)
@@ -112,23 +118,28 @@ class SiteController < ApplicationController
       .select("tier_list_id, COUNT(DISTINCT user_id) as user_count")
       .map { |record| [record.tier_list_id, record.user_count] }
       .to_h
-  
-    # Fetch group rankings for items with an average rank of 1 or 2 within these tier lists
+
+    # Fetch group rankings for items with an average rank of 1 or 2 (S and A tiers)
     @group_rankings_tb = ItemRank
       .where(tier_list_id: random_tier_list_ids)
       .group(:item_id, :tier_list_id)
       .select("item_id, tier_list_id, AVG(rank) as average_rank")
-      .having("AVG(rank) <= 2")
+      .having("AVG(rank) <= 2") # S and A tiers (1 and 2)
       .order("RANDOM()")
       .limit(6)
-
   end
 
   def bb_ratings
-    
-    # Fetch random tier lists to display on the home view
-    random_tier_list_ids = TierList.order("RANDOM()").limit(3).pluck(:id) # Example: 3 random tier lists
-  
+    # Find tier lists that have ANY items ranked in bottom tiers (5 or 6)
+    random_tier_list_ids = ItemRank
+      .where("rank >= 5")
+      .select(:tier_list_id)
+      .distinct
+      .pluck(:tier_list_id)
+      .sample(3)  # Use Ruby's sample instead of ORDER BY RANDOM()
+
+    return if random_tier_list_ids.empty?
+
     # Count unique user rankings for each tier list
     @user_ranking_counts_bb = ItemRank
       .where(tier_list_id: random_tier_list_ids)
@@ -136,16 +147,15 @@ class SiteController < ApplicationController
       .select("tier_list_id, COUNT(DISTINCT user_id) as user_count")
       .map { |record| [record.tier_list_id, record.user_count] }
       .to_h
-  
-    # Fetch group rankings for items with an average rank of 1 or 2 within these tier lists
+
+    # Fetch group rankings for items with an average rank of 5 or 6 (D and F tiers)
     @group_rankings_bb = ItemRank
       .where(tier_list_id: random_tier_list_ids)
       .group(:item_id, :tier_list_id)
       .select("item_id, tier_list_id, AVG(rank) as average_rank")
-      .having("AVG(rank) >= 5")
+      .having("AVG(rank) >= 5 AND AVG(rank) <= 6") # D and F tiers (5 and 6)
       .order("RANDOM()")
       .limit(6)
-
   end
 
 

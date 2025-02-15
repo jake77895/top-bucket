@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     resources :form_templates, only: [:index, :new, :create, :edit, :update, :destroy]
     resources :ratings, only: [:index, :destroy]
     resources :settings, only: [:index, :update]
-    resources :pages do
+    resources :pages, except: [:show] do
       member do
         # Routes for managing tier lists
         get :manage_tier_lists
