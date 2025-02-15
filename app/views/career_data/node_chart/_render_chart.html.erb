@@ -401,20 +401,30 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
         .attr("opacity", 1); // Ensure it is visible
 
         group.style("cursor", "pointer").on("click", () => {
-                const nodeData = nodeDataMap[d.id] || {}; // Get data or empty object
-                // Update modal content
-                document.getElementById("modal-industry").textContent = nodeData.industry || "N/A";
-                document.getElementById("modal-level").textContent = nodeData.name || "N/A";
-                document.getElementById("modal-record-count").textContent = nodeData.record_count || "0";
-                document.getElementById("modal-avg-salary").textContent = `$${Math.round(nodeData.salary || 0).toLocaleString()}`;
-                document.getElementById("modal-avg-bonus").textContent = `$${Math.round(nodeData.bonus || 0).toLocaleString()}`;
-                document.getElementById("modal-avg-total-comp").textContent = `$${Math.round(nodeData.total_comp || 0).toLocaleString()}`;
-                document.getElementById("modal-avg-comp-per-hour").textContent = `$${Math.round(nodeData.comp_per_hour || 0).toLocaleString()}`;
+    const nodeData = nodeDataMap[d.id] || {}; // Get data or empty object
+    
+    // Check if this node is an exit opportunity in any category
+    const isExit = Object.values(exitOpportunitiesMapping).some(categoryExits => 
+        categoryExits.some(exit => exit.node_id === d.id)
+    );
+    
+    console.log("Node data:", nodeData);
+    console.log("Is exit node:", isExit);
 
+    // Update modal content
+    document.getElementById("modal-industry").textContent = nodeData.industry || "N/A";
+    document.getElementById("modal-level").textContent = nodeData.name || "N/A";
+    document.getElementById("modal-record-count").textContent = nodeData.record_count || "0";
+    document.getElementById("modal-avg-salary").textContent = `$${Math.round(nodeData.salary || 0).toLocaleString()}`;
+    document.getElementById("modal-avg-bonus").textContent = `$${Math.round(nodeData.bonus || 0).toLocaleString()}`;
+    document.getElementById("modal-avg-total-comp").textContent = `$${Math.round(nodeData.total_comp || 0).toLocaleString()}`;
+    document.getElementById("modal-avg-comp-per-hour").textContent = `$${Math.round(nodeData.comp_per_hour || 0).toLocaleString()}`;
 
-                  // Show the modal using Bootstrap
-                  new bootstrap.Modal(document.getElementById("nodeModal")).show();
-              });
+    // Show the appropriate modal
+    const modalId = isExit ? "nodeModalExits" : "nodeModal";
+    const modal = new bootstrap.Modal(document.getElementById(modalId));
+    modal.show();
+});
     });
 
     // After your initial node creation and before the category click handlers
