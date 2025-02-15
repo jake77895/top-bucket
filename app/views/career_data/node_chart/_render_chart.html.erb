@@ -460,6 +460,18 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
 
   
 
+  // Add this at the end of your renderChart function, just before the chartRendered event
+  document.addEventListener("chartRendered", () => {
+    // Get the chart container
+    const chartContainer = document.getElementById("chart");
+    
+    // Calculate halfway point of the scroll width
+    const halfwayPoint = (chartContainer.scrollWidth - chartContainer.clientWidth) / 2;
+    
+    // Set the scroll position
+    chartContainer.scrollLeft = halfwayPoint;
+  });
+
   document.dispatchEvent(new Event("chartRendered"));
 }
 </script>
