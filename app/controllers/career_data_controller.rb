@@ -224,72 +224,72 @@ class CareerDataController < ApplicationController
   end
   
 
-  def generate_exit_opportunities
-    # Get all non-null job_grouping values.
-    grouping_ids = CareerJob.where("job_grouping IS NOT NULL")
-                            .group(:job_grouping)
-                            .pluck(:job_grouping)
+  # def generate_exit_opportunities
+  #   # Get all non-null job_grouping values.
+  #   grouping_ids = CareerJob.where("job_grouping IS NOT NULL")
+  #                           .group(:job_grouping)
+  #                           .pluck(:job_grouping)
     
-    # Get a list of industries from the static node mapping.
-    industries = node_mapping.map { |nm| nm[:industry].strip }.uniq
+  #   # Get a list of industries from the static node mapping.
+  #   industries = node_mapping.map { |nm| nm[:industry].strip }.uniq
     
-    # Initialize the dynamic mapping hash.
-    # The keys will be each industry (from the node mapping) and the values
-    # will be arrays of exit opportunity objects.
-    dynamic_mapping = Hash.new { |hash, key| hash[key] = [] }
+  #   # Initialize the dynamic mapping hash.
+  #   # The keys will be each industry (from the node mapping) and the values
+  #   # will be arrays of exit opportunity objects.
+  #   dynamic_mapping = Hash.new { |hash, key| hash[key] = [] }
     
-    # Process each job grouping.
-    grouping_ids.each do |grouping_id|
-      jobs = CareerJob.where(job_grouping: grouping_id)
-      next if jobs.empty?
+  #   # Process each job grouping.
+  #   grouping_ids.each do |grouping_id|
+  #     jobs = CareerJob.where(job_grouping: grouping_id)
+  #     next if jobs.empty?
       
-      # For each industry in our base list...
-      industries.each do |industry|
-        # Get all jobs in this grouping that belong to this industry.
-        industry_jobs = jobs.select { |job| job.industry.strip.downcase == industry.strip.downcase }
-        next if industry_jobs.empty?  # No jobs for this industry in the grouping
+  #     # For each industry in our base list...
+  #     industries.each do |industry|
+  #       # Get all jobs in this grouping that belong to this industry.
+  #       industry_jobs = jobs.select { |job| job.industry.strip.downcase == industry.strip.downcase }
+  #       next if industry_jobs.empty?  # No jobs for this industry in the grouping
         
-        # Determine a threshold for this industry.
-        # (For example, use the maximum job_order among these jobs.)
-        threshold = industry_jobs.map { |j| j.job_order.to_i }.max
+  #       # Determine a threshold for this industry.
+  #       # (For example, use the maximum job_order among these jobs.)
+  #       threshold = industry_jobs.map { |j| j.job_order.to_i }.max
         
-        # Now, consider jobs in the grouping from other industries whose job_order is lower than the threshold.
-        exit_jobs = jobs.select do |job|
-          job.industry.strip.downcase != industry.strip.downcase &&
-          job.job_order.to_i < threshold
-        end
+  #       # Now, consider jobs in the grouping from other industries whose job_order is lower than the threshold.
+  #       exit_jobs = jobs.select do |job|
+  #         job.industry.strip.downcase != industry.strip.downcase &&
+  #         job.job_order.to_i < threshold
+  #       end
         
-        exit_jobs.each do |exit_job|
-          # Look up the corresponding compensation to determine the job's level.
-          comp = CareerCompensation.find_by(career_job_id: exit_job.id)
-          next unless comp
+  #       exit_jobs.each do |exit_job|
+  #         # Look up the corresponding compensation to determine the job's level.
+  #         comp = CareerCompensation.find_by(career_job_id: exit_job.id)
+  #         next unless comp
           
-          # Normalize the compensation level string.
-          comp_level_normalized = comp.level.to_s.strip.downcase
+  #         # Normalize the compensation level string.
+  #         comp_level_normalized = comp.level.to_s.strip.downcase
           
-          # Look up the node mapping for the exit job's industry based on its level (via names).
-          mapping = node_mapping.find do |nm|
-            nm[:industry].strip.downcase == exit_job.industry.strip.downcase &&
-            nm[:names].any? { |name| name.strip.downcase == comp_level_normalized }
-          end
+  #         # Look up the node mapping for the exit job's industry based on its level (via names).
+  #         mapping = node_mapping.find do |nm|
+  #           nm[:industry].strip.downcase == exit_job.industry.strip.downcase &&
+  #           nm[:names].any? { |name| name.strip.downcase == comp_level_normalized }
+  #         end
           
-          if mapping
-            # Build the exit opportunity object.
-            exit_opportunity = { 
-              exit_industry: exit_job.industry,  # the industry of the exit job
-              node_id: mapping[:id],              # the matching node mapping's id
-              job_level: comp.level,              # the compensation level (as stored in career_compensation)
-              job_order: exit_job.job_order         # the job_order from the career_job record
-            }
-            # Add this opportunity to the array for the current industry.
-            dynamic_mapping[industry] << exit_opportunity unless dynamic_mapping[industry].include?(exit_opportunity)
-          end
-        end
-      end
-    end
+  #         if mapping
+  #           # Build the exit opportunity object.
+  #           exit_opportunity = { 
+  #             exit_industry: exit_job.industry,  # the industry of the exit job
+  #             node_id: mapping[:id],              # the matching node mapping's id
+  #             job_level: comp.level,              # the compensation level (as stored in career_compensation)
+  #             job_order: exit_job.job_order         # the job_order from the career_job record
+  #           }
+  #           # Add this opportunity to the array for the current industry.
+  #           dynamic_mapping[industry] << exit_opportunity unless dynamic_mapping[industry].include?(exit_opportunity)
+  #         end
+  #       end
+  #     end
+  #   end
     
-    render json: dynamic_mapping
-  end
+  #   render json: dynamic_mapping
+  # end
   
   
   
@@ -515,31 +515,64 @@ class CareerDataController < ApplicationController
   
   
 
+  def exit_opportunities_mapping
+    exit_opps = ExitOpportunityMapping.all.group_by(&:source_category)
+    
+    mapped_exits = exit_opps.transform_values do |opportunities|
+      opportunities.map do |opp|
+        # Find the matching node from node_mapping
+        mapping = node_mapping.find do |nm|
+          nm[:industry] == opp.target_industry &&
+          nm[:names].any? { |name| name.strip.downcase == opp.target_node_name.strip.downcase }
+        end
+        
+        if mapping
+          {
+            node_id: mapping[:id],
+            likelihood: opp.likelihood
+          }
+        end
+      end.compact
+    end
+    
+    Rails.logger.debug "Exit Opportunities Mapping: #{mapped_exits.inspect}"
+    render json: mapped_exits
+  end
+  
+  
+
   private
 
   def node_mapping
     [
+      # Hedge Fund (now first)
+      { id: 11, names: ["Junior Analyst"], level: 1, industry: "Hedge Fund" },
+      { id: 12, names: ["Research Associate"], level: 2, industry: "Hedge Fund" },
+      { id: 13, names: ["Fund Analyst"], level: 3, industry: "Hedge Fund" },
+      { id: 14, names: ["Sector Head"], level: 4, industry: "Hedge Fund" },
+      { id: 15, names: ["Portfolio Manager"], level: 5, industry: "Hedge Fund" },
+
       # Venture Capital
       { id: 1, names: ["Analyst"], level: 1, industry: "Venture Capital" },
       { id: 2, names: ["Pre-MBA associate"], level: 2, industry: "Venture Capital" },
       { id: 3, names: ["Senior associate"], level: 3, industry: "Venture Capital" },
       { id: 4, names: ["Principal"], level: 4, industry: "Venture Capital" },
       { id: 5, names: ["Partner"], level: 5, industry: "Venture Capital" },
-  
+
+      # Private Credit
+      { id: 41, names: ["Analyst"], level: 1, industry: "Private Credit" },
+      { id: 42, names: ["Associate"], level: 2, industry: "Private Credit" },
+      { id: 43, names: ["Vice president"], level: 3, industry: "Private Credit" },
+      { id: 44, names: ["Principal"], level: 4, industry: "Private Credit" },
+      { id: 45, names: ["Partner"], level: 5, industry: "Private Credit" },
+
       # Private Equity
       { id: 6, names: ["Analyst"], level: 1, industry: "Private Equity" },
       { id: 7, names: ["Associate"], level: 2, industry: "Private Equity" },
       { id: 8, names: ["Vice president"], level: 3, industry: "Private Equity" },
       { id: 9, names: ["Principal"], level: 4, industry: "Private Equity" },
       { id: 10, names: ["Partner"], level: 5, industry: "Private Equity" },
-  
-      # Hedge Fund
-      { id: 11, names: ["Junior Analyst"], level: 1, industry: "Hedge Fund" },
-      { id: 12, names: ["Research Associate"], level: 2, industry: "Hedge Fund" },
-      { id: 13, names: ["Fund Analyst"], level: 3, industry: "Hedge Fund" },
-      { id: 14, names: ["Sector Head"], level: 4, industry: "Hedge Fund" },
-      { id: 15, names: ["Portfolio Manager"], level: 5, industry: "Hedge Fund" },
-  
+
       # Investment Banking
       { id: 16, names: ["Analyst"], level: 1, industry: "Investment Banking" },
       { id: 17, names: ["Associate"], level: 2, industry: "Investment Banking" },

@@ -1,0 +1,104 @@
+<div class="modal fade" id="nodeModal" tabindex="-1" aria-labelledby="nodeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="nodeModalLabel">Exit Opportunities</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Original Details in Accordion -->
+        <div class="accordion mb-3" id="detailsAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#detailsCollapse">
+                Details
+              </button>
+            </h2>
+            <div id="detailsCollapse" class="accordion-collapse collapse" data-bs-parent="#detailsAccordion">
+              <div class="accordion-body">
+                <p><strong>Industry:</strong> <span id="modal-industry"></span></p>
+                <p><strong>Level:</strong> <span id="modal-level"></span></p>
+                <p><strong>Number of Records:</strong> <span id="modal-record-count"></span></p>
+                <p><strong>Average Salary:</strong> $<span id="modal-avg-salary"></span></p>
+                <p><strong>Average Bonus:</strong> $<span id="modal-avg-bonus"></span></p>
+                <p><strong>Average Total Compensation:</strong> $<span id="modal-avg-total-comp"></span></p>
+                <p><strong>Average Compensation per Hour:</strong> $<span id="modal-avg-comp-per-hour"></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Companies Accordion -->
+        <div class="accordion" id="companiesAccordion">
+          <!-- Apollo -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#apolloCollapse">
+                Apollo Global Management
+              </button>
+            </h2>
+            <div id="apolloCollapse" class="accordion-collapse collapse" data-bs-parent="#companiesAccordion">
+              <div class="accordion-body">
+                <div style="max-height: 200px; overflow-y: auto;">
+                  <p class="mb-2"><strong>Goldman Sachs</strong> - TMT Investment Banking</p>
+                  <p class="mb-2"><strong>Morgan Stanley</strong> - M&A Advisory</p>
+                  <p class="mb-2"><strong>JPMorgan</strong> - Technology Coverage</p>
+                  <p class="mb-2"><strong>Credit Suisse</strong> - Leveraged Finance</p>
+                  <p class="mb-2"><strong>Evercore</strong> - Technology M&A</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blackstone -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#blackstoneCollapse">
+                Blackstone
+              </button>
+            </h2>
+            <div id="blackstoneCollapse" class="accordion-collapse collapse" data-bs-parent="#companiesAccordion">
+              <div class="accordion-body">
+                <div style="max-height: 200px; overflow-y: auto;">
+                  <p class="mb-2"><strong>Goldman Sachs</strong> - Real Estate Investment Banking</p>
+                  <p class="mb-2"><strong>Morgan Stanley</strong> - Real Estate Group</p>
+                  <p class="mb-2"><strong>Bank of America</strong> - Real Estate Coverage</p>
+                  <p class="mb-2"><strong>Eastdil Secured</strong> - Investment Sales</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KKR -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#kkrCollapse">
+                KKR
+              </button>
+            </h2>
+            <div id="kkrCollapse" class="accordion-collapse collapse" data-bs-parent="#companiesAccordion">
+              <div class="accordion-body">
+                <div style="max-height: 200px; overflow-y: auto;">
+                  <p class="mb-2"><strong>Goldman Sachs</strong> - Financial Institutions Group</p>
+                  <p class="mb-2"><strong>Morgan Stanley</strong> - Private Equity Coverage</p>
+                  <p class="mb-2"><strong>JPMorgan</strong> - Financial Sponsors</p>
+                  <p class="mb-2"><strong>Lazard</strong> - M&A Advisory</p>
+                  <p class="mb-2"><strong>Evercore</strong> - Private Capital Advisory</p>
+                  <p class="mb-2"><strong>PJT Partners</strong> - Strategic Advisory</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+console.log(data);
+</script>
