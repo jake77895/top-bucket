@@ -1,0 +1,58 @@
+
+
+<div class="container mt-4">
+  <!-- Filters Section -->
+  <%= render 'employment_reports/filters/filters' %>
+  
+  <!-- Summary Section -->
+  <%= render 'employment_reports/summary/summary' %>
+  
+  <!-- Chart Section -->
+  <%= render 'employment_reports/chart/chart' %>
+</div>
+
+<%= content_for :head do %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<% end %>
+
+<%= content_for :javascript do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Chart.js initialization for industry breakdown
+      const industryCtx = document.getElementById('industryChart').getContext('2d');
+      new Chart(industryCtx, {
+          type: 'pie',
+          data: {
+              labels: ['Consulting', 'Finance', 'Technology', 'Other'],
+              datasets: [{
+                  data: [35, 25, 20, 20],
+                  backgroundColor: [
+                      '#007bff',
+                      '#28a745',
+                      '#ffc107',
+                      '#dc3545'
+                  ]
+              }]
+          }
+      });
+
+      // Chart.js initialization for geographic distribution
+      const geoCtx = document.getElementById('geographyChart').getContext('2d');
+      new Chart(geoCtx, {
+          type: 'pie',
+          data: {
+              labels: ['Northeast US', 'West Coast', 'International', 'Other US'],
+              datasets: [{
+                  data: [45, 30, 15, 10],
+                  backgroundColor: [
+                      '#007bff',
+                      '#28a745',
+                      '#ffc107',
+                      '#dc3545'
+                  ]
+              }]
+          }
+      });
+    });
+  </script>
+<% end %>

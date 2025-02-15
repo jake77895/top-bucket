@@ -1,0 +1,67 @@
+<div class="row">
+  <!-- Industry Breakdown -->
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-dark text-white">
+        <h3 class="mb-0">Industry Breakdown</h3>
+      </div>
+      <div class="card-body">
+        <canvas id="industryChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Geographic Distribution -->
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-dark text-white">
+        <h3 class="mb-0">Geographic Distribution</h3>
+      </div>
+      <div class="card-body">
+        <canvas id="geographyChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= content_for :javascript do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Chart.js initialization for industry breakdown
+      const industryCtx = document.getElementById('industryChart').getContext('2d');
+      new Chart(industryCtx, {
+          type: 'pie',
+          data: {
+              labels: ['Consulting', 'Finance', 'Technology', 'Other'],
+              datasets: [{
+                  data: [35, 25, 20, 20],
+                  backgroundColor: [
+                      '#007bff',
+                      '#28a745',
+                      '#ffc107',
+                      '#dc3545'
+                  ]
+              }]
+          }
+      });
+
+      // Chart.js initialization for geographic distribution
+      const geoCtx = document.getElementById('geographyChart').getContext('2d');
+      new Chart(geoCtx, {
+          type: 'pie',
+          data: {
+              labels: ['Northeast US', 'West Coast', 'International', 'Other US'],
+              datasets: [{
+                  data: [45, 30, 15, 10],
+                  backgroundColor: [
+                      '#007bff',
+                      '#28a745',
+                      '#ffc107',
+                      '#dc3545'
+                  ]
+              }]
+          }
+      });
+    });
+  </script>
+<% end %> 
