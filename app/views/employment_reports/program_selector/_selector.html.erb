@@ -1,0 +1,89 @@
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <!-- Program Type Toggle -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="btn-group w-100" role="group" aria-label="Program Type Toggle">
+          <input type="radio" class="btn-check" name="program-type" id="mba" autocomplete="off" checked>
+          <label class="btn btn-outline-dark" for="mba">MBA Programs</label>
+
+          <input type="radio" class="btn-check" name="program-type" id="undergrad" autocomplete="off">
+          <label class="btn btn-outline-dark" for="undergrad">Undergraduate Programs</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Program Selection -->
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Select Program</label>
+        <select class="form-select" id="program-select">
+          <!-- MBA Programs (shown by default) -->
+          <option value="harvard">Harvard Business School</option>
+          <option value="stanford">Stanford GSB</option>
+          <option value="wharton">Wharton</option>
+          <option value="booth">Chicago Booth</option>
+          <option value="sloan">MIT Sloan</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded');
+    
+    const programSelect = document.getElementById('program-select');
+    const mbaToggle = document.getElementById('mba');
+    const undergradToggle = document.getElementById('undergrad');
+    
+    console.log('Elements found:', {
+      programSelect: !!programSelect,
+      mbaToggle: !!mbaToggle,
+      undergradToggle: !!undergradToggle
+    });
+
+    // MBA programs options
+    const mbaPrograms = [
+      { value: 'harvard', text: 'Harvard Business School' },
+      { value: 'stanford', text: 'Stanford GSB' },
+      { value: 'wharton', text: 'Wharton' },
+      { value: 'booth', text: 'Chicago Booth' },
+      { value: 'sloan', text: 'MIT Sloan' }
+    ];
+
+    // Undergraduate programs options
+    const undergradPrograms = [
+      { value: 'harvard_college', text: 'Harvard College' },
+      { value: 'stanford_university', text: 'Stanford University' },
+      { value: 'upenn', text: 'UPenn' },
+      { value: 'princeton', text: 'Princeton University' },
+      { value: 'mit', text: 'MIT' }
+    ];
+
+    function updateProgramOptions(programs) {
+      console.log('Updating program options with:', programs);
+      programSelect.innerHTML = '';
+      programs.forEach(program => {
+        const option = new Option(program.text, program.value);
+        programSelect.add(option);
+      });
+    }
+
+    // Event listeners for toggle buttons
+    mbaToggle.addEventListener('change', function() {
+      console.log('MBA toggle changed, checked:', this.checked);
+      if (this.checked) updateProgramOptions(mbaPrograms);
+    });
+
+    undergradToggle.addEventListener('change', function() {
+      console.log('Undergrad toggle changed, checked:', this.checked);
+      if (this.checked) updateProgramOptions(undergradPrograms);
+    });
+
+    // Initialize with MBA programs
+    console.log('Initializing with MBA programs');
+    updateProgramOptions(mbaPrograms);
+  });
+</script> 

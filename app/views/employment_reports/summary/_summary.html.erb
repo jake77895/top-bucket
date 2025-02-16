@@ -4,41 +4,219 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <!-- Salary Statistics -->
-      <div class="col-md-4 mb-3">
+      <!-- Offer Rate Statistics -->
+      <div class="col-md-3 mb-3">
         <div class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">Salary Statistics</h5>
-            <p><strong>Median Starting Salary:</strong> $150,000</p>
-            <p><strong>Mean Starting Salary:</strong> $155,000</p>
-            <p><strong>Salary Range:</strong> $95,000 - $225,000</p>
+            <h5 class="card-title">Offer Rate</h5>
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Total Graduates
+                <span class="text-muted">
+                  <strong>825</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Seeking Employment
+                <span class="text-muted">
+                  <strong>780</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Job Offer Rate
+                <span class="text-muted">
+                  <strong>98%</strong>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Employment Rates -->
-      <div class="col-md-4 mb-3">
+      <!-- Top Functions -->
+      <div class="col-md-3 mb-3">
         <div class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">Employment Rates</h5>
-            <p><strong>At Graduation:</strong> 85%</p>
-            <p><strong>3 Months Post-Grad:</strong> 95%</p>
-            <p><strong>Received Offers:</strong> 98%</p>
+            <h5 class="card-title">Top Functions</h5>
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Investment Banking
+                <span class="text-muted">
+                  <strong>245</strong> (31%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Consulting
+                <span class="text-muted">
+                  <strong>198</strong> (25%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Private Equity
+                <span class="text-muted">
+                  <strong>156</strong> (20%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Product Management
+                <span class="text-muted">
+                  <strong>102</strong> (13%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Corporate Finance
+                <span class="text-muted">
+                  <strong>87</strong> (11%)
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Compensation -->
-      <div class="col-md-4 mb-3">
+      <!-- Top Employers -->
+      <div class="col-md-3 mb-3">
         <div class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">Total Compensation</h5>
-            <p><strong>Median Signing Bonus:</strong> $30,000</p>
-            <p><strong>Mean Total Comp:</strong> $185,000</p>
-            <p><strong>Bonus Range:</strong> $15,000 - $50,000</p>
+            <h5 class="card-title d-flex justify-content-between align-items-center">
+              Top Employers
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="ibOnlyToggle">
+                <label class="form-check-label small" for="ibOnlyToggle">IB Only</label>
+              </div>
+            </h5>
+            <div class="list-group list-group-flush" id="employersList">
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Goldman Sachs
+                <span class="text-muted">
+                  <strong>45</strong> (6%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                McKinsey
+                <span class="text-muted">
+                  <strong>42</strong> (5%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Morgan Stanley
+                <span class="text-muted">
+                  <strong>38</strong> (5%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                JPMorgan
+                <span class="text-muted">
+                  <strong>35</strong> (4%)
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Bain
+                <span class="text-muted">
+                  <strong>32</strong> (4%)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Breakdown -->
+      <div class="col-md-3 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Hired By Location</h5>
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                United States
+                <span class="text-muted">
+                  <strong>85%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
+                Northeast
+                <span class="text-muted">
+                  <strong>45%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
+                Midwest
+                <span class="text-muted">
+                  <strong>8%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
+                West
+                <span class="text-muted">
+                  <strong>15%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
+                Southwest
+                <span class="text-muted">
+                  <strong>5%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
+                South
+                <span class="text-muted">
+                  <strong>7%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
+                Mid-Atlantic
+                <span class="text-muted">
+                  <strong>5%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                International
+                <span class="text-muted">
+                  <strong>15%</strong>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ibOnlyToggle = document.getElementById('ibOnlyToggle');
+    const employersList = document.getElementById('employersList');
+    
+    const allEmployers = [
+      { name: 'Goldman Sachs', count: 45, percent: 6, isIB: true },
+      { name: 'McKinsey', count: 42, percent: 5, isIB: false },
+      { name: 'Morgan Stanley', count: 38, percent: 5, isIB: true },
+      { name: 'JPMorgan', count: 35, percent: 4, isIB: true },
+      { name: 'Bain', count: 32, percent: 4, isIB: false }
+    ];
+
+    const ibEmployers = [
+      { name: 'Goldman Sachs', count: 45, percent: 6, isIB: true },
+      { name: 'Morgan Stanley', count: 38, percent: 5, isIB: true },
+      { name: 'JPMorgan', count: 35, percent: 4, isIB: true },
+      { name: 'Bank of America', count: 30, percent: 4, isIB: true },
+      { name: 'Citi', count: 28, percent: 3, isIB: true }
+    ];
+
+    function updateEmployersList(employers) {
+      employersList.innerHTML = employers.map(employer => `
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          ${employer.name}
+          <span class="text-muted">
+            <strong>${employer.count}</strong> (${employer.percent}%)
+          </span>
+        </div>
+      `).join('');
+    }
+
+    ibOnlyToggle.addEventListener('change', function() {
+      updateEmployersList(this.checked ? ibEmployers : allEmployers);
+    });
+  });
+</script> 

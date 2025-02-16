@@ -1,19 +1,84 @@
 
 
 <div class="container mt-4">
-  <!-- Filters Section -->
-  <%= render 'employment_reports/filters/filters' %>
+
+<!-- Card Header with Back Button -->
+  <div class="card shadow-sm position-relative mb-4">
+    <!-- Back Button -->
+    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light position-relative">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
+        <%= "Employments Report #{@year}" %>
+      </h1>
+      <p class="text-muted"><%= "Compare programs by offer rate, industry placement, and so much more" %></p>
+    </div>
+  </div>
+
+  <!-- Program Type Selection -->
+  <%= render 'employment_reports/program_selector/selector' %>
+  
+
   
   <!-- Summary Section -->
   <%= render 'employment_reports/summary/summary' %>
+
+      <!-- Filter Button -->
+  <div class="card shadow-sm mb-4">
+
+      <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#filtersModal">
+        <i class="bi bi-funnel"></i> Filters
+      </button>
+
+  </div>
+
+
   
   <!-- Chart Section -->
   <%= render 'employment_reports/chart/chart' %>
-</div>
 
-<%= content_for :head do %>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<% end %>
+
+  
+  <!-- Filters Modal -->
+  <div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-0">
+          <div class="mb-3">
+            <label class="form-label">Industry</label>
+            <select class="form-select" id="industry-filter">
+              <option value="consulting">Consulting</option>
+              <option value="finance">Finance</option>
+              <option value="technology">Technology</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Region</label>
+            <select class="form-select" id="region-filter">
+              <option value="">All Regions</option>
+              <option value="northeast">Northeast US</option>
+              <option value="west">West Coast</option>
+              <option value="international">International</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="applyFilters">Apply Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%= content_for :javascript do %>
   <script>

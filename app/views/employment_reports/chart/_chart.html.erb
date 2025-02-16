@@ -24,6 +24,103 @@
   </div>
 </div>
 
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-dark text-white">
+    <h3 class="mb-0">School Comparison</h3>
+  </div>
+  <div class="card-body" style="height: 400px;">
+    <canvas id="schoolComparisonChart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Register the annotation plugin
+  Chart.register(ChartAnnotation);
+  
+  const ctx = document.getElementById('schoolComparisonChart').getContext('2d');
+  
+  // Dummy data
+  const data = {
+    labels: ['Harvard', 'Wharton', 'Stanford', 'Columbia', 'Chicago Booth', 'MIT Sloan', 'Northwestern Kellogg', 'Berkeley Haas'],
+    values: [98, 97, 96, 95, 94, 93, 92, 91],
+    average: 94.5,
+    selectedSchool: 'Harvard'  // This would be dynamic based on selection
+  };
+
+  // Create gradient for the selected school
+  const selectedSchoolColor = ctx.createLinearGradient(0, 0, 0, 400);
+  selectedSchoolColor.addColorStop(0, '#007bff');
+  selectedSchoolColor.addColorStop(1, '#0056b3');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.labels,
+      datasets: [{
+        data: data.values,
+        backgroundColor: data.labels.map(label => 
+          label === data.selectedSchool ? selectedSchoolColor : '#e9ecef'
+        ),
+        borderWidth: 0,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        annotation: {
+          annotations: {
+            line1: {
+              type: 'line',
+              xMin: data.average,
+              xMax: data.average,
+              borderColor: '#dc3545',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              label: {
+                content: `Average: ${data.average}%`,
+                display: true,
+                position: 'start'
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            display: false
+          }
+        },
+        x: {
+          beginAtZero: true,
+          grid: {
+            color: '#f0f0f0'
+          },
+          min: 85,  // Start scale at 85%
+          max: 100, // End at 100%
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+
 <%= content_for :javascript do %>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -64,4 +161,8 @@
       });
     });
   </script>
+
+  <%= content_for :head do %>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <% end %>
 <% end %> 
