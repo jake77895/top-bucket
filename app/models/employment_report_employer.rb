@@ -8,7 +8,9 @@
 #  alixpartners         :boolean
 #  alvarez_marsal       :boolean
 #  amazon               :boolean
+#  amgen                :boolean          default(FALSE)
 #  analysis_group       :boolean
+#  apple                :boolean          default(FALSE)
 #  bain                 :boolean
 #  bank_of_america      :boolean
 #  barclays             :boolean
@@ -28,13 +30,18 @@
 #  guggenheim           :boolean
 #  hershey              :boolean
 #  jefferies            :boolean
+#  johnson_and_johnson  :boolean          default(FALSE)
 #  jpmorgan             :boolean
 #  kearney              :boolean
+#  kimberly_clark       :boolean          default(FALSE)
+#  kraft_heinz          :boolean          default(FALSE)
 #  lazard               :boolean
 #  lek                  :boolean
 #  mckinsey             :boolean
+#  mcmaster_carr        :boolean          default(FALSE)
 #  microsoft            :boolean
 #  morgan_stanley       :boolean
+#  nike                 :boolean          default(FALSE)
 #  oliver_wyman         :boolean
 #  parthenon            :boolean
 #  pepsico              :boolean

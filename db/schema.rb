@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_16_023643) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_16_193541) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -130,6 +130,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_16_023643) do
     t.index ["undergraduate_school_id"], name: "index_employees_on_undergraduate_school_id"
   end
 
+  create_table "employment_report_details", force: :cascade do |t|
+    t.bigint "employment_report_id", null: false
+    t.string "metric"
+    t.decimal "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employment_report_id"], name: "index_employment_report_details_on_employment_report_id"
+  end
+
   create_table "employment_report_employers", force: :cascade do |t|
     t.bigint "employment_report_id", null: false
     t.boolean "bcg"
@@ -179,23 +188,28 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_16_023643) do
     t.boolean "hershey"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "amgen", default: false
+    t.boolean "apple", default: false
+    t.boolean "johnson_and_johnson", default: false
+    t.boolean "kimberly_clark", default: false
+    t.boolean "kraft_heinz", default: false
+    t.boolean "mcmaster_carr", default: false
+    t.boolean "nike", default: false
     t.index ["employment_report_id"], name: "index_employment_report_employers_on_employment_report_id"
   end
 
-  create_table "employment_report_functions", force: :cascade do |t|
+  create_table "employment_report_industries", id: :bigint, default: -> { "nextval('employment_report_functions_id_seq'::regclass)" }, force: :cascade do |t|
     t.bigint "employment_report_id", null: false
     t.decimal "consulting"
-    t.decimal "corporate_strategy"
     t.decimal "investment_banking"
-    t.decimal "investment_management"
     t.decimal "private_equity"
-    t.decimal "real_estate"
     t.decimal "venture_capital"
     t.decimal "marketing"
-    t.decimal "brand_management"
-    t.decimal "product_management_tech"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "diversified_financial"
+    t.decimal "investment_management"
+    t.decimal "technology"
     t.index ["employment_report_id"], name: "index_employment_report_functions_on_employment_report_id"
   end
 
@@ -227,6 +241,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_16_023643) do
     t.decimal "job_offers_3_months"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "average_salary"
     t.index ["employment_report_id"], name: "index_employment_report_overviews_on_employment_report_id"
   end
 
@@ -577,8 +592,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_16_023643) do
   add_foreign_key "employees", "locations"
   add_foreign_key "employees", "schools", column: "graduate_school_id"
   add_foreign_key "employees", "schools", column: "undergraduate_school_id"
+  add_foreign_key "employment_report_details", "employment_reports"
   add_foreign_key "employment_report_employers", "employment_reports"
-  add_foreign_key "employment_report_functions", "employment_reports"
+  add_foreign_key "employment_report_industries", "employment_reports"
   add_foreign_key "employment_report_locations", "employment_reports"
   add_foreign_key "employment_report_overviews", "employment_reports"
   add_foreign_key "employment_reports", "employment_report_programs"

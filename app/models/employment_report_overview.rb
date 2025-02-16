@@ -3,6 +3,7 @@
 # Table name: employment_report_overviews
 #
 #  id                     :bigint           not null, primary key
+#  average_salary         :integer
 #  class_size             :integer
 #  continuing_education   :decimal(, )
 #  job_offers_3_months    :decimal(, )
