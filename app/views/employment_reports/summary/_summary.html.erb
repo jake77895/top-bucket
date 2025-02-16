@@ -34,6 +34,12 @@
                   <strong><%= ((@overview.seeking_employment * @overview.job_offers_3_months / 100.0) / @overview.class_size * 100).round(1) %>%</strong>
                 </span>
               </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Average Salary
+                <span class="text-muted">
+                  <strong>$<%= number_with_delimiter(@overview.average_salary.to_i) %></strong>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -43,7 +49,7 @@
       <div class="col-lg-3 col-12 mb-3">
         <div class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">Top Functions</h5>
+            <h5 class="card-title">Top Industries/Functions</h5>
             <div class="list-group list-group-flush">
               <% @industries.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
                            .sort_by { |_, value| -value.to_f }
@@ -51,7 +57,7 @@
                 <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                   <%= industry.titleize.gsub('_', ' ') %>
                   <span class="text-muted">
-                    <strong><%= (@overview.class_size * percentage / 100).round %></strong> 
+                    <strong><%= (@overview.seeking_employment * percentage / 100).round %></strong> 
                     (<%= percentage.round %>%)
                   </span>
                 </div>
@@ -91,7 +97,8 @@
                     'unitedhealth' => 'UnitedHealth',
                     'eli_lilly' => 'Eli Lilly',
                     'alvarez_marsal' => 'Alvarez & Marsal',
-                    'wells_fargo' => 'Wells Fargo'
+                    'wells_fargo' => 'Wells Fargo',
+                    'mcmaster_carr' => 'McMaster Carr'
                   }
                   
                   original_name = name.downcase

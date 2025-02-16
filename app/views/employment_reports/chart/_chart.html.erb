@@ -2,7 +2,13 @@
   <div class="card shadow-sm mb-4">
     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center w-100">
       <h3 class="mb-0">School Comparison</h3>
-      <span class="text-light"><%= params[:metric]&.titleize&.gsub('Job Offer Rate', 'Seeking Job Offer Rate') || 'Seeking Job Offer Rate' %></span>
+      <span class="text-light"><%= 
+        if params[:metric] == 'average_salary'
+          'Average Salary'
+        else
+          params[:metric]&.titleize&.gsub('Job Offer Rate', 'Seeking Job Offer Rate') || 'Seeking Job Offer Rate'
+        end
+      %></span>
     </div>
     <div class="card-body" style="height: 500px; padding: 20px;">
       <canvas id="schoolComparisonChart"></canvas>
@@ -88,6 +94,9 @@ document.addEventListener('DOMContentLoaded', function() {
               size: 12
             },
             callback: function(value) {
+              if (window.location.search.includes('metric=average_salary')) {
+                return '$' + value.toLocaleString();
+              }
               return value + '%';
             }
           }

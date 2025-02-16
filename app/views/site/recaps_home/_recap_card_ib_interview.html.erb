@@ -6,7 +6,7 @@
         <h6 class="font-weight-bold mb-0" style="font-size: 0.9rem;">
           <%= recap_card[:name] %>
           <span class="text-muted" style="font-size: 0.75rem;">•</span>
-          <span style="font-size: 0.75rem; color: gray;"><%= recap_card[:recaps] %> Recaps</span>
+          <span style="font-size: 0.75rem; color: gray;"><%= pluralize(recap_card[:recaps], 'Recap') %></span>
         </h6>
         <span class="badge badge-pill badge-primary" style="font-size: 0.7rem; background-color: var(--bs-primary) !important; color: white !important;">
           <%= recap_card[:tag] %>

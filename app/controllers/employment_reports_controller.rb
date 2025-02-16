@@ -69,6 +69,10 @@ class EmploymentReportsController < ApplicationController
           [p.name, total_rate]
         end
       }
+    when 'average_salary'
+      programs.map { |p|
+        [p.name, p.employment_reports.last&.employment_report_overview&.average_salary]
+      }
     else # Handle location metrics
       programs.map { |p|
         [p.name, p.employment_reports.last&.employment_report_location&.send(metric)]
