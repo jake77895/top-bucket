@@ -199,8 +199,8 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   const defaultColor = "#6F6F6F";
   const highlightStroke = "#102B3F";
   const defaultStroke = "#ccc";
-  const likelyExitColor = "#c5effc";      // Light blue for likely exits (likelihood: 1)
-  const possibleExitColor = "#e8f7fc";    // Very light blue for possible exits (likelihood: 2)
+  const likelyExitColor = "#7ac1ff";      // Darker blue for likely exits
+  const possibleExitColor = "#e6f4ff";    // Keeping the light blue for possible exits
 
     // Mapping of exit opportunities by category.
   // For Investment Banking, node with id 7 (Private Equity Associate) is considered an exit opportunity.
@@ -211,6 +211,7 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
     .select("#chart")
     .append("svg")
     .attr("id", "career-tree")
+    
     .attr("width", width)
     .attr("height", 750)
     .style("font-family", "Arial");
