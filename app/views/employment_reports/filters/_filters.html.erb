@@ -1,29 +1,58 @@
-<div class="card shadow-sm mb-4">
-  <div class="card-header bg-dark text-white">
-    <h3 class="mb-0">Filters</h3>
-  </div>
-  <div class="card-body">
-    <div class="row">
-      <!-- Add your filter controls here -->
-      <div class="col-md-4 mb-3">
-        <label class="form-label">Industry</label>
-        <select class="form-select" id="industry-filter">
-          <option value="">All Industries</option>
-          <option value="consulting">Consulting</option>
-          <option value="finance">Finance</option>
-          <option value="technology">Technology</option>
-        </select>
+<div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="filtersModalLabel">Select Metric</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      
-      <div class="col-md-4 mb-3">
-        <label class="form-label">Region</label>
-        <select class="form-select" id="region-filter">
-          <option value="">All Regions</option>
-          <option value="northeast">Northeast US</option>
-          <option value="west">West Coast</option>
-          <option value="international">International</option>
-        </select>
+      <div class="modal-body pt-0">
+        <%= form_with url: employment_report_path(@report), method: :get, data: { controller: "filters", action: "submit->filters#update" } do |f| %>
+          <div class="mb-3">
+            <label class="form-label">Metric</label>
+            <%= f.select :metric, 
+                options_for_select([
+                  ['Job Offer Rate', 'job_offer_rate'],
+                  ['Total Offer Rate', 'total_offer_rate'],
+                  ['Consulting', 'consulting'],
+                  ['Investment Banking', 'investment_banking'],
+                  # Add other functions dynamically
+                  *@functions.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at', 'consulting', 'investment_banking')
+                            .keys.map { |f| [f.titleize, f] },
+                  # Add locations dynamically
+                  *@locations.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                            .keys.map { |l| [l.titleize, l] }
+                ]), 
+                { selected: params[:metric] },
+                class: "form-select" 
+            %>
+          </div>
+
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Close</button>
+            <%= f.submit "Apply", class: "btn btn-primary" %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('filters:update', function(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    fetch(form.action + '?' + new URLSearchParams(formData), {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Assuming you have a chart instance called myChart
+      window.myChart.data = data;
+      window.myChart.update();
+    });
+  });
+<% end %> 

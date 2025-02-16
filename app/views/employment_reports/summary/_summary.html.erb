@@ -13,19 +13,25 @@
               <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                 Total Graduates
                 <span class="text-muted">
-                  <strong>825</strong>
+                  <strong><%= @overview.class_size %></strong>
                 </span>
               </div>
               <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                 Seeking Employment
                 <span class="text-muted">
-                  <strong>780</strong>
+                  <strong><%= @overview.seeking_employment.round %></strong>
                 </span>
               </div>
               <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                 Job Offer Rate
                 <span class="text-muted">
-                  <strong>98%</strong>
+                  <strong><%= @overview.job_offers_3_months %>%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Total Offer Rate
+                <span class="text-muted">
+                  <strong><%= ((@overview.seeking_employment * @overview.job_offers_3_months / 100.0) / @overview.class_size * 100).round(1) %>%</strong>
                 </span>
               </div>
             </div>
@@ -39,36 +45,17 @@
           <div class="card-body">
             <h5 class="card-title">Top Functions</h5>
             <div class="list-group list-group-flush">
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Investment Banking
-                <span class="text-muted">
-                  <strong>245</strong> (31%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Consulting
-                <span class="text-muted">
-                  <strong>198</strong> (25%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Private Equity
-                <span class="text-muted">
-                  <strong>156</strong> (20%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Product Management
-                <span class="text-muted">
-                  <strong>102</strong> (13%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Corporate Finance
-                <span class="text-muted">
-                  <strong>87</strong> (11%)
-                </span>
-              </div>
+              <% @functions.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                           .sort_by { |_, value| -value.to_f }
+                           .first(5).each do |function, percentage| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <%= function.titleize.gsub('_', ' ') %>
+                  <span class="text-muted">
+                    <strong><%= (@overview.class_size * percentage / 100).round %></strong> 
+                    (<%= percentage.round %>%)
+                  </span>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -85,37 +72,58 @@
                 <label class="form-check-label small" for="ibOnlyToggle">IB Only</label>
               </div>
             </h5>
-            <div class="list-group list-group-flush" id="employersList">
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Goldman Sachs
-                <span class="text-muted">
-                  <strong>45</strong> (6%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                McKinsey
-                <span class="text-muted">
-                  <strong>42</strong> (5%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Morgan Stanley
-                <span class="text-muted">
-                  <strong>38</strong> (5%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                JPMorgan
-                <span class="text-muted">
-                  <strong>35</strong> (4%)
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Bain
-                <span class="text-muted">
-                  <strong>32</strong> (4%)
-                </span>
-              </div>
+            <div class="list-group list-group-flush" id="employersList" style="max-height: 300px; overflow-y: auto;">
+              <% 
+                def format_company_name(name)
+                  special_cases = {
+                    'bcg' => 'BCG',
+                    'jpmorgan' => 'JP Morgan',
+                    'mckinsey' => 'McKinsey',
+                    'lek' => 'LEK',
+                    'ubs' => 'UBS',
+                    'pwc' => 'PwC',
+                    'pg' => 'P&G',
+                    'goldman_sachs' => 'Goldman Sachs',
+                    'morgan_stanley' => 'Morgan Stanley',
+                    'bank_of_america' => 'Bank of America',
+                    'capital_one' => 'Capital One',
+                    'oliver_wyman' => 'Oliver Wyman',
+                    'unitedhealth' => 'UnitedHealth',
+                    'eli_lilly' => 'Eli Lilly',
+                    'alvarez_marsal' => 'Alvarez & Marsal',
+                    'wells_fargo' => 'Wells Fargo'
+                  }
+                  
+                  original_name = name.downcase
+                  return special_cases[original_name] if special_cases[original_name]
+                  
+                  name.split('_')
+                      .map { |word| word.capitalize }
+                      .join(' ')
+                end
+
+                ib_employers = [
+                  'goldman_sachs',
+                  'morgan_stanley',
+                  'jpmorgan',
+                  'bank_of_america',
+                  'citigroup',
+                  'barclays',
+                  'ubs',
+                  'jefferies',
+                  'evercore',
+                  'lazard',
+                  'guggenheim'
+                ]
+              %>
+              
+              <% @employers.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                          .select { |_, value| value }
+                          .each do |employer, _| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <%= format_company_name(employer) %>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -127,54 +135,15 @@
           <div class="card-body">
             <h5 class="card-title">Hired By Location</h5>
             <div class="list-group list-group-flush">
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                United States
-                <span class="text-muted">
-                  <strong>85%</strong>
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
-                Northeast
-                <span class="text-muted">
-                  <strong>45%</strong>
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
-                Midwest
-                <span class="text-muted">
-                  <strong>8%</strong>
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
-                West
-                <span class="text-muted">
-                  <strong>15%</strong>
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
-                Southwest
-                <span class="text-muted">
-                  <strong>5%</strong>
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
-                South
-                <span class="text-muted">
-                  <strong>7%</strong>
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0 ps-2">
-                Mid-Atlantic
-                <span class="text-muted">
-                  <strong>5%</strong>
-                </span>
-              </div>
-              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                International
-                <span class="text-muted">
-                  <strong>15%</strong>
-                </span>
-              </div>
+              <% @locations.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                          .each do |location, percentage| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0 <%= 'ps-2' unless location == 'united_states' || location == 'international' %>">
+                  <%= location.titleize.gsub('_', ' ') %>
+                  <span class="text-muted">
+                    <strong><%= percentage.round %>%</strong>
+                  </span>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -188,35 +157,73 @@
     const ibOnlyToggle = document.getElementById('ibOnlyToggle');
     const employersList = document.getElementById('employersList');
     
-    const allEmployers = [
-      { name: 'Goldman Sachs', count: 45, percent: 6, isIB: true },
-      { name: 'McKinsey', count: 42, percent: 5, isIB: false },
-      { name: 'Morgan Stanley', count: 38, percent: 5, isIB: true },
-      { name: 'JPMorgan', count: 35, percent: 4, isIB: true },
-      { name: 'Bain', count: 32, percent: 4, isIB: false }
+    // Define which employers are Investment Banks
+    const ibEmployers = [
+      'goldman_sachs',
+      'morgan_stanley',
+      'jpmorgan',
+      'bank_of_america',
+      'citigroup',
+      'barclays',
+      'ubs',
+      'jefferies',
+      'evercore',
+      'lazard',
+      'guggenheim'
     ];
 
-    const ibEmployers = [
-      { name: 'Goldman Sachs', count: 45, percent: 6, isIB: true },
-      { name: 'Morgan Stanley', count: 38, percent: 5, isIB: true },
-      { name: 'JPMorgan', count: 35, percent: 4, isIB: true },
-      { name: 'Bank of America', count: 30, percent: 4, isIB: true },
-      { name: 'Citi', count: 28, percent: 3, isIB: true }
-    ];
+    // Company name formatting function
+    function formatCompanyName(name) {
+      const specialCases = {
+        'bcg': 'BCG',
+        'jpmorgan': 'JP Morgan',
+        'mckinsey': 'McKinsey',
+        'lek': 'LEK',
+        'ubs': 'UBS',
+        'pwc': 'PwC',
+        'pg': 'P&G',
+        'goldman_sachs': 'Goldman Sachs',
+        'morgan_stanley': 'Morgan Stanley',
+        'bank_of_america': 'Bank of America',
+        'capital_one': 'Capital One',
+        'oliver_wyman': 'Oliver Wyman',
+        'unitedhealth': 'UnitedHealth',
+        'eli_lilly': 'Eli Lilly',
+        'alvarez_marsal': 'Alvarez & Marsal',
+        'wells_fargo': 'Wells Fargo'
+      };
+
+      const originalName = name.toLowerCase().replace(/\s+/g, '_');
+      if (specialCases[originalName]) {
+        return specialCases[originalName];
+      }
+      
+      return name.split('_')
+                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                 .join(' ');
+    }
+    
+    const allEmployers = <%= raw @employers.attributes
+                                         .except('id', 'employment_report_id', 'created_at', 'updated_at')
+                                         .select { |_, value| value }
+                                         .map { |name, _| { 
+                                           name: format_company_name(name), 
+                                           original_name: name,
+                                           isIB: ib_employers.include?(name)
+                                         }}.to_json %>;
+
+    const ibOnlyEmployers = allEmployers.filter(e => e.isIB);
 
     function updateEmployersList(employers) {
       employersList.innerHTML = employers.map(employer => `
-        <div class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="list-group-item d-flex justify-content-between align-items-center px-0">
           ${employer.name}
-          <span class="text-muted">
-            <strong>${employer.count}</strong> (${employer.percent}%)
-          </span>
         </div>
       `).join('');
     }
 
     ibOnlyToggle.addEventListener('change', function() {
-      updateEmployersList(this.checked ? ibEmployers : allEmployers);
+      updateEmployersList(this.checked ? ibOnlyEmployers : allEmployers);
     });
   });
 </script> 

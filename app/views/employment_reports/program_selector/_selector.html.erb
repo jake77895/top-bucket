@@ -4,10 +4,10 @@
     <div class="row mb-4">
       <div class="col-12">
         <div class="btn-group w-100" role="group" aria-label="Program Type Toggle">
-          <input type="radio" class="btn-check" name="program-type" id="mba" autocomplete="off" checked>
+          <input type="radio" class="btn-check" name="program-type" id="mba" value="MBA" <%= 'checked' if params[:type] != 'Undergrad' %>>
           <label class="btn btn-outline-dark" for="mba">MBA Programs</label>
 
-          <input type="radio" class="btn-check" name="program-type" id="undergrad" autocomplete="off">
+          <input type="radio" class="btn-check" name="program-type" id="undergrad" value="Undergrad" <%= 'checked' if params[:type] == 'Undergrad' %>>
           <label class="btn btn-outline-dark" for="undergrad">Undergraduate Programs</label>
         </div>
       </div>
@@ -17,14 +17,17 @@
     <div class="row">
       <div class="col-12">
         <label class="form-label">Select Program</label>
-        <select class="form-select" id="program-select">
-          <!-- MBA Programs (shown by default) -->
-          <option value="harvard">Harvard Business School</option>
-          <option value="stanford">Stanford GSB</option>
-          <option value="wharton">Wharton</option>
-          <option value="booth">Chicago Booth</option>
-          <option value="sloan">MIT Sloan</option>
-        </select>
+        <%= select_tag :program_id, 
+            options_from_collection_for_select(
+              @programs.where(program_type: params[:type] || 'MBA'), 
+              :id, 
+              :name, 
+              @selected_program&.id
+            ),
+            class: 'form-select',
+            id: 'program-select',
+            prompt: 'Select a program'
+        %>
       </div>
     </div>
   </div>
@@ -32,58 +35,23 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded');
-    
     const programSelect = document.getElementById('program-select');
-    const mbaToggle = document.getElementById('mba');
-    const undergradToggle = document.getElementById('undergrad');
+    const typeToggles = document.querySelectorAll('input[name="program-type"]');
     
-    console.log('Elements found:', {
-      programSelect: !!programSelect,
-      mbaToggle: !!mbaToggle,
-      undergradToggle: !!undergradToggle
-    });
-
-    // MBA programs options
-    const mbaPrograms = [
-      { value: 'harvard', text: 'Harvard Business School' },
-      { value: 'stanford', text: 'Stanford GSB' },
-      { value: 'wharton', text: 'Wharton' },
-      { value: 'booth', text: 'Chicago Booth' },
-      { value: 'sloan', text: 'MIT Sloan' }
-    ];
-
-    // Undergraduate programs options
-    const undergradPrograms = [
-      { value: 'harvard_college', text: 'Harvard College' },
-      { value: 'stanford_university', text: 'Stanford University' },
-      { value: 'upenn', text: 'UPenn' },
-      { value: 'princeton', text: 'Princeton University' },
-      { value: 'mit', text: 'MIT' }
-    ];
-
-    function updateProgramOptions(programs) {
-      console.log('Updating program options with:', programs);
-      programSelect.innerHTML = '';
-      programs.forEach(program => {
-        const option = new Option(program.text, program.value);
-        programSelect.add(option);
+    // When program type changes, filter the programs
+    typeToggles.forEach(toggle => {
+      toggle.addEventListener('change', function() {
+        // If we have a selected program, use that, otherwise use the first program
+        const programId = programSelect.value || '<%= @programs.first&.id %>';
+        window.location.href = `/employment_reports/${programId}?type=${this.value}`;
       });
-    }
-
-    // Event listeners for toggle buttons
-    mbaToggle.addEventListener('change', function() {
-      console.log('MBA toggle changed, checked:', this.checked);
-      if (this.checked) updateProgramOptions(mbaPrograms);
     });
 
-    undergradToggle.addEventListener('change', function() {
-      console.log('Undergrad toggle changed, checked:', this.checked);
-      if (this.checked) updateProgramOptions(undergradPrograms);
+    // When program changes
+    programSelect.addEventListener('change', function() {
+      if (this.value) {
+        window.location.href = `/employment_reports/${this.value}?type=${document.querySelector('input[name="program-type"]:checked').value}`;
+      }
     });
-
-    // Initialize with MBA programs
-    console.log('Initializing with MBA programs');
-    updateProgramOptions(mbaPrograms);
   });
 </script> 
