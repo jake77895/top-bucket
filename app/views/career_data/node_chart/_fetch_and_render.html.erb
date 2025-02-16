@@ -32,18 +32,17 @@ function normalizeNodeCoordinates(nodeDataMap, svgWidth, svgHeight, margin = 50)
 document.addEventListener("DOMContentLoaded", () => {
   const fetchNodes = fetch("/nodes_data").then((response) => response.json());
   const fetchLinks = fetch("/link_data").then((response) => response.json());
-  const fetchExitOpportunities = fetch("/exit_opportunities")
-                                  .then((response) => response.json());
+  const fetchExitOpportunities = fetch("/exit_opportunities_mapping")
+                                .then((response) => response.json());
 
   Promise.all([fetchNodes, fetchLinks, fetchExitOpportunities])
-     .then(([nodesData, linkData, fetchedExitMapping]) => {
-    console.log("Nodes, links, and exit opportunities data fetched successfully.");
-    console.log("Exit Opportunities Mapping:", fetchedExitMapping);
-    
-    // Correct assignment:
-    exitOpportunitiesMapping = fetchedExitMapping;
-    console.log("exitOpportunitiesMapping in fetch and render:", exitOpportunitiesMapping);
-    
+    .then(([nodesData, linkData, fetchedExitMapping]) => {
+      console.log("Nodes, links, and exit opportunities data fetched successfully.");
+      console.log("Exit Opportunities Mapping:", fetchedExitMapping);
+      
+      exitOpportunitiesMapping = fetchedExitMapping;
+      console.log("exitOpportunitiesMapping in fetch and render:", exitOpportunitiesMapping);
+      
       // Create a map of node data
       const nodeDataMap = nodesData.reduce((map, node) => {
         map[node.id] = node;

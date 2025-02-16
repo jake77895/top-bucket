@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_14_183703) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_16_023643) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -128,6 +128,130 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_183703) do
     t.index ["name"], name: "index_employees_on_name"
     t.index ["previous_company_id"], name: "index_employees_on_previous_company_id"
     t.index ["undergraduate_school_id"], name: "index_employees_on_undergraduate_school_id"
+  end
+
+  create_table "employment_report_employers", force: :cascade do |t|
+    t.bigint "employment_report_id", null: false
+    t.boolean "bcg"
+    t.boolean "mckinsey"
+    t.boolean "bain"
+    t.boolean "amazon"
+    t.boolean "goldman_sachs"
+    t.boolean "jpmorgan"
+    t.boolean "bank_of_america"
+    t.boolean "citigroup"
+    t.boolean "deloitte"
+    t.boolean "lek"
+    t.boolean "capital_one"
+    t.boolean "parthenon"
+    t.boolean "tiktok"
+    t.boolean "evercore"
+    t.boolean "google"
+    t.boolean "morgan_stanley"
+    t.boolean "guggenheim"
+    t.boolean "lazard"
+    t.boolean "samsung"
+    t.boolean "ubs"
+    t.boolean "walmart"
+    t.boolean "kearney"
+    t.boolean "oliver_wyman"
+    t.boolean "alixpartners"
+    t.boolean "analysis_group"
+    t.boolean "pwc"
+    t.boolean "accenture"
+    t.boolean "alvarez_marsal"
+    t.boolean "wells_fargo"
+    t.boolean "barclays"
+    t.boolean "jefferies"
+    t.boolean "visa"
+    t.boolean "blackarch"
+    t.boolean "vanguard"
+    t.boolean "dell"
+    t.boolean "adobe"
+    t.boolean "microsoft"
+    t.boolean "davita"
+    t.boolean "unitedhealth"
+    t.boolean "cigna"
+    t.boolean "eli_lilly"
+    t.boolean "pg"
+    t.boolean "pepsico"
+    t.boolean "conagra"
+    t.boolean "hershey"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employment_report_id"], name: "index_employment_report_employers_on_employment_report_id"
+  end
+
+  create_table "employment_report_functions", force: :cascade do |t|
+    t.bigint "employment_report_id", null: false
+    t.decimal "consulting"
+    t.decimal "corporate_strategy"
+    t.decimal "investment_banking"
+    t.decimal "investment_management"
+    t.decimal "private_equity"
+    t.decimal "real_estate"
+    t.decimal "venture_capital"
+    t.decimal "marketing"
+    t.decimal "brand_management"
+    t.decimal "product_management_tech"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employment_report_id"], name: "index_employment_report_functions_on_employment_report_id"
+  end
+
+  create_table "employment_report_locations", force: :cascade do |t|
+    t.bigint "employment_report_id", null: false
+    t.decimal "united_states"
+    t.decimal "northeast"
+    t.decimal "midwest"
+    t.decimal "west"
+    t.decimal "southwest"
+    t.decimal "south"
+    t.decimal "mid_atlantic"
+    t.decimal "international"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employment_report_id"], name: "index_employment_report_locations_on_employment_report_id"
+  end
+
+  create_table "employment_report_overviews", force: :cascade do |t|
+    t.bigint "employment_report_id", null: false
+    t.integer "class_size"
+    t.decimal "seeking_employment"
+    t.decimal "not_seeking_employment"
+    t.decimal "sponsored"
+    t.decimal "starting_own_business"
+    t.decimal "continuing_education"
+    t.decimal "postponing_job_search"
+    t.decimal "not_seeking_other"
+    t.decimal "job_offers_3_months"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employment_report_id"], name: "index_employment_report_overviews_on_employment_report_id"
+  end
+
+  create_table "employment_report_programs", force: :cascade do |t|
+    t.string "name"
+    t.string "program_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "employment_reports", force: :cascade do |t|
+    t.bigint "employment_report_program_id", null: false
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employment_report_program_id"], name: "index_employment_reports_on_employment_report_program_id"
+  end
+
+  create_table "exit_opportunity_mappings", force: :cascade do |t|
+    t.string "source_category"
+    t.string "target_node_name"
+    t.integer "likelihood"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "target_industry"
   end
 
   create_table "flags", force: :cascade do |t|
@@ -453,6 +577,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_14_183703) do
   add_foreign_key "employees", "locations"
   add_foreign_key "employees", "schools", column: "graduate_school_id"
   add_foreign_key "employees", "schools", column: "undergraduate_school_id"
+  add_foreign_key "employment_report_employers", "employment_reports"
+  add_foreign_key "employment_report_functions", "employment_reports"
+  add_foreign_key "employment_report_locations", "employment_reports"
+  add_foreign_key "employment_report_overviews", "employment_reports"
+  add_foreign_key "employment_reports", "employment_report_programs"
   add_foreign_key "flags", "users"
   add_foreign_key "form_templates", "position_types"
   add_foreign_key "forum_comments", "posts"

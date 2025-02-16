@@ -1,8 +1,8 @@
 <body class="bg-light">
   <div class="container-fluid py-4">
-    <div class="row d-flex flex-nowrap" style="min-height: 90vh;">
+    <div class="row d-flex" style="min-height: 90vh; margin-bottom: 70px;">
       <!-- Left Column -->
-      <div class="col-lg-3 col-md-4 col-sm-12 d-flex flex-column">
+      <div class="col-xxl-3 d-none d-xxl-flex flex-column">
         <div class="card mb-3 ms-3 shadow-sm border-0" style="min-height: 388px;">
           <div class="card-body text-center p-3">
             <div class="d-flex justify-content-between">
@@ -29,7 +29,7 @@
       </div>
 
       <!-- Middle Column -->
-      <div class="col-lg-6 col-md-8 col-sm-12 d-flex flex-column">
+      <div class="col-12 col-xxl-6">
         <div class="row gx-3 gy-0">
           <!-- Top Cards -->
           <div class="col-md-6">
@@ -62,7 +62,7 @@
           </div>
         </div>
         <div class="row mt-3">
-          <div class="col-12 d-flex flex-column">
+          <div class="col-12">
             <div class="card shadow-sm border-0" style="min-height: 476px; overflow: hidden;">
               <div class="card-body">
                 <div class="d-flex justify-content-between">
@@ -81,7 +81,7 @@
       </div>
 
       <!-- Right Column -->
-      <div class="col-lg-3 col-md-4 col-sm-12 d-flex flex-column">
+      <div class="col-12 col-xxl-3 mt-3 mt-xxl-0">
         <div class="card mb-4 me-3 shadow-sm border-0" style="min-height: 300px;">
           <div class="card-body text-center pb-0 m-0">
             <div class="d-flex justify-content-between">
@@ -93,13 +93,15 @@
           <%= render partial: 'site/recaps_home/list_of_recap_cards' %>
 
         </div>
-        <div class="card mb-4 me-3 shadow-sm border-0" style="min-height: 150px; background-color: #0D1B2A; color: white;">
+        <div class="card mb-4 me-3 shadow-sm border-0" style="min-height: 200px; background-color: #0D1B2A; color: white;">
           <div class="card-body text-center">
-            <h5 class="text-start" style="font-size: 0.7rem;">Interview Question of the Day</h5>
-            <hr class="m-0" style="opacity: 0.5; border-color: white;">
-            <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+            <h5 class="text-start mb-2" style="font-size: 0.7rem;">Interview Question of the Day</h5>
+            <hr class="mb-2" style="opacity: 0.5; border-color: white;">
+            <div class="d-flex justify-content-center align-items-center" style="height: 120px;">
               <% if @question_of_the_day.present? && @question_of_the_day.question_text.present? %>
-                <p style="text-align: center; margin: 0;"><%= @question_of_the_day.question_text %></p>
+                <p style="text-align: center; margin: 0; padding: 0 15px;">
+                  <%= truncate(@question_of_the_day.question_text, length: 200, separator: ' ') %>
+                </p>
               <% end %>
             </div>
           </div>
@@ -107,11 +109,10 @@
         <div class="card me-3 shadow-sm border-0" style="min-height: 220px;">
           <div class="card-body text-center d-flex flex-column justify-content-between align-items-center">
             <%= render 'site/questions_home/answer_choices' %>
-            <%= link_to "See All Questions", question_packets_path, class: "btn btn-dark rounded-pill w-100", style: "background-color: #0D1B2A;" %>
+            <%= link_to "See All Questions", question_packets_path, class: "btn btn-dark rounded-pill w-100 mt-3", style: "background-color: #0D1B2A;" %>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -160,7 +161,7 @@
   document.addEventListener("nodesRendered", function () {
     const chart = document.getElementById("chart");
     if (chart) {
-      chart.scrollLeft = chart.scrollWidth / 4.5; // Center horizontally
+      chart.scrollLeft = chart.scrollWidth / 3.5; // Center horizontally at exactly halfway
       chart.scrollTop = chart.scrollHeight / 23; // Center vertically (if needed)
     }
   });

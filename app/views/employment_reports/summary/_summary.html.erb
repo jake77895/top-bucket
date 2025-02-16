@@ -1,0 +1,236 @@
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-dark text-white">
+    <h3 class="mb-0">Employment Outcomes Summary</h3>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <!-- Offer Rate Statistics -->
+      <div class="col-lg-3 col-12 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Offer Rate</h5>
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Total Graduates
+                <span class="text-muted">
+                  <strong><%= @overview.class_size %></strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Seeking Employment
+                <span class="text-muted">
+                  <strong><%= @overview.seeking_employment.round %></strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Seeking Job Offer Rate
+                <span class="text-muted">
+                  <strong><%= @overview.job_offers_3_months.round(1) %>%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Total Offer Rate
+                <span class="text-muted">
+                  <strong><%= ((@overview.seeking_employment * @overview.job_offers_3_months / 100.0) / @overview.class_size * 100).round(1) %>%</strong>
+                </span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Average Salary
+                <span class="text-muted">
+                  <strong>$<%= number_with_delimiter(@overview.average_salary.to_i) %></strong>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Functions -->
+      <div class="col-lg-3 col-12 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Top Industries/Functions</h5>
+            <div class="list-group list-group-flush">
+              <% @industries.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                           .sort_by { |_, value| -value.to_f }
+                           .first(5).each do |industry, percentage| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <%= industry.titleize.gsub('_', ' ') %>
+                  <span class="text-muted">
+                    <strong><%= (@overview.seeking_employment * percentage / 100).round %></strong> 
+                    (<%= percentage.round %>%)
+                  </span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Employers -->
+      <div class="col-lg-3 col-12 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title d-flex justify-content-between align-items-center">
+              Top Employers
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="ibOnlyToggle">
+                <label class="form-check-label small" for="ibOnlyToggle">IB Only</label>
+              </div>
+            </h5>
+            <div class="list-group list-group-flush" id="employersList" style="max-height: 300px; overflow-y: auto;">
+              <% 
+                def format_company_name(name)
+                  special_cases = {
+                    'bcg' => 'BCG',
+                    'jpmorgan' => 'JP Morgan',
+                    'mckinsey' => 'McKinsey',
+                    'lek' => 'LEK',
+                    'ubs' => 'UBS',
+                    'pwc' => 'PwC',
+                    'pg' => 'P&G',
+                    'goldman_sachs' => 'Goldman Sachs',
+                    'morgan_stanley' => 'Morgan Stanley',
+                    'bank_of_america' => 'Bank of America',
+                    'capital_one' => 'Capital One',
+                    'oliver_wyman' => 'Oliver Wyman',
+                    'unitedhealth' => 'UnitedHealth',
+                    'eli_lilly' => 'Eli Lilly',
+                    'alvarez_marsal' => 'Alvarez & Marsal',
+                    'wells_fargo' => 'Wells Fargo',
+                    'mcmaster_carr' => 'McMaster Carr'
+                  }
+                  
+                  original_name = name.downcase
+                  return special_cases[original_name] if special_cases[original_name]
+                  
+                  name.split('_')
+                      .map { |word| word.capitalize }
+                      .join(' ')
+                end
+
+                ib_employers = [
+                  'goldman_sachs',
+                  'morgan_stanley',
+                  'jpmorgan',
+                  'bank_of_america',
+                  'citigroup',
+                  'barclays',
+                  'ubs',
+                  'jefferies',
+                  'evercore',
+                  'lazard',
+                  'guggenheim'
+                ]
+              %>
+              
+              <% @employers.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                          .select { |_, value| value }
+                          .each do |employer, _| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <%= format_company_name(employer) %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Breakdown -->
+      <div class="col-lg-3 col-12 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Hired By Location</h5>
+            <div class="list-group list-group-flush">
+              <% @locations.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                          .each do |location, percentage| %>
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0 <%= 'ps-2' unless location == 'united_states' || location == 'international' %>">
+                  <%= location.titleize.gsub('_', ' ') %>
+                  <span class="text-muted">
+                    <strong><%= percentage.round %>%</strong>
+                  </span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ibOnlyToggle = document.getElementById('ibOnlyToggle');
+    const employersList = document.getElementById('employersList');
+    
+    // Define which employers are Investment Banks
+    const ibEmployers = [
+      'goldman_sachs',
+      'morgan_stanley',
+      'jpmorgan',
+      'bank_of_america',
+      'citigroup',
+      'barclays',
+      'ubs',
+      'jefferies',
+      'evercore',
+      'lazard',
+      'guggenheim'
+    ];
+
+    // Company name formatting function
+    function formatCompanyName(name) {
+      const specialCases = {
+        'bcg': 'BCG',
+        'jpmorgan': 'JP Morgan',
+        'mckinsey': 'McKinsey',
+        'lek': 'LEK',
+        'ubs': 'UBS',
+        'pwc': 'PwC',
+        'pg': 'P&G',
+        'goldman_sachs': 'Goldman Sachs',
+        'morgan_stanley': 'Morgan Stanley',
+        'bank_of_america': 'Bank of America',
+        'capital_one': 'Capital One',
+        'oliver_wyman': 'Oliver Wyman',
+        'unitedhealth': 'UnitedHealth',
+        'eli_lilly': 'Eli Lilly',
+        'alvarez_marsal': 'Alvarez & Marsal',
+        'wells_fargo': 'Wells Fargo'
+      };
+
+      const originalName = name.toLowerCase().replace(/\s+/g, '_');
+      if (specialCases[originalName]) {
+        return specialCases[originalName];
+      }
+      
+      return name.split('_')
+                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                 .join(' ');
+    }
+    
+    const allEmployers = <%= raw @employers.attributes
+                                         .except('id', 'employment_report_id', 'created_at', 'updated_at')
+                                         .select { |_, value| value }
+                                         .map { |name, _| { 
+                                           name: format_company_name(name), 
+                                           original_name: name,
+                                           isIB: ib_employers.include?(name)
+                                         }}.to_json %>;
+
+    const ibOnlyEmployers = allEmployers.filter(e => e.isIB);
+
+    function updateEmployersList(employers) {
+      employersList.innerHTML = employers.map(employer => `
+        <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+          ${employer.name}
+        </div>
+      `).join('');
+    }
+
+    ibOnlyToggle.addEventListener('change', function() {
+      updateEmployersList(this.checked ? ibOnlyEmployers : allEmployers);
+    });
+  });
+</script> 

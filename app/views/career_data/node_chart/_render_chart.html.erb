@@ -2,6 +2,17 @@
 function renderChart(nodesData, nodeDataMap, linkdata) {
 const data = [
   {
+    category: "Hedge Fund",
+    nodes: [
+      { id: 11, name: "Junior Analyst", level: 1 },
+      { id: 12, name: "Research Associate", level: 2 },
+      { id: 13, name: "Fund Analyst", level: 3 },
+      { id: 14, name: "Sector Head", level: 4 },
+      { id: 15, name: "Portfolio Manager", level: 5 },
+    ],
+    links: [],
+  },
+  {
     category: "Venture Capital",
     nodes: [
       { id: 1, name: "Analyst", level: 1 },
@@ -10,7 +21,18 @@ const data = [
       { id: 4, name: "Principal", level: 4 },
       { id: 5, name: "Partner", level: 5 },
     ],
-      links: [],
+    links: [],
+  },
+  {
+    category: "Private Credit",
+    nodes: [
+      { id: 41, name: "Analyst", level: 1 },
+      { id: 42, name: "Associate", level: 2 },
+      { id: 43, name: "Vice president", level: 3 },
+      { id: 44, name: "Principal", level: 4 },
+      { id: 45, name: "Partner", level: 5 },
+    ],
+    links: [],
   },
   {
     category: "Private Equity",
@@ -20,17 +42,6 @@ const data = [
       { id: 8, name: "Vice president", level: 3 },
       { id: 9, name: "Principal", level: 4 },
       { id: 10, name: "Partner", level: 5 },
-    ],
-    links: [],
-  },
-  {
-    category: "Hedge Fund",
-    nodes: [
-      { id: 11, name: "Junior Analyst", level: 1 },
-      { id: 12, name: "Research Associate", level: 2 },
-      { id: 13, name: "Fund Analyst", level: 3 },
-      { id: 14, name: "Sector Head", level: 4 },
-      { id: 15, name: "Portfolio Manager", level: 5 },
     ],
     links: [],
   },
@@ -91,6 +102,20 @@ const data = [
   },
 ];
 
+// At the start of your renderChart function, reorder the data array
+data.sort((a, b) => {
+  const order = {
+    "Hedge Fund": 1,
+    "Venture Capital": 2,
+    "Private Credit": 3,
+    "Private Equity": 4,
+    "Investment Banking": 5,
+    "Corporate Development": 6,
+    "Investment Management": 7,
+    "FP&A": 8
+  };
+  return (order[a.category] || 999) - (order[b.category] || 999);
+});
 
   // Ensure links are rendered only if data exists
 // Function to render links based on provided link data
@@ -174,8 +199,8 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   const defaultColor = "#6F6F6F";
   const highlightStroke = "#102B3F";
   const defaultStroke = "#ccc";
-  const exitOpportunityColor = "#c5effc";  // exit opportunity fill color
-  const exitOpportunityStroke = "#102B3F";   // exit opportunity stroke color
+  const likelyExitColor = "#c5effc";      // Light blue for likely exits (likelihood: 1)
+  const possibleExitColor = "#e8f7fc";    // Very light blue for possible exits (likelihood: 2)
 
     // Mapping of exit opportunities by category.
   // For Investment Banking, node with id 7 (Private Equity Associate) is considered an exit opportunity.
@@ -211,22 +236,21 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   d3.selectAll(".node").select("circle")
     .attr("fill", function () {
       const nodeData = d3.select(this).datum();
-      const isPrimary = categoryData.nodes.some((n) => n.id === nodeData.id);
-      const exitMapping = exitOpportunitiesMapping[categoryData.category];
-      const isExit = exitMapping && exitMapping.some(exitObj => exitObj.node_id === nodeData.id);
       
-      console.log("Button for:", categoryData.category);
-      console.log("Node Data:", nodeData);
-      console.log("isPrimary:", isPrimary);
-      console.log("exitMapping:", exitMapping);
-      console.log("isExit:", isExit);
+      // Check if this is a primary node for the current category
+      const isPrimary = categoryData.nodes.some((n) => n.id === nodeData.id);
+      
+      // Find matching exit opportunity
+      const exitOpp = exitOpportunitiesMapping[categoryData.category]?.find(exit => 
+        exit.node_id === nodeData.id
+      );
       
       if (isPrimary) {
-        return highlightColor;
-      } else if (isExit) {
-        return exitOpportunityColor;
+        return highlightColor;  // White for primary nodes
+      } else if (exitOpp) {
+        return exitOpp.likelihood === 1 ? likelyExitColor : possibleExitColor;  // Different blues for exit nodes
       } else {
-        return defaultColor;
+        return defaultColor;  // Grey for other nodes
       }
     })
     .attr("stroke", function () {
@@ -377,39 +401,55 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
         .attr("opacity", 1); // Ensure it is visible
 
         group.style("cursor", "pointer").on("click", () => {
-                const nodeData = nodeDataMap[d.id] || {}; // Get data or empty object
-                // Update modal content
-                document.getElementById("modal-industry").textContent = nodeData.industry || "N/A";
-                document.getElementById("modal-level").textContent = nodeData.name || "N/A";
-                document.getElementById("modal-record-count").textContent = nodeData.record_count || "0";
-                document.getElementById("modal-avg-salary").textContent = `$${Math.round(nodeData.salary || 0).toLocaleString()}`;
-                document.getElementById("modal-avg-bonus").textContent = `$${Math.round(nodeData.bonus || 0).toLocaleString()}`;
-                document.getElementById("modal-avg-total-comp").textContent = `$${Math.round(nodeData.total_comp || 0).toLocaleString()}`;
-                document.getElementById("modal-avg-comp-per-hour").textContent = `$${Math.round(nodeData.comp_per_hour || 0).toLocaleString()}`;
+    const nodeData = nodeDataMap[d.id] || {}; // Get data or empty object
+    
+    // Check if this node is an exit opportunity in any category
+    const isExit = Object.values(exitOpportunitiesMapping).some(categoryExits => 
+        categoryExits.some(exit => exit.node_id === d.id)
+    );
+    
+    console.log("Node data:", nodeData);
+    console.log("Is exit node:", isExit);
 
+    // Update modal content
+    document.getElementById("modal-industry").textContent = nodeData.industry || "N/A";
+    document.getElementById("modal-level").textContent = nodeData.name || "N/A";
+    document.getElementById("modal-record-count").textContent = nodeData.record_count || "0";
+    document.getElementById("modal-avg-salary").textContent = `$${Math.round(nodeData.salary || 0).toLocaleString()}`;
+    document.getElementById("modal-avg-bonus").textContent = `$${Math.round(nodeData.bonus || 0).toLocaleString()}`;
+    document.getElementById("modal-avg-total-comp").textContent = `$${Math.round(nodeData.total_comp || 0).toLocaleString()}`;
+    document.getElementById("modal-avg-comp-per-hour").textContent = `$${Math.round(nodeData.comp_per_hour || 0).toLocaleString()}`;
 
-                  // Show the modal using Bootstrap
-                  new bootstrap.Modal(document.getElementById("nodeModal")).show();
-              });
+    // Show the appropriate modal
+    const modalId = isExit ? "nodeModalExits" : "nodeModal";
+    const modal = new bootstrap.Modal(document.getElementById(modalId));
+    modal.show();
+});
     });
 
-    // Find the Investment Banking category data from the data array
+    // After your initial node creation and before the category click handlers
+    // Initialize with Investment Banking selected
     const investmentBankingData = data.find(d => d.category === "Investment Banking");
-
     if (investmentBankingData) {
-      // Update the nodes immediately on page load
       d3.selectAll(".node").select("circle")
         .attr("fill", function () {
           const nodeData = d3.select(this).datum();
-          return investmentBankingData.nodes.some((n) => n.id === nodeData.id)
-            ? highlightColor
-            : defaultColor;
-        })
-        .attr("stroke", function () {
-          const nodeData = d3.select(this).datum();
-          return investmentBankingData.nodes.some((n) => n.id === nodeData.id)
-            ? highlightStroke
-            : defaultStroke;
+          
+          // Check if this is a primary node
+          const isPrimary = investmentBankingData.nodes.some((n) => n.id === nodeData.id);
+          
+          // Find matching exit opportunity
+          const exitOpp = exitOpportunitiesMapping["Investment Banking"]?.find(exit => 
+            exit.node_id === nodeData.id
+          );
+          
+          if (isPrimary) {
+            return highlightColor;
+          } else if (exitOpp) {
+            return exitOpp.likelihood === 1 ? likelyExitColor : possibleExitColor;
+          } else {
+            return defaultColor;
+          }
         });
     }
 
@@ -419,6 +459,18 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   });
 
   
+
+  // Add this at the end of your renderChart function, just before the chartRendered event
+  document.addEventListener("chartRendered", () => {
+    // Get the chart container
+    const chartContainer = document.getElementById("chart");
+    
+    // Calculate halfway point of the scroll width
+    const halfwayPoint = (chartContainer.scrollWidth - chartContainer.clientWidth) / 2;
+    
+    // Set the scroll position
+    chartContainer.scrollLeft = halfwayPoint;
+  });
 
   document.dispatchEvent(new Event("chartRendered"));
 }

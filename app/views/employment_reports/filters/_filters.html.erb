@@ -1,0 +1,66 @@
+<div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filtersModalLabel">Select Metric</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with url: employment_report_path(@report), method: :get, data: { controller: "filters", action: "submit->filters#update" } do |f| %>
+          <%= hidden_field_tag :id, params[:id] %>
+          <%= hidden_field_tag :type, params[:type] || 'MBA' %>
+          
+          <div class="mb-3">
+            <%= f.select :metric, 
+                options_for_select([
+                  ['Offer Rates', nil, { disabled: true }],
+                  ['Seeking Offer Rate', 'job_offer_rate'],
+                  ['Total Offer Rate', 'total_offer_rate'],
+                  ['Average Salary', 'average_salary'],
+                  ['Industries', nil, { disabled: true }],
+                  ['Consulting', 'consulting'],
+                  ['Investment Banking', 'investment_banking'],
+                  ['Diversified Financial', 'diversified_financial'],
+                  ['Investment Management', 'investment_management'],
+                  ['Private Equity', 'private_equity'],
+                  ['Venture Capital', 'venture_capital'],
+                  ['Marketing', 'marketing'],
+                  ['Technology', 'technology'],
+                  ['Locations', nil, { disabled: true }],
+                  *@locations.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+                           .map { |location, _| [location.titleize.gsub('_', ' '), location] }
+                ], params[:metric]), 
+                { prompt: "Select a metric" },
+                class: "form-select" 
+            %>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <%= link_to "Clear Filter", employment_report_path(@report, id: params[:id], type: params[:type]), 
+                class: "btn btn-outline-secondary" %>
+            <%= f.submit "Apply", class: "btn btn-dark" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('filters:update', function(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    fetch(form.action + '?' + new URLSearchParams(formData), {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      window.myChart.data = data;
+      window.myChart.update();
+    });
+  });
+<% end %> 

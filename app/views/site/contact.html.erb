@@ -1,157 +1,404 @@
-<body class="bg-light">
-  <div class="container-fluid py-4">
-    <div class="row g-3">
-      <!-- Left Column -->
-      <div class="col-lg-3 col-md-12">
-        <div class="card mb-3 ms-lg-3 shadow-sm border-0" style="min-height: 388px;">
-          <div class="card-body text-center p-3">
-            <div class="d-flex justify-content-between">
-              <h5 class="text-start m-2">Top Bucket</h5>
-              <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
-            </div>
-            <%= render partial: 'site/ratings_home/list_of_rating_cards_tb' %>
-          </div>
-        </div>
-        <div class="card mb-3 ms-lg-3 shadow-sm border-0" style="min-height: 388px;">
-          <div class="card-body text-center p-3">
-            <div class="d-flex justify-content-between">
-              <h5 class="text-start m-2">Bottom Bucket</h5>
-              <%= link_to "View all", tier_lists_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
-            </div>
-            <%= render partial: 'site/ratings_home/list_of_rating_cards_bb' %>
-          </div>
-        </div>
-      </div>
-
-      <!-- Middle Column -->
-      <div class="col-lg-6 col-md-12">
-        <div class="row gx-3">
-          <!-- Mock Interview Card -->
-          <div class="col-md-6 mb-3">
-            <div class="card shadow-sm border-0" style="min-height: 300px;">
-              <div class="card-body d-flex justify-content-center align-items-center">
-                <div class="d-flex flex-column align-items-center text-center" style="width: 300px;">
-                  <div class="mb-5" style="margin-top: -30px;">
-                    <%= render partial: 'site/mocks_home/overlapping_images_mocks' %>
-                  </div>
-                  <h5>Mock Interview Meeting Board</h5>
-                  <p style="font-size: 0.8rem;">Practice mock interviews with peers pursuing similar career paths.</p>
-                  <%= link_to 'Book a Mock', meeting_board_mock_interviews_path, class: 'btn btn-dark rounded-pill py-1 mt-2', style: 'width: 100%; background-color: #0D1B2A;' %>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Career Coach Card -->
-          <div class="col-md-6 mb-3">
-            <div class="card shadow-sm border-0" style="min-height: 300px;">
-              <div class="card-body d-flex justify-content-center align-items-center">
-                <div class="d-flex flex-column align-items-center text-center" style="width: 300px;">
-                  <div class="mb-5" style="margin-top: -30px;">
-                    <%= render partial: 'site/mocks_home/overlapping_images_coaches' %>
-                  </div>
-                  <h5>Career Coach Scheduling</h5>
-                  <p style="font-size: 0.8rem;">Work with a coach who's succeeded in some of the world's most competitive interviews.</p>
-                  <%= link_to 'Book a Session', interview_coaches_index_path, class: 'btn btn-dark rounded-pill py-1 mt-2', style: 'width: 100%; background-color: #0D1B2A;' %>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Career Details Chart -->
-          <div class="col-12">
-            <div class="card shadow-sm border-0" style="min-height: 476px; overflow: hidden;">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="text-start m-2">Career Details and Common Exit Opportunities</h5>
-                  <%= link_to 'See Details', career_datum_path(id: 1), class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
-                </div>
-                <hr class="m-0 mb-2 text-muted" style="opacity: 0.1;">
-                <div id="chart" style="height: 390px; overflow-x: auto; white-space: nowrap;" class="w-100">
-                  <!-- Chart will be rendered here -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column -->
-      <div class="col-lg-3 col-md-12">
-        <div class="card mb-3 me-lg-3 shadow-sm border-0" style="min-height: 300px;">
-          <div class="card-body text-center pb-0 m-0">
-            <div class="d-flex justify-content-between">
-              <h5 class="text-start">Networking & Interview Recaps</h5>
-              <%= link_to "View all", employee_views_path, class: "text-end m-2 text-dark text-decoration-none", style: "font-size: 0.8rem;" %>
-            </div>
-            <hr class="m-0 text-muted" style="opacity: 0.1;">
-          </div>
-          <%= render partial: 'site/recaps_home/list_of_recap_cards' %>
-        </div>
-        <div class="card mb-3 me-lg-3 shadow-sm border-0" style="min-height: 150px; background-color: #0D1B2A; color: white;">
-          <div class="card-body text-center">
-            <h5 class="text-start" style="font-size: 0.7rem;">Interview Question of the Day</h5>
-            <hr class="m-0" style="opacity: 0.5; border-color: white;">
-            <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-              <% if @question_of_the_day.present? && @question_of_the_day.question_text.present? %>
-                <p style="text-align: center; margin: 0;"><%= @question_of_the_day.question_text %></p>
-              <% end %>
-            </div>
-          </div>
-        </div>
-        <div class="card me-lg-3 shadow-sm border-0" style="min-height: 220px;">
-          <div class="card-body text-center d-flex flex-column justify-content-between align-items-center">
-            <%= render 'site/questions_home/answer_choices' %>
-            <%= link_to "See All Questions", question_packets_path, class: "btn btn-dark rounded-pill w-100", style: "background-color: #0D1B2A;" %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-    <!-- Footer -->
-  <div style="
-  background-color: #0D1B2A; 
-  color: #fff; 
-  text-align: center; 
-  padding: 0; 
-  position: fixed; 
-  bottom: 0; 
-  left: 0; 
-  right: 0; 
-  z-index: 1000; 
-  border-top: 0px solid #0D1B2A; 
-  height: 50px; 
-  display: flex; 
-  align-items: center;">
-
-    <!-- "All Career Data" Text Centered -->
-    <div style="
-      font-size: 0.8rem; 
-      font-weight: bold; 
-      text-align: center; 
-      max-width: 150px; 
-      flex: 0 0 auto; 
-      margin-left: 10px;">
-      <%= link_to 'All Career Data', career_datum_path(id: 1), style: 'color: inherit; text-decoration: none;' %>
-    </div>
-
-    <!-- Ticker Items -->
-    <div style="flex: 5; margin-left: 20px; overflow: hidden; white-space: nowrap;">
-      <%= render partial: "site/career_tree_home/list_of_ticker_items", locals: { } %>
-    </div>
-  </div>
-
-  <!-- Charts and Scripts -->
-  <%= render 'career_data/node_chart/render_chart' %>
-  <%= render 'career_data/node_chart/fetch_and_render' %>
-  <%= render 'career_data/node_chart/node_modal' %>
-</body>
-
-<script>
-  document.addEventListener("nodesRendered", function () {
-    const chart = document.getElementById("chart");
-    if (chart) {
-      chart.scrollLeft = chart.scrollWidth / 4.5;
-      chart.scrollTop = chart.scrollHeight / 23;
+<!-- Hero Section -->
+<style>
+  @media (max-width: 768px) {
+    .hero-section {
+      height: 60vh !important;
     }
-  });
-</script>
+    .logo-background {
+      width: 100% !important;
+      right: 0 !important;
+      animation-duration: 20s !important;
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hero-section {
+      height: 70vh !important;
+    }
+    .logo-background {
+      width: 100% !important;
+      right: 0 !important;
+      animation-duration: 25s !important;
+    }
+  }
+</style>
+
+<section class="text-white d-flex align-items-center hero-section" 
+  style="
+    position: relative; 
+    background-color: #000;
+    height: 80vh;
+    overflow: hidden;
+  ">
+
+  <!-- Background Design Layer with Bank Logos -->
+  <div class="logo-background" style="
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    z-index: 0;
+    background-image: url('<%= asset_path('overview/bank_background_logos.png') %>');
+    background-size: 80%;
+    background-repeat: repeat-y;
+    background-position: 40% center;
+    opacity: 0.9;
+    animation: scrollUp 30s linear infinite;
+  "></div>
+
+  <style>
+    @keyframes scrollUp {
+      from {
+        background-position: 40% 100%;
+      }
+      to {
+        background-position: 40% 20%;
+      }
+    }
+  </style>
+
+  <!-- Bottom Rectangle -->
+  <div style="
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 130px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 79%, rgba(0, 0, 0, 1) 100%);
+    z-index: 1;
+  "></div>
+
+  <!-- Foreground Content -->
+  <div class="container-fluid px-4 px-md-5" style="z-index: 2; position: relative;">
+    <div class="row">
+      <div class="col-12 col-lg-7 col-xl-6" style="margin-left: 2rem; background-color: rgba(0, 0, 0, 0.7); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px);">
+        <h1 class="fw-bold mb-3" style="
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          line-height: 1.2;
+        ">
+          Everything you need to break into finance
+        </h1>
+        <p class="mb-4" style="
+          font-size: clamp(1rem, 1.2vw, 1.2rem); 
+          opacity: 1.0;
+          max-width: 600px;
+          color: #8a8d91;
+        ">
+          Created by someone who went through the recruiting process, this provides everything you need to succeed.
+        </p>
+        <a href="/" class="btn btn-primary px-4 py-2" style="
+          background-color: #316CF4;
+          border: none;
+          font-weight: 500;
+        ">
+          Get Started
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5" style="background-color: #000000; position: relative;">
+  <!-- Top Curved Blue Line -->
+  <div style="
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    border-top: 3px solid #316CF4;
+    border-radius: 100% 100% 0 0;
+    opacity: 0.8;
+    z-index: 1;
+    box-shadow: 
+      0 -15px 100px rgba(49, 108, 244, 0.8),
+      0 -5px 50px rgba(49, 108, 244, 1),
+      0 0 25px rgba(49, 108, 244, 1);  /* Three intense shadow layers */
+    mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+  ">
+    <!-- Add a glowing element behind -->
+    <div style="
+      position: absolute;
+      top: -10px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: #316CF4;
+      border-radius: 100% 100% 0 0;
+      filter: blur(7px);
+      opacity: 0.5;
+      z-index: -1;
+    "></div>
+  </div>
+
+  <div class="container text-center">
+    <!-- Section Heading -->
+    <div class="row align-items-center mt-5 mb-5">
+      <div class="col-md-5">
+        <div class="d-flex flex-column text-start">
+          <h2 class="text-white" style="font-size: 3.5rem; line-height: 1.1; font-weight: 400;">Why Breaking Into</h2>
+          <h2 class="fw-bold text-white" style="font-size: 3.5rem; line-height: 1.1; margin-top: -10px;">Finance is tough</h2>
+        </div>
+      </div>
+      
+      <div class="col-md-7">
+        <!-- Contextual Paragraph -->
+        <p class="text-white text-start" style="font-size: 1.1rem; line-height: 1.6; opacity: 0.7;">
+          Breaking into finance is notoriously challenging, with fierce competition and limited spots. For undergraduates, 50% of target school applicants successfully secure full-time investment banking roles, while only 30% of semi-target students achieve the same, and less than 2% of all applicants overall break into the industry. At the MBA level, 60-70% of target school candidates land investment banking roles, 40-60% from semi-targets, but less than 10% of all applicants make it.
+        </p>
+      </div>
+    </div>
+    
+    <!-- Stats Section -->
+    <div class="row g-4">
+      <!-- Stat 1 -->
+      <div class="col-md-4">
+        <div class="p-4 rounded" style="
+          background: linear-gradient(90deg, rgba(136, 174, 206, 0.15), rgba(66, 110, 146, 0.2), rgba(17, 25, 37, 0.25));
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+          <div class="mb-3">
+            <img src="<%= asset_path('overview/graduate.png') %>" alt="Graduate Icon" style="width: 40px; height: 40px;" />
+          </div>
+          <h3 class="fw-bold mb-2 text-white" style="font-size: 2.5rem;">50%</h3>
+          <p class="text-white" style="opacity: 0.7; font-size: 1rem;">Target school applicants who land full-time IB roles</p>
+        </div>
+      </div>
+      
+      <!-- Stat 2 -->
+      <div class="col-md-4">
+        <div class="p-4 rounded" style="
+          background: linear-gradient(90deg, rgba(136, 174, 206, 0.15), rgba(66, 110, 146, 0.2), rgba(17, 25, 37, 0.25));
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+          <div class="mb-3">
+            <img src="<%= asset_path('overview/group.png') %>" alt="Group Icon" style="width: 40px; height: 40px;" />
+          </div>
+          <h3 class="fw-bold mb-2 text-white" style="font-size: 2.5rem;">&lt;10%</h3>
+          <p class="text-white" style="opacity: 0.7; font-size: 1rem;">MBA candidates who land IB roles across all programs</p>
+        </div>
+      </div>
+      
+      <!-- Stat 3 -->
+      <div class="col-md-4">
+        <div class="p-4 rounded" style="
+          background: linear-gradient(90deg, rgba(136, 174, 206, 0.15), rgba(66, 110, 146, 0.2), rgba(17, 25, 37, 0.25));
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+          <div class="mb-3">
+            <img src="<%= asset_path('overview/undergrad.png') %>" alt="Certificate Icon" style="width: 40px; height: 40px;" />
+          </div>
+          <h3 class="fw-bold mb-2 text-white" style="font-size: 2.5rem;">&lt;2%</h3>
+          <p class="text-white" style="opacity: 0.7; font-size: 1rem;">Overall undergrads who break into investment banking</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="py-5" style="background-color: #000000;">
+  <div class="container text-center">
+    <!-- Introductory Text -->
+    <h2 class="fw-bold mb-4 text-white">Everything You Need to Navigate Finance Recruiting</h2>
+    <p class="mb-5 text-white" style="font-size: 1.1rem; line-height: 1.8; opacity: 0.7;">
+      Finance recruiting is unlike any other process—structured yet highly competitive. 
+      TopBucket provides all the resources you need to confidently navigate this unique journey, 
+      from interview preparation to career coaching. Explore the resources below to get started and take the 
+      first step toward breaking into high finance.
+    </p>
+
+    <div class="accordion shadow-sm rounded" style="
+      background-color: #000; 
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        0 0 20px rgba(255, 255, 255, 0.1),
+        0 4px 20px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(90deg, rgba(136, 174, 206, 0.15), rgba(66, 110, 146, 0.2), rgba(17, 25, 37, 0.25));
+    ">
+      <!-- Section 1 -->
+      <div class="accordion-item" style="background-color: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3">
+          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff; max-width: calc(100% - 150px);">Career Path Overviews</h2>
+          <div class="d-flex align-items-center">
+            <%= link_to 'View', pages_path, class: 'btn btn-outline-light btn-sm me-3' %>
+            <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
+                 alt="Toggle Details" 
+                 style="cursor: pointer; width: 20px; height: 20px; filter: invert(1);" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#collapseOne" />
+          </div>
+        </div>
+        <div id="collapseOne" class="accordion-collapse collapse">
+          <div class="accordion-body px-4 py-3 text-start" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+            Details on different career paths such as Investment Banking, Private Equity, Venture Capital, etc... Breaks down information both at an industry level and a firm level.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="accordion-item" style="background-color: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3">
+          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff;">Recruiting Focused Forums</h2>
+          <div class="d-flex align-items-center">
+            <%= link_to 'View', forum_rooms_path, class: 'btn btn-outline-light btn-sm me-3' %>
+            <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
+                 alt="Toggle Details" 
+                 style="cursor: pointer; width: 20px; height: 20px; filter: invert(1);" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#collapseTwo" />
+          </div>
+        </div>
+        <div id="collapseTwo" class="accordion-collapse collapse">
+          <div class="accordion-body px-4 py-3 text-start" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+            Join discussions about recruiting experiences and get advice from others in the process.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="accordion-item" style="background-color: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3">
+          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff;">Networking and Interview Recaps</h2>
+          <div class="d-flex align-items-center">
+            <%= link_to 'View', employee_views_path, class: 'btn btn-outline-light btn-sm me-3' %>
+            <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
+                 alt="Toggle Details" 
+                 style="cursor: pointer; width: 20px; height: 20px; filter: invert(1);" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#collapseThree" />
+          </div>
+        </div>
+        <div id="collapseThree" class="accordion-collapse collapse">
+          <div class="accordion-body px-4 py-3 text-start" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+            Read about others' networking experiences and interview processes at various firms.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="accordion-item" style="background-color: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3">
+          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff;">Mock Interviews</h2>
+          <div class="d-flex align-items-center">
+            <%= link_to 'View', meeting_board_mock_interviews_path, class: 'btn btn-outline-light btn-sm me-3' %>
+            <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
+                 alt="Toggle Details" 
+                 style="cursor: pointer; width: 20px; height: 20px; filter: invert(1);" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#collapseFour" />
+          </div>
+        </div>
+        <div id="collapseFour" class="accordion-collapse collapse">
+          <div class="accordion-body px-4 py-3 text-start" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+            Practice your interview skills with experienced professionals.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5 -->
+      <div class="accordion-item" style="background-color: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3">
+          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff;">Career Coaching</h2>
+          <div class="d-flex align-items-center">
+            <%= link_to 'View', interview_coaches_index_path, class: 'btn btn-outline-light btn-sm me-3' %>
+            <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
+                 alt="Toggle Details" 
+                 style="cursor: pointer; width: 20px; height: 20px; filter: invert(1);" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#collapseFive" />
+          </div>
+        </div>
+        <div id="collapseFive" class="accordion-collapse collapse">
+          <div class="accordion-body px-4 py-3 text-start" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+            Get personalized guidance from experienced professionals in the industry.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6 -->
+      <div class="accordion-item" style="background-color: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3">
+          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff;">Real Interview Questions</h2>
+          <div class="d-flex align-items-center">
+            <%= link_to 'View', question_packets_path, class: 'btn btn-outline-light btn-sm me-3' %>
+            <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
+                 alt="Toggle Details" 
+                 style="cursor: pointer; width: 20px; height: 20px; filter: invert(1);" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#collapseSix" />
+          </div>
+        </div>
+        <div id="collapseSix" class="accordion-collapse collapse">
+          <div class="accordion-body px-4 py-3 text-start" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+            Access actual interview questions used by top firms.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7 -->
+      <div class="accordion-item" style="background-color: transparent; border: none;">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3">
+          <h2 class="mb-0 text-start" style="
+            font-size: 1.1rem; 
+            color: #fff; 
+            max-width: calc(100% - 150px);
+            word-wrap: break-word;
+            flex-shrink: 1;
+          ">Career Path and Compensation Data</h2>
+          <div class="d-flex align-items-center" style="flex-shrink: 0;">
+            <%= link_to 'View', career_datum_path(id: 1), class: 'btn btn-outline-light btn-sm me-3' %>
+            <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
+                 alt="Toggle Details" 
+                 style="cursor: pointer; width: 20px; height: 20px; filter: invert(1);" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#collapseSeven" />
+          </div>
+        </div>
+        <div id="collapseSeven" class="accordion-collapse collapse">
+          <div class="accordion-body px-4 py-3 text-start" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+            Explore detailed compensation data and career progression paths.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<!-- Bottom Section -->
+<footer class="py-4 text-white" style="background-color: #000000;">
+  <div class="container">
+    <div class="row text-center align-items-center">
+      <!-- Company Name and Copyright -->
+      <div class="col-12 mb-3">
+        <h5 class="fw-bold">TopBucket</h5>
+        <p class="mb-0" style="font-size: 0.9rem;">&copy; <%= Time.now.year %> TopBucket. All rights reserved.</p>
+      </div>
+
+      <!-- Links -->
+        <div class="col-12">
+        <a href="<%= privacy_policy_path %>" class="text-white text-decoration-none mx-2" style="font-size: 0.9rem;">
+            Privacy Policy
+        </a>
+        |
+        <a href="<%= terms_of_service_path %>" class="text-white text-decoration-none mx-2" style="font-size: 0.9rem;">
+            Terms of Service
+        </a>
+        </div>
+
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,89 @@
+
+
+<div class="container mt-4">
+
+<!-- Card Header with Back Button -->
+  <div class="card shadow-sm position-relative mb-4">
+    <!-- Back Button -->
+    <%= link_to root_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px; z-index: 1050;' do %>
+      <span class="fs-6">&larr;</span>
+    <% end %>
+
+    <!-- Title and Description -->
+    <div class="card-body text-center bg-light position-relative">
+      <h1 class="fw-bold text-uppercase" style="letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;">
+        <%= "Employments Report #{@year}" %>
+      </h1>
+      <p class="text-muted"><%= "Compare programs by offer rate, industry placement, and so much more" %></p>
+    </div>
+  </div>
+
+  <!-- Program Type Selection -->
+  <%= render 'employment_reports/program_selector/selector' %>
+  
+
+  
+  <!-- Summary Section -->
+  <%= render 'employment_reports/summary/summary' %>
+
+      <!-- Filter Button -->
+  <div class="card shadow-sm mb-4">
+
+      <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#filtersModal">
+        <i class="bi bi-funnel"></i> Select Comparison Metric
+      </button>
+
+  </div>
+
+
+  
+  <!-- Chart Section -->
+  <%= render 'employment_reports/chart/chart' %>
+
+
+  
+  <!-- Filters Modal -->
+  <%= render 'employment_reports/filters/filters' %>
+</div>
+
+<%= content_for :javascript do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Chart.js initialization for industry breakdown
+      const industryCtx = document.getElementById('industryChart').getContext('2d');
+      new Chart(industryCtx, {
+          type: 'pie',
+          data: {
+              labels: ['Consulting', 'Finance', 'Technology', 'Other'],
+              datasets: [{
+                  data: [35, 25, 20, 20],
+                  backgroundColor: [
+                      '#007bff',
+                      '#28a745',
+                      '#ffc107',
+                      '#dc3545'
+                  ]
+              }]
+          }
+      });
+
+      // Chart.js initialization for geographic distribution
+      const geoCtx = document.getElementById('geographyChart').getContext('2d');
+      new Chart(geoCtx, {
+          type: 'pie',
+          data: {
+              labels: ['Northeast US', 'West Coast', 'International', 'Other US'],
+              datasets: [{
+                  data: [45, 30, 15, 10],
+                  backgroundColor: [
+                      '#007bff',
+                      '#28a745',
+                      '#ffc107',
+                      '#dc3545'
+                  ]
+              }]
+          }
+      });
+    });
+  </script>
+<% end %>

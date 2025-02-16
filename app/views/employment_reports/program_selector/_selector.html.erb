@@ -1,0 +1,34 @@
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <%= form_tag employment_report_path, method: :get do %>
+
+
+      <!-- Program Selection -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <%
+=begin%>
+ <label class="form-label">Select Program</label> 
+<%
+=end%>
+          <%= select_tag :id, 
+              options_from_collection_for_select(
+                @programs.where(program_type: params[:type] || 'MBA'), 
+                :id, 
+                :name, 
+                params[:id]
+              ),
+              class: 'form-select',
+              prompt: params[:type] == 'Undergrad' ? 'No undergraduate programs available' : 'Select a program'
+          %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <%= submit_tag 'Update', class: 'btn btn-primary w-100' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div> 
