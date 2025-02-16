@@ -35,6 +35,24 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 
+    <style>
+      @media (max-width: 991px) { /* Bootstrap's lg breakpoint */
+        .auth-buttons {
+          display: flex;
+          width: 100%;
+          padding: 10px 0;
+        }
+        .auth-buttons .nav-item {
+          flex: 1;
+          margin: 0 !important;
+        }
+        .auth-buttons .btn {
+          width: 98%;
+          margin: 0 1%;
+        }
+      }
+    </style>
+
   </head>
 
   <body
@@ -77,9 +95,6 @@
               <%= link_to 'Overview', about_path, class: 'nav-link text-white' %>
             </li>
             <li class="nav-item">
-              <%= link_to 'Contact', contact_path, class: 'nav-link text-white' %>
-            </li>
-            <li class="nav-item">
               <%= link_to 'Forums', forum_rooms_path, class: 'nav-link text-white' %>
             </li>
             <li class="nav-item">
@@ -115,12 +130,14 @@
                 </ul>
               </li>
             <% else %>
-              <li class="nav-item">
-                <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-outline-light border-0' %>
-              </li>
-              <li class="nav-item ms-2">
-                <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-light' %>
-              </li>
+              <div class="auth-buttons d-lg-flex">
+                <li class="nav-item">
+                  <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-outline-light' %>
+                </li>
+                <li class="nav-item ms-lg-2">
+                  <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-light' %>
+                </li>
+              </div>
             <% end %>
           </ul>
         </div>

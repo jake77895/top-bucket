@@ -1,5 +1,29 @@
 <!-- Hero Section -->
-<section class="text-white d-flex align-items-center" 
+<style>
+  @media (max-width: 768px) {
+    .hero-section {
+      height: 60vh !important;
+    }
+    .logo-background {
+      width: 100% !important;
+      right: 0 !important;
+      animation-duration: 20s !important;
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hero-section {
+      height: 70vh !important;
+    }
+    .logo-background {
+      width: 100% !important;
+      right: 0 !important;
+      animation-duration: 25s !important;
+    }
+  }
+</style>
+
+<section class="text-white d-flex align-items-center hero-section" 
   style="
     position: relative; 
     background-color: #000;
@@ -8,19 +32,19 @@
   ">
 
   <!-- Background Design Layer with Bank Logos -->
-  <div style="
+  <div class="logo-background" style="
     position: absolute;
     top: 0;
-    right: 8%;
+    right: 0;
     width: 40%;
     height: 100%;
     z-index: 0;
     background-image: url('<%= asset_path('overview/bank_background_logos.png') %>');
-    background-size: 90%; 
+    background-size: 80%;
     background-repeat: repeat-y;
     background-position: 40% center;
     opacity: 0.9;
-    animation: scrollUp 25s linear infinite;
+    animation: scrollUp 30s linear infinite;
   "></div>
 
   <style>
@@ -46,18 +70,21 @@
   "></div>
 
   <!-- Foreground Content -->
-  <div class="container-fluid px-5" style="z-index: 2; position: relative; margin-left: 7em;">
+  <div class="container-fluid px-4 px-md-5" style="z-index: 2; position: relative;">
     <div class="row">
-      <div class="col-lg-5 text-start">
-        <h1 style="
-          font-size: 64px;
-          font-weight: 500;
+      <div class="col-12 col-lg-7 col-xl-6" style="margin-left: 2rem; background-color: rgba(0, 0, 0, 0.7); padding: 2rem; border-radius: 12px; backdrop-filter: blur(5px);">
+        <h1 class="fw-bold mb-3" style="
+          font-size: clamp(2.5rem, 5vw, 4rem);
           line-height: 1.2;
-          margin-bottom: 24px;
         ">
           Everything you need to break into finance
         </h1>
-        <p class="mb-4" style="font-size: 18px; opacity: 0.9;">
+        <p class="mb-4" style="
+          font-size: clamp(1rem, 1.2vw, 1.2rem); 
+          opacity: 1.0;
+          max-width: 600px;
+          color: #8a8d91;
+        ">
           Created by someone who went through the recruiting process, this provides everything you need to succeed.
         </p>
         <a href="/" class="btn btn-primary px-4 py-2" style="
@@ -195,7 +222,7 @@
       <!-- Section 1 -->
       <div class="accordion-item" style="background-color: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
         <div class="d-flex justify-content-between align-items-center px-4 py-3">
-          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff;">Career Path Overviews</h2>
+          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff; max-width: calc(100% - 150px);">Career Path Overviews</h2>
           <div class="d-flex align-items-center">
             <%= link_to 'View', pages_path, class: 'btn btn-outline-light btn-sm me-3' %>
             <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
@@ -315,8 +342,14 @@
       <!-- Section 7 -->
       <div class="accordion-item" style="background-color: transparent; border: none;">
         <div class="d-flex justify-content-between align-items-center px-4 py-3">
-          <h2 class="mb-0 text-start" style="font-size: 1.1rem; color: #fff;">Career Path and Compensation Data</h2>
-          <div class="d-flex align-items-center">
+          <h2 class="mb-0 text-start" style="
+            font-size: 1.1rem; 
+            color: #fff; 
+            max-width: calc(100% - 150px);
+            word-wrap: break-word;
+            flex-shrink: 1;
+          ">Career Path and Compensation Data</h2>
+          <div class="d-flex align-items-center" style="flex-shrink: 0;">
             <%= link_to 'View', career_datum_path(id: 1), class: 'btn btn-outline-light btn-sm me-3' %>
             <img src="<%= asset_path('icons/arrow_toggle_icon.svg') %>" 
                  alt="Toggle Details" 
