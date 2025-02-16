@@ -1,57 +1,34 @@
 <div class="card shadow-sm mb-4">
   <div class="card-body">
-    <!-- Program Type Toggle -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="btn-group w-100" role="group" aria-label="Program Type Toggle">
-          <input type="radio" class="btn-check" name="program-type" id="mba" value="MBA" <%= 'checked' if params[:type] != 'Undergrad' %>>
-          <label class="btn btn-outline-dark" for="mba">MBA Programs</label>
+    <%= form_tag employment_report_path, method: :get do %>
 
-          <input type="radio" class="btn-check" name="program-type" id="undergrad" value="Undergrad" <%= 'checked' if params[:type] == 'Undergrad' %>>
-          <label class="btn btn-outline-dark" for="undergrad">Undergraduate Programs</label>
+
+      <!-- Program Selection -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <%
+=begin%>
+ <label class="form-label">Select Program</label> 
+<%
+=end%>
+          <%= select_tag :id, 
+              options_from_collection_for_select(
+                @programs.where(program_type: params[:type] || 'MBA'), 
+                :id, 
+                :name, 
+                params[:id]
+              ),
+              class: 'form-select',
+              prompt: params[:type] == 'Undergrad' ? 'No undergraduate programs available' : 'Select a program'
+          %>
         </div>
       </div>
-    </div>
 
-    <!-- Program Selection -->
-    <div class="row">
-      <div class="col-12">
-        <label class="form-label">Select Program</label>
-        <%= select_tag :program_id, 
-            options_from_collection_for_select(
-              @programs.where(program_type: params[:type] || 'MBA'), 
-              :id, 
-              :name, 
-              @selected_program&.id
-            ),
-            class: 'form-select',
-            id: 'program-select',
-            prompt: 'Select a program'
-        %>
+      <div class="row">
+        <div class="col-12">
+          <%= submit_tag 'Update', class: 'btn btn-primary w-100' %>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
-</div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const programSelect = document.getElementById('program-select');
-    const typeToggles = document.querySelectorAll('input[name="program-type"]');
-    
-    // When program type changes, filter the programs
-    typeToggles.forEach(toggle => {
-      toggle.addEventListener('change', function() {
-        // If we have a selected program, use that, otherwise use the first program
-        const programId = programSelect.value || '<%= @programs.first&.id %>';
-        window.location.href = `/employment_reports/${programId}?type=${this.value}`;
-      });
-    });
-
-    // When program changes
-    programSelect.addEventListener('change', function() {
-      if (this.value) {
-        window.location.href = `/employment_reports/${this.value}?type=${document.querySelector('input[name="program-type"]:checked').value}`;
-      }
-    });
-  });
-</script> 
+</div> 

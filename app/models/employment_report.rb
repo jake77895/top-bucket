@@ -19,7 +19,7 @@
 class EmploymentReport < ApplicationRecord
   belongs_to :employment_report_program
   has_one :employment_report_overview
-  has_one :employment_report_function
+  has_one :employment_report_industry
   has_one :employment_report_location
   has_one :employment_report_employer
 end

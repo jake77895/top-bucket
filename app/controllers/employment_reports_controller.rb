@@ -1,6 +1,12 @@
 class EmploymentReportsController < ApplicationController
   def show
     @programs = EmploymentReportProgram.all
+    
+    # Debug logging
+    Rails.logger.debug "Total programs: #{@programs.count}"
+    Rails.logger.debug "MBA programs: #{@programs.where(program_type: 'MBA').count}"
+    Rails.logger.debug "Undergrad programs: #{@programs.where(program_type: 'Undergrad').count}"
+    
     @selected_program = EmploymentReportProgram.find_by(id: params[:id]) || @programs.first
     
     if @selected_program
@@ -16,7 +22,7 @@ class EmploymentReportsController < ApplicationController
         end
         
         @overview = @report.employment_report_overview
-        @functions = @report.employment_report_function
+        @industries = @report.employment_report_industry
         @locations = @report.employment_report_location
         @employers = @report.employment_report_employer
 
@@ -44,50 +50,20 @@ class EmploymentReportsController < ApplicationController
     programs = EmploymentReportProgram.all
     metric = params[:metric]
 
-    # Debug log to check number of programs
-    Rails.logger.debug "Number of programs: #{programs.count}"
-
     data = case metric
-    when 'job_offer_rate'
+    when 'consulting', 'investment_banking', 'diversified_financial', 
+         'investment_management', 'private_equity', 'venture_capital', 
+         'marketing', 'technology'
       programs.map { |p| 
-        [p.name, p.employment_reports.last&.employment_report_overview&.job_offers_3_months]
+        [p.name, p.employment_reports.last&.employment_report_industry&.send(metric)]
       }
-    when 'total_offer_rate'
-      programs.map { |p| 
-        report = p.employment_reports.last&.employment_report_overview
-        total_rate = if report
-          (report.seeking_employment * report.job_offers_3_months / 100.0) / report.class_size * 100
-        end
-        [p.name, total_rate&.round(1)]
-      }
-    when 'consulting', 'investment_banking'
-      programs.map { |p| 
-        [p.name, p.employment_reports.last&.employment_report_function&.send(metric)]
-      }
-    else
-      if @functions.attributes.key?(metric)
-        programs.map { |p| 
-          [p.name, p.employment_reports.last&.employment_report_function&.send(metric)]
-        }
-      elsif @locations.attributes.key?(metric)
-        programs.map { |p| 
-          [p.name, p.employment_reports.last&.employment_report_location&.send(metric)]
-        }
-      end
     end
 
     # Ensure data is not nil and has values
     data = data.compact.reject { |_, value| value.nil? }
     
-    # Debug log to check filtered data
-    Rails.logger.debug "Filtered data: #{data.inspect}"
-
-    # Calculate average only if we have data
     values = data.map { |_, value| value }
     average = values.any? ? (values.sum / values.length.to_f).round(1) : nil
-
-    # Debug log for average
-    Rails.logger.debug "Average: #{average}"
 
     {
       labels: data.map { |name, _| name },
@@ -95,7 +71,7 @@ class EmploymentReportsController < ApplicationController
         {
           label: metric.titleize,
           data: data.map { |_, value| value },
-          backgroundColor: '#4285f4',  # Google Blue
+          backgroundColor: '#4285f4',
           borderColor: '#4285f4',
           borderWidth: 1
         },
@@ -103,13 +79,13 @@ class EmploymentReportsController < ApplicationController
           label: 'Average',
           data: Array.new(data.length, average),
           type: 'line',
-          borderColor: '#dc3545',      # Bootstrap danger red
+          borderColor: '#dc3545',
           backgroundColor: '#dc3545',
           borderWidth: 2,
           pointRadius: 0,
           borderDash: [5, 5],
           fill: false,
-          order: 1  # Ensure line appears on top
+          order: 1
         }
       ]
     }

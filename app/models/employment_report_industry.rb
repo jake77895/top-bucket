@@ -25,6 +25,6 @@
 #
 #  fk_rails_...  (employment_report_id => employment_reports.id)
 #
-class EmploymentReportFunction < ApplicationRecord
+class EmploymentReportIndustry < ApplicationRecord
   belongs_to :employment_report
 end

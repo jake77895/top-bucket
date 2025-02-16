@@ -45,11 +45,11 @@
           <div class="card-body">
             <h5 class="card-title">Top Functions</h5>
             <div class="list-group list-group-flush">
-              <% @functions.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
+              <% @industries.attributes.except('id', 'employment_report_id', 'created_at', 'updated_at')
                            .sort_by { |_, value| -value.to_f }
-                           .first(5).each do |function, percentage| %>
+                           .first(5).each do |industry, percentage| %>
                 <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                  <%= function.titleize.gsub('_', ' ') %>
+                  <%= industry.titleize.gsub('_', ' ') %>
                   <span class="text-muted">
                     <strong><%= (@overview.class_size * percentage / 100).round %></strong> 
                     (<%= percentage.round %>%)
