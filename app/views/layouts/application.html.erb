@@ -66,13 +66,13 @@
         </div>
 
         <!-- Toggler Button for Mobile View - Moved up -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Navigation Links and Profile -->
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-3">
+          <ul class="navbar-nav me-auto">
             <li class="nav-item">
               <%= link_to 'Overview', about_path, class: 'nav-link text-white' %>
             </li>
@@ -85,7 +85,7 @@
             <li class="nav-item">
               <%= link_to 'Career Overviews', pages_index_path, class: 'nav-link text-white' %>
             </li>
-             <li class="nav-item">
+            <li class="nav-item">
               <%= link_to 'Employment Reports', employment_report_path(year: 2024), class: 'nav-link text-white' %>
             </li>
             <li class="nav-item">
@@ -93,7 +93,7 @@
             </li>
           </ul>
 
-          <ul class="navbar-nav ms-auto align-items-center">
+          <ul class="navbar-nav">
             <% if user_signed_in? %>
               <!-- Dropdown for Profile and Admin -->
               <li class="nav-item dropdown">
@@ -116,9 +116,9 @@
               </li>
             <% else %>
               <li class="nav-item">
-                <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-outline-light me-2' %>
+                <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-outline-light border-0' %>
               </li>
-              <li class="nav-item">
+              <li class="nav-item ms-2">
                 <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-light' %>
               </li>
             <% end %>
