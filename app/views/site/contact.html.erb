@@ -17,12 +17,22 @@
     z-index: 0;
     background-image: url('<%= asset_path('overview/bank_background_logos.png') %>');
     background-size: 90%; 
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
     background-position: 40% center;
     opacity: 0.9;
+    animation: scrollUp 25s linear infinite;
   "></div>
 
-
+  <style>
+    @keyframes scrollUp {
+      from {
+        background-position: 40% 100%;
+      }
+      to {
+        background-position: 40% 20%;
+      }
+    }
+  </style>
 
   <!-- Bottom Rectangle -->
   <div style="
