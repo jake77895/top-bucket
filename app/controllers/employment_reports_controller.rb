@@ -57,6 +57,22 @@ class EmploymentReportsController < ApplicationController
       programs.map { |p| 
         [p.name, p.employment_reports.last&.employment_report_industry&.send(metric)]
       }
+    when 'job_offer_rate'
+      programs.map { |p|
+        [p.name, p.employment_reports.last&.employment_report_overview&.job_offers_3_months]
+      }
+    when 'total_offer_rate'
+      programs.map { |p|
+        overview = p.employment_reports.last&.employment_report_overview
+        if overview
+          total_rate = ((overview.seeking_employment * overview.job_offers_3_months / 100.0) / overview.class_size * 100).round(1)
+          [p.name, total_rate]
+        end
+      }
+    else # Handle location metrics
+      programs.map { |p|
+        [p.name, p.employment_reports.last&.employment_report_location&.send(metric)]
+      }
     end
 
     # Ensure data is not nil and has values
@@ -69,7 +85,7 @@ class EmploymentReportsController < ApplicationController
       labels: data.map { |name, _| name },
       datasets: [
         {
-          label: metric.titleize,
+          label: metric.titleize.gsub('_', ' '),
           data: data.map { |_, value| value },
           backgroundColor: '#4285f4',
           borderColor: '#4285f4',
