@@ -1,4 +1,6 @@
-<script>
+<%
+=begin%>
+ <script>
 function renderLinks(svg, data, nodeDataMap, levelSpacing) {
   data.forEach((categoryData, i) => {
     const group = svg
@@ -60,4 +62,6 @@ function calculateNodeY(nodeId, categoryData, levelSpacing) {
   return (node.level - 1) * levelSpacing + 100; // Adjust the base offset if needed
 }
 
-</script>
+</script> 
+<%
+=end%>

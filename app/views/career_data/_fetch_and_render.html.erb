@@ -1,4 +1,6 @@
-<script>
+<%
+=begin%>
+ <script>
   console.log("fetch_and_render partial loaded");
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -22,4 +24,6 @@
       })
       .catch(error => console.error("Error fetching nodes:", error));
   });
-</script>
+</script> 
+<%
+=end%>

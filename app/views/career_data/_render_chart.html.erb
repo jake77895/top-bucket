@@ -1,4 +1,6 @@
-<script>
+<%
+=begin%>
+ <script>
 function renderChart(nodesData) {
   console.log("renderChart function is being called with data:", nodesData);
 
@@ -33,4 +35,6 @@ function renderChart(nodesData) {
   // Dispatch custom event after rendering nodes
   document.dispatchEvent(new Event("nodesRendered"));
 }
-</script>
+</script> 
+<%
+=end%>

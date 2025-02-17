@@ -1,4 +1,6 @@
-<script>
+<%
+=begin%>
+ <script>
   document.addEventListener("nodesRendered", () => {
     fetch("/link_data")
       .then((response) => response.json())
@@ -45,4 +47,6 @@
     // Example logic for Y position calculation
     return d3.select(`#node-${nodeId}`).attr("cy");
   }
-</script>
+</script> 
+<%
+=end%>
