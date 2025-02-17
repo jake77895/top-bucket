@@ -199,7 +199,7 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   // Define colors for normal highlighting, exit opportunities, and defaults
   const highlightColor = "#fff";
   const defaultColor = "#6F6F6F";
-  const highlightStroke = "#102B3F";
+  const highlightStroke = "#ccc";
   const defaultStroke = "#ccc";
   const likelyExitColor = "#0d6efd";      // Darker blue for likely exits
   const possibleExitColor = "#deebf7";    // Keeping the light blue for possible exits
@@ -436,18 +436,23 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   if (isExit) {
     const exitMapping = exitOpportunitiesMapping[selectedCategory]?.find(exit => exit.node_id === d.id);
     if (exitMapping) {
-      // First get the data
+      console.log("Fetching exit details for mapping:", exitMapping);
       fetch(`/career_data/exit_details/${exitMapping.id}`)
         .then(response => response.json())
         .then(data => {
+          console.log("Received exit details:", data);
           const mapping = data[0];
           if (mapping) {
-            // Update debug info and accordion content
+            console.log("Updating modal with mapping:", mapping);
             updateModalContent(mapping);
-            // Then show the modal
             const modal = new bootstrap.Modal(document.getElementById('nodeModalExits'));
             modal.show();
+          } else {
+            console.warn("No mapping found in response data");
           }
+        })
+        .catch(error => {
+          console.error("Error fetching exit details:", error);
         });
     }
   } else {
@@ -507,67 +512,67 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
 }
 
 function updateModalContent(mapping) {
-  // Update debug info
-  const debugInfo = document.querySelector('.debug-info');
-  debugInfo.innerHTML = `
-    <p>Mapping ID: ${mapping.id}</p>
-    <p>Details count: ${mapping.exit_opportunity_details.length}</p>
-    ${mapping.exit_opportunity_details.map(detail => 
-      `<p>Detail ID: ${detail.id}, Mapping ID: ${detail.exit_opportunity_mapping_id}</p>`
-    ).join('')}
-  `;
+  const companiesAccordion = document.getElementById('companiesAccordionExits');
+  
+  if (!companiesAccordion) {
+    console.error('Could not find companies accordion element');
+    return;
+  }
 
-  // Group details by target company
-  const groupedDetails = mapping.exit_opportunity_details.reduce((groups, detail) => {
+  if (!mapping || !mapping.exit_opportunity_details || mapping.exit_opportunity_details.length === 0) {
+    companiesAccordion.innerHTML = `
+      <div class="alert alert-info">
+        <p class="mb-0">No exit opportunity details are available for this position.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Sort details by likelihood (1 first) then alphabetically by company name
+  const sortedDetails = mapping.exit_opportunity_details.sort((a, b) => {
+    if (a.likelihood !== b.likelihood) {
+      return a.likelihood - b.likelihood; // 1 comes before 2
+    }
+    return a.source_company_name.localeCompare(b.source_company_name);
+  });
+
+  // Group by target company
+  const groupedDetails = sortedDetails.reduce((groups, detail) => {
     const key = detail.target_company_name;
     if (!groups[key]) groups[key] = [];
     groups[key].push(detail);
     return groups;
   }, {});
 
-  // Update companies accordion
-  const companiesAccordion = document.getElementById('companiesAccordionExits');
-  if (mapping.exit_opportunity_details.length > 0) {
-    const accordionHTML = Object.entries(groupedDetails).map(([company, details]) => `
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" 
-                  data-bs-toggle="collapse" 
-                  data-bs-target="#exitCollapse${company.replace(/\s+/g, '-').toLowerCase()}">
-            ${company}
-            <span class="badge ${mapping.likelihood >= 4 ? 'bg-success' : 'bg-warning'} ms-2">
-              ${mapping.likelihood >= 4 ? 'Likely' : 'Possible'}
-            </span>
-          </button>
-        </h2>
-        <div id="exitCollapse${company.replace(/\s+/g, '-').toLowerCase()}" 
-             class="accordion-collapse collapse" 
-             data-bs-parent="#companiesAccordionExits">
-          <div class="accordion-body">
-            ${details.map(detail => `
-              <div class="mb-3">
-                <p class="mb-1">
-                  <strong>From:</strong> ${detail.source_company_name}
-                  ${detail.source_group ? `- ${detail.source_group}` : ''}
-                </p>
-                ${detail.target_group ? `
-                  <p class="mb-0 text-muted">
-                    <small>Target Group: ${detail.target_group}</small>
-                  </p>
-                ` : ''}
-              </div>
-            `).join('')}
-          </div>
+  const accordionHTML = Object.entries(groupedDetails).map(([company, details]) => `
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#exitCollapse${company.replace(/\s+/g, '-').toLowerCase()}">
+          ${company}
+        </button>
+      </h2>
+      <div id="exitCollapse${company.replace(/\s+/g, '-').toLowerCase()}" 
+           class="accordion-collapse collapse" 
+           data-bs-parent="#companiesAccordionExits">
+        <div class="accordion-body p-0">
+          ${details.map((detail, index) => `
+            <div class="px-3 py-2 ${index !== details.length - 1 ? 'border-bottom' : ''}">
+              <p class="mb-0 d-flex align-items-center">
+                <strong>${detail.source_company_name}</strong>${detail.source_group ? ` <span class="text-secondary">&nbsp;(${detail.source_group})</span>` : ''}
+                <span class="badge ${detail.likelihood === 1 ? 'bg-primary' : ''} ms-2" 
+                      style="${detail.likelihood === 2 ? 'background-color: #deebf7; color: #000;' : ''}">
+                  ${detail.likelihood === 1 ? 'Strong Chance' : 'Moderate Chance'}
+                </span>
+              </p>
+            </div>
+          `).join('')}
         </div>
       </div>
-    `).join('');
-    companiesAccordion.innerHTML = accordionHTML;
-  } else {
-    companiesAccordion.innerHTML = `
-      <div class="alert alert-info">
-        <p class="mb-0">No exit opportunity details are available for this position.</p>
-      </div>
-    `;
-  }
+    </div>
+  `).join('');
+  
+  companiesAccordion.innerHTML = accordionHTML;
 }
 </script>

@@ -1,13 +1,18 @@
 <div class="modal fade" id="nodeModalExits" tabindex="-1" aria-labelledby="nodeModalExitsLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="nodeModalExitsLabel">Exit Opportunities</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title fw-bold" id="nodeModalExitsLabel">Exit Opportunities</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
-        <!-- Debug section -->
-        <div class="debug-info" style="background: #f5f5f5; padding: 10px; margin-bottom: 10px;"></div>
+        <!-- Debug section (hidden but functional) -->
+        <div class="debug-info" style="display: none;"></div>
 
         <!-- Details Accordion -->
         <div class="accordion mb-3" id="detailsAccordionExits">
@@ -18,67 +23,54 @@
               </button>
             </h2>
             <div id="detailsCollapseExits" class="accordion-collapse collapse" data-bs-parent="#detailsAccordionExits">
-              <div class="accordion-body">
-                <p><strong>Industry:</strong> <span id="modal-industry-exits"></span></p>
-                <p><strong>Level:</strong> <span id="modal-level-exits"></span></p>
-                <p><strong>Number of Records:</strong> <span id="modal-record-count-exits"></span></p>
-                <p><strong>Average Salary:</strong> $<span id="modal-avg-salary-exits"></span></p>
-                <p><strong>Average Bonus:</strong> $<span id="modal-avg-bonus-exits"></span></p>
-                <p><strong>Average Total Compensation:</strong> $<span id="modal-avg-total-comp-exits"></span></p>
-                <p><strong>Average Compensation per Hour:</strong> $<span id="modal-avg-comp-per-hour-exits"></span></p>
+              <div class="accordion-body p-0">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <strong>Industry:</strong>
+                    <span id="modal-industry-exits" class="text-secondary"></span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Level:</strong>
+                    <span id="modal-level-exits" class="text-secondary"></span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Number of Records:</strong>
+                    <span id="modal-record-count-exits" class="text-secondary"></span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Average Salary:</strong>
+                    <span id="modal-avg-salary-exits" class="text-secondary"></span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Average Bonus:</strong>
+                    <span id="modal-avg-bonus-exits" class="text-secondary"></span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Average Total Compensation:</strong>
+                    <span id="modal-avg-total-comp-exits" class="text-secondary"></span>
+                  </li>
+                  <li class="list-group-item">
+                    <strong>Average Compensation per Hour:</strong>
+                    <span id="modal-avg-comp-per-hour-exits" class="text-secondary"></span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Companies Accordion -->
-        <div class="accordion" id="companiesAccordionExits">
-          <% if @exit_opportunity_details&.any? %>
-            <% @exit_opportunity_details.group_by(&:target_company_name).each do |target_company, details| %>
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" 
-                          data-bs-toggle="collapse" 
-                          data-bs-target="#exitCollapse<%= target_company.parameterize %>">
-                    <%= target_company %>
-                    <span class="badge <%= @exit_mapping.likelihood >= 4 ? 'bg-success' : 'bg-warning' %> ms-2">
-                      <%= @exit_mapping.likelihood >= 4 ? 'Likely' : 'Possible' %>
-                    </span>
-                  </button>
-                </h2>
-                <div id="exitCollapse<%= target_company.parameterize %>" 
-                     class="accordion-collapse collapse" 
-                     data-bs-parent="#companiesAccordionExits">
-                  <div class="accordion-body">
-                    <% details.each do |detail| %>
-                      <div class="mb-3">
-                        <p class="mb-1">
-                          <strong>From:</strong> <%= detail.source_company_name %>
-                          <% if detail.source_group.present? %>
-                            - <%= detail.source_group %>
-                          <% end %>
-                        </p>
-                        <% if detail.target_group.present? %>
-                          <p class="mb-0 text-muted">
-                            <small>Target Group: <%= detail.target_group %></small>
-                          </p>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          <% else %>
-            <div class="alert alert-info">
-              <p class="mb-0">No exit opportunity details are available for this position.</p>
-            </div>
-          <% end %>
-        </div>
+        <!-- Companies Accordion - Content populated by JavaScript -->
+        <div class="accordion" id="companiesAccordionExits"></div>
       </div>
       
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <div class="modal-footer d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary rounded-pill px-4"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
