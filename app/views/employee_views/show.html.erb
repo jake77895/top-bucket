@@ -1,4 +1,4 @@
-<div class="container mb-4 mt-4">
+<div class="container mb-2 mt-4">
   <div class="card shadow-sm position-relative">
     <!-- Back Button -->
     <%= link_to params[:origin_page] || employee_views_path, class: 'btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute', style: 'width: 40px; height: 40px; top: 10px; left: 10px;' do %>
@@ -11,6 +11,13 @@
       <p class="text-muted" style="font-size: 14px;">Explore key professionals and their details</p>
     </div>
   </div>
+</div>
+
+<!-- Add Submit Career Data Button -->
+<div class="container mb-2">
+  <%= link_to new_employee_path, class: "btn btn-primary w-100 rounded-3 py-2" do %>
+    <i class="fas fa-plus-circle me-2"></i>Add Professional
+  <% end %>
 </div>
 
 <%= render 'employee_views/filter/filters' %>

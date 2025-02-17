@@ -210,6 +210,14 @@ Rails.application.routes.draw do
     end
   end
 
+ # Public Routes for Creating Employees
+  resources :employees, only: [:new, :create] do
+    collection do
+      post :create_initial
+      get :new_details
+    end
+  end
+
   # Public Routes for Viewing Mock Interview Sessions
   resources :interview_coaches, only: [:index, :show, :new, :create, :edit, :update]
 
@@ -278,7 +286,6 @@ Rails.application.routes.draw do
   # Privacy Policy and Terms of Service
   get 'privacy_policy', to: 'site#privacy_policy', as: :privacy_policy
   get 'terms_of_service', to: 'site#terms_of_service', as: :terms_of_service
-
 
 
 

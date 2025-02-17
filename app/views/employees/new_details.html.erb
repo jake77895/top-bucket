@@ -1,0 +1,47 @@
+<h2 class="text-center my-4">Add Professional (Step 2 of 2)</h2>
+
+<div class="container">
+  <%= form_with(model: @employee, local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Additional Details</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :job_level_id, 'Select Job Level', class: 'form-label' %>
+          <%= form.collection_select :job_level_id, @job_levels, :id, :name, { prompt: 'Select Job Level' }, { class: 'form-select' } %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :group_id, 'Select Group', class: 'form-label' %>
+          <%= form.collection_select :group_id, @groups, :id, :name, { prompt: 'Select Group' }, { class: 'form-select' } %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :previous_company_id, 'Select Previous Company', class: 'form-label' %>
+          <%= form.collection_select :previous_company_id, @companies, :id, :name, { prompt: 'Select Previous Company' }, { class: 'form-select' } %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :linkedin_url, 'LinkedIn URL (Optional)', class: 'form-label' %>
+          <%= form.text_field :linkedin_url, class: 'form-control' %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :undergraduate_school_id, 'Undergraduate School', class: 'form-label' %>
+          <%= form.collection_select :undergraduate_school_id, School.all, :id, :name, { prompt: 'Select Undergraduate School' }, { class: 'form-select' } %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :graduate_school_id, 'Graduate School (Optional)', class: 'form-label' %>
+          <%= form.collection_select :graduate_school_id, School.all, :id, :name, { prompt: 'Select Graduate School' }, { class: 'form-select' } %>
+        </div>
+      </div>
+
+      <div class="card-footer d-flex justify-content-between align-items-center">
+        <small class="text-muted">Your submission will be reviewed by our team</small>
+        <%= form.submit 'Submit', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>

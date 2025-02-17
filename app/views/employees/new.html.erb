@@ -1,0 +1,41 @@
+<h2 class="text-center my-4">Add Professional (Step 1 of 2)</h2>
+
+<div class="container">
+  <%= form_with(model: @employee, url: create_initial_employees_path, local: true) do |form| %>
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Basic Information</h5>
+      </div>
+      <div class="card-body">
+        <!-- Employee Name -->
+        <div class="mb-3">
+          <%= form.label :name, 'Employee Name', class: 'form-label' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter employee name', required: true %>
+        </div>
+
+        <!-- Select Company -->
+        <div class="mb-3">
+          <%= form.label :company_id, 'Select Company', class: 'form-label' %>
+          <%= form.collection_select :company_id, @companies, :id, :name, { prompt: 'Select Company' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Select Position Type -->
+        <div class="mb-3">
+          <%= form.label :position_type_id, 'Select Position Type', class: 'form-label' %>
+          <%= form.collection_select :position_type_id, @position_types, :id, :name, { prompt: 'Select Position Type' }, { class: 'form-select' } %>
+        </div>
+
+        <!-- Select Location -->
+        <div class="mb-3">
+          <%= form.label :location_id, 'Select Location', class: 'form-label' %>
+          <%= form.collection_select :location_id, @locations, :id, :name, { prompt: 'Select Location' }, { class: 'form-select' } %>
+        </div>
+      </div>
+
+      <div class="card-footer d-flex justify-content-between align-items-center">
+        <small class="text-muted">Your submission will be reviewed by our team</small>
+        <%= form.submit 'Next', class: 'btn btn-dark' %>
+      </div>
+    </div>
+  <% end %>
+</div>
