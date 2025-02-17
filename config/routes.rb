@@ -227,8 +227,12 @@ Rails.application.routes.draw do
       get :overview
       get :change
       get :start
+      get 'exit_opportunities_mapping'
+      get 'exit_details/:id', to: 'career_data#exit_details', as: 'exit_details'
     end
-
+    member do
+      get 'exit_details'
+    end
   end
 
   # Public Routes for Career Jobs and Compensation

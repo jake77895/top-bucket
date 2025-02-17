@@ -232,6 +232,26 @@ module CareerDataShared
     # Return the final node aggregates as JSON
     render json: node_aggregates
   end
+
+  def exit_details
+    @exit_mapping = ExitOpportunityMapping.includes(:exit_opportunity_details)
+                                        .find(params[:id])
+    @exit_opportunity_details = @exit_mapping.exit_opportunity_details
+    
+    Rails.logger.debug "🚀 EXIT DETAILS ACTION TRIGGERED 🚀"
+
+    # Return both JSON and HTML
+    respond_to do |format|
+      format.json { render json: [@exit_mapping.as_json(include: :exit_opportunity_details)] }
+      format.html { render partial: 'career_data/node_chart/node_modal_exits' }
+    end
+  end
+
+  def show
+    if params[:id].present?
+      @mapping = ExitOpportunityMapping.includes(:exit_opportunity_details).find(params[:id])
+    end
+  end
   
 
   # def generate_exit_opportunities
@@ -302,23 +322,37 @@ module CareerDataShared
   # end
 
   def exit_opportunities_mapping
-    exit_opps = ExitOpportunityMapping.all.group_by(&:source_category)
+    # Get all mappings grouped by source category
+    exit_opps = ExitOpportunityMapping.includes(:exit_opportunity_details)
+                                     .all
+                                     .group_by(&:source_category)
     
+    # Transform the mappings into the format we need
     mapped_exits = exit_opps.transform_values do |opportunities|
       opportunities.map do |opp|
-        # Find the matching node from node_mapping
-        mapping = node_mapping.find do |nm|
-          nm[:industry] == opp.target_industry &&
-          nm[:names].any? { |name| name.strip.downcase == opp.target_node_name.strip.downcase }
-        end
-        
-        if mapping
-          {
-            node_id: mapping[:id],
-            likelihood: opp.likelihood
-          }
-        end
-      end.compact
+        {
+          id: opp.id,
+          node_id: node_mapping.find do |nm|
+            nm[:industry].strip.downcase == opp.target_industry.strip.downcase &&
+            nm[:names].any? { |name| name.strip.downcase == opp.target_node_name.strip.downcase }
+          end&.dig(:id),
+          likelihood: opp.likelihood,
+          exit_opportunity_details: opp.exit_opportunity_details.group_by(&:target_company_name).map do |company, details|
+            {
+              target_company: company,
+              details: details.map do |detail|
+                {
+                  id: detail.id,
+                  source_company_name: detail.source_company_name,
+                  source_group: detail.source_group,
+                  target_group: detail.target_group,
+                  exit_opportunity_mapping_id: detail.exit_opportunity_mapping_id
+                }
+              end
+            }
+          end
+        }
+      end.compact # Remove any nil entries
     end
     
     Rails.logger.debug "Exit Opportunities Mapping: #{mapped_exits.inspect}"
@@ -756,12 +790,25 @@ module CareerDataShared
   
   
 
+  def exit_opportunities_for_node
+    node_name = params[:node_name]
+    category = params[:category]
+    
+    mappings = ExitOpportunityMapping.includes(:exit_opportunity_details)
+                                    .where(source_category: category, target_node_name: node_name)
+                                    .order(likelihood: :asc)
+    
+    render json: { mappings: mappings.as_json(include: :exit_opportunity_details) }
+  end
+
   def node_data
     # Get the node name from params
     node_name = params[:node_name]
+    Rails.logger.debug "1. Node name from params: #{node_name}"
     
     # Find the node in our mapping
     node = node_mapping.find { |n| n[:names].include?(node_name) }
+    Rails.logger.debug "2. Found node: #{node.inspect}"
     return {} unless node
 
     # Get all jobs matching this node's industry and level
@@ -770,14 +817,27 @@ module CareerDataShared
       node[:industry].downcase,
       node_name.downcase
     )
+    Rails.logger.debug "3. Found jobs count: #{jobs.count}"
 
     # Calculate summary statistics
     summary = calculate_start_summary(jobs)
+    Rails.logger.debug "4. Summary stats: #{summary.inspect}"
 
-    # Fetch exit opportunity mappings for this node
+    # Get the currently selected category from params
+    selected_category = params[:category]
+    Rails.logger.debug "5. Selected category: #{selected_category}"
+
+    # Find exit opportunity mappings - UPDATED QUERY
     @mappings = ExitOpportunityMapping.includes(:exit_opportunity_details)
-                                     .where(target_node_name: node_name)
+                                     .where(
+                                       source_category: node[:industry],  # Changed from target_industry
+                                       source_node_name: node_name       # Changed from target_node_name
+                                     )
                                      .order(likelihood: :asc)
+
+    Rails.logger.debug "6. SQL Query: #{@mappings.to_sql}"
+    Rails.logger.debug "7. Found mappings count: #{@mappings.count}"
+    Rails.logger.debug "8. Mappings data: #{@mappings.inspect}"
 
     # Return the node data
     {
@@ -929,14 +989,12 @@ def calculate_start_summary(jobs)
 end
 
   def initialize_mappings
-    # Only try to fetch mappings if we have a node_name parameter
-    if params[:node_name].present?
-      @mappings = ExitOpportunityMapping.includes(:exit_opportunity_details)
-                                       .where(target_node_name: params[:node_name])
-                                       .order(likelihood: :asc)
-    end
+    Rails.logger.debug "1. Initialize Mappings called with params: #{params.inspect}"
     
-    # Always ensure @mappings is at least an empty array
-    @mappings ||= []
+    if params[:id].present?
+      Rails.logger.debug "2. ID present: #{params[:id]}"
+      @mapping = ExitOpportunityMapping.includes(:exit_opportunity_details).find(params[:id])
+      Rails.logger.debug "3. Found mapping: #{@mapping.inspect}"
+    end
   end
 end

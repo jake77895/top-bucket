@@ -549,16 +549,18 @@ class CareerDataController < ApplicationController
 
   #   # Build response data
   #   {
-  #     industry: node_data[:industry],
-  #     level: node_data[:level],
-  #     record_count: node_data[:record_count],
-  #     avg_salary: node_data[:avg_salary],
-  #     avg_bonus: node_data[:avg_bonus],
-  #     avg_total_comp: node_data[:avg_total_comp],
-  #     avg_comp_per_hour: node_data[:avg_comp_per_hour],
-  #     mappings: @mappings
+  #     industry: node[:industry],
+  #     level: node[:level],
+  #     record_count: summary[:total_records],
+  #     avg_salary: summary[:avg_salary],
+  #     avg_bonus: summary[:avg_bonus],
+  #     avg_total_comp: summary[:avg_total_comp],
+  #     avg_comp_per_hour: summary[:avg_comp_per_hour],
+  #     mappings: @mappings.as_json(include: :exit_opportunity_details)
   #   }
   # end
+
+
 
   private
 
