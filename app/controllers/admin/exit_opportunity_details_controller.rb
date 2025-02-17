@@ -21,7 +21,9 @@ class Admin::ExitOpportunityDetailsController < ApplicationController
       redirect_to admin_exit_opportunity_details_path, 
                   notice: 'Exit opportunity detail was successfully created.'
     else
-      render :new
+      @mappings = ExitOpportunityMapping.includes(:exit_opportunity_details)
+                                       .order(created_at: :desc)
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -34,7 +36,9 @@ class Admin::ExitOpportunityDetailsController < ApplicationController
       redirect_to admin_exit_opportunity_details_path, 
                   notice: 'Exit opportunity detail was successfully updated.'
     else
-      render :edit
+      @mappings = ExitOpportunityMapping.includes(:exit_opportunity_details)
+                                       .order(created_at: :desc)
+      render :index, status: :unprocessable_entity
     end
   end
 

@@ -1,9 +1,9 @@
-<div class="modal fade" id="detailModal<%= mapping&.id || detail&.exit_opportunity_mapping_id %>" tabindex="-1" 
-     aria-labelledby="detailModalLabel<%= mapping&.id || detail&.exit_opportunity_mapping_id %>" aria-hidden="true">
+<div class="modal fade" id="detailModal<%= detail.id || mapping&.id %>" tabindex="-1" 
+     aria-labelledby="detailModalLabel<%= detail.id || mapping&.id %>" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="detailModalLabel<%= mapping&.id || detail&.exit_opportunity_mapping_id %>">
+        <h5 class="modal-title" id="detailModalLabel<%= detail.id || mapping&.id %>">
           <%= detail.persisted? ? 'Edit' : 'Add' %> Exit Opportunity Detail
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

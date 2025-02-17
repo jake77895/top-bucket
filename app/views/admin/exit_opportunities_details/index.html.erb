@@ -3,7 +3,7 @@
 
   <div class="card mb-4">
     <div class="card-header">
-      <h2 class="h5 mb-0">Opportunities Without Details</h2>
+      <h2 class="h5 mb-0">Opportunities Mapped</h2>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -17,7 +17,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @mappings.reject { |m| m.exit_opportunity_details.any? }.each do |mapping| %>
+            <% @mappings.each do |mapping| %>
               <tr>
                 <td><%= mapping.source_category %></td>
                 <td><%= mapping.target_industry %></td>
@@ -59,12 +59,11 @@
             </tr>
           </thead>
           <tbody>
-            <% @mappings.select { |m| m.exit_opportunity_details.any? }.each do |mapping| %>
-              <% detail = mapping.exit_opportunity_details.first %>
+            <% @mappings.flat_map(&:exit_opportunity_details).each do |detail| %>
               <tr>
-                <td><%= mapping.source_category %></td>
-                <td><%= mapping.target_industry %></td>
-                <td><%= mapping.target_node_name %></td>
+                <td><%= detail.exit_opportunity_mapping.source_category %></td>
+                <td><%= detail.exit_opportunity_mapping.target_industry %></td>
+                <td><%= detail.exit_opportunity_mapping.target_node_name %></td>
                 <td><%= detail.source_company_name %></td>
                 <td><%= detail.source_group %></td>
                 <td><%= detail.target_company_name %></td>
@@ -74,7 +73,7 @@
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-primary"
                             data-bs-toggle="modal" 
-                            data-bs-target="#detailModal<%= detail.exit_opportunity_mapping_id %>">
+                            data-bs-target="#detailModal<%= detail.id %>">
                       Edit Detail
                     </button>
                     <%= link_to 'Delete Detail', 
