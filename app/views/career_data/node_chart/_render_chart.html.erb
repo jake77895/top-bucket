@@ -202,7 +202,7 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   const highlightStroke = "#102B3F";
   const defaultStroke = "#ccc";
   const likelyExitColor = "#0d6efd";      // Darker blue for likely exits
-  const possibleExitColor = "#e6f4ff";    // Keeping the light blue for possible exits
+  const possibleExitColor = "#deebf7";    // Keeping the light blue for possible exits
   const exitOpportunityStroke = "#0d6efd";  // Blue stroke for exit nodes
 
     // Mapping of exit opportunities by category.
@@ -256,7 +256,7 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
             if (isPrimary) {
                 return highlightColor;  // White for primary nodes
             } else if (exitOpp) {
-                return exitOpp.likelihood >= 4 ? likelyExitColor : possibleExitColor;  // Different blues based on likelihood
+                return exitOpp.likelihood === 1 ? likelyExitColor : possibleExitColor;  // Blue for likelihood 1, Red for likelihood 2
             } else {
                 return defaultColor;  // Grey for other nodes
             }
@@ -477,7 +477,7 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
           if (isPrimary) {
             return highlightColor;
           } else if (exitOpp) {
-            return exitOpp.likelihood >= 4 ? likelyExitColor : possibleExitColor;
+            return exitOpp.likelihood === 1 ? likelyExitColor : possibleExitColor;
           } else {
             return defaultColor;
           }
