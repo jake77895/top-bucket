@@ -1,0 +1,62 @@
+<div class="modal fade" id="detailModal<%= mapping&.id || detail&.exit_opportunity_mapping_id %>" tabindex="-1" 
+     aria-labelledby="detailModalLabel<%= mapping&.id || detail&.exit_opportunity_mapping_id %>" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel<%= mapping&.id || detail&.exit_opportunity_mapping_id %>">
+          <%= detail.persisted? ? 'Edit' : 'Add' %> Exit Opportunity Detail
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with(model: [:admin, detail], local: true) do |f| %>
+          <%= f.hidden_field :exit_opportunity_mapping_id, value: mapping&.id || detail&.exit_opportunity_mapping_id %>
+
+          <% if detail.errors.any? %>
+            <div class="alert alert-danger">
+              <h4><%= pluralize(detail.errors.count, "error") %> prohibited this detail from being saved:</h4>
+              <ul>
+                <% detail.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="mb-3">
+            <%= f.label :source_company_name, class: 'form-label' %>
+            <%= f.text_field :source_company_name, class: 'form-control' %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :source_group, class: 'form-label' %>
+            <%= f.text_field :source_group, class: 'form-control' %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :target_company_name, class: 'form-label' %>
+            <%= f.text_field :target_company_name, class: 'form-control' %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :target_group, class: 'form-label' %>
+            <%= f.text_field :target_group, class: 'form-control' %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :likelihood, "Likelihood (1 = Likely, 2 = Possible)", class: 'form-label' %>
+            <%= f.select :likelihood, 
+                [['Likely', 1], ['Possible', 2]],
+                { include_blank: 'Select Likelihood' },
+                class: 'form-select' %>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <%= f.submit 'Save Detail', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -11,6 +11,8 @@
 #  updated_at       :datetime         not null
 #
 class ExitOpportunityMapping < ApplicationRecord
+  has_many :exit_opportunity_details, dependent: :destroy
+  
   validates :source_category, presence: true
   validates :target_node_name, presence: true
 end 

@@ -1,0 +1,19 @@
+<%
+=begin%>
+ <div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Edit Exit Opportunity Detail</h2>
+      <p class="text-muted mb-0">
+        For: <%= @detail.exit_opportunity_mapping.source_category %> → 
+        <%= @detail.exit_opportunity_mapping.target_industry %> 
+        (<%= @detail.exit_opportunity_mapping.target_node_name %>)
+      </p>
+    </div>
+    <div class="card-body">
+      <%= render 'form' %>
+    </div>
+  </div>
+</div>  
+<%
+=end%>

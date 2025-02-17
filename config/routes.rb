@@ -136,6 +136,7 @@ Rails.application.routes.draw do
     resources :exit_opportunity_mappings do
       get :node_names, on: :collection
     end
+    resources :exit_opportunity_details
 
   end
 
