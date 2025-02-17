@@ -74,18 +74,22 @@
     <!-- Answer Choices -->
     <h3 class="text-left mb-4" style="font-size: 1.1rem;">Choose Answer</h3>
     <div class="row row-cols-1 row-cols-md-2 g-3">
+      <% 
+        # Get the maximum height needed by finding the longest answer
+        answers = (1..4).map { |i| @question.send("answer_choice_#{i}") }
+      %>
       <% 1.upto(4) do |i| %>
-        <div class="col">
+        <div class="col h-100">
           <button 
             type="button" 
-            class="btn btn-outline-dark btn-lg w-100" 
-            style="font-size: 0.95rem; white-space: normal;" 
+            class="btn btn-outline-dark btn-lg w-100 h-100 d-flex align-items-center justify-content-center" 
+            style="font-size: 0.95rem; min-height: 80px; white-space: normal;" 
             data-bs-toggle="modal" 
             data-bs-target="#explanationModal" 
             data-bs-explanation="<%= @question.explanation_text %>" 
             data-is-correct="<%= @question.correct_answer == i %>"
             data-bs-correct-answer="<%= @question.send("answer_choice_#{@question.correct_answer}") %>">
-            <%= @question.send("answer_choice_#{i}") %>
+            <span><%= @question.send("answer_choice_#{i}") %></span>
           </button>
         </div>
       <% end %>

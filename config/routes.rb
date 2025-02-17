@@ -133,6 +133,9 @@ Rails.application.routes.draw do
 
     resources :career_aggregate_jobs, except: [:show]
 
+    resources :exit_opportunity_mappings do
+      get :node_names, on: :collection
+    end
 
   end
 

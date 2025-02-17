@@ -1,0 +1,43 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Exit Opportunity Mappings</h1>
+    <%= link_to 'New Mapping', new_admin_exit_opportunity_mapping_path, class: 'btn btn-primary' %>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Source Category</th>
+              <th>Target Industry</th>
+              <th>Target Node Name</th>
+              <th>Likelihood</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @mappings.each do |mapping| %>
+              <tr>
+                <td><%= mapping.source_category %></td>
+                <td><%= mapping.target_industry %></td>
+                <td><%= mapping.target_node_name %></td>
+                <td><%= mapping.likelihood %></td>
+                <td><%= mapping.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+                <td>
+                  <%= link_to 'Edit', edit_admin_exit_opportunity_mapping_path(mapping), class: 'btn btn-sm btn-outline-primary me-2' %>
+                  <%= link_to 'Delete', admin_exit_opportunity_mapping_path(mapping), 
+                      method: :delete, 
+                      data: { confirm: 'Are you sure?' }, 
+                      class: 'btn btn-sm btn-outline-danger' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

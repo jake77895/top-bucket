@@ -1,0 +1,85 @@
+<%= form_with(model: [:admin, @mapping], local: true) do |f| %>
+  <% if @mapping.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@mapping.errors.count, "error") %> prohibited this mapping from being saved:</h4>
+      <ul>
+        <% @mapping.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :source_category, class: 'form-label' %>
+    <%= f.select :source_category, 
+        available_industries,
+        { include_blank: 'Select Source Category' },
+        class: 'form-select',
+        data: { 
+          controller: "dynamic-select",
+          action: "change->dynamic-select#updateTargetNodeNames"
+        } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :target_industry, class: 'form-label' %>
+    <%= f.select :target_industry,
+        available_industries,
+        { include_blank: 'Select Target Industry' },
+        class: 'form-select',
+        data: { 
+          controller: "dynamic-select",
+          action: "change->dynamic-select#updateTargetNodeNames"
+        } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :target_node_name, class: 'form-label' %>
+    <%= f.select :target_node_name,
+        @mapping.target_industry.present? ? available_node_names(@mapping.target_industry) : [],
+        { include_blank: 'Select Target Node Name' },
+        class: 'form-select',
+        data: { dynamic_select_target: true } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :likelihood, "Likelihood (1 = Likely, 2 = Possible)", class: 'form-label' %>
+    <%= f.select :likelihood, 
+        [['Likely', 1], ['Possible', 2]],
+        { include_blank: 'Select Likelihood' },
+        class: 'form-select' %>
+  </div>
+
+  <div class="mt-4">
+    <%= f.submit class: 'btn btn-primary' %>
+    <%= link_to 'Back', admin_exit_opportunity_mappings_path, class: 'btn btn-outline-secondary ms-2' %>
+  </div>
+<% end %>
+
+<%# Add JavaScript for dynamic node name updates %>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const targetIndustrySelect = document.querySelector('select[name="exit_opportunity_mapping[target_industry]"]');
+  const targetNodeNameSelect = document.querySelector('select[name="exit_opportunity_mapping[target_node_name]"]');
+
+  targetIndustrySelect.addEventListener('change', function() {
+    const selectedIndustry = this.value;
+    
+    // Clear current options
+    targetNodeNameSelect.innerHTML = '<option value="">Select Target Node Name</option>';
+    
+    if (selectedIndustry) {
+      // Fetch node names for selected industry
+      fetch(`/admin/exit_opportunity_mappings/node_names?industry=${encodeURIComponent(selectedIndustry)}`)
+        .then(response => response.json())
+        .then(nodeNames => {
+          nodeNames.forEach(name => {
+            const option = new Option(name, name);
+            targetNodeNameSelect.add(option);
+          });
+        });
+    }
+  });
+});
+</script>

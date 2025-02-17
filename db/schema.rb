@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_16_193541) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_17_015811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -258,6 +258,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_16_193541) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["employment_report_program_id"], name: "index_employment_reports_on_employment_report_program_id"
+  end
+
+  create_table "exit_opportunities_details", force: :cascade do |t|
+    t.bigint "exit_opportunity_mapping_id", null: false
+    t.string "target_company_name", null: false
+    t.string "target_group"
+    t.string "source_company_name", null: false
+    t.string "source_group"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exit_opportunity_mapping_id"], name: "idx_on_exit_opportunity_mapping_id_b961f93084"
+    t.index ["source_company_name"], name: "index_exit_opportunities_details_on_source_company_name"
+    t.index ["target_company_name"], name: "index_exit_opportunities_details_on_target_company_name"
   end
 
   create_table "exit_opportunity_mappings", force: :cascade do |t|
@@ -598,6 +611,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_16_193541) do
   add_foreign_key "employment_report_locations", "employment_reports"
   add_foreign_key "employment_report_overviews", "employment_reports"
   add_foreign_key "employment_reports", "employment_report_programs"
+  add_foreign_key "exit_opportunities_details", "exit_opportunity_mappings"
   add_foreign_key "flags", "users"
   add_foreign_key "form_templates", "position_types"
   add_foreign_key "forum_comments", "posts"
