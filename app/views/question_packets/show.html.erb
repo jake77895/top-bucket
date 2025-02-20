@@ -170,7 +170,24 @@
       }
 
       correctAnswerText.textContent = `Correct Answer: ${correctAnswer}`;
-      explanationText.textContent = explanation;
+      
+      // Clear existing content
+      explanationText.innerHTML = '';
+      
+      // Split explanation into sentences, handling multiple periods
+      const sentences = explanation
+        .replace(/\.{2,}/g, '[MULTIPLE_PERIODS]') // Temporarily replace multiple periods
+        .split(/\.\s+/)
+        .map(sentence => sentence.replace(/\[MULTIPLE_PERIODS\]/g, '..')); // Restore multiple periods
+      
+      sentences.forEach(sentence => {
+        if (sentence.trim()) {  // Only create paragraph if sentence isn't empty
+          const p = document.createElement('p');
+          p.className = 'mb-2';
+          p.textContent = sentence + (sentence.endsWith('.') ? '' : '.');
+          explanationText.appendChild(p);
+        }
+      });
     });
   });
 </script>

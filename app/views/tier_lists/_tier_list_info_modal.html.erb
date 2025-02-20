@@ -1,0 +1,40 @@
+<!-- Tier List Info Modal -->
+<div class="modal fade" id="tierListInfoModal" tabindex="-1" aria-labelledby="tierListInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="tierListInfoModalLabel"><%= tier_list.name %></h5>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="modal-body text-center">
+        <% if tier_list.picture.present? %>
+          <%= image_tag tier_list.picture.url(:medium), 
+                class: 'img-thumbnail mb-3', 
+                style: 'width: 250px; height: 200px; object-fit: cover;' %>
+        <% else %>
+          <img src="https://via.placeholder.com/200x150" 
+                class="img-thumbnail mb-3" 
+                alt="Placeholder Image" 
+                style="width: 200px; height: 150px; object-fit: cover;">
+        <% end %>
+        
+        <div class="border rounded p-3 text-start bg-light" style="max-height: 200px; overflow-y: auto;">
+          <% if tier_list.description.present? %>
+            <% tier_list.description.split(/\.\s+/).each do |sentence| %>
+              <p class="mb-2"><%= sentence %>.</p>
+            <% end %>
+          <% else %>
+            <p class="mb-0">No description available.</p>
+          <% end %>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> 

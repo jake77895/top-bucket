@@ -17,17 +17,16 @@
       <div class="card mb-3">
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" id="heading-<%= category.parameterize %>">
           <h5 class="mb-0">
-            <button class="btn btn-link text-white text-decoration-none" data-bs-toggle="collapse" data-bs-target="#collapse-<%= category.parameterize %>" aria-expanded="false" aria-controls="collapse-<%= category.parameterize %>">
+            <button class="btn btn-link text-white text-decoration-none" data-bs-toggle="collapse" data-bs-target="#collapse-<%= category.parameterize %>" aria-expanded="true" aria-controls="collapse-<%= category.parameterize %>">
               <%= category.presence || "Uncategorized" %>
             </button>
           </h5>
           <%= link_to '#', data: { bs_toggle: 'collapse', bs_target: "#collapse-#{category.parameterize}" }, class: 'd-flex align-items-center' do %>
             <%= image_tag 'icons/arrow_toggle_icon.svg', alt: 'Toggle', style: 'width: 20px; height: 20px; filter: invert(1) brightness(2);' %>
           <% end %>
-
         </div>
 
-        <div id="collapse-<%= category.parameterize %>" class="collapse" aria-labelledby="heading-<%= category.parameterize %>" data-bs-parent="#categoryAccordion">
+        <div id="collapse-<%= category.parameterize %>" class="collapse show" aria-labelledby="heading-<%= category.parameterize %>" data-bs-parent="#categoryAccordion">
           <div class="card-body">
             <ul class="list-group">
               <% tier_lists.each do |tier_list| %>
