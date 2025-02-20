@@ -6,7 +6,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <%= form_with url: employment_report_path(@report), method: :get, data: { controller: "filters", action: "submit->filters#update" } do |f| %>
+        <%= form_with url: employment_reports_path(@year), method: :get, data: { controller: "filters", action: "submit->filters#update" } do |f| %>
           <%= hidden_field_tag :id, params[:id] %>
           <%= hidden_field_tag :type, params[:type] || 'MBA' %>
           
@@ -36,7 +36,7 @@
           </div>
 
           <div class="d-flex justify-content-end gap-2">
-            <%= link_to "Clear Filter", employment_report_path(@report, id: params[:id], type: params[:type]), 
+            <%= link_to "Clear Filter", employment_reports_path(@year, id: params[:id], type: params[:type]), 
                 class: "btn btn-outline-secondary" %>
             <%= f.submit "Apply", class: "btn btn-dark" %>
           </div>

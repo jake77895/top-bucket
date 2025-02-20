@@ -5,11 +5,17 @@ class EmploymentReportsController < ApplicationController
     
     # Debug logging
     Rails.logger.debug "Requested Year: #{@year}"
+    Rails.logger.debug "Program ID: #{params[:id]}"
     Rails.logger.debug "Total programs: #{@programs.count}"
     Rails.logger.debug "MBA programs: #{@programs.where(program_type: 'MBA').count}"
     Rails.logger.debug "Undergrad programs: #{@programs.where(program_type: 'Undergrad').count}"
     
-    @selected_program = @programs.first
+    # Select program based on params[:id] or default to first
+    @selected_program = if params[:id].present?
+      @programs.find_by(id: params[:id])
+    else
+      @programs.first
+    end
     
     if @selected_program
       @report = @selected_program.employment_reports.find_by(year: @year) || 

@@ -265,9 +265,7 @@ Rails.application.routes.draw do
   get 'exit_opportunities', to: 'site#generate_exit_opportunities'
   
   # Employment Report Consolidated Path
-  resources :employment_reports, only: [:show], param: :year do
-    get ':year', to: 'employment_reports#show', on: :collection
-  end
+  get 'employment_reports/:year', to: 'employment_reports#show', as: :employment_reports
 
   # Navigation parts of the site
   root "site#home"

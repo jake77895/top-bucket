@@ -1,8 +1,6 @@
 <div class="card shadow-sm mb-4">
   <div class="card-body">
-    <%= form_tag employment_report_path, method: :get do %>
-
-
+    <%= form_tag employment_reports_path(@year), method: :get do %>
       <!-- Program Selection -->
       <div class="row mb-3">
         <div class="col-12">
