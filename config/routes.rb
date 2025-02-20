@@ -269,9 +269,6 @@ Rails.application.routes.draw do
     get ':year', to: 'employment_reports#show', on: :collection
   end
 
-  # Or more simply:
-  get 'employment_reports/:year', to: 'employment_reports#show', as: :employment_report
-
   # Navigation parts of the site
   root "site#home"
 
