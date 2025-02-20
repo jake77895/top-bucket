@@ -52,6 +52,19 @@
         </tr>
       <% end %>
 
+      <%# Email %>
+      <% if employee.email.present? %>
+        <tr>
+          <th scope="row" class="text-nowrap border-bottom">Email</th>
+          <td class="border-bottom">
+            <%= employee.email %>
+            <% if employee.email_used? %>
+              <span class="badge rounded-pill bg-primary ms-2">Used</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+
       <%# Previous Company %>
       <% if employee.previous_company %>
         <tr>

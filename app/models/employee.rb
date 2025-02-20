@@ -3,6 +3,8 @@
 # Table name: employees
 #
 #  id                      :bigint           not null, primary key
+#  email                   :string
+#  email_used              :boolean
 #  flag_comment            :text
 #  flagged                 :integer          default(0), not null
 #  linkedin_url            :string
@@ -22,6 +24,7 @@
 # Indexes
 #
 #  index_employees_on_company_id               (company_id)
+#  index_employees_on_email                    (email)
 #  index_employees_on_flagged                  (flagged)
 #  index_employees_on_graduate_school_id       (graduate_school_id)
 #  index_employees_on_group_id                 (group_id)
@@ -62,6 +65,8 @@ class Employee < ApplicationRecord
   validates :name, presence: true
   validates :linkedin_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true
   validates :flagged, numericality: { only_integer: true }, allow_nil: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
+  validates :email, uniqueness: true, if: :email_present?
 
   # Virtual attribute for removing the picture
   attr_accessor :remove_picture
@@ -106,5 +111,9 @@ class Employee < ApplicationRecord
 
   def remove_picture_if_requested
     self.remove_picture! if remove_picture == '1'
+  end
+
+  def email_present?
+    email.present?
   end
 end

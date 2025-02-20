@@ -58,6 +58,9 @@ class EmployeesController < ApplicationController
             employee_view: ib_view,
             employee: @employee
           )
+          # Redirect to Investment Banking employee view
+          redirect_to employee_view_path(1), notice: 'Thank you for your submission. It will be reviewed by our team.'
+          return
         end
       end
       
@@ -82,7 +85,8 @@ class EmployeesController < ApplicationController
   def employee_params
     params.require(:employee).permit(
       :job_level_id, :previous_company_id, :linkedin_url,
-      :group_id, :location_id, :undergraduate_school_id, :graduate_school_id, :picture
+      :group_id, :location_id, :undergraduate_school_id, 
+      :graduate_school_id, :picture, :email, :email_used
     )
   end
 

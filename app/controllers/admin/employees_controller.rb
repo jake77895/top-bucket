@@ -213,7 +213,7 @@ class Admin::EmployeesController < ApplicationController
     params.require(:employee).permit(
       :job_level_id, :previous_company_id, :linkedin_url, :flagged, 
       :flag_comment, :group_id, :location_id, :undergraduate_school_id, 
-      :graduate_school_id, :picture, :remove_picture
+      :graduate_school_id, :picture, :remove_picture, :email, :email_used
     )
   end
 

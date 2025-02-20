@@ -36,6 +36,20 @@
           <%= form.label :graduate_school_id, 'Graduate School (Optional)', class: 'form-label' %>
           <%= form.collection_select :graduate_school_id, School.all, :id, :name, { prompt: 'Select Graduate School' }, { class: 'form-select' } %>
         </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <%= form.label :email, 'Email Address (Optional)', class: 'form-label' %>
+          <%= form.email_field :email, class: 'form-control', placeholder: 'Enter email address' %>
+        </div>
+
+        <!-- Email Used -->
+        <div class="mb-3">
+          <div class="form-check">
+            <%= form.check_box :email_used, class: 'form-check-input' %>
+            <%= form.label :email_used, 'Email has been used', class: 'form-check-label' %>
+          </div>
+        </div>
       </div>
 
       <div class="card-footer d-flex justify-content-between align-items-center">

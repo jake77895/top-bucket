@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_18_193103) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_20_191034) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -119,7 +119,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_18_193103) do
     t.bigint "undergraduate_school_id"
     t.bigint "graduate_school_id"
     t.string "picture"
+    t.string "email"
+    t.boolean "email_used"
     t.index ["company_id"], name: "index_employees_on_company_id"
+    t.index ["email"], name: "index_employees_on_email"
     t.index ["flagged"], name: "index_employees_on_flagged"
     t.index ["graduate_school_id"], name: "index_employees_on_graduate_school_id"
     t.index ["group_id"], name: "index_employees_on_group_id"

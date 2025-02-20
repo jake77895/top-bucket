@@ -43,6 +43,20 @@
           <%= form.collection_select :graduate_school_id, @schools, :id, :name, { prompt: 'Select Graduate School' }, { class: 'form-select' } %>
         </div>
 
+        <!-- Email -->
+        <div class="mb-3">
+          <%= form.label :email, 'Email Address', class: 'form-label' %>
+          <%= form.email_field :email, class: 'form-control', placeholder: 'Enter email address (optional)' %>
+        </div>
+
+        <!-- Email Used -->
+        <div class="mb-3">
+          <div class="form-check">
+            <%= form.check_box :email_used, class: 'form-check-input' %>
+            <%= form.label :email_used, 'Email has been used', class: 'form-check-label' %>
+          </div>
+        </div>
+
         <!-- Picture Upload -->
         <div class="mb-3">
           <%= form.label :picture, 'Upload Picture', class: 'form-label' %>
