@@ -22,7 +22,7 @@
         <div class="d-flex flex-column justify-content-between" style="height: 100%;">
           <h6 class="mb-0 text-start" style="line-height: 1; margin: 0;"><%= ranking.item.name %></h6>
           <small class="text-muted text-start" style="line-height: 0.95; margin: 0; font-size: 0.75rem;">
-            <%= shorten_name(tier_list.name) %>
+            <%= truncate(shorten_name(tier_list.name), length: 35) %>
           </small>
         </div>
       </div>
@@ -30,8 +30,7 @@
       <div class="d-flex align-items-end ms-auto" style="height: 30px;">
         <img src="/assets/custom_icons/top_bucket_icon.svg" alt="Top Bucket Icon" style="width: 30px; height: 30px; margin-right: 5px;">
         <span class="text-muted text-start" style="line-height: 1; font-size: 0.7rem;">
-          <%= @user_ranking_counts_tb[ranking.tier_list_id] || 0 %>
-          <span class="text-start" style="display: block;">rankings</span>
+          <%= pluralize(@user_ranking_counts_tb[ranking.tier_list_id] || 0, 'ranking') %>
         </span>
       </div>
     </div>
