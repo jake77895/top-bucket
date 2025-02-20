@@ -48,13 +48,13 @@
           <%= form.label :picture, 'Upload Picture', class: 'form-label' %>
           <%= form.file_field :picture, class: 'form-control' %>
           
-          <% if @employee.picture.present? %>
+          <% if @employee.picture? %>
             <div class="mt-2">
               <label class="form-label">Current Picture:</label>
               <div>
-                <%= image_tag @employee.picture.url(:thumb), 
-                            class: 'img-thumbnail', 
-                            style: 'width: 150px; height: 150px; object-fit: cover;' %>
+                <%= cl_image_tag @employee.picture.url, 
+                              class: 'img-thumbnail', 
+                              style: 'width: 150px; height: 150px; object-fit: cover;' %>
               </div>
               <div class="form-check mt-2">
                 <%= form.check_box :remove_picture, class: 'form-check-input' %>

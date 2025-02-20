@@ -90,8 +90,14 @@ class Admin::EmployeesController < ApplicationController
   def update_initial
     @employee = Employee.find(params[:id])
 
-    if @employee.update(initial_employee_params)
-      session[:employee_edit] = initial_employee_params
+    # Only update with the initial permitted parameters
+    if @employee.update_columns(
+      name: initial_employee_params[:name],
+      company_id: initial_employee_params[:company_id],
+      position_type_id: initial_employee_params[:position_type_id],
+      location_id: initial_employee_params[:location_id]
+    )
+      session[:employee_edit] = initial_employee_params.to_h
       redirect_to edit_details_admin_employee_path(@employee), notice: 'Initial details updated. Proceed to finalize the employee information.'
     else
       @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
@@ -125,10 +131,18 @@ class Admin::EmployeesController < ApplicationController
   def update
     @employee = Employee.find(params[:id])
 
-    # Remove the picture if the checkbox is checked
-    @employee.picture.purge if params[:employee][:remove_picture] == '1'
+    # Debug logging
+    Rails.logger.debug "==== DEBUG: Update Employee ===="
+    Rails.logger.debug "Employee ID: #{@employee.id}"
+    Rails.logger.debug "Params: #{params.inspect}"
+    Rails.logger.debug "Employee params: #{employee_params.inspect}"
 
-    if @employee.update(session[:employee_edit].merge(employee_params))
+    # Merge the session data with the employee params
+    update_params = session[:employee_edit].present? ? 
+      session[:employee_edit].merge(employee_params) : 
+      employee_params
+
+    if @employee.update(update_params)
       session.delete(:employee_edit)
       redirect_to admin_employees_path, notice: 'Employee was successfully updated.'
     else
@@ -146,8 +160,15 @@ class Admin::EmployeesController < ApplicationController
   ## =====================
   # DELETE /admin/employees/:id
   def destroy
-    @employee.destroy
-    redirect_to admin_employees_path, notice: 'Employee was successfully deleted.'
+    employee = Employee.find(params[:id])
+    employee.destroy
+    
+    # Determine where to redirect based on where the request came from
+    redirect_path = request.referer&.include?('flagged') ? 
+      flagged_admin_employees_path : 
+      admin_employees_path
+      
+    redirect_to redirect_path, notice: 'Employee was successfully deleted.'
   end
 
   ## =====================
@@ -170,13 +191,6 @@ class Admin::EmployeesController < ApplicationController
     flags.update_all(status: "resolved")
     flash[:success] = "Flags for #{employee.name} have been resolved."
     redirect_to flagged_admin_employees_path
-
-  end
-
-  def destroy
-    employee = Employee.find(params[:id])
-    employee.destroy
-    redirect_to flagged_admin_employees_path, notice: "Employee deleted successfully."
   end
 
   ## =====================
@@ -198,7 +212,9 @@ class Admin::EmployeesController < ApplicationController
   def employee_params
     params.require(:employee).permit(
       :job_level_id, :previous_company_id, :linkedin_url, :flagged, 
-      :flag_comment, :group_id, :location_id, :undergraduate_school_id, :graduate_school_id, :picture, :remove_picture)
+      :flag_comment, :group_id, :location_id, :undergraduate_school_id, 
+      :graduate_school_id, :picture, :remove_picture
+    )
   end
 
   # Fetch Groups based on Company, Location, Position Type

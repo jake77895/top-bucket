@@ -7,6 +7,7 @@
 #  flagged                 :integer          default(0), not null
 #  linkedin_url            :string
 #  name                    :string           not null
+#  picture                 :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  company_id              :bigint
@@ -65,7 +66,7 @@ class Employee < ApplicationRecord
   # Virtual attribute for removing the picture
   attr_accessor :remove_picture
 
-  before_save :purge_picture, if: -> { remove_picture == '1' }
+  before_save :remove_picture_if_requested
 
    # Ransack: Allowlisted searchable attributes
    def self.ransackable_attributes(auth_object = nil)
@@ -103,7 +104,7 @@ class Employee < ApplicationRecord
 
   private
 
-  def purge_picture
-    picture.purge
+  def remove_picture_if_requested
+    self.remove_picture! if remove_picture == '1'
   end
 end
