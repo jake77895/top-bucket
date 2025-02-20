@@ -1,20 +1,21 @@
 class EmploymentReportsController < ApplicationController
   def show
     @programs = EmploymentReportProgram.all
+    @year = params[:year] || Time.current.year.to_s
     
     # Debug logging
+    Rails.logger.debug "Requested Year: #{@year}"
     Rails.logger.debug "Total programs: #{@programs.count}"
     Rails.logger.debug "MBA programs: #{@programs.where(program_type: 'MBA').count}"
     Rails.logger.debug "Undergrad programs: #{@programs.where(program_type: 'Undergrad').count}"
     
-    @selected_program = EmploymentReportProgram.find_by(id: params[:id]) || @programs.first
+    @selected_program = @programs.first
     
     if @selected_program
-      @report = @selected_program.employment_reports.find_by(year: params[:year]) || 
+      @report = @selected_program.employment_reports.find_by(year: @year) || 
                 @selected_program.employment_reports.order(year: :desc).first
       
       if @report
-        @year = @report.year
         # Validate year is a 4-digit number
         if @year.to_s.length != 4
           redirect_to root_path, alert: "Invalid year format"
@@ -28,18 +29,22 @@ class EmploymentReportsController < ApplicationController
 
         # Apply filters if any are present
         @filtered_data = apply_filters(params)
+      else
+        redirect_to root_path, alert: "Report not found for year #{@year}"
+        return
       end
     else
-      redirect_to root_path, alert: "Program not found"
+      redirect_to root_path, alert: "No programs found"
+      return
     end
-
-    # Add this to verify the view is being rendered
-    render 'employment_reports/show'
 
     respond_to do |format|
       format.html
       format.json { render json: @filtered_data }
     end
+  rescue => e
+    Rails.logger.error "Employment Report Error: #{e.message}\n#{e.backtrace.join("\n")}"
+    redirect_to root_path, alert: "Sorry, there was an error loading the employment report."
   end
 
   private
