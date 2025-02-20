@@ -28,7 +28,7 @@
       </div>
 
       <div class="d-flex align-items-end ms-auto" style="height: 30px;">
-        <img src="/assets/custom_icons/top_bucket_icon.svg" alt="Top Bucket Icon" style="width: 30px; height: 30px; margin-right: 5px;">
+        <%= image_tag 'custom_icons/top_bucket_icon.svg', alt: 'Top Bucket Icon', style: 'width: 30px; height: 30px; margin-right: 5px;' %>
         <span class="text-muted text-start" style="line-height: 1; font-size: 0.7rem;">
           <%= pluralize(@user_ranking_counts_tb[ranking.tier_list_id] || 0, 'ranking') %>
         </span>
