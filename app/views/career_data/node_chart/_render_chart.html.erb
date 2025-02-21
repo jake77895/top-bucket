@@ -203,7 +203,7 @@ function renderLinks(svg, linkData, nodeDataMap, levelSpacing) {
   const defaultStroke = "#ccc";
   const likelyExitColor = "#0d6efd";      // Darker blue for likely exits
   const possibleExitColor = "#deebf7";    // Keeping the light blue for possible exits
-  const exitOpportunityStroke = "#0d6efd";  // Blue stroke for exit nodes
+  const exitOpportunityStroke = "#ccc";  // Blue stroke for exit nodes
 
     // Mapping of exit opportunities by category.
   // For Investment Banking, node with id 7 (Private Equity Associate) is considered an exit opportunity.
@@ -519,6 +519,10 @@ function updateModalContent(mapping) {
     return;
   }
 
+  // Add overflow-x style to the accordion
+  companiesAccordion.style.overflowX = 'auto';
+  companiesAccordion.style.maxWidth = '100%';
+
   if (!mapping || !mapping.exit_opportunity_details || mapping.exit_opportunity_details.length === 0) {
     companiesAccordion.innerHTML = `
       <div class="alert alert-info">
@@ -531,7 +535,7 @@ function updateModalContent(mapping) {
   // Sort details by likelihood (1 first) then alphabetically by company name
   const sortedDetails = mapping.exit_opportunity_details.sort((a, b) => {
     if (a.likelihood !== b.likelihood) {
-      return a.likelihood - b.likelihood; // 1 comes before 2
+      return a.likelihood - b.likelihood;
     }
     return a.source_company_name.localeCompare(b.source_company_name);
   });
@@ -558,14 +562,24 @@ function updateModalContent(mapping) {
            data-bs-parent="#companiesAccordionExits">
         <div class="accordion-body p-0">
           ${details.map((detail, index) => `
-            <div class="px-3 py-2 ${index !== details.length - 1 ? 'border-bottom' : ''}">
-              <p class="mb-0 d-flex align-items-center">
-                <strong>${detail.source_company_name}</strong>${detail.source_group ? ` <span class="text-secondary">&nbsp;(${detail.source_group})</span>` : ''}
-                <span class="badge ${detail.likelihood === 1 ? 'bg-primary' : ''} ms-2" 
-                      style="${detail.likelihood === 2 ? 'background-color: #deebf7; color: #000;' : ''}">
-                  ${detail.likelihood === 1 ? 'Strong Chance' : 'Moderate Chance'}
-                </span>
-              </p>
+            <div class="px-3 py-2 ${index !== details.length - 1 ? 'border-bottom' : ''}" style="min-width: max-content;">
+              <div class="d-flex justify-content-between align-items-start mb-1">
+                <div>
+                  <p class="mb-1 d-flex align-items-center flex-wrap">
+                    <strong>${detail.source_company_name}</strong>
+                    ${detail.source_group ? ` <span class="text-secondary">&nbsp;(${detail.source_group})</span>` : ''}
+                    <span class="badge ${detail.likelihood === 1 ? 'bg-primary' : ''} ms-2" 
+                          style="${detail.likelihood === 2 ? 'background-color: #deebf7; color: #000;' : ''}">
+                      ${detail.likelihood === 1 ? 'Strong Chance' : 'Moderate Chance'}
+                    </span>
+                    ${detail.description ? `
+                      <span class="badge bg-light text-dark ms-2 text-wrap" style="font-weight: normal;">
+                        ${detail.description}
+                      </span>
+                    ` : ''}
+                  </p>
+                </div>
+              </div>
             </div>
           `).join('')}
         </div>

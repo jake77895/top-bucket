@@ -3,6 +3,7 @@
 # Table name: exit_opportunities_details
 #
 #  id                          :bigint           not null, primary key
+#  description                 :text
 #  likelihood                  :integer
 #  source_company_name         :string           not null
 #  source_group                :string
