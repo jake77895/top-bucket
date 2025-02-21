@@ -1,7 +1,7 @@
 <h1 class="text-center my-4">Create a New Post in <%= @forum_room.name %></h1>
 
 <div class="container">
-  <%= form_with model: @post, local: true do |form| %>
+  <%= form_with model: [@forum_room, @post], local: true do |form| %>
     <div class="card shadow-sm">
       <div class="card-body">
         <!-- Title -->
