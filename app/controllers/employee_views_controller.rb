@@ -287,17 +287,17 @@ class EmployeeViewsController < ApplicationController
   def overall_ib_networking_impression(ratings)
     if params[:form_context].to_s.downcase == "networking" && @employee.position_type.name == "Investment Banking" 
       # Fetch the ID dynamically based on the question text
-      impression_id = FormTemplate.find_by(question_text: "How would you rate your interaction?", form_context: params[:form_context].to_s.downcase)&.id.to_s
+      impression_id = FormTemplate.find_by(question_text: "When was your last interaction in the recruiting process?", form_context: params[:form_context].to_s.downcase)&.id.to_s
 
-      # Count occurrences of each response for the "How would you rate your interaction?" question
+      # Count occurrences of each response for the "When was your last interaction in the recruiting process?" question
       impression_counts = ratings.pluck(:responses).map { |r| r[impression_id] }.compact.tally
 
-      # Map the counts to predefined categories
+      # Map the counts to the new categories
       @impression_data = {
-        "Very Positive" => impression_counts["Very Positive"] || 0,
-        "Positive" => impression_counts["Positive"] || 0,
-        "Neutral" => impression_counts["Neutral"] || 0,
-        "Negative" => impression_counts["Negative"] || 0,
+        "Early in the process" => impression_counts["Early in the process"] || 0,
+        "Middle of the process" => impression_counts["Middle of the process"] || 0,
+        "Near the interview stage" => impression_counts["Near the interview stage"] || 0,
+        "Don't remember" => impression_counts["Don't remember"] || 0
       }
     end
   end

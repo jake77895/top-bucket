@@ -170,7 +170,6 @@ Rails.application.routes.draw do
     end
     member do
       get 'summary/:employee_id', to: 'employee_views#summary', as: 'summary'
-
       post 'flag_employee/:employee_id', to: 'employee_views#flag', as: 'flag_employee'
     end
   end
@@ -268,7 +267,7 @@ Rails.application.routes.draw do
   get 'employment_reports/:year', to: 'employment_reports#show', as: :employment_reports
 
   # Navigation parts of the site
-  root "site#home"
+  root "site#about"
 
   # authenticated :user do
   #   # Set the authenticated user's homepage

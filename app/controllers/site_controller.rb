@@ -194,7 +194,7 @@ class SiteController < ApplicationController
     Rails.logger.debug "Overall Impression Data: #{@impression_data.inspect}"
     
     # Calculate positive percentage
-    impression_counts = calculate_impression_counts(ratings, "How would you rate your interaction?", "networking")
+    impression_counts = calculate_impression_counts(ratings, "When was your last interaction in the recruiting process?", "networking")
     positive_percentage = calculate_positive_impressions_percentage_ib_networking(impression_counts)
     Rails.logger.debug "Positive Percentage: #{positive_percentage}"
     
