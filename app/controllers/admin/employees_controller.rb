@@ -9,7 +9,7 @@ class Admin::EmployeesController < ApplicationController
   # GET /admin/employees
   def index
     @employees = Employee.includes(:job_level, :company, :group, :location, :undergraduate_school, :graduate_school)
-                         .order(created_at: :desc)
+                         .order(name: :asc)
   end
 
   ## =====================

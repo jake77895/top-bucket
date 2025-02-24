@@ -8,7 +8,23 @@
         style: 'width: 50px; height: 50px; object-fit: cover;',
         alt: employee.name
       ) %>
-      <h5 class="mb-0"><%= employee.name %></h5>
+      <div>
+        <h5 class="mb-0"><%= employee.name %></h5>
+        <div class="d-flex align-items-center">
+          <% if employee.employee_verification&.verified_by_admin? %>
+            <span class="badge bg-success">Verified By Admin</span>
+          <% elsif employee.employee_verification&.user_verifications_count.to_i >= 3 %>
+            <span class="badge bg-primary">Verified By Users</span>
+          <% else %>
+            <span class="badge bg-secondary me-2">Not Yet Verified</span>
+            <% if user_signed_in? %>
+              <%= link_to 'Suggest Edit', 
+                  edit_user_employee_path(employee, return_to: request.path), 
+                  class: 'btn btn-sm btn-outline-primary' %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     </div>
     <% if employee.linkedin_url.present? %>
       <%= link_to employee.linkedin_url, target: '_blank', rel: 'noopener', class: 'ms-auto' do %>

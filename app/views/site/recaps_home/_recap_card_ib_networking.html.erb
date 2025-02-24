@@ -14,9 +14,7 @@
       </div>
       <p class="mb-1" style="font-size: 0.7rem;"><%= recap_card[:level] %> at <%= recap_card[:company] %></p>
       <p class="text-muted mb-0" style="font-size: 0.7rem;">
-        <%= image_tag "icons/recap_card_icons/heart.svg", class: "me-1", style: "height: 14px; width: 14px;", title: "Rated Positive Or Very Positive" %>
-        <strong><%= recap_card[:positive_percentage] %>%</strong>
-        | <%= image_tag "icons/recap_card_icons/trend.png", class: "me-1", style: "height: 14px; width: 14px;", title: "Asked About A Market Trend" %>
+        <%= image_tag "icons/recap_card_icons/trend.png", class: "me-1", style: "height: 14px; width: 14px;", title: "Asked About A Market Trend" %>
         <strong><%= recap_card[:market_trend] %>%</strong>
         | <%= image_tag "icons/recap_card_icons/deal.png", class: "me-1", style: "height: 14px; width: 14px;", title: "Asked About A Deal" %>
         <strong><%= recap_card[:deal] %>%</strong>

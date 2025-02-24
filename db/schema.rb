@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_21_030545) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_24_164036) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,6 +84,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_21_030545) do
     t.datetime "updated_at", null: false
     t.bigint "position_type_id", null: false
     t.index ["position_type_id"], name: "index_companies_on_position_type_id"
+  end
+
+  create_table "employee_verifications", force: :cascade do |t|
+    t.bigint "employee_id", null: false
+    t.boolean "verified_by_admin", default: false
+    t.integer "user_verifications_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_employee_verifications_on_employee_id"
   end
 
   create_table "employee_views", force: :cascade do |t|
@@ -602,6 +611,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_21_030545) do
   add_foreign_key "comments", "tier_lists"
   add_foreign_key "comments", "users"
   add_foreign_key "companies", "position_types"
+  add_foreign_key "employee_verifications", "employees", on_delete: :cascade
   add_foreign_key "employee_views_employees", "employee_views"
   add_foreign_key "employee_views_employees", "employees", on_delete: :cascade
   add_foreign_key "employees", "companies"

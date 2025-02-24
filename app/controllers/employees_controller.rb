@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_employee, only: [:edit_user, :update_user_initial, :edit_user_details, :update_user]
 
   def new
     @employee = Employee.new
@@ -76,7 +77,80 @@ class EmployeesController < ApplicationController
     end
   end
 
+  ## =====================
+  ## USER EDIT FLOW - Step 1
+  ## =====================
+  def edit_user
+    @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+    @position_types = PositionType.all
+    @locations = Location.all
+    @return_to = params[:return_to]
+  end
+
+  def update_user_initial
+    if @employee.update_columns(
+      name: initial_employee_params[:name],
+      company_id: initial_employee_params[:company_id],
+      position_type_id: initial_employee_params[:position_type_id],
+      location_id: initial_employee_params[:location_id]
+    )
+      session[:employee_user_edit] = initial_employee_params.to_h
+      redirect_to edit_user_details_employee_path(@employee, return_to: params[:return_to]), 
+                  notice: 'Initial details updated. Please complete the remaining information.'
+    else
+      @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+      @position_types = PositionType.all
+      @locations = Location.all
+      flash.now[:alert] = 'Please fill in all required fields.'
+      render :edit_user
+    end
+  end
+
+  ## =====================
+  ## USER EDIT FLOW - Step 2
+  ## =====================
+  def edit_user_details
+    if session[:employee_user_edit].blank?
+      redirect_to edit_user_employee_path(@employee), alert: 'Please provide initial details first.'
+      return
+    end
+
+    @groups = fetch_groups(@employee.company_id, @employee.location_id, @employee.position_type_id)
+    @job_levels = fetch_job_levels(@employee.company_id, @employee.position_type_id)
+    @locations = Location.all
+    @schools = School.all
+    @companies = Company.select('DISTINCT ON (name) *').order(:name, :id)
+    @return_to = params[:return_to]
+  end
+
+  def update_user
+    update_params = session[:employee_user_edit].present? ? 
+      session[:employee_user_edit].merge(employee_params) : 
+      employee_params
+
+    if @employee.update(update_params)
+      # Increment the user verifications count
+      @employee.employee_verification ||= EmployeeVerification.new(employee: @employee)
+      @employee.employee_verification.increment!(:user_verifications_count)
+      
+      session.delete(:employee_user_edit)
+      redirect_to params[:return_to] || root_path, 
+                  notice: 'Thank you for helping verify this employee information!'
+    else
+      @groups = fetch_groups(@employee.company_id, @employee.location_id, @employee.position_type_id)
+      @job_levels = fetch_job_levels(@employee.company_id, @employee.position_type_id)
+      @locations = Location.all
+      @schools = School.all
+      flash.now[:alert] = 'Failed to save employee details.'
+      render :edit_user_details
+    end
+  end
+
   private
+
+  def set_employee
+    @employee = Employee.find(params[:id])
+  end
 
   def initial_employee_params
     params.require(:employee).permit(:name, :company_id, :position_type_id, :location_id)

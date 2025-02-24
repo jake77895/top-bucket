@@ -7,7 +7,7 @@ form_templates = [
   { form_context: "networking", question_text: "Were you asked any technical questions?", response_type: "yes/no", position_type_id: find_position_type_id('Investment Banking'), position: 2 },
   { form_context: "networking", question_text: "Were you asked about a deal?", response_type: "yes/no", position_type_id: find_position_type_id('Investment Banking'), position: 3 },
   { form_context: "networking", question_text: "Were you asked about a market trend?", response_type: "yes/no", position_type_id: find_position_type_id('Investment Banking'), position: 4 },
-  { form_context: "networking", question_text: "How would you rate your interaction?", response_type: "dropdown", position_type_id: find_position_type_id('Investment Banking'), position: 5 },
+  { form_context: "networking", question_text: "When was your last interaction in the recruiting process?", response_type: "dropdown", position_type_id: find_position_type_id('Investment Banking'), position: 5 },
   { form_context: "networking", question_text: "Were you referred to another colleague?", response_type: "yes/no", position_type_id: find_position_type_id('Investment Banking'), position: 6 },
   { form_context: "interview", question_text: "How would you describe the tone of the interview?", response_type: "dropdown", position_type_id: find_position_type_id('Investment Banking'), position: 1 },
   { form_context: "interview", question_text: "Were you asked about a deal?", response_type: "yes/no", position_type_id: find_position_type_id('Investment Banking'), position: 2 },

@@ -1,5 +1,19 @@
 <div class="card shadow-sm mx-2 mb-3" style="width: 250px; margin-right: 15px; cursor: pointer;">
   <div class="card-body position-relative text-center">
+    <!-- Verification Icon -->
+    <% if employee.employee_verification&.verified_by_admin? || employee.employee_verification&.user_verifications_count.to_i >= 3 %>
+      <div class="position-absolute top-0 start-0 ms-3 mt-2">
+        <%= image_tag 'icons/check_icon.svg', 
+            alt: 'Verified', 
+            style: 'width: 20px; height: 20px; filter: invert(20%) sepia(98%) saturate(2000%) hue-rotate(106deg) brightness(96%) contrast(106%);',
+            data: { 
+              bs_toggle: 'tooltip', 
+              bs_placement: 'top', 
+              bs_title: employee.employee_verification&.verified_by_admin? ? 'Verified By Admin' : 'Verified By Users'
+            } %>
+      </div>
+    <% end %>
+
     <!-- LinkedIn Link and Flag Icon -->
     <div class="position-absolute top-0 end-0 me-2 mt-2 d-flex align-items-center">
       <!-- Flag Icon -->

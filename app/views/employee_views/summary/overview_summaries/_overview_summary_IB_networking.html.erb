@@ -4,7 +4,7 @@
     <div class="col-md-4">
       <div class="card shadow-sm h-100">
         <div class="card-body d-flex flex-column justify-content-center">
-          <h5 class="card-title">Overall Impression</h5>
+          <h5 class="card-title">Stage in Recruiting Process</h5>
           <% total_responses = @impression_data.values.sum %>
           <% @impression_data.each do |label, count| %>
             <% percentage = (count * 100 / total_responses).round(0) %>

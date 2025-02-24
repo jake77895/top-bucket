@@ -62,6 +62,8 @@ class Employee < ApplicationRecord
 
   has_many :ratings, dependent: :destroy
 
+  has_one :employee_verification, dependent: :destroy
+
   validates :name, presence: true
   validates :linkedin_url, format: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true
   validates :flagged, numericality: { only_integer: true }, allow_nil: true

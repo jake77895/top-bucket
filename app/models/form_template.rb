@@ -33,7 +33,7 @@ class FormTemplate < ApplicationRecord
     {
       # Investment Banking - Networking
       "How would you describe the tone of the conversation?" => ["Casual and Friendly", "Professional", "Tense or Confrontational", "Unengaged"],
-      "How would you rate your interaction?" => ["Very Positive", "Positive", "Neutral", "Negative"],
+      "When was your last interaction in the recruiting process?" => ["Early in the process", "Middle of the process", "Near the interview stage", "Don’t remember"],
       # Investment Banking - Interview
       "How difficult were the technical questions?" => ["Easy", "Medium", "Hard", "Very Hard"],
       "How would you describe the tone of the interview?" => ["Casual and Friendly", "Professional", "Tense or Confrontational", "Unengaged"],

@@ -288,5 +288,18 @@ Rails.application.routes.draw do
   get 'terms_of_service', to: 'site#terms_of_service', as: :terms_of_service
 
 
+  #############################
+  ####  USER FUNCTIONALITy  ###
+  #############################
+
+  # Users editing employee details
+  resources :employees, only: [] do
+    member do
+      get :edit_user
+      patch :update_user_initial
+      get :edit_user_details
+      patch :update_user
+    end
+  end
 
 end
