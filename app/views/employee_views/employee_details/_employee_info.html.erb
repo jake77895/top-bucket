@@ -18,9 +18,30 @@
           <% else %>
             <span class="badge bg-secondary me-2">Not Yet Verified</span>
             <% if user_signed_in? %>
-              <%= link_to 'Suggest Edit', 
-                  edit_user_employee_path(employee, return_to: request.path), 
-                  class: 'btn btn-sm btn-outline-primary' %>
+              <%= link_to edit_user_employee_path(employee, return_to: request.path),
+                  class: 'me-2',
+                  data: {
+                    bs_toggle: 'tooltip',
+                    bs_placement: 'top',
+                    bs_title: 'Add Or Update Info'
+                  } do %>
+                <%= image_tag 'icons/edit_icon.svg',
+                    alt: 'Edit',
+                    style: 'width: 20px; height: 20px;' %>
+              <% end %>
+              <%= button_to verify_employee_path(employee),
+                  method: :post,
+                  class: 'btn btn-link p-0 me-2',
+                  data: { 
+                    confirm: 'Are you sure all the information is correct?',
+                    bs_toggle: 'tooltip',
+                    bs_placement: 'top',
+                    bs_title: 'Everything Correct?'
+                  } do %>
+                <%= image_tag 'icons/check_square.svg',
+                    alt: 'Verify',
+                    style: 'width: 20px; height: 20px;' %>
+              <% end %>
             <% end %>
           <% end %>
         </div>

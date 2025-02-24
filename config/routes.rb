@@ -75,6 +75,7 @@ Rails.application.routes.draw do
         # For the flagged flow
         get :flagged
       end
+      
       member do
         get :edit_initial
         patch :update_initial
@@ -82,6 +83,9 @@ Rails.application.routes.draw do
         
         # Resolve flags for a specific employee
         post :resolve
+        
+        # For the verification flow
+        post :toggle_verification
       end
     end
     resources :employee_views do
@@ -299,6 +303,7 @@ Rails.application.routes.draw do
       patch :update_user_initial
       get :edit_user_details
       patch :update_user
+      post :verify
     end
   end
 

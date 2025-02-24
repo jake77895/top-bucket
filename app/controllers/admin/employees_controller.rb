@@ -193,6 +193,19 @@ class Admin::EmployeesController < ApplicationController
     redirect_to flagged_admin_employees_path
   end
 
+  def toggle_verification
+    @employee = Employee.find(params[:id])
+    
+    # Create or find verification record
+    verification = @employee.employee_verification || @employee.create_employee_verification
+    
+    # Toggle the verified_by_admin status
+    verification.update(verified_by_admin: !verification.verified_by_admin)
+    
+    redirect_back(fallback_location: admin_employees_path, 
+      notice: verification.verified_by_admin ? 'Employee verified.' : 'Employee verification removed.')
+  end
+
   ## =====================
   ## PRIVATE METHODS
   ## =====================

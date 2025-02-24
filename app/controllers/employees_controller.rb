@@ -146,6 +146,23 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def verify
+    @employee = Employee.find(params[:id])
+    
+    # Create verification record if it doesn't exist
+    @employee.employee_verification ||= EmployeeVerification.new(employee: @employee)
+    
+    if current_user.admin?
+      @employee.employee_verification.update(verified_by_admin: true)
+      flash[:notice] = "Employee information has been admin verified!"
+    else
+      @employee.employee_verification.increment!(:user_verifications_count)
+      flash[:notice] = "Thank you for verifying this employee's information!"
+    end
+    
+    redirect_back(fallback_location: root_path)
+  end
+
   private
 
   def set_employee
