@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_25_010026) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_26_001418) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -478,6 +478,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_010026) do
     t.index ["slug"], name: "index_pages_on_slug", unique: true
   end
 
+  create_table "point_actions", force: :cascade do |t|
+    t.string "action_name", null: false
+    t.integer "point_value", null: false
+    t.text "description"
+    t.boolean "is_active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_name"], name: "index_point_actions_on_action_name", unique: true
+  end
+
   create_table "position_types", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -591,6 +601,27 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_010026) do
     t.index ["tier_list_template_id"], name: "index_tier_lists_on_tier_list_template_id"
   end
 
+  create_table "user_point_transactions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "action_id", null: false
+    t.integer "points_earned", null: false
+    t.bigint "reference_id"
+    t.string "reference_type"
+    t.jsonb "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_id"], name: "index_user_point_transactions_on_action_id"
+    t.index ["reference_id", "reference_type"], name: "idx_on_reference_id_reference_type_ff6a4f6b82"
+    t.index ["user_id"], name: "index_user_point_transactions_on_user_id"
+  end
+
+  create_table "user_points_summary", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "total_points", default: 0, null: false
+    t.datetime "last_updated", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["user_id"], name: "index_user_points_summary_on_user_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "user_name", default: "", null: false
     t.boolean "admin", default: false
@@ -658,4 +689,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_25_010026) do
   add_foreign_key "ratings", "employees"
   add_foreign_key "ratings", "users"
   add_foreign_key "tier_lists", "tier_list_templates"
+  add_foreign_key "user_point_transactions", "point_actions", column: "action_id"
+  add_foreign_key "user_point_transactions", "users"
+  add_foreign_key "user_points_summary", "users"
 end
